@@ -1,0 +1,1 @@
+(:type [boolean-set 1 (a b c)])

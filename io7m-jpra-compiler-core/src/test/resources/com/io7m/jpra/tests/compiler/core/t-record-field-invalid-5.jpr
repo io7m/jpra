@@ -1,0 +1,2 @@
+(record T
+  [(field t x.y.z)])
