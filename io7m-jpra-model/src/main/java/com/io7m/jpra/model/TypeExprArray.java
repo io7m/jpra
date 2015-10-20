@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * An {@code array} type expression.
  */
 
-public final class TypeExprArray implements TypeExprType
+@Immutable public final class TypeExprArray implements TypeExprType
 {
   private final TypeExprType    type;
   private final SizeExprType<?> element_count;

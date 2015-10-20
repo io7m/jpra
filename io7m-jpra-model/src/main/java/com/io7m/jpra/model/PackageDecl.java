@@ -20,13 +20,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 /**
  * A package declaration.
  */
 
-public final class PackageDecl
+@Immutable public final class PackageDecl
 {
   private final PackageNameQualified                                name;
   private final ImmutableList<TypeDeclType>

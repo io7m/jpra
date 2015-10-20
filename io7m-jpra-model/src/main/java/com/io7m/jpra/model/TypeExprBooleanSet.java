@@ -18,12 +18,13 @@ package com.io7m.jpra.model;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code boolean-set} type.
  */
 
-public final class TypeExprBooleanSet implements TypeExprType
+@Immutable public final class TypeExprBooleanSet implements TypeExprType
 {
   private final SizeExprType<SizeUnitOctetsType> size;
   private final ImmutableList<FieldName>         fields;

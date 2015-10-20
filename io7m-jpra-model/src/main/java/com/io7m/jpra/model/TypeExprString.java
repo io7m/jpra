@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code string} type expression.
  */
 
-public final class TypeExprString implements TypeExprType
+@Immutable public final class TypeExprString implements TypeExprType
 {
   private final String                           encoding;
   private final SizeExprType<SizeUnitOctetsType> size;

@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code field} declaration in a {@code packed} type.
  */
 
-public final class PackedFieldDeclValue implements PackedFieldDeclType
+@Immutable public final class PackedFieldDeclValue
+  implements PackedFieldDeclType
 {
   private final FieldName    name;
   private final TypeExprType type;

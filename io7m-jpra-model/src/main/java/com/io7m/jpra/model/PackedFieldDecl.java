@@ -24,7 +24,7 @@ import java.util.Optional;
  * Functions over field declaration for {@code packed} types.
  */
 
-public final class PackedFieldDecl implements ModelElementType
+public final class PackedFieldDecl
 {
   private PackedFieldDecl()
   {

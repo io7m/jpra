@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A size function denoting the size in octets of a given type expression.
  */
 
-public final class SizeInOctets implements SizeExprType<SizeUnitOctetsType>
+@Immutable public final class SizeInOctets
+  implements SizeExprType<SizeUnitOctetsType>
 {
   private final TypeExprType expression;
 

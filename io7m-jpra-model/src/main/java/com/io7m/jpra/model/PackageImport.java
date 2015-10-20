@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A package import declaration.
  */
 
-public final class PackageImport implements ModelElementType
+@Immutable public final class PackageImport implements ModelElementType
 {
   private final PackageNameQualified   from;
   private final PackageNameQualified   to;

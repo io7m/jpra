@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code record} {@code field} declaration.
  */
 
-public final class RecordFieldDeclValue implements RecordFieldDeclType
+@Immutable public final class RecordFieldDeclValue
+  implements RecordFieldDeclType
 {
   private final FieldName    name;
   private final TypeExprType type;

@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A case in a {@code union} declaration.
  */
 
-public final class UnionCase implements ModelElementType
+@Immutable public final class UnionCase implements ModelElementType
 {
   private final UnionCaseName name;
   private final TypeExprType  type;

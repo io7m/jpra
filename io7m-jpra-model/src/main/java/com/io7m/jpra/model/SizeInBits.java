@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A size function denoting the size in bits of a given type expression.
  */
 
-public final class SizeInBits implements SizeExprType<SizeUnitBitsType>
+@Immutable public final class SizeInBits
+  implements SizeExprType<SizeUnitBitsType>
 {
   private final TypeExprType expression;
 

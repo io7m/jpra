@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code packed} type field that specifies a number of padding bits.
  */
 
-public final class PackedFieldDeclPaddingBits implements PackedFieldDeclType
+@Immutable public final class PackedFieldDeclPaddingBits
+  implements PackedFieldDeclType
 {
   private final SizeExprType<SizeUnitBitsType> size;
 

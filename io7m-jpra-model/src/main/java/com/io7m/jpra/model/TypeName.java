@@ -17,13 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 /**
  * A type name.
  */
 
-public final class TypeName implements ModelElementType
+@Immutable public final class TypeName implements ModelElementType
 {
   private final String value;
 

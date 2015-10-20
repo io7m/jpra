@@ -48,6 +48,10 @@
       <groupId>com.goldmansachs</groupId>
       <artifactId>gs-collections</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.github.stephenc.jcip</groupId>
+      <artifactId>jcip-annotations</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

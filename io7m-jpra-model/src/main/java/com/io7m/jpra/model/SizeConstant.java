@@ -17,6 +17,7 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
 
@@ -26,7 +27,7 @@ import java.math.BigInteger;
  * @param <U> The type of units
  */
 
-public final class SizeConstant<U extends SizeUnitType>
+@Immutable public final class SizeConstant<U extends SizeUnitType>
   implements SizeExprType<U>
 {
   private final BigInteger value;

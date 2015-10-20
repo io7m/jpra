@@ -17,6 +17,7 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ import java.util.Optional;
  * A type reference.
  */
 
-public final class TypeExprReference implements TypeExprType
+@Immutable public final class TypeExprReference implements TypeExprType
 {
   private final TypeName                         name;
   private final Optional<PackageNameUnqualified> package_name;

@@ -17,12 +17,15 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
- * A {@code record} field declaration that specifies a number of padding octets.
+ * A {@code record} field declaration that specifies a number of padding
+ * octets.
  */
 
-public final class RecordFieldDeclPaddingOctets implements RecordFieldDeclType
+@Immutable public final class RecordFieldDeclPaddingOctets
+  implements RecordFieldDeclType
 {
   private final SizeExprType<SizeUnitOctetsType> size;
 

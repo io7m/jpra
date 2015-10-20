@@ -20,13 +20,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 /**
  * A {@code union} declaration.
  */
 
-public final class TypeDeclUnion implements TypeDeclType
+@Immutable public final class TypeDeclUnion implements TypeDeclType
 {
   private final TypeName                               name;
   private final ImmutableList<UnionCase>               cases_order;

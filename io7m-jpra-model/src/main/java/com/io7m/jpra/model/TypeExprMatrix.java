@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code matrix} type expression.
  */
 
-public final class TypeExprMatrix implements TypeExprType
+@Immutable public final class TypeExprMatrix implements TypeExprType
 {
   private final TypeExprScalarType type;
   private final SizeExprType<?>    size_width;

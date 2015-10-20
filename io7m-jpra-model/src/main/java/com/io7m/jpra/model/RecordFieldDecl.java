@@ -24,7 +24,7 @@ import java.util.Optional;
  * Functions ove record field declarations.
  */
 
-public final class RecordFieldDecl implements ModelElementType
+public final class RecordFieldDecl
 {
   private RecordFieldDecl()
   {
@@ -42,9 +42,8 @@ public final class RecordFieldDecl implements ModelElementType
     return r.matchRecordFieldDeclaration(
       new RecordFieldDeclMatcherType<Optional<FieldName>, RuntimeException>()
       {
-        @Override
-        public Optional<FieldName> matchPadding(final
-        RecordFieldDeclPaddingOctets r)
+        @Override public Optional<FieldName> matchPadding(
+          final RecordFieldDeclPaddingOctets r)
         {
           return Optional.empty();
         }

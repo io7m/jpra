@@ -18,13 +18,14 @@ package com.io7m.jpra.model;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 /**
  * A fully qualified package name.
  */
 
-public final class PackageNameQualified implements ModelElementType
+@Immutable public final class PackageNameQualified implements ModelElementType
 {
   private final ImmutableList<PackageNameUnqualified> value;
   private final String                                image;

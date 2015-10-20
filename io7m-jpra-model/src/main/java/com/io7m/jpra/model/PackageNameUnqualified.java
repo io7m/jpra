@@ -17,6 +17,7 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 import java.util.regex.Matcher;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
  * An unqualified package name.
  */
 
-public final class PackageNameUnqualified implements ModelElementType
+@Immutable public final class PackageNameUnqualified implements ModelElementType
 {
   private static final Pattern PATTERN;
   private static final String  PATTERN_TEXT;

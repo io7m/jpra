@@ -17,13 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
 /**
  * The name of a union case.
  */
 
-public final class UnionCaseName implements ModelElementType
+@Immutable public final class UnionCaseName implements ModelElementType
 {
   private final String value;
 

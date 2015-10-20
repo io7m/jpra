@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A floating point type expression.
  */
 
-public final class TypeExprFloat implements TypeExprScalarType
+@Immutable public final class TypeExprFloat implements TypeExprScalarType
 {
   private final SizeExprType<SizeUnitBitsType> size;
 

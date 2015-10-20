@@ -17,12 +17,14 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * An {@code unsigned} integer type expression.
  */
 
-public final class TypeExprIntegerUnsigned implements TypeExprIntegerType
+@Immutable public final class TypeExprIntegerUnsigned
+  implements TypeExprIntegerType
 {
   private final SizeExprType<SizeUnitBitsType> size;
 

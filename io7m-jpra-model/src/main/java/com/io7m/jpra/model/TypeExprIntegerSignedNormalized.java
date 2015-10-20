@@ -17,12 +17,13 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 /**
  * A {@code signed-normalized} type expression.
  */
 
-public final class TypeExprIntegerSignedNormalized
+@Immutable public final class TypeExprIntegerSignedNormalized
   implements TypeExprIntegerType
 {
   private final SizeExprType<SizeUnitBitsType> size;
