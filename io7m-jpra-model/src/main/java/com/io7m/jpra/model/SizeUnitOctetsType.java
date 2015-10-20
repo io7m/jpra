@@ -16,6 +16,10 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * An empty type indicating that a given size value is in octets.
+ */
+
 public interface SizeUnitOctetsType extends SizeUnitType
 {
 

@@ -22,6 +22,10 @@ import org.valid4j.Assertive;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type of field names.
+ */
+
 public final class FieldName implements ModelElementType
 {
   private static final Pattern PATTERN;
@@ -35,6 +39,12 @@ public final class FieldName implements ModelElementType
   }
 
   private final String value;
+
+  /**
+   * Construct a field name.
+   *
+   * @param in_value The raw string value
+   */
 
   public FieldName(final String in_value)
   {
@@ -59,6 +69,10 @@ public final class FieldName implements ModelElementType
     final FieldName other = (FieldName) o;
     return this.value.equals(other.value);
   }
+
+  /**
+   * @return The raw string value
+   */
 
   public String getValue()
   {

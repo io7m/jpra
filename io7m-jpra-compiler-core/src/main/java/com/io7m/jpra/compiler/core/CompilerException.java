@@ -22,10 +22,22 @@ import com.io7m.jsx.lexer.Position;
 import java.nio.file.Path;
 import java.util.Optional;
 
+/**
+ * The root type of compiler exceptions.
+ */
+
 public abstract class CompilerException extends Exception
 {
   private final Optional<Path> file;
   private final Position       position;
+
+  /**
+   * Construct an exception.
+   *
+   * @param in_file     The source file, if any
+   * @param in_position The source position
+   * @param message     The exception message
+   */
 
   public CompilerException(
     final Optional<Path> in_file,
@@ -37,12 +49,20 @@ public abstract class CompilerException extends Exception
     this.position = NullCheck.notNull(in_position);
   }
 
-  public Optional<Path> getFile()
+  /**
+   * @return The source file, if any
+   */
+
+  public final Optional<Path> getFile()
   {
     return this.file;
   }
 
-  public Position getPosition()
+  /**
+   * @return The source position
+   */
+
+  public final Position getPosition()
   {
     return this.position;
   }

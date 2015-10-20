@@ -16,15 +16,123 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
+/**
+ * The set of parser error codes.
+ */
+
 public enum ParseErrorCode
 {
+  /**
+   * A quoted string was specified where a list was expected.
+   */
+
   EXPECTED_LIST_GOT_QUOTED_STRING,
-  EXPECTED_LIST_GOT_SYMBOL, EXPECTED_SYMBOL_GOT_LIST,
-  EXPECTED_SYMBOL_GOT_QUOTED_STRING, UNRECOGNIZED_KEYWORD,
-  EXPECTED_NON_EMPTY_LIST, BAD_PACKAGE_NAME, SYNTAX_ERROR,
-  UNRECOGNIZED_TYPE_KEYWORD, UNRECOGNIZED_INTEGER_TYPE_KEYWORD,
-  EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING, INVALID_INTEGER_CONSTANT,
-  UNRECOGNIZED_SIZE_FUNCTION, SEMANTIC_ERROR, BAD_FIELD_NAME,
-  DUPLICATE_FIELD_NAME, BAD_TYPE_NAME, UNRECOGNIZED_RECORD_FIELD_KEYWORD,
+
+  /**
+   * A symbol was specified where a list was expected.
+   */
+
+  EXPECTED_LIST_GOT_SYMBOL,
+
+  /**
+   * A list was specified where a symbol was expected.
+   */
+
+  EXPECTED_SYMBOL_GOT_LIST,
+
+  /**
+   * A quoted string was specified where a symbol was expected.
+   */
+
+  EXPECTED_SYMBOL_GOT_QUOTED_STRING,
+
+  /**
+   * An unrecognized keyword was specified.
+   */
+
+  UNRECOGNIZED_KEYWORD,
+
+  /**
+   * An empty list was specified where a non-empty list was required.
+   */
+
+  EXPECTED_NON_EMPTY_LIST,
+
+  /**
+   * An invalid package name was specified.
+   */
+
+  BAD_PACKAGE_NAME,
+
+  /**
+   * A syntax error for a specific expression was encountered.
+   */
+
+  SYNTAX_ERROR,
+
+  /**
+   * An unrecognized type keyword was specified.
+   */
+
+  UNRECOGNIZED_TYPE_KEYWORD,
+
+  /**
+   * An unrecognized integer type keyword was encountered.
+   */
+
+  UNRECOGNIZED_INTEGER_TYPE_KEYWORD,
+
+  /**
+   * A symbol or list was expected, but a quoted string was specified.
+   */
+
+  EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING,
+
+  /**
+   * A malformed integer constant was specified.
+   */
+
+  INVALID_INTEGER_CONSTANT,
+
+  /**
+   * An unrecognized size function was specified.
+   */
+
+  UNRECOGNIZED_SIZE_FUNCTION,
+
+  /**
+   * An invalid field name was specified.
+   */
+
+  BAD_FIELD_NAME,
+
+  /**
+   * A type declaration contained a duplicate field.
+   */
+
+  DUPLICATE_FIELD_NAME,
+
+  /**
+   * An invalid type name was specified.
+   */
+
+  BAD_TYPE_NAME,
+
+  /**
+   * An unrecognized record field keyword was specified.
+   */
+
+  UNRECOGNIZED_RECORD_FIELD_KEYWORD,
+
+  /**
+   * An invalid type reference was specified.
+   */
+
   BAD_TYPE_REFERENCE,
+
+  /**
+   * Expected a scalar type expression, but got something else.
+   */
+
+  EXPECTED_SCALAR_TYPE_EXPRESSION,
 }

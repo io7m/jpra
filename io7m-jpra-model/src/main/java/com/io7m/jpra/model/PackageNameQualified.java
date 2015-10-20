@@ -20,10 +20,20 @@ import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * A fully qualified package name.
+ */
+
 public final class PackageNameQualified implements ModelElementType
 {
   private final ImmutableList<PackageNameUnqualified> value;
   private final String                                image;
+
+  /**
+   * Construct a name.
+   *
+   * @param in_value The list of segments making up the full name
+   */
 
   public PackageNameQualified(
     final ImmutableList<PackageNameUnqualified> in_value)
@@ -49,6 +59,10 @@ public final class PackageNameQualified implements ModelElementType
   {
     return this.image;
   }
+
+  /**
+   * @return The raw name segments
+   */
 
   public ImmutableList<PackageNameUnqualified> getValue()
   {

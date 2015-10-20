@@ -18,14 +18,28 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A floating point type expression.
+ */
+
 public final class TypeExprFloat implements TypeExprScalarType
 {
   private final SizeExprType<SizeUnitBitsType> size;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param in_size The size of the number in bits
+   */
 
   public TypeExprFloat(final SizeExprType<SizeUnitBitsType> in_size)
   {
     this.size = NullCheck.notNull(in_size);
   }
+
+  /**
+   * @return An expression denoting the size in bits of the type
+   */
 
   public SizeExprType<SizeUnitBitsType> getSizeExpression()
   {

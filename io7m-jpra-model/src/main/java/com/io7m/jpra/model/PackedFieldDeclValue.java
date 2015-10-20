@@ -18,10 +18,21 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code field} declaration in a {@code packed} type.
+ */
+
 public final class PackedFieldDeclValue implements PackedFieldDeclType
 {
   private final FieldName    name;
   private final TypeExprType type;
+
+  /**
+   * Construct a {@code field} declaration.
+   *
+   * @param in_name The name of the field
+   * @param in_type The type of the field
+   */
 
   public PackedFieldDeclValue(
     final FieldName in_name,
@@ -31,10 +42,18 @@ public final class PackedFieldDeclValue implements PackedFieldDeclType
     this.type = NullCheck.notNull(in_type);
   }
 
+  /**
+   * @return The field name
+   */
+
   public FieldName getName()
   {
     return this.name;
   }
+
+  /**
+   * @return The field type
+   */
 
   public TypeExprType getType()
   {

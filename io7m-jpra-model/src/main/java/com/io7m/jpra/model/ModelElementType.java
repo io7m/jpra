@@ -16,7 +16,11 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A marker interface indicating that something is an element of the model.
+ */
+
 public interface ModelElementType
 {
-
+  // No extra functions
 }

@@ -18,9 +18,19 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code signed} integer type expression.
+ */
+
 public final class TypeExprIntegerSigned implements TypeExprIntegerType
 {
   private final SizeExprType<SizeUnitBitsType> size;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param in_size An expression denoting the size of the integer in bits
+   */
 
   public TypeExprIntegerSigned(final SizeExprType<SizeUnitBitsType> in_size)
   {

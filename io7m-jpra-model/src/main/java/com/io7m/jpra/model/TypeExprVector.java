@@ -18,10 +18,21 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code vector} type expression.
+ */
+
 public final class TypeExprVector implements TypeExprType
 {
   private final TypeExprScalarType type;
   private final SizeExprType<?>    size;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param in_size The number of elements in the vector
+   * @param in_type The type of vector elements
+   */
 
   public TypeExprVector(
     final SizeExprType<?> in_size,
@@ -31,12 +42,20 @@ public final class TypeExprVector implements TypeExprType
     this.type = NullCheck.notNull(in_type);
   }
 
-  public SizeExprType<?> getSizeExpression()
+  /**
+   * @return The number of elements in the vector
+   */
+
+  public SizeExprType<?> getElementCountExpression()
   {
     return this.size;
   }
 
-  public TypeExprScalarType getType()
+  /**
+   * @return The type of elements
+   */
+
+  public TypeExprScalarType getElementType()
   {
     return this.type;
   }

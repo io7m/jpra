@@ -18,10 +18,21 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A case in a {@code union} declaration.
+ */
+
 public final class UnionCase implements ModelElementType
 {
   private final UnionCaseName name;
   private final TypeExprType  type;
+
+  /**
+   * Construct a case.
+   *
+   * @param in_name The name of the union case
+   * @param in_type The type of the union case
+   */
 
   public UnionCase(
     final UnionCaseName in_name,
@@ -30,6 +41,10 @@ public final class UnionCase implements ModelElementType
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
   }
+
+  /**
+   * @return The name of the union case
+   */
 
   public UnionCaseName getName()
   {

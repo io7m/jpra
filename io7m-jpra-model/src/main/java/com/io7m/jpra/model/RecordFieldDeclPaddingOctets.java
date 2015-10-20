@@ -18,15 +18,29 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code record} field declaration that specifies a number of padding octets.
+ */
+
 public final class RecordFieldDeclPaddingOctets implements RecordFieldDeclType
 {
   private final SizeExprType<SizeUnitOctetsType> size;
+
+  /**
+   * Construct a field declaration.
+   *
+   * @param in_size A size expression denoting the number of padding octets
+   */
 
   public RecordFieldDeclPaddingOctets(
     final SizeExprType<SizeUnitOctetsType> in_size)
   {
     this.size = NullCheck.notNull(in_size);
   }
+
+  /**
+   * @return The field size expression
+   */
 
   public SizeExprType<SizeUnitOctetsType> getSizeExpression()
   {

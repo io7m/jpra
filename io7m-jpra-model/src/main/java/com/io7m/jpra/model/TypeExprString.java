@@ -18,10 +18,22 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code string} type expression.
+ */
+
 public final class TypeExprString implements TypeExprType
 {
   private final String                           encoding;
   private final SizeExprType<SizeUnitOctetsType> size;
+
+  /**
+   * Construct an exception.
+   *
+   * @param in_encoding The string encoding
+   * @param in_size     An expression denoting the maximum size of the string in
+   *                    octets
+   */
 
   public TypeExprString(
     final String in_encoding,
@@ -31,10 +43,18 @@ public final class TypeExprString implements TypeExprType
     this.size = NullCheck.notNull(in_size);
   }
 
+  /**
+   * @return The string encoding
+   */
+
   public String getEncoding()
   {
     return this.encoding;
   }
+
+  /**
+   * @return The expression denoting the maximum size of the string in octets
+   */
 
   public SizeExprType<SizeUnitOctetsType> getSizeExpression()
   {

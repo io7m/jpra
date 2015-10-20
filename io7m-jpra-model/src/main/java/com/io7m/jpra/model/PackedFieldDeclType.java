@@ -16,8 +16,24 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * The type of field declarations for {@code packed} types.
+ */
+
 public interface PackedFieldDeclType extends ModelElementType
 {
+  /**
+   * Accept a matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
+
   <A, E extends Exception> A matchPackedFieldDeclaration(
     final PackedFieldDeclMatcherType<A, E> m)
     throws E;

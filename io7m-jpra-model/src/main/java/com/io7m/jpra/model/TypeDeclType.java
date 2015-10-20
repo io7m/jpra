@@ -16,9 +16,29 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * The type of type declarations.
+ */
+
 public interface TypeDeclType extends ModelElementType
 {
+  /**
+   * @return The type name
+   */
+
   TypeName getName();
+
+  /**
+   * Accept a type declaration matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
 
   <A, E extends Exception> A matchTypeDeclaration(
     final TypeDeclMatcherType<A, E> m)

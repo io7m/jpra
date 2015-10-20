@@ -20,6 +20,10 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 import java.util.Optional;
 
+/**
+ * Functions ove record field declarations.
+ */
+
 public final class RecordFieldDecl implements ModelElementType
 {
   private RecordFieldDecl()
@@ -27,13 +31,20 @@ public final class RecordFieldDecl implements ModelElementType
     throw new UnreachableCodeException();
   }
 
+  /**
+   * @param r The field declaration
+   *
+   * @return The name defined for the given field declaration, if any
+   */
+
   public static Optional<FieldName> name(final RecordFieldDeclType r)
   {
     return r.matchRecordFieldDeclaration(
       new RecordFieldDeclMatcherType<Optional<FieldName>, RuntimeException>()
       {
         @Override
-        public Optional<FieldName> matchPadding(final RecordFieldDeclPaddingOctets r)
+        public Optional<FieldName> matchPadding(final
+        RecordFieldDeclPaddingOctets r)
         {
           return Optional.empty();
         }

@@ -19,9 +19,19 @@ package com.io7m.jpra.model;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * The name of a union case.
+ */
+
 public final class UnionCaseName implements ModelElementType
 {
-  public final String value;
+  private final String value;
+
+  /**
+   * Construct a case name.
+   *
+   * @param in_value The raw name value
+   */
 
   public UnionCaseName(final String in_value)
   {

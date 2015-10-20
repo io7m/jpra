@@ -21,12 +21,35 @@ import com.io7m.jpra.model.PackageNameQualified;
 import com.io7m.jpra.model.PackageNameUnqualified;
 import com.io7m.jpra.model.TypeDeclRecord;
 
+/**
+ * A listener that will receive the results of parsed expressions.
+ */
+
 public interface StatementParserEventListenerType
 {
+  /**
+   * A package was begun.
+   *
+   * @param context The lexical context
+   * @param name    The package name
+   *
+   * @throws CompilerParseException If required
+   */
+
   void onPackageBegin(
     LexicalContextType context,
     PackageNameQualified name)
     throws CompilerParseException;
+
+  /**
+   * A package was imported.
+   *
+   * @param context The lexical context
+   * @param p_name  The imported package name
+   * @param up_name The name used to refer to the imported package
+   *
+   * @throws CompilerParseException If required
+   */
 
   void onImport(
     LexicalContextType context,
@@ -34,8 +57,25 @@ public interface StatementParserEventListenerType
     PackageNameUnqualified up_name)
     throws CompilerParseException;
 
+  /**
+   * A package was finished.
+   *
+   * @param context The lexical context
+   *
+   * @throws CompilerParseException If required
+   */
+
   void onPackageEnd(LexicalContextType context)
     throws CompilerParseException;
+
+  /**
+   * A {@code record} type was declared.
+   *
+   * @param context The lexical context
+   * @param r       The type
+   *
+   * @throws CompilerParseException If required
+   */
 
   void onRecord(
     LexicalContextType context,

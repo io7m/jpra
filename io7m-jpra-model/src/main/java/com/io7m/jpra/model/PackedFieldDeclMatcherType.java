@@ -16,10 +16,37 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A {@code packed} field declaration matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface PackedFieldDeclMatcherType<A, E extends Exception>
 {
+  /**
+   * Match a field.
+   *
+   * @param r The field
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchPaddingBits(PackedFieldDeclPaddingBits r)
     throws E;
+
+  /**
+   * Match a field.
+   *
+   * @param r The field
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchValue(PackedFieldDeclValue r)
     throws E;

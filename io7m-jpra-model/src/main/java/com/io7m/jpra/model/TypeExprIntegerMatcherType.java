@@ -16,17 +16,64 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * The type of {@code integer} type expression matchers.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface TypeExprIntegerMatcherType<A, E extends Exception>
 {
+  /**
+   * Match an {@code unsigned} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchIntegerUnsigned(TypeExprIntegerUnsigned t)
     throws E;
+
+  /**
+   * Match a {@code signed} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchIntegerSigned(TypeExprIntegerSigned t)
     throws E;
 
+  /**
+   * Match an {@code signed-normalized} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchIntegerSignedNormalized(
     TypeExprIntegerSignedNormalized t)
     throws E;
+
+  /**
+   * Match an {@code unsigned-normalized} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchIntegerUnsignedNormalized(
     TypeExprIntegerUnsignedNormalized t)

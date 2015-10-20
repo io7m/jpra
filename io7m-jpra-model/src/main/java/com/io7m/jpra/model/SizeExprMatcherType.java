@@ -16,13 +16,50 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A size expression matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface SizeExprMatcherType<A, E extends Exception>
 {
+  /**
+   * Match an expression.
+   *
+   * @param s The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchConstant(SizeConstant<?> s)
     throws E;
 
+  /**
+   * Match an expression.
+   *
+   * @param s The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchInOctets(SizeInOctets s)
     throws E;
+
+  /**
+   * Match an expression.
+   *
+   * @param s The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchInBits(SizeInBits s)
     throws E;

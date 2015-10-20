@@ -20,10 +20,21 @@ import com.io7m.jnull.NullCheck;
 
 import java.util.Optional;
 
+/**
+ * A type reference.
+ */
+
 public final class TypeExprReference implements TypeExprType
 {
   private final TypeName                         name;
   private final Optional<PackageNameUnqualified> package_name;
+
+  /**
+   * Construct a type reference.
+   *
+   * @param in_package_name A package qualifier, if any
+   * @param in_name         The type name
+   */
 
   public TypeExprReference(
     final Optional<PackageNameUnqualified> in_package_name,
@@ -33,10 +44,18 @@ public final class TypeExprReference implements TypeExprType
     this.package_name = NullCheck.notNull(in_package_name);
   }
 
+  /**
+   * @return The type name
+   */
+
   public TypeName getName()
   {
     return this.name;
   }
+
+  /**
+   * @return The package qualifier, if any
+   */
 
   public Optional<PackageNameUnqualified> getPackageName()
   {

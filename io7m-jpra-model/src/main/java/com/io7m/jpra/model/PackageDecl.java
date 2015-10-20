@@ -22,6 +22,10 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * A package declaration.
+ */
+
 public final class PackageDecl
 {
   private final PackageNameQualified                                name;
@@ -29,6 +33,15 @@ public final class PackageDecl
                                                                     fields_order;
   private final ImmutableMap<TypeName, TypeDeclType>                fields_name;
   private final ImmutableMap<PackageNameUnqualified, PackageImport> imports;
+
+  /**
+   * Construct a package declaration.
+   *
+   * @param in_fields_name  The package fields by name
+   * @param in_name         The name of the package
+   * @param in_fields_order The package fields in declaration order
+   * @param in_imports      The package imports
+   */
 
   public PackageDecl(
     final ImmutableMap<TypeName, TypeDeclType> in_fields_name,
@@ -61,20 +74,36 @@ public final class PackageDecl
         imp.getUsing()));
   }
 
-  public ImmutableMap<TypeName, TypeDeclType> getFieldsName()
+  /**
+   * @return The package fields by name
+   */
+
+  public ImmutableMap<TypeName, TypeDeclType> getFieldsByName()
   {
     return this.fields_name;
   }
+
+  /**
+   * @return The package fields in declaration order
+   */
 
   public ImmutableList<TypeDeclType> getFieldsOrdered()
   {
     return this.fields_order;
   }
 
+  /**
+   * @return The fully-qualified package name
+   */
+
   public PackageNameQualified getName()
   {
     return this.name;
   }
+
+  /**
+   * @return The package imports
+   */
 
   public ImmutableMap<PackageNameUnqualified, PackageImport> getImports()
   {

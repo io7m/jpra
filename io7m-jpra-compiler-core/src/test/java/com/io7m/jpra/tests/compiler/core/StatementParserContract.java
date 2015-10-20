@@ -1065,7 +1065,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
           called.set(true);
           Assert.assertEquals(SizeInOctets.class, t.getClass());
           final SizeInOctets s = (SizeInOctets) t;
-          final TypeExprType e = s.getExpression();
+          final TypeExprType e = s.getTypeExpression();
           Assert.assertEquals(TypeExprReference.class, e.getClass());
           final TypeExprReference r = (TypeExprReference) e;
           final TypeName n = r.getName();
@@ -1094,7 +1094,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
           called.set(true);
           Assert.assertEquals(SizeInBits.class, t.getClass());
           final SizeInBits s = (SizeInBits) t;
-          final TypeExprType e = s.getExpression();
+          final TypeExprType e = s.getTypeExpression();
           Assert.assertEquals(TypeExprReference.class, e.getClass());
           final TypeExprReference r = (TypeExprReference) e;
           final TypeName n = r.getName();
@@ -1238,7 +1238,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
 
     this.expected.expect(
       new CompilerParseExceptionMatcher(
-        ParseErrorCode.SEMANTIC_ERROR));
+        ParseErrorCode.EXPECTED_SCALAR_TYPE_EXPRESSION));
 
     p.parseStatement(q.parseExpression(), new CheckedListener());
   }
@@ -1322,7 +1322,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
 
     this.expected.expect(
       new CompilerParseExceptionMatcher(
-        ParseErrorCode.SEMANTIC_ERROR));
+        ParseErrorCode.EXPECTED_SCALAR_TYPE_EXPRESSION));
 
     p.parseStatement(q.parseExpression(), new CheckedListener());
   }
@@ -1345,9 +1345,9 @@ public abstract class StatementParserContract<P extends StatementParserType>
           called.set(true);
           Assert.assertEquals(TypeExprVector.class, t.getClass());
           final TypeExprVector v = (TypeExprVector) t;
-          final TypeExprScalarType et = v.getType();
+          final TypeExprScalarType et = v.getElementType();
           Assert.assertEquals(TypeExprFloat.class, et.getClass());
-          final SizeExprType<?> se = v.getSizeExpression();
+          final SizeExprType<?> se = v.getElementCountExpression();
           Assert.assertEquals(SizeConstant.class, se.getClass());
           final SizeConstant<?> s = (SizeConstant<?>) se;
           Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
@@ -1375,7 +1375,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
           called.set(true);
           Assert.assertEquals(TypeExprMatrix.class, t.getClass());
           final TypeExprMatrix v = (TypeExprMatrix) t;
-          final TypeExprScalarType et = v.getType();
+          final TypeExprScalarType et = v.getElementType();
           Assert.assertEquals(TypeExprFloat.class, et.getClass());
           final SizeExprType<?> we = v.getWidthExpression();
           final SizeExprType<?> he = v.getHeightExpression();
@@ -1422,8 +1422,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
       this.newSExpressionParser("t-type-array-invalid-0.jpr");
 
     this.expected.expect(
-      new CompilerParseExceptionMatcher(
-        ParseErrorCode.SEMANTIC_ERROR));
+      new CompilerParseExceptionMatcher(ParseErrorCode.SYNTAX_ERROR));
 
     p.parseStatement(q.parseExpression(), new CheckedListener());
   }
@@ -1436,8 +1435,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
       this.newSExpressionParser("t-type-array-invalid-1.jpr");
 
     this.expected.expect(
-      new CompilerParseExceptionMatcher(
-        ParseErrorCode.SEMANTIC_ERROR));
+      new CompilerParseExceptionMatcher(ParseErrorCode.SYNTAX_ERROR));
 
     p.parseStatement(q.parseExpression(), new CheckedListener());
   }
@@ -1574,7 +1572,7 @@ public abstract class StatementParserContract<P extends StatementParserType>
           called.set(true);
           Assert.assertEquals(TypeExprArray.class, t.getClass());
           final TypeExprArray v = (TypeExprArray) t;
-          final TypeExprType et = v.getType();
+          final TypeExprType et = v.getElementType();
           Assert.assertEquals(TypeExprFloat.class, et.getClass());
           final SizeExprType<?> se = v.getElementCountExpression();
           Assert.assertEquals(SizeConstant.class, se.getClass());

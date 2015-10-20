@@ -18,15 +18,29 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code packed} type field that specifies a number of padding bits.
+ */
+
 public final class PackedFieldDeclPaddingBits implements PackedFieldDeclType
 {
   private final SizeExprType<SizeUnitBitsType> size;
+
+  /**
+   * Construct a padding declaration.
+   *
+   * @param in_size A size expression denoting a number of bits
+   */
 
   public PackedFieldDeclPaddingBits(
     final SizeExprType<SizeUnitBitsType> in_size)
   {
     this.size = NullCheck.notNull(in_size);
   }
+
+  /**
+   * @return The size expression for the field
+   */
 
   public SizeExprType<SizeUnitBitsType> getSizeExpression()
   {

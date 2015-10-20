@@ -18,8 +18,21 @@ package com.io7m.jpra.compiler.core.parser;
 
 import com.io7m.jsx.SExpressionType;
 
+/**
+ * The type of statement parsers.
+ */
+
 public interface StatementParserType
 {
+  /**
+   * Parse a statement.
+   *
+   * @param e        A raw s-expression
+   * @param listener A listener that will receive the results of parsing
+   *
+   * @throws CompilerParseException On parse errors
+   */
+
   void parseStatement(
     SExpressionType e,
     StatementParserREPLEventListenerType listener)

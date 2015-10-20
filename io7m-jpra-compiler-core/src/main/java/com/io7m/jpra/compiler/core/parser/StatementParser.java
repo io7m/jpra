@@ -78,6 +78,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * The default implementation of the {@link StatementParserType} interface.
+ */
+
 public final class StatementParser implements StatementParserType
 {
   private static final Logger LOG;
@@ -893,7 +897,7 @@ public final class StatementParser implements StatementParserType
       sb.append(System.lineSeparator());
       sb.append("Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
-      throw CompilerParseException.semanticError(se, sb.toString());
+      throw CompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
       throw new UnreachableCodeException(x);
     }
@@ -992,13 +996,14 @@ public final class StatementParser implements StatementParserType
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       serial.serialize(e, bao);
       final StringBuilder sb = new StringBuilder(128);
-      sb.append("Semantic error.");
+      sb.append("Expected a scalar type expression.");
       sb.append(System.lineSeparator());
       sb.append("Expected: <scalar-type-expression>");
       sb.append(System.lineSeparator());
       sb.append("Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
-      throw CompilerParseException.semanticError(e, sb.toString());
+      throw CompilerParseException.expectedScalarTypeExpression(
+        e, sb.toString());
     } catch (final IOException x) {
       throw new UnreachableCodeException(x);
     }
@@ -1239,6 +1244,10 @@ public final class StatementParser implements StatementParserType
       throw CompilerParseException.badFieldName(name, e.getMessage());
     }
   }
+
+  /**
+   * @return A new statement parser
+   */
 
   public static StatementParserType newParser()
   {

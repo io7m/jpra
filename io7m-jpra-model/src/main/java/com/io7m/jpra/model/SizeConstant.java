@@ -20,15 +20,31 @@ import com.io7m.jnull.NullCheck;
 
 import java.math.BigInteger;
 
+/**
+ * A constant size.
+ *
+ * @param <U> The type of units
+ */
+
 public final class SizeConstant<U extends SizeUnitType>
   implements SizeExprType<U>
 {
   private final BigInteger value;
 
+  /**
+   * Construct a constant.
+   *
+   * @param in_size The size value
+   */
+
   public SizeConstant(final BigInteger in_size)
   {
     this.value = NullCheck.notNull(in_size);
   }
+
+  /**
+   * @return The size value
+   */
 
   public BigInteger getValue()
   {

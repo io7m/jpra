@@ -16,10 +16,37 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A {@code record} field declaration matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface RecordFieldDeclMatcherType<A, E extends Exception>
 {
+  /**
+   * Match a field.
+   *
+   * @param r The field
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchPadding(RecordFieldDeclPaddingOctets r)
     throws E;
+
+  /**
+   * Match a field.
+   *
+   * @param r The field
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchValue(RecordFieldDeclValue r)
     throws E;

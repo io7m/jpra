@@ -24,11 +24,23 @@ import org.valid4j.Assertive;
 
 import java.util.Optional;
 
+/**
+ * A {@code record} type declaration.
+ */
+
 public final class TypeDeclRecord implements TypeDeclType
 {
   private final TypeName                                      name;
   private final ImmutableList<RecordFieldDeclType>            fields_order;
   private final ImmutableMap<FieldName, RecordFieldDeclValue> fields_name;
+
+  /**
+   * Construct a declaration.
+   *
+   * @param in_fields_name  The fields by name
+   * @param in_name         The type name
+   * @param in_fields_order The fields in declaration order
+   */
 
   public TypeDeclRecord(
     final ImmutableMap<FieldName, RecordFieldDeclValue> in_fields_name,
@@ -54,10 +66,18 @@ public final class TypeDeclRecord implements TypeDeclType
       });
   }
 
+  /**
+   * @return The fields by name
+   */
+
   public ImmutableMap<FieldName, RecordFieldDeclValue> getFieldsByName()
   {
     return this.fields_name;
   }
+
+  /**
+   * @return The fields in declaration order
+   */
 
   public ImmutableList<RecordFieldDeclType> getFieldsInDeclarationOrder()
   {

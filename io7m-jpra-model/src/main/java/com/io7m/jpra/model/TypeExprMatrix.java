@@ -18,11 +18,25 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code matrix} type expression.
+ */
+
 public final class TypeExprMatrix implements TypeExprType
 {
   private final TypeExprScalarType type;
   private final SizeExprType<?>    size_width;
   private final SizeExprType<?>    size_height;
+
+  /**
+   * Construct a {@code matrix} type expression.
+   *
+   * @param in_size_width  An expression denoting the number of columns in the
+   *                       matrix
+   * @param in_size_height An expression denoting the number of rows in the
+   *                       matrix
+   * @param in_type        The type of matrix elements
+   */
 
   public TypeExprMatrix(
     final SizeExprType<?> in_size_width,
@@ -34,17 +48,29 @@ public final class TypeExprMatrix implements TypeExprType
     this.type = NullCheck.notNull(in_type);
   }
 
+  /**
+   * @return The expression denoting the number of rows in the matrix
+   */
+
   public SizeExprType<?> getHeightExpression()
   {
     return this.size_height;
   }
+
+  /**
+   * @return The expression denoting the number of columns in the matrix
+   */
 
   public SizeExprType<?> getWidthExpression()
   {
     return this.size_width;
   }
 
-  public TypeExprScalarType getType()
+  /**
+   * @return The type of matrix elements
+   */
+
+  public TypeExprScalarType getElementType()
   {
     return this.type;
   }

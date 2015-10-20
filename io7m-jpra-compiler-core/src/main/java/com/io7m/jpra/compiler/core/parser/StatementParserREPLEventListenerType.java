@@ -20,12 +20,30 @@ import com.io7m.jpra.compiler.core.LexicalContextType;
 import com.io7m.jpra.model.SizeExprType;
 import com.io7m.jpra.model.TypeExprType;
 
+/**
+ * A listener that will receive the results of REPL-specific expressions.
+ */
+
 public interface StatementParserREPLEventListenerType
   extends StatementParserEventListenerType
 {
+  /**
+   * Called on {@code :type} expressions.
+   *
+   * @param context The lexical context
+   * @param t       The resulting type expression
+   */
+
   void onREPLType(
     LexicalContextType context,
     TypeExprType t);
+
+  /**
+   * Called on {@code :size} expressions.
+   *
+   * @param context The lexical context
+   * @param t       The resulting size expression
+   */
 
   void onREPLSize(
     LexicalContextType context,

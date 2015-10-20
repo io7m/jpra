@@ -16,8 +16,24 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * The type of record field declarations.
+ */
+
 public interface RecordFieldDeclType extends ModelElementType
 {
+  /**
+   * Accept a field matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
+
   <A, E extends Exception> A matchRecordFieldDeclaration(
     final RecordFieldDeclMatcherType<A, E> m)
     throws E;

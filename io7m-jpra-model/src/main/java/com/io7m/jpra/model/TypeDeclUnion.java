@@ -22,11 +22,23 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * A {@code union} declaration.
+ */
+
 public final class TypeDeclUnion implements TypeDeclType
 {
   private final TypeName                               name;
   private final ImmutableList<UnionCase>               cases_order;
   private final ImmutableMap<UnionCaseName, UnionCase> cases_name;
+
+  /**
+   * Construct a declaration.
+   *
+   * @param in_cases_name  The cases by name
+   * @param in_name        The type name
+   * @param in_cases_order The cases in declaration order
+   */
 
   public TypeDeclUnion(
     final ImmutableMap<UnionCaseName, UnionCase> in_cases_name,

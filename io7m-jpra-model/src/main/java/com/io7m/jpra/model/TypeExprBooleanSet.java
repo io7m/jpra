@@ -19,10 +19,21 @@ package com.io7m.jpra.model;
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code boolean-set} type.
+ */
+
 public final class TypeExprBooleanSet implements TypeExprType
 {
   private final SizeExprType<SizeUnitOctetsType> size;
   private final ImmutableList<FieldName>         fields;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param in_fields The fields of the set
+   * @param in_size   The size in octets that will be used
+   */
 
   public TypeExprBooleanSet(
     final ImmutableList<FieldName> in_fields,
@@ -32,10 +43,18 @@ public final class TypeExprBooleanSet implements TypeExprType
     this.size = NullCheck.notNull(in_size);
   }
 
+  /**
+   * @return The fields in declaration order
+   */
+
   public ImmutableList<FieldName> getFieldsInDeclarationOrder()
   {
     return this.fields;
   }
+
+  /**
+   * @return The size expression denoting the size in octets
+   */
 
   public SizeExprType<SizeUnitOctetsType> getSizeExpression()
   {

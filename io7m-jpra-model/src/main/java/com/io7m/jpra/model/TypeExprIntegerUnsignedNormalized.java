@@ -18,10 +18,20 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * An {@code unsigned-normalized} integer type expression.
+ */
+
 public final class TypeExprIntegerUnsignedNormalized
   implements TypeExprIntegerType
 {
   private final SizeExprType<SizeUnitBitsType> size;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param in_size An expression denoting the size of the integer in bits
+   */
 
   public TypeExprIntegerUnsignedNormalized(
     final SizeExprType<SizeUnitBitsType> in_size)

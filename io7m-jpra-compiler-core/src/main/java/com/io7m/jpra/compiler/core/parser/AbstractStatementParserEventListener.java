@@ -24,6 +24,14 @@ import com.io7m.jpra.model.TypeExprType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * An abstract implementation of the {@link
+ * StatementParserREPLEventListenerType}
+ * that simply logs calls and does nothing.
+ */
+
+// CHECKSTYLE:OFF
+
 public abstract class AbstractStatementParserEventListener
   implements StatementParserREPLEventListenerType
 {

@@ -18,10 +18,21 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A {@code record} {@code field} declaration.
+ */
+
 public final class RecordFieldDeclValue implements RecordFieldDeclType
 {
   private final FieldName    name;
   private final TypeExprType type;
+
+  /**
+   * Construct a field declaration.
+   *
+   * @param in_name The field name
+   * @param in_type The field type
+   */
 
   public RecordFieldDeclValue(
     final FieldName in_name,
@@ -31,12 +42,25 @@ public final class RecordFieldDeclValue implements RecordFieldDeclType
     this.type = NullCheck.notNull(in_type);
   }
 
+  /**
+   * @return The field type
+   */
+
+  public TypeExprType getType()
+  {
+    return this.type;
+  }
+
   @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
     final RecordFieldDeclMatcherType<A, E> m)
     throws E
   {
     return m.matchValue(this);
   }
+
+  /**
+   * @return The field name
+   */
 
   public FieldName getName()
   {

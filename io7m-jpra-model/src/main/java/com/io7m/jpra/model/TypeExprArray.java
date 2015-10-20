@@ -18,10 +18,21 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * An {@code array} type expression.
+ */
+
 public final class TypeExprArray implements TypeExprType
 {
   private final TypeExprType    type;
   private final SizeExprType<?> element_count;
+
+  /**
+   * Construct an {@code array} type expression.
+   *
+   * @param in_size A size expression denoting the number of array elements
+   * @param in_type The element type
+   */
 
   public TypeExprArray(
     final SizeExprType<?> in_size,
@@ -31,10 +42,18 @@ public final class TypeExprArray implements TypeExprType
     this.type = NullCheck.notNull(in_type);
   }
 
-  public TypeExprType getType()
+  /**
+   * @return The type of elements
+   */
+
+  public TypeExprType getElementType()
   {
     return this.type;
   }
+
+  /**
+   * @return The number of elements
+   */
 
   public SizeExprType<?> getElementCountExpression()
   {

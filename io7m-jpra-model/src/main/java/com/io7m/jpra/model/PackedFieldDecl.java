@@ -20,12 +20,22 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 import java.util.Optional;
 
+/**
+ * Functions over field declaration for {@code packed} types.
+ */
+
 public final class PackedFieldDecl implements ModelElementType
 {
   private PackedFieldDecl()
   {
     throw new UnreachableCodeException();
   }
+
+  /**
+   * @param r The field declaration
+   *
+   * @return The name defined for the given field declaration, if any
+   */
 
   public static Optional<FieldName> name(final PackedFieldDeclType r)
   {

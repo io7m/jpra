@@ -16,6 +16,10 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * An empty type used to indicate the units of size expressions.
+ */
+
 public interface SizeUnitType
 {
 

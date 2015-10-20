@@ -24,11 +24,23 @@ import org.valid4j.Assertive;
 
 import java.util.Optional;
 
+/**
+ * A {@code packed} type declaration.
+ */
+
 public final class TypeDeclPacked implements TypeDeclType
 {
   private final TypeName                                      name;
   private final ImmutableList<PackedFieldDeclType>            fields_order;
   private final ImmutableMap<FieldName, PackedFieldDeclValue> fields_name;
+
+  /**
+   * Construct a type declaration.
+   *
+   * @param in_fields_name  The fields by name
+   * @param in_name         The type name
+   * @param in_fields_order The fields in declaration order
+   */
 
   public TypeDeclPacked(
     final ImmutableMap<FieldName, PackedFieldDeclValue> in_fields_name,

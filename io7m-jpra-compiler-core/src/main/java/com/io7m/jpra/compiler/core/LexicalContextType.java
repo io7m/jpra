@@ -19,7 +19,17 @@ package com.io7m.jpra.compiler.core;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jsx.SExpressionType;
 
+/**
+ * The type of lexical contexts.
+ */
+
 public interface LexicalContextType
 {
+  /**
+   * @param e A model element
+   *
+   * @return The original lexical expression for the model element {@code e}
+   */
+
   SExpressionType getExpressionFor(ModelElementType e);
 }

@@ -22,6 +22,10 @@ import org.valid4j.Assertive;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * An unqualified package name.
+ */
+
 public final class PackageNameUnqualified implements ModelElementType
 {
   private static final Pattern PATTERN;
@@ -35,6 +39,12 @@ public final class PackageNameUnqualified implements ModelElementType
   }
 
   private final String value;
+
+  /**
+   * Construct a package name.
+   *
+   * @param in_value The raw package name
+   */
 
   public PackageNameUnqualified(final String in_value)
   {
@@ -51,6 +61,10 @@ public final class PackageNameUnqualified implements ModelElementType
   {
     return this.value;
   }
+
+  /**
+   * @return The raw package name
+   */
 
   public String getValue()
   {

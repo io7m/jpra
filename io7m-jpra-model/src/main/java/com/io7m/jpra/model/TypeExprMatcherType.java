@@ -16,28 +16,115 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A type expression matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface TypeExprMatcherType<A, E extends Exception>
 {
+  /**
+   * Match an {@code array} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchArray(TypeExprArray t)
     throws E;
+
+  /**
+   * Match a {@code string} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchString(TypeExprString t)
     throws E;
 
+  /**
+   * Match a {@code boolean-set} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchBooleanSet(TypeExprBooleanSet t)
     throws E;
+
+  /**
+   * Match a type reference.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchReference(TypeExprReference t)
     throws E;
 
+  /**
+   * Match an {@code integer} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchInteger(TypeExprIntegerType t)
     throws E;
+
+  /**
+   * Match a {@code float} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchFloat(TypeExprFloat t)
     throws E;
 
+  /**
+   * Match a {@code vector} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchVector(TypeExprVector t)
     throws E;
+
+  /**
+   * Match a {@code matrix} type expression.
+   *
+   * @param t The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchMatrix(TypeExprMatrix t)
     throws E;

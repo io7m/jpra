@@ -19,9 +19,19 @@ package com.io7m.jpra.model;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * A type name.
+ */
+
 public final class TypeName implements ModelElementType
 {
   private final String value;
+
+  /**
+   * Construct a type name.
+   *
+   * @param in_value The raw name value
+   */
 
   public TypeName(final String in_value)
   {
@@ -34,6 +44,10 @@ public final class TypeName implements ModelElementType
     Assertive.require(
       Character.isUpperCase(in_value.codePointAt(0)), "Name must be titlecase");
   }
+
+  /**
+   * @return The raw string value
+   */
 
   public String getValue()
   {

@@ -18,11 +18,23 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A package import declaration.
+ */
+
 public final class PackageImport implements ModelElementType
 {
   private final PackageNameQualified   from;
   private final PackageNameQualified   to;
   private final PackageNameUnqualified using;
+
+  /**
+   * Construct a package import declaration.
+   *
+   * @param in_from  The importing package
+   * @param in_to    The imported package
+   * @param in_using The unqualified name used to refer to {@code in_to}
+   */
 
   public PackageImport(
     final PackageNameQualified in_from,
@@ -34,15 +46,27 @@ public final class PackageImport implements ModelElementType
     this.using = NullCheck.notNull(in_using);
   }
 
+  /**
+   * @return The importing package
+   */
+
   public PackageNameQualified getFrom()
   {
     return this.from;
   }
 
+  /**
+   * @return The imported package
+   */
+
   public PackageNameQualified getTo()
   {
     return this.to;
   }
+
+  /**
+   * @return The unqualified name used to refer to the imported package
+   */
 
   public PackageNameUnqualified getUsing()
   {

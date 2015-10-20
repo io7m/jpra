@@ -18,16 +18,30 @@ package com.io7m.jpra.model;
 
 import com.io7m.jnull.NullCheck;
 
+/**
+ * A size function denoting the size in octets of a given type expression.
+ */
+
 public final class SizeInOctets implements SizeExprType<SizeUnitOctetsType>
 {
   private final TypeExprType expression;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_expression The type expression
+   */
 
   public SizeInOctets(final TypeExprType in_expression)
   {
     this.expression = NullCheck.notNull(in_expression);
   }
 
-  public TypeExprType getExpression()
+  /**
+   * @return The type expression
+   */
+
+  public TypeExprType getTypeExpression()
   {
     return this.expression;
   }

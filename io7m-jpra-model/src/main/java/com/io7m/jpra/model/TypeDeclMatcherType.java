@@ -16,13 +16,50 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * A type declaration matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface TypeDeclMatcherType<A, E extends Exception>
 {
+  /**
+   * Match a type declaration.
+   *
+   * @param t The declaration
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchRecord(TypeDeclRecord t)
     throws E;
 
+  /**
+   * Match a type declaration.
+   *
+   * @param t The declaration
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchUnion(TypeDeclUnion t)
     throws E;
+
+  /**
+   * Match a type declaration.
+   *
+   * @param t The declaration
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchPacked(TypeDeclPacked t)
     throws E;

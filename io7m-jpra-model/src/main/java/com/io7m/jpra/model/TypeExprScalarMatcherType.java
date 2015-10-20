@@ -16,10 +16,37 @@
 
 package com.io7m.jpra.model;
 
+/**
+ * The type of scalar type matchers.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
+ */
+
 public interface TypeExprScalarMatcherType<A, E extends Exception>
 {
+  /**
+   * Match an {@code integer} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
   A matchScalarInteger(TypeExprIntegerType t)
     throws E;
+
+  /**
+   * Match a {@code float} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
 
   A matchScalarFloat(TypeExprFloat t)
     throws E;
