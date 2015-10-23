@@ -40,6 +40,10 @@
       <artifactId>io7m-jsx-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.io7m.jsx</groupId>
+      <artifactId>io7m-jsx-parser</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

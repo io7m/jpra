@@ -14,26 +14,48 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
-
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+package com.io7m.jpra.compiler.core.checker;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * Checker error codes.
  */
 
-public interface ModelElementType
+public enum CheckerErrorCode
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
+   * A package must be in the process of being declared to perform this action.
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  NO_CURRENT_PACKAGE,
+
+  /**
+   * A package attempts to import itself.
+   */
+
+  PACKAGE_IMPORTS_SELF,
+
+  /**
+   * Nested packages are not allowed.
+   */
+
+  PACKAGE_NESTED,
+
+  /**
+   * An imported package conflicts with an existing import.
+   */
+
+  PACKAGE_IMPORT_CONFLICT,
+
+  /**
+   * A duplicate type was specified.
+   */
+
+  TYPE_DUPLICATE,
+
+  /**
+   * A duplicate package was specified.
+   */
+
+  PACKAGE_DUPLICATE
+
 }

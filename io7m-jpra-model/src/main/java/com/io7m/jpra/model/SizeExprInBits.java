@@ -17,23 +17,52 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.type_expressions.TypeExprType;
+import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * A size function denoting the size in bits of a given type expression.
  */
 
-public interface ModelElementType
+@Immutable public final class SizeExprInBits
+  implements SizeExprType<SizeUnitBitsType>
 {
+  private final TypeExprType expression;
+
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Construct an expression.
    *
-   * @return The original lexical information, if any
+   * @param in_expression The type expression
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  public SizeExprInBits(final TypeExprType in_expression)
+  {
+    this.expression = NullCheck.notNull(in_expression);
+  }
+
+  /**
+   * @return The type expression
+   */
+
+  public TypeExprType getTypeExpression()
+  {
+    return this.expression;
+  }
+
+  @Override public <A, E extends Exception> A matchSizeExpression(
+    final SizeExprMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchInBits(this);
+  }
+
+  @Override
+  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  {
+    return this.expression.getLexicalInformation();
+  }
 }

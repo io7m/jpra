@@ -14,26 +14,36 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_declarations;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.names.TypeName;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The type of type declarations.
  */
 
-public interface ModelElementType
+public interface TypeDeclType extends ModelElementType
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
+   * @return The type name
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  TypeName getName();
+
+  /**
+   * Accept a type declaration matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
+
+  <A, E extends Exception> A matchTypeDeclaration(
+    final TypeDeclMatcherType<A, E> m)
+    throws E;
 }

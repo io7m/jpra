@@ -14,26 +14,40 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
-
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+package com.io7m.jpra.model.types;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The type of scalar type matchers.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
  */
 
-public interface ModelElementType
+public interface TypeScalarMatcherType<A, E extends Exception>
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Match an {@code integer} type.
    *
-   * @return The original lexical information, if any
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  A matchScalarInteger(TIntegerType t)
+    throws E;
+
+  /**
+   * Match a {@code float} type.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchScalarFloat(TFloat t)
+    throws E;
 }

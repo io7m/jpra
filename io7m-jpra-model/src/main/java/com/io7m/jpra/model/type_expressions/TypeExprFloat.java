@@ -1,0 +1,80 @@
+/*
+ * Copyright © 2015 <code@io7m.com> http://io7m.com
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+ * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+package com.io7m.jpra.model.type_expressions;
+
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.SizeExprType;
+import com.io7m.jpra.model.SizeUnitBitsType;
+import net.jcip.annotations.Immutable;
+
+import java.nio.file.Path;
+import java.util.Optional;
+
+/**
+ * A floating point type expression.
+ */
+
+@Immutable public final class TypeExprFloat implements TypeExprScalarType
+{
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final SizeExprType<SizeUnitBitsType> size;
+
+  /**
+   * Construct a {@code float} type expression.
+   *
+   * @param in_lex  Lexical information
+   * @param in_size The size in bits that will be used
+   */
+
+  public TypeExprFloat(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final SizeExprType<SizeUnitBitsType> in_size)
+  {
+    this.lex = NullCheck.notNull(in_lex);
+    this.size = NullCheck.notNull(in_size);
+  }
+
+  /**
+   * @return An expression denoting the size in bits of the type
+   */
+
+  public SizeExprType<SizeUnitBitsType> getSizeExpression()
+  {
+    return this.size;
+  }
+
+  @Override public <A, E extends Exception> A matchTypeExpression(
+    final TypeExprMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchFloat(this);
+  }
+
+  @Override public <A, E extends Exception> A matchTypeScalarExpression(
+    final TypeExprScalarMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchScalarFloat(this);
+  }
+
+  @Override
+  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  {
+    return this.lex;
+  }
+}

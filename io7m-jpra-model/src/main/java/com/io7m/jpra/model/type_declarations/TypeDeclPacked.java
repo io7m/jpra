@@ -14,18 +14,15 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_declarations;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
-import com.io7m.jpra.model.type_declarations.TypeDeclMatcherType;
-import com.io7m.jpra.model.type_declarations.TypeDeclType;
-import com.io7m.jpra.model.type_declarations.UnionCase;
-import com.io7m.jpra.model.names.UnionCaseName;
 import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
@@ -33,41 +30,45 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A {@code union} declaration.
+ * A {@code packed} type declaration.
  */
 
-@Immutable public final class TypeDeclUnion implements TypeDeclType
+@Immutable public final class TypeDeclPacked implements TypeDeclType
 {
-  private final TypeName                               name;
-  private final ImmutableList<UnionCase>               cases_order;
-  private final ImmutableMap<UnionCaseName, UnionCase> cases_name;
+  private final TypeName                                      name;
+  private final ImmutableList<PackedFieldDeclType>            fields_order;
+  private final ImmutableMap<FieldName, PackedFieldDeclValue> fields_name;
 
   /**
-   * Construct a declaration.
+   * Construct a type declaration.
    *
-   * @param in_cases_name  The cases by name
-   * @param in_name        The type name
-   * @param in_cases_order The cases in declaration order
+   * @param in_fields_name  The fields by name
+   * @param in_name         The type name
+   * @param in_fields_order The fields in declaration order
    */
 
-  public TypeDeclUnion(
-    final ImmutableMap<UnionCaseName, UnionCase> in_cases_name,
+  public TypeDeclPacked(
+    final ImmutableMap<FieldName, PackedFieldDeclValue> in_fields_name,
     final TypeName in_name,
-    final ImmutableList<UnionCase> in_cases_order)
+    final ImmutableList<PackedFieldDeclType> in_fields_order)
   {
-    this.cases_name = NullCheck.notNull(in_cases_name);
+    this.fields_name = NullCheck.notNull(in_fields_name);
     this.name = NullCheck.notNull(in_name);
-    this.cases_order = NullCheck.notNull(in_cases_order);
+    this.fields_order = NullCheck.notNull(in_fields_order);
 
     Assertive.require(
-      this.cases_name.size() == this.cases_order.size(),
-      "Cases-by-name size %d != Cases-ordered size %d",
-      Integer.valueOf(this.cases_name.size()),
-      Integer.valueOf(this.cases_order.size()));
+      this.fields_name.size() <= this.fields_order.size(),
+      "Fields-by-name size %d > Fields-ordered size %d",
+      Integer.valueOf(this.fields_name.size()),
+      Integer.valueOf(this.fields_order.size()));
 
-    this.cases_order.forEach(
-      (Procedure<UnionCase>) each -> Assertive.require(
-        this.cases_name.containsKey(each.getName())));
+    this.fields_order.forEach(
+      (Procedure<PackedFieldDeclType>) r -> {
+        final Optional<FieldName> r_name = PackedFieldDecl.name(r);
+        if (r_name.isPresent()) {
+          Assertive.require(this.fields_name.containsKey(r_name.get()));
+        }
+      });
   }
 
   @Override public TypeName getName()
@@ -79,7 +80,7 @@ import java.util.Optional;
     final TypeDeclMatcherType<A, E> m)
     throws E
   {
-    return m.matchUnion(this);
+    return m.matchPacked(this);
   }
 
   @Override

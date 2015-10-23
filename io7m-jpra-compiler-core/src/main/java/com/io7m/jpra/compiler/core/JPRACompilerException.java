@@ -14,26 +14,44 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.compiler.core;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jnull.NullCheck;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The root type of compiler exceptions.
  */
 
-public interface ModelElementType
+public abstract class JPRACompilerException extends Exception
 {
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Construct an exception.
    *
-   * @return The original lexical information, if any
+   * @param in_lex  Lexical information
+   * @param message The exception message
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  public JPRACompilerException(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final String message)
+  {
+    super(NullCheck.notNull(message));
+    this.lex = NullCheck.notNull(in_lex);
+  }
+
+  /**
+   * @return The lexical information for the error, if any
+   */
+
+  public final Optional<ImmutableLexicalPositionType<Path>>
+  getLexicalInformation()
+  {
+    return this.lex;
+  }
 }

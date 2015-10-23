@@ -14,53 +14,55 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_declarations;
+
+import com.io7m.jpra.model.TypeDeclUnion;
 
 /**
- * A size expression matcher.
+ * A type declaration matcher.
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<A, E extends Exception>
+public interface TypeDeclMatcherType<A, E extends Exception>
 {
   /**
-   * Match an expression.
+   * Match a type declaration.
    *
-   * @param s The expression
+   * @param t The declaration
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<?> s)
+  A matchRecord(TypeDeclRecord t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a type declaration.
    *
-   * @param s The expression
+   * @param t The declaration
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets s)
+  A matchUnion(TypeDeclUnion t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a type declaration.
    *
-   * @param s The expression
+   * @param t The declaration
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits s)
+  A matchPacked(TypeDeclPacked t)
     throws E;
 }

@@ -16,8 +16,14 @@
 
 package com.io7m.jpra.model;
 
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.names.PackageNameUnqualified;
 import net.jcip.annotations.Immutable;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * A package import declaration.
@@ -95,5 +101,11 @@ import net.jcip.annotations.Immutable;
     result = 31 * result + this.to.hashCode();
     result = 31 * result + this.using.hashCode();
     return result;
+  }
+
+  @Override
+  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  {
+    return this.using.getLexicalInformation();
   }
 }

@@ -16,24 +16,44 @@
 
 package com.io7m.jpra.model;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jnull.NullCheck;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.math.BigInteger;
 
-/**
- * A marker interface indicating that something is an element of the model.
- */
-
-public interface ModelElementType
+public final class Size<U extends SizeUnitType>
 {
-  /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
-   */
+  private final BigInteger value;
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  public Size(final BigInteger in_value)
+  {
+    this.value = NullCheck.notNull(in_value);
+  }
+
+  @Override public boolean equals(final Object o)
+  {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+
+    final Size<?> size = (Size<?>) o;
+    return this.getValue().equals(size.getValue());
+  }
+
+  @Override public String toString()
+  {
+    return this.value.toString();
+  }
+
+  @Override public int hashCode()
+  {
+    return this.getValue().hashCode();
+  }
+
+  public BigInteger getValue()
+  {
+    return this.value;
+  }
 }

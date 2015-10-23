@@ -14,26 +14,15 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.compiler.core.checker;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+import com.io7m.jpra.compiler.core.parser.JPRAParserREPLEventListenerType;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The type of type checkers.
  */
 
-public interface ModelElementType
+public interface CheckerType extends JPRAParserREPLEventListenerType
 {
-  /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
-   */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
 }

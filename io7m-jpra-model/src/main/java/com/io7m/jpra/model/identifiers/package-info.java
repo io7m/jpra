@@ -14,26 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
-
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
-
 /**
- * A marker interface indicating that something is an element of the model.
+ * Resolved identifiers.
  */
 
-public interface ModelElementType
-{
-  /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
-   */
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.identifiers;
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
-}

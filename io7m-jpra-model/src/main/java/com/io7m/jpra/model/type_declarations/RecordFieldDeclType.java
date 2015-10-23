@@ -14,26 +14,29 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_declarations;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+import com.io7m.jpra.model.ModelElementType;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The type of record field declarations.
  */
 
-public interface ModelElementType
+public interface RecordFieldDeclType extends ModelElementType
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Accept a field matcher.
    *
-   * @return The original lexical information, if any
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  <A, E extends Exception> A matchRecordFieldDeclaration(
+    final RecordFieldDeclMatcherType<A, E> m)
+    throws E;
 }

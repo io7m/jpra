@@ -52,6 +52,10 @@
       <groupId>com.github.stephenc.jcip</groupId>
       <artifactId>jcip-annotations</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.io7m.jsx</groupId>
+      <artifactId>io7m-jsx-core</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

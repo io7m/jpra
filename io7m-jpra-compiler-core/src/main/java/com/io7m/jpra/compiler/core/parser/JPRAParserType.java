@@ -14,26 +14,40 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.compiler.core.parser;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jpra.compiler.core.JPRACompilerException;
+import com.io7m.jsx.SExpressionType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * The type of statement parsers.
  */
 
-public interface ModelElementType
+public interface JPRAParserType
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Parse a statement.
    *
-   * @return The original lexical information, if any
+   * @param e        A raw s-expression
+   * @param listener A listener that will receive the results of parsing
+   *
+   * @throws JPRACompilerParseException On parse errors
+   * @throws JPRACompilerException      Propagated from {@code listener}
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  void parseStatement(
+    SExpressionType e,
+    JPRAParserREPLEventListenerType listener)
+    throws JPRACompilerException, JPRACompilerParseException;
+
+  /**
+   * @return The current parsing position, if the underlying lexer is providing
+   * this information.
+   */
+
+  Optional<ImmutableLexicalPositionType<Path>> getParsingPosition();
 }

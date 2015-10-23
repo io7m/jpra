@@ -14,53 +14,105 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.types;
 
 /**
- * A size expression matcher.
+ * A type matcher.
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<A, E extends Exception>
+public interface TypeMatcherType<A, E extends Exception>
 {
   /**
-   * Match an expression.
+   * Match an {@code array} type.
    *
-   * @param s The expression
+   * @param t The type
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<?> s)
+  A matchArray(TArray t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a {@code string} type.
    *
-   * @param s The expression
+   * @param t The type
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets s)
+  A matchString(TString t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a {@code boolean-set} type.
    *
-   * @param s The expression
+   * @param t The type
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits s)
+  A matchBooleanSet(TBooleanSet t)
+    throws E;
+
+  /**
+   * Match an {@code integer} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchInteger(TIntegerType t)
+    throws E;
+
+  /**
+   * Match a {@code float} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchFloat(TFloat t)
+    throws E;
+
+  /**
+   * Match a {@code vector} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchVector(TVector t)
+    throws E;
+
+  /**
+   * Match a {@code matrix} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchMatrix(TMatrix t)
     throws E;
 }

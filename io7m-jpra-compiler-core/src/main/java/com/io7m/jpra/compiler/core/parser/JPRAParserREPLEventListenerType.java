@@ -14,26 +14,37 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-
-import java.nio.file.Path;
-import java.util.Optional;
+import com.io7m.jpra.model.SizeExprType;
+import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 /**
- * A marker interface indicating that something is an element of the model.
+ * A listener that will receive the results of REPL-specific expressions.
  */
 
-public interface ModelElementType
+public interface JPRAParserREPLEventListenerType
+  extends JPRAParserEventListenerType
 {
   /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
+   * Called on {@code :type} expressions.
    *
-   * @return The original lexical information, if any
+   * @param p The parser
+   * @param t The resulting type expression
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  void onREPLType(
+    JPRAParserType p,
+    TypeExprType t);
+
+  /**
+   * Called on {@code :size} expressions.
+   *
+   * @param p The parser
+   * @param t The resulting size expression
+   */
+
+  void onREPLSize(
+    JPRAParserType p,
+    SizeExprType<?> t);
 }

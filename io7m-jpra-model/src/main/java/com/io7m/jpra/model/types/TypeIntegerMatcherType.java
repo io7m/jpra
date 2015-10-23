@@ -14,53 +14,68 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.types;
 
 /**
- * A size expression matcher.
+ * The type of {@code integer} type expression matchers.
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<A, E extends Exception>
+public interface TypeIntegerMatcherType<A, E extends Exception>
 {
   /**
-   * Match an expression.
+   * Match an {@code unsigned} type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<?> s)
+  A matchIntegerUnsigned(TIntegerUnsigned t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a {@code signed} type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets s)
+  A matchIntegerSigned(TIntegerSigned t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match an {@code signed-normalized} type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits s)
+  A matchIntegerSignedNormalized(
+    TIntegerSignedNormalized t)
+    throws E;
+
+  /**
+   * Match an {@code unsigned-normalized} type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchIntegerUnsignedNormalized(
+    TIntegerUnsignedNormalized t)
     throws E;
 }

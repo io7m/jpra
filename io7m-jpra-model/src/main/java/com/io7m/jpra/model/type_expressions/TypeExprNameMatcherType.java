@@ -14,53 +14,79 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_expressions;
 
 /**
- * A size expression matcher.
+ * The type of type name matchers.
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<A, E extends Exception>
+public interface TypeExprNameMatcherType<A, E extends Exception>
 {
   /**
-   * Match an expression.
+   * Match a type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<?> s)
+  A matchNameF(TypeExprNameF t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets s)
+  A matchNamePT(TypeExprNamePT t)
     throws E;
 
   /**
-   * Match an expression.
+   * Match a type expression.
    *
-   * @param s The expression
+   * @param t The type expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits s)
+  A matchNamePTF(TypeExprNamePTF t)
+    throws E;
+
+  /**
+   * Match a type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchNameT(TypeExprNameT t)
+    throws E;
+
+  /**
+   * Match a type expression.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchNameTF(TypeExprNameTF t)
     throws E;
 }

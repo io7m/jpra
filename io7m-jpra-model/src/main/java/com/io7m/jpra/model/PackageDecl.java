@@ -19,15 +19,23 @@ package com.io7m.jpra.model;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.names.PackageNameUnqualified;
+import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * A package declaration.
  */
 
-@Immutable public final class PackageDecl
+@Immutable public final class PackageDecl implements ModelElementType
 {
   private final PackageNameQualified                                name;
   private final ImmutableList<TypeDeclType>
@@ -109,5 +117,11 @@ import org.valid4j.Assertive;
   public ImmutableMap<PackageNameUnqualified, PackageImport> getImports()
   {
     return this.imports;
+  }
+
+  @Override
+  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  {
+    return this.name.getLexicalInformation();
   }
 }
