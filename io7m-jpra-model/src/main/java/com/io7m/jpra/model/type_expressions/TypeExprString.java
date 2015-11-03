@@ -18,65 +18,41 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
-import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A {@code string} type expression.
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-@Immutable public final class TypeExprString implements TypeExprType
+public final class TypeExprString<I, T, S>
+  implements TypeExprType<I, T, S>
 {
-  private final String                                       encoding;
-  private final SizeExprType<SizeUnitOctetsType>             size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-
-  /**
-   * Construct an expression.
-   *
-   * @param in_lex      Lexical information
-   * @param in_encoding The string encoding
-   * @param in_size     An expression denoting the maximum size of the string in
-   *                    octets
-   */
+  private final T                                            type;
+  private final S                                            size;
+  private final String                                       encoding;
 
   public TypeExprString(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final String in_encoding,
-    final SizeExprType<SizeUnitOctetsType> in_size)
+    final T in_type,
+    final S in_size,
+    final String in_encoding)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.encoding = NullCheck.notNull(in_encoding);
+    this.type = NullCheck.notNull(in_type);
     this.size = NullCheck.notNull(in_size);
+    this.encoding = NullCheck.notNull(in_encoding);
   }
 
-  /**
-   * @return The string encoding
-   */
-
-  public String getEncoding()
-  {
-    return this.encoding;
-  }
-
-  /**
-   * @return The expression denoting the maximum size of the string in octets
-   */
-
-  public SizeExprType<SizeUnitOctetsType> getSizeExpression()
-  {
-    return this.size;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchString(this);
+    return m.matchExprString(this);
   }
 
   @Override

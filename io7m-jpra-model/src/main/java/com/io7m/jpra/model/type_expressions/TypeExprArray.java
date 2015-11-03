@@ -18,63 +18,41 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * An {@code array} type expression.
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-@Immutable public final class TypeExprArray implements TypeExprType
+public final class TypeExprArray<I, T, S>
+  implements TypeExprType<I, T, S>
 {
-  private final TypeExprType                                 type;
-  private final SizeExprType<?>                              element_count;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-
-  /**
-   * Construct an {@code array} type expression.
-   *
-   * @param in_lex  Lexical information
-   * @param in_size A size expression denoting the number of array elements
-   * @param in_type The element type
-   */
+  private final T                                            type;
+  private final S                                            element_count;
+  private final TypeExprType<I, T, S>                element_type;
 
   public TypeExprArray(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<?> in_size,
-    final TypeExprType in_type)
+    final T in_type,
+    final S in_element_count,
+    final TypeExprType<I, T, S> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.element_count = NullCheck.notNull(in_size);
     this.type = NullCheck.notNull(in_type);
+    this.element_count = NullCheck.notNull(in_element_count);
+    this.element_type = NullCheck.notNull(in_element_type);
   }
 
-  /**
-   * @return The type of elements
-   */
-
-  public TypeExprType getElementType()
-  {
-    return this.type;
-  }
-
-  /**
-   * @return The number of elements
-   */
-
-  public SizeExprType<?> getElementCountExpression()
-  {
-    return this.element_count;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchArray(this);
+    return m.matchExprArray(this);
   }
 
   @Override

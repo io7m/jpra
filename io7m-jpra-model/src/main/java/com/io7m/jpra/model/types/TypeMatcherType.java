@@ -115,4 +115,30 @@ public interface TypeMatcherType<A, E extends Exception>
 
   A matchMatrix(TMatrix t)
     throws E;
+
+  /**
+   * Match a {@code record} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchRecord(TRecord t)
+    throws E;
+
+  /**
+   * Match a {@code packed} type.
+   *
+   * @param t The type
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchPacked(TPacked t)
+    throws E;
 }

@@ -29,6 +29,17 @@ public final class Size<U extends SizeUnitType>
     this.value = NullCheck.notNull(in_value);
   }
 
+  public static <U extends SizeUnitType> Size<U> zero()
+  {
+    return new Size<>(BigInteger.ZERO);
+  }
+
+  public static Size<SizeUnitBitsType> toBits(
+    final Size<SizeUnitOctetsType> size)
+  {
+    return new Size<>(size.getValue().multiply(BigInteger.valueOf(8L)));
+  }
+
   @Override public boolean equals(final Object o)
   {
     if (this == o) {
@@ -55,5 +66,10 @@ public final class Size<U extends SizeUnitType>
   public BigInteger getValue()
   {
     return this.value;
+  }
+
+  public Size<U> add(final Size<U> size)
+  {
+    return new Size<>(this.value.add(size.getValue()));
   }
 }

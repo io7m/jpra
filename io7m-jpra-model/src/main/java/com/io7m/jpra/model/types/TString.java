@@ -19,6 +19,7 @@ package com.io7m.jpra.model.types;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Size;
+import com.io7m.jpra.model.SizeUnitBitsType;
 import com.io7m.jpra.model.SizeUnitOctetsType;
 import net.jcip.annotations.Immutable;
 
@@ -34,6 +35,7 @@ import java.util.Optional;
   private final String                                       encoding;
   private final Size<SizeUnitOctetsType>                     size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final Size<SizeUnitBitsType>                       size_bits;
 
   /**
    * Construct an expression.
@@ -52,6 +54,7 @@ import java.util.Optional;
     this.lex = NullCheck.notNull(in_lex);
     this.encoding = NullCheck.notNull(in_encoding);
     this.size = NullCheck.notNull(in_size);
+    this.size_bits = Size.toBits(this.size);
   }
 
   /**
@@ -63,13 +66,9 @@ import java.util.Optional;
     return this.encoding;
   }
 
-  /**
-   * @return The expression denoting the maximum size of the string in octets
-   */
-
-  public Size<SizeUnitOctetsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSize()
   {
-    return this.size;
+    return this.size_bits;
   }
 
   @Override public <A, E extends Exception> A matchType(

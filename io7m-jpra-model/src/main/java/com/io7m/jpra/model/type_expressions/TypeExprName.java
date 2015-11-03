@@ -18,59 +18,40 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.names.TypeName;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * An unqualified reference to a type.
- *
- * Example: {@code T}
- */
-
-public final class TypeExprNameT implements TypeExprNameType
+public final class TypeExprName<I, T, S>
+  implements TypeExprType<I, T, S>
 {
-  private final TypeName name;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final T                                            type;
+  private final S                                            size;
+  private final I                                            name;
 
-  /**
-   * Construct a reference.
-   *
-   * @param in_name The field name
-   */
-
-  public TypeExprNameT(
-    final TypeName in_name)
+  public TypeExprName(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final I in_name,
+    final T in_type,
+    final S in_size)
   {
+    this.lex = NullCheck.notNull(in_lex);
     this.name = NullCheck.notNull(in_name);
+    this.type = NullCheck.notNull(in_type);
+    this.size = NullCheck.notNull(in_size);
   }
 
-  /**
-   * @return The type name
-   */
-
-  public TypeName getName()
-  {
-    return this.name;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchReference(this);
+    return m.matchName(this);
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.name.getLexicalInformation();
-  }
-
-  @Override public <A, E extends Exception> A matchTypeNameExpression(
-    final TypeExprNameMatcherType<A, E> m)
-    throws E
-  {
-    return m.matchNameT(this);
+    return this.lex;
   }
 }

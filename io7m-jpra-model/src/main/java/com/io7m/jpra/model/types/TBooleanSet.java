@@ -19,9 +19,10 @@ package com.io7m.jpra.model.types;
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.Size;
+import com.io7m.jpra.model.SizeUnitBitsType;
 import com.io7m.jpra.model.SizeUnitOctetsType;
+import com.io7m.jpra.model.names.FieldName;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -36,6 +37,7 @@ import java.util.Optional;
   private final Size<SizeUnitOctetsType>                     size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final Size<SizeUnitBitsType>                       size_bits;
 
   /**
    * Construct a boolean set type.
@@ -53,6 +55,7 @@ import java.util.Optional;
     this.lex = NullCheck.notNull(in_lex);
     this.fields = NullCheck.notNull(in_fields);
     this.size = NullCheck.notNull(in_size);
+    this.size_bits = Size.toBits(this.size);
   }
 
   /**
@@ -64,13 +67,9 @@ import java.util.Optional;
     return this.fields;
   }
 
-  /**
-   * @return The size expression denoting the size in octets
-   */
-
-  public Size<SizeUnitOctetsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSize()
   {
-    return this.size;
+    return this.size_bits;
   }
 
   @Override public <A, E extends Exception> A matchType(

@@ -25,7 +25,6 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.PackageImport;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.SizeExprType;
 import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.type_declarations.TypeDeclRecord;

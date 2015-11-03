@@ -30,10 +30,6 @@ import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.SizeExprConstant;
-import com.io7m.jpra.model.SizeExprInBits;
-import com.io7m.jpra.model.SizeExprInOctets;
-import com.io7m.jpra.model.SizeExprType;
 import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.SizeUnitType;
 import com.io7m.jpra.model.names.TypeName;
@@ -45,8 +41,7 @@ import com.io7m.jpra.model.type_expressions.TypeExprIntegerSignedNormalized;
 import com.io7m.jpra.model.type_expressions.TypeExprIntegerType;
 import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsigned;
 import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsignedNormalized;
-import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
-import com.io7m.jpra.model.type_expressions.TypeExprNameType;
+import com.io7m.jpra.model.type_expressions.TypeExprName;
 import com.io7m.jpra.model.type_expressions.TypeExprScalarType;
 import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
@@ -333,7 +328,7 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  private static TypeExprNameType onTypeReference(
+  private static TypeExprName onTypeReference(
     final JSXSerializerType serial,
     final SExpressionSymbolType se)
     throws JPRACompilerParseException

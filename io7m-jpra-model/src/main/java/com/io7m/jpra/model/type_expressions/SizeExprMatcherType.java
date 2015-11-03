@@ -17,24 +17,53 @@
 package com.io7m.jpra.model.type_expressions;
 
 /**
- * The type of type expressions denoting scalar types.
+ * A size expression matcher.
+ *
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
+ * @param <A>  The type of returned values
+ * @param <E>  The type of raised exceptions
  */
 
-public interface TypeExprScalarType extends TypeExprType
+public interface SizeExprMatcherType<I, T, S, A, E extends Exception>
 {
   /**
-   * Accept a matcher.
+   * Match an expression.
    *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
+   * @param s The expression
    *
-   * @return The value returned by {@code m}
+   * @return A value of {@code A}
    *
-   * @throws E If {@code m} raises {@code E}
+   * @throws E If required
    */
 
-  <A, E extends Exception> A matchTypeScalarExpression(
-    final TypeExprScalarMatcherType<A, E> m)
+  A matchConstant(SizeExprConstant<I, T, S> s)
+    throws E;
+
+  /**
+   * Match an expression.
+   *
+   * @param s The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchInOctets(SizeExprInOctets<I, T, S> s)
+    throws E;
+
+  /**
+   * Match an expression.
+   *
+   * @param s The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchInBits(SizeExprInBits<I, T, S> s)
     throws E;
 }

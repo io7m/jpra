@@ -17,6 +17,8 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.Size;
+import com.io7m.jpra.model.SizeUnitBitsType;
 
 /**
  * The type of types.
@@ -24,6 +26,12 @@ import com.io7m.jpra.model.ModelElementType;
 
 public interface TType extends ModelElementType
 {
+  /**
+   * @return The size in bits
+   */
+
+  Size<SizeUnitBitsType> getSize();
+
   /**
    * Accept a matcher.
    *

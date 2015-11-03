@@ -18,57 +18,38 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitBitsType;
-import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A {@code signed-normalized} type expression.
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-@Immutable public final class TypeExprIntegerSignedNormalized
-  implements TypeExprIntegerType
+public final class TypeExprIntegerSignedNormalized<I, T, S>
+  implements TypeExprType<I, T, S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<SizeUnitBitsType> size;
-
-  /**
-   * Construct an {@code integer signed-normalized} type expression.
-   *
-   * @param in_lex  Lexical information
-   * @param in_size The size in bits that will be used
-   */
+  private final T                                            type;
+  private final S                                            size;
 
   public TypeExprIntegerSignedNormalized(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<SizeUnitBitsType> in_size)
+    final T in_type,
+    final S in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
+    this.type = NullCheck.notNull(in_type);
     this.size = NullCheck.notNull(in_size);
   }
 
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchInteger(this);
-  }
-
-  @Override public <A, E extends Exception> A matchTypeIntegerExpression(
-    final TypeExprIntegerMatcherType<A, E> m)
-    throws E
-  {
-    return m.matchIntegerSignedNormalized(this);
-  }
-
-  @Override public <A, E extends Exception> A matchTypeScalarExpression(
-    final TypeExprScalarMatcherType<A, E> m)
-    throws E
-  {
-    return m.matchScalarInteger(this);
+    return m.matchExprIntegerSignedNormalized(this);
   }
 
   @Override

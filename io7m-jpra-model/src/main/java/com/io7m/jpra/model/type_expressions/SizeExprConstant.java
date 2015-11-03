@@ -18,73 +18,67 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.names.TypeName;
+import net.jcip.annotations.Immutable;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A package-qualified reference to a type.
+ * A constant size.
  *
- * Example: {@code p:T}
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-public final class TypeExprNamePT implements TypeExprNameType
+@Immutable public final class SizeExprConstant<I, T, S>
+  implements SizeExprType<I, T, S>
 {
-  private final PackageNameUnqualified pack;
-  private final TypeName               type;
+  private final BigInteger                                   value;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
   /**
-   * Construct a reference.
+   * Construct a size expression.
    *
-   * @param in_pack The package name
-   * @param in_type The type name
+   * @param in_lex  The lexical information for the name
+   * @param in_size The size expression
+   *
+   * @return A new size expression
    */
 
-  public TypeExprNamePT(
-    final PackageNameUnqualified in_pack,
-    final TypeName in_type)
+  public SizeExprConstant(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final BigInteger in_size)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.pack = NullCheck.notNull(in_pack);
+    this.lex = NullCheck.notNull(in_lex);
+    this.value = NullCheck.notNull(in_size);
   }
 
   /**
-   * @return The package name
+   * @return The size value
    */
 
-  public PackageNameUnqualified getPackage()
+  public BigInteger getValue()
   {
-    return this.pack;
+    return this.value;
   }
 
-  /**
-   * @return The type name
-   */
-
-  public TypeName getType()
-  {
-    return this.type;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchSizeExpression(
+    final SizeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchReference(this);
+    return m.matchConstant(this);
+  }
+
+  @Override public String toString()
+  {
+    return this.value.toString();
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.type.getLexicalInformation();
-  }
-
-  @Override public <A, E extends Exception> A matchTypeNameExpression(
-    final TypeExprNameMatcherType<A, E> m)
-    throws E
-  {
-    return m.matchNamePT(this);
+    return this.lex;
   }
 }

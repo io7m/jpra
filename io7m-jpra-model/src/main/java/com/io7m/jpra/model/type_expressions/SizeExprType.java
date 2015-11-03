@@ -14,40 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_declarations;
+package com.io7m.jpra.model.type_expressions;
+
+import com.io7m.jpra.model.ModelElementType;
 
 /**
- * A {@code record} field declaration matcher.
+ * The type of size expressions.
  *
- * @param <A> The type of returned values
- * @param <E> The type of raised exceptions
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-public interface RecordFieldDeclMatcherType<A, E extends Exception>
+public interface SizeExprType<I, T, S> extends ModelElementType
 {
   /**
-   * Match a field.
+   * Accept a matcher.
    *
-   * @param r The field
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
    *
-   * @return A value of {@code A}
+   * @return The value returned by {@code m}
    *
-   * @throws E If required
+   * @throws E If {@code m} raises {@code E}
    */
 
-  A matchPadding(RecordFieldDeclPaddingOctets r)
-    throws E;
-
-  /**
-   * Match a field.
-   *
-   * @param r The field
-   *
-   * @return A value of {@code A}
-   *
-   * @throws E If required
-   */
-
-  A matchValue(RecordFieldDeclValue r)
+  <A, E extends Exception> A matchSizeExpression(
+    final SizeExprMatcherType<I, T, S, A, E> m)
     throws E;
 }

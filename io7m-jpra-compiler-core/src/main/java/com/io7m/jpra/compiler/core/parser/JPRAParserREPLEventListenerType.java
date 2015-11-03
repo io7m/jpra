@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jpra.model.SizeExprType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 /**

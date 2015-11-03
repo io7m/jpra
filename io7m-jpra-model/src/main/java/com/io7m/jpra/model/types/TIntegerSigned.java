@@ -29,11 +29,10 @@ import java.util.Optional;
  * A {@code signed} integer type expression.
  */
 
-@Immutable public final class TIntegerSigned
-  implements TIntegerType
+@Immutable public final class TIntegerSigned implements TIntegerType
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final Size<SizeUnitBitsType> size;
+  private final Size<SizeUnitBitsType>                       size;
 
   /**
    * Construct an {@code integer signed} type expression.
@@ -48,6 +47,11 @@ import java.util.Optional;
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
+  }
+
+  @Override public Size<SizeUnitBitsType> getSize()
+  {
+    return this.size;
   }
 
   @Override public <A, E extends Exception> A matchType(

@@ -49,6 +49,11 @@ import java.util.Optional;
     this.size = NullCheck.notNull(in_size);
   }
 
+  @Override public Size<SizeUnitBitsType> getSize()
+  {
+    return this.size;
+  }
+
   @Override public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E

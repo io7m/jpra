@@ -28,7 +28,7 @@ import com.io7m.jpra.model.type_expressions.TypeExprNamePT;
 import com.io7m.jpra.model.type_expressions.TypeExprNamePTF;
 import com.io7m.jpra.model.type_expressions.TypeExprNameT;
 import com.io7m.jpra.model.type_expressions.TypeExprNameTF;
-import com.io7m.jpra.model.type_expressions.TypeExprNameType;
+import com.io7m.jpra.model.type_expressions.TypeExprName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.serializer.JSXSerializerType;
@@ -124,7 +124,7 @@ public final class JPRATypeReferenceNameParser
    * @throws JPRACompilerParseException On errors
    */
 
-  public static TypeExprNameType onName(
+  public static TypeExprName onName(
     final JSXSerializerType serial,
     final SExpressionSymbolType se)
     throws JPRACompilerParseException

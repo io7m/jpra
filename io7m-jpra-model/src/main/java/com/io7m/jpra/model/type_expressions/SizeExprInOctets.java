@@ -14,24 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.type_expressions.TypeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A size function denoting the size in bits of a given type expression.
+ * A size function denoting the size in octets of a given type expression.
+ *
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-@Immutable public final class SizeExprInBits
-  implements SizeExprType<SizeUnitBitsType>
+@Immutable public final class SizeExprInOctets<I, T, S>
+  implements SizeExprType<I, T, S>
 {
-  private final TypeExprType expression;
+  private final TypeExprType<I, T, S> expression;
 
   /**
    * Construct an expression.
@@ -39,7 +42,7 @@ import java.util.Optional;
    * @param in_expression The type expression
    */
 
-  public SizeExprInBits(final TypeExprType in_expression)
+  public SizeExprInOctets(final TypeExprType<I, T, S> in_expression)
   {
     this.expression = NullCheck.notNull(in_expression);
   }
@@ -48,16 +51,16 @@ import java.util.Optional;
    * @return The type expression
    */
 
-  public TypeExprType getTypeExpression()
+  public TypeExprType<I, T, S> getTypeExpression()
   {
     return this.expression;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<A, E> m)
+    final SizeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchInBits(this);
+    return m.matchInOctets(this);
   }
 
   @Override

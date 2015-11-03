@@ -14,70 +14,58 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_declarations;
+package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.names.FieldName;
-import com.io7m.jpra.model.type_expressions.TypeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A {@code field} declaration in a {@code packed} type.
+ * A size function denoting the size in bits of a given type expression.
+ *
+ * @param <I>  The type of identifiers
+ * @param <T>  The type of types
+ * @param <S>  The type of sizes (in bits)
  */
 
-@Immutable public final class PackedFieldDeclValue
-  implements PackedFieldDeclType
+@Immutable public final class SizeExprInBits<I, T, S>
+  implements SizeExprType<I, T, S>
 {
-  private final FieldName    name;
-  private final TypeExprType type;
+  private final TypeExprType<I, T, S> expression;
 
   /**
-   * Construct a {@code field} declaration.
+   * Construct an expression.
    *
-   * @param in_name The name of the field
-   * @param in_type The type of the field
+   * @param in_expression The type expression
    */
 
-  public PackedFieldDeclValue(
-    final FieldName in_name,
-    final TypeExprType in_type)
+  public SizeExprInBits(final TypeExprType<I, T, S> in_expression)
   {
-    this.name = NullCheck.notNull(in_name);
-    this.type = NullCheck.notNull(in_type);
+    this.expression = NullCheck.notNull(in_expression);
   }
 
   /**
-   * @return The field name
+   * @return The type expression
    */
 
-  public FieldName getName()
+  public TypeExprType<I, T, S> getTypeExpression()
   {
-    return this.name;
+    return this.expression;
   }
 
-  /**
-   * @return The field type
-   */
-
-  public TypeExprType getType()
-  {
-    return this.type;
-  }
-
-  @Override public <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchSizeExpression(
+    final SizeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchValue(this);
+    return m.matchInBits(this);
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.name.getLexicalInformation();
+    return this.expression.getLexicalInformation();
   }
 }

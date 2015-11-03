@@ -56,7 +56,9 @@
     <module name="ClassFanOutComplexity">
       <property name="max" value="125"/>
     </module>
-    <module name="ClassTypeParameterName"/>
+    <module name="ClassTypeParameterName">
+      <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+    </module>
     <module name="ConstantName"/>
     <module name="CovariantEquals"/>
     <module name="CyclomaticComplexity">

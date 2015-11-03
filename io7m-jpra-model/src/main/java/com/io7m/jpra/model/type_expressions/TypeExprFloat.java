@@ -18,58 +18,37 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitBitsType;
-import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A floating point type expression.
+ * @param <I> The type of identifiers
+ * @param <T> The type of types
+ * @param <S> The type of sizes (in bits)
  */
 
-@Immutable public final class TypeExprFloat implements TypeExprScalarType
+public final class TypeExprFloat<I, T, S> implements TypeExprType<I, T, S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<SizeUnitBitsType> size;
-
-  /**
-   * Construct a {@code float} type expression.
-   *
-   * @param in_lex  Lexical information
-   * @param in_size The size in bits that will be used
-   */
+  private final T                                            type;
+  private final S                                            size;
 
   public TypeExprFloat(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<SizeUnitBitsType> in_size)
+    final T in_type,
+    final S in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
+    this.type = NullCheck.notNull(in_type);
     this.size = NullCheck.notNull(in_size);
   }
 
-  /**
-   * @return An expression denoting the size in bits of the type
-   */
-
-  public SizeExprType<SizeUnitBitsType> getSizeExpression()
-  {
-    return this.size;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, S, A, E> m)
     throws E
   {
-    return m.matchFloat(this);
-  }
-
-  @Override public <A, E extends Exception> A matchTypeScalarExpression(
-    final TypeExprScalarMatcherType<A, E> m)
-    throws E
-  {
-    return m.matchScalarFloat(this);
+    return m.matchExprFloat(this);
   }
 
   @Override

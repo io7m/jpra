@@ -16,13 +16,14 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
+import com.io7m.jfunctional.Unit;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
+import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.type_expressions.SizeExprType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 /**
@@ -111,7 +112,7 @@ public interface JPRAParserEventListenerType
   void onRecordFieldValue(
     JPRAParserType p,
     FieldName name,
-    TypeExprType type);
+    TypeExprType<TypeName, FieldName, UnresolvedIdentifierType, Unit, SizeExprType<TypeName, FieldName, UnresolvedIdentifierType, Unit>> type);
 
   /**
    * A {@code record} type was finished.
