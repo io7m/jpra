@@ -23,44 +23,42 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * @param <TN> The type of identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
- */
-
-public final class TypeExprArray<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprArray<S> implements TypeExprType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final SizeExprType<TN, TR, FN, FR, T>              element_count;
-  private final TypeExprType<TN, TR, FN, FR, T>              element_type;
+  private final SizeExprType<S>                              element_count;
+  private final TypeExprType<S>                              element_type;
+  private final S                                            data;
 
   public TypeExprArray(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<TN, TR, FN, FR, T> in_element_count,
-    final T in_type,
-    final TypeExprType<TN, TR, FN, FR, T> in_element_type)
+    final SizeExprType<S> in_element_count,
+    final TypeExprType<S> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.type = NullCheck.notNull(in_type);
     this.element_count = NullCheck.notNull(in_element_count);
     this.element_type = NullCheck.notNull(in_element_type);
+    this.data = NullCheck.notNull(in_data);
   }
 
-  public TypeExprType<TN, TR, FN, FR, T> getElementType()
+  public TypeExprType<S> getElementType()
   {
     return this.element_type;
   }
 
-  public SizeExprType<TN, TR, FN, FR, T> getElementCount()
+  public SizeExprType<S> getElementCount()
   {
     return this.element_count;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchExprArray(this);

@@ -14,35 +14,40 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
-
-import com.io7m.jpra.model.ModelElementType;
+package com.io7m.jpra.model.type_declarations;
 
 /**
- * The type of type expressions.
+ * A {@code record} field declaration matcher.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
  */
 
-public interface TypeExprType<S> extends ModelElementType
+public interface RecordFieldDeclMatcherType<S, A, E extends Exception>
 {
   /**
-   * @return The supplemental data associated with the expression
+   * Match a field.
+   *
+   * @param r The field
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
    */
 
-  S getData();
+  A matchPadding(RecordFieldDeclPaddingOctets<S> r)
+    throws E;
 
   /**
-   * Accept a matcher.
+   * Match a field.
    *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
+   * @param r The field
    *
-   * @return The value returned by {@code m}
+   * @return A value of {@code A}
    *
-   * @throws E If {@code m} raises {@code E}
+   * @throws E If required
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+  A matchValue(RecordFieldDeclValue<S> r)
     throws E;
 }

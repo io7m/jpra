@@ -26,17 +26,13 @@ import java.util.Optional;
 
 /**
  * A constant size.
- *
- * @param <TN> The type of identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
  */
 
-@Immutable public final class SizeExprConstant<TN, TR, FN, FR, T>
-  implements SizeExprType<TN, TR, FN, FR, T>
+@Immutable public final class SizeExprConstant<S> implements SizeExprType<S>
 {
   private final BigInteger                                   value;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final S                                            data;
 
   /**
    * Construct a size expression.
@@ -48,11 +44,13 @@ import java.util.Optional;
    */
 
   public SizeExprConstant(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final BigInteger in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.value = NullCheck.notNull(in_size);
+    this.data = NullCheck.notNull(in_data);
   }
 
   /**
@@ -64,8 +62,13 @@ import java.util.Optional;
     return this.value;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final SizeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchConstant(this);

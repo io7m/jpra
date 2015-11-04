@@ -17,56 +17,53 @@
 package com.io7m.jpra.model.type_expressions;
 
 /**
- * @param <TN> The type of identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
  * @param <A>  The type of returned values
  * @param <E>  The type of raised exceptions
  */
 
-public interface TypeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
+public interface TypeExprMatcherType<S, A, E extends Exception>
 {
   A matchExprIntegerSigned(
-    TypeExprIntegerSigned<TN, TR, FN, FR, T> e)
+    TypeExprIntegerSigned<S> e)
     throws E;
 
   A matchExprIntegerSignedNormalized(
-    TypeExprIntegerSignedNormalized<TN, TR, FN, FR, T> e)
+    TypeExprIntegerSignedNormalized<S> e)
     throws E;
 
   A matchExprIntegerUnsigned(
-    TypeExprIntegerUnsigned<TN, TR, FN, FR, T> e)
+    TypeExprIntegerUnsigned<S> e)
     throws E;
 
   A matchExprIntegerUnsignedNormalized(
-    TypeExprIntegerUnsignedNormalized<TN, TR, FN, FR, T> e)
+    TypeExprIntegerUnsignedNormalized<S> e)
     throws E;
 
   A matchExprArray(
-    TypeExprArray<TN, TR, FN, FR, T> e)
+    TypeExprArray<S> e)
     throws E;
 
   A matchExprFloat(
-    TypeExprFloat<TN, TR, FN, FR, T> e)
+    TypeExprFloat<S> e)
     throws E;
 
   A matchExprVector(
-    TypeExprVector<TN, TR, FN, FR, T> e)
+    TypeExprVector<S> e)
     throws E;
 
-  A matchExprMatrix(TypeExprMatrix<TN, TR, FN, FR, T> e)
+  A matchExprMatrix(TypeExprMatrix<S> e)
     throws E;
 
-  A matchExprString(TypeExprString<TN, TR, FN, FR, T> e)
+  A matchExprString(TypeExprString<S> e)
     throws E;
 
-  A matchName(TypeExprName<TN, TR, FN, FR, T> e)
+  A matchName(TypeExprName<S> e)
     throws E;
 
-  A matchTypeOfField(TypeExprTypeOfField<TN, TR, FN, FR, T> e)
+  A matchTypeOfField(TypeExprTypeOfField<S> e)
     throws E;
 
   A matchBooleanSet(
-    TypeExprBooleanSet<TN, TR, FN, FR, T> e)
+    TypeExprBooleanSet<S> e)
     throws E;
 }

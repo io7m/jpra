@@ -16,12 +16,9 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jpra.model.Untyped;
-import com.io7m.jpra.model.names.FieldName;
-import com.io7m.jpra.model.names.FieldReference;
-import com.io7m.jpra.model.names.TypeName;
-import com.io7m.jpra.model.names.TypeReference;
+import com.io7m.jpra.model.Parsed;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jsx.SExpressionType;
 
@@ -32,6 +29,20 @@ import com.io7m.jsx.SExpressionType;
 public interface JPRAParserType
 {
   /**
+   * Parse a statement.
+   *
+   * @param expr The input expression
+   *
+   * @return A statement
+   *
+   * @throws JPRACompilerParseException On parse errors
+   */
+
+  StatementType<Parsed> parseStatement(
+    final SExpressionType expr)
+    throws JPRACompilerParseException;
+
+  /**
    * Parse a type expression.
    *
    * @param expr The input expression
@@ -41,8 +52,7 @@ public interface JPRAParserType
    * @throws JPRACompilerParseException On parse errors
    */
 
-  TypeExprType<TypeName, TypeReference, FieldName, FieldReference, Untyped>
-  parseTypeExpression(
+  TypeExprType<Parsed> parseTypeExpression(
     final SExpressionType expr)
     throws JPRACompilerParseException;
 
@@ -56,8 +66,7 @@ public interface JPRAParserType
    * @throws JPRACompilerParseException On parse errors
    */
 
-  SizeExprType<TypeName, TypeReference, FieldName, FieldReference,
-    Untyped> parseSizeExpression(
+  SizeExprType<Parsed> parseSizeExpression(
     final SExpressionType expr)
     throws JPRACompilerParseException;
 }

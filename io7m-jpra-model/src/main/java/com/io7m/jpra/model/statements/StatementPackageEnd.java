@@ -14,41 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.statements;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.ModelElementType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerSignedNormalized<S> implements TypeExprType<S>
+public final class StatementPackageEnd<S>
+  implements ModelElementType, StatementType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              size;
   private final S                                            data;
 
-  public TypeExprIntegerSignedNormalized(
+  public StatementPackageEnd(
     final S in_data,
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_size)
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
     this.data = NullCheck.notNull(in_data);
-  }
-
-  @Override public S getData()
-  {
-    return this.data;
-  }
-
-  @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
-    throws E
-  {
-    return m.matchExprIntegerSignedNormalized(this);
   }
 
   @Override
@@ -57,8 +43,15 @@ public final class TypeExprIntegerSignedNormalized<S> implements TypeExprType<S>
     return this.lex;
   }
 
-  public SizeExprType<S> getSize()
+  @Override public S getData()
   {
-    return this.size;
+    return this.data;
+  }
+
+  @Override public <A, E extends Exception> A matchStatement(
+    final StatementMatcherType<S, A, E> m)
+    throws E
+  {
+    return m.matchPackageEnd(this);
   }
 }

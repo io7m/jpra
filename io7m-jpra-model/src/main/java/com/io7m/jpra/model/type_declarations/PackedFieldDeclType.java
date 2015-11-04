@@ -14,22 +14,16 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jpra.model.ModelElementType;
 
 /**
- * The type of type expressions.
+ * The type of field declarations for {@code packed} types.
  */
 
-public interface TypeExprType<S> extends ModelElementType
+public interface PackedFieldDeclType<S> extends ModelElementType
 {
-  /**
-   * @return The supplemental data associated with the expression
-   */
-
-  S getData();
-
   /**
    * Accept a matcher.
    *
@@ -42,7 +36,7 @@ public interface TypeExprType<S> extends ModelElementType
    * @throws E If {@code m} raises {@code E}
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+  <A, E extends Exception> A matchPackedFieldDeclaration(
+    final PackedFieldDeclMatcherType<S, A, E> m)
     throws E;
 }

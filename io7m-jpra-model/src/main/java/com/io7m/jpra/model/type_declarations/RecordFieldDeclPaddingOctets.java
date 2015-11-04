@@ -14,51 +14,61 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerSignedNormalized<S> implements TypeExprType<S>
-{
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              size;
-  private final S                                            data;
+/**
+ * A {@code record} field declaration that specifies a number of padding
+ * octets.
+ */
 
-  public TypeExprIntegerSignedNormalized(
-    final S in_data,
+@Immutable public final class RecordFieldDeclPaddingOctets<S>
+  implements RecordFieldDeclType<S>
+{
+  private final SizeExprType<S>                              size;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+
+  /**
+   * Construct a field declaration.
+   *
+   * @param in_lex  The lexical information for the name
+   * @param in_size The size expression
+   */
+
+  public RecordFieldDeclPaddingOctets(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<S> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
   }
 
-  @Override public S getData()
+  /**
+   * @return The field size expression
+   */
+
+  public SizeExprType<S> getSizeExpression()
   {
-    return this.data;
+    return this.size;
   }
 
-  @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+  @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
+    final RecordFieldDeclMatcherType<S, A, E> m)
     throws E
   {
-    return m.matchExprIntegerSignedNormalized(this);
+    return m.matchPadding(this);
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
-  }
-
-  public SizeExprType<S> getSize()
-  {
-    return this.size;
   }
 }

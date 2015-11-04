@@ -20,14 +20,16 @@ import com.io7m.jpra.model.ModelElementType;
 
 /**
  * The type of size expressions.
- *
- * @param <TN> The type of type identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
  */
 
-public interface SizeExprType<TN, TR, FN, FR, T> extends ModelElementType
+public interface SizeExprType<S> extends ModelElementType
 {
+  /**
+   * @return The supplemental data associated with the expression
+   */
+
+  S getData();
+
   /**
    * Accept a matcher.
    *
@@ -41,6 +43,6 @@ public interface SizeExprType<TN, TR, FN, FR, T> extends ModelElementType
    */
 
   <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final SizeExprMatcherType<S, A, E> m)
     throws E;
 }

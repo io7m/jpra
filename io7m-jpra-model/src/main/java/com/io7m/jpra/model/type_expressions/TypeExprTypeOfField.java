@@ -18,33 +18,36 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.names.FieldReference;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprTypeOfField<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprTypeOfField<S> implements TypeExprType<S>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final SizeExprType<TN, TR, FN, FR, T>              size;
-  private final FR                                           name;
+  private final S              data;
+  private final FieldReference field_reference;
 
   public TypeExprTypeOfField(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final FR in_name,
-    final T in_type,
-    final SizeExprType<TN, TR, FN, FR, T> in_size)
+    final S in_data,
+    final FieldReference in_field_reference)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.name = NullCheck.notNull(in_name);
-    this.type = NullCheck.notNull(in_type);
-    this.size = NullCheck.notNull(in_size);
+    this.field_reference = NullCheck.notNull(in_field_reference);
+    this.data = NullCheck.notNull(in_data);
+  }
+
+  public FieldReference getFieldReference()
+  {
+    return this.field_reference;
+  }
+
+  @Override public S getData()
+  {
+    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchTypeOfField(this);
@@ -53,6 +56,6 @@ public final class TypeExprTypeOfField<TN, TR, FN, FR, T>
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.lex;
+    return this.field_reference.getFieldPath().get(0).getLexicalInformation();
   }
 }

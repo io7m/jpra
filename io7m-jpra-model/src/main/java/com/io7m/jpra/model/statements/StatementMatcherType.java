@@ -14,35 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.statements;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.type_declarations.TypeDeclType;
 
-/**
- * The type of type expressions.
- */
-
-public interface TypeExprType<S> extends ModelElementType
+public interface StatementMatcherType<S, A, E extends Exception>
 {
-  /**
-   * @return The supplemental data associated with the expression
-   */
+  A matchPackageBegin(
+    StatementPackageBegin<S> s)
+    throws E;
 
-  S getData();
+  A matchPackageEnd(
+    StatementPackageEnd<S> s)
+    throws E;
 
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
+  A matchPackageImport(
+    StatementPackageImport<S> s)
+    throws E;
 
-  <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+  A matchTypeDecl(TypeDeclType<S> s)
     throws E;
 }

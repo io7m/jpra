@@ -19,14 +19,11 @@ package com.io7m.jpra.model.size_expressions;
 /**
  * A size expression matcher.
  *
- * @param <TN> The type of identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
- * @param <A>  The type of returned values
- * @param <E>  The type of raised exceptions
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
+public interface SizeExprMatcherType<S, A, E extends Exception>
 {
   /**
    * Match an expression.
@@ -38,7 +35,8 @@ public interface SizeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<TN, TR, FN, FR, T> s)
+  A matchConstant(
+    SizeExprConstant<S> s)
     throws E;
 
   /**
@@ -51,7 +49,8 @@ public interface SizeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets<TN, TR, FN, FR, T> s)
+  A matchInOctets(
+    SizeExprInOctets<S> s)
     throws E;
 
   /**
@@ -64,6 +63,7 @@ public interface SizeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits<TN, TR, FN, FR, T> s)
+  A matchInBits(
+    SizeExprInBits<S> s)
     throws E;
 }

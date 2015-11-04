@@ -23,27 +23,26 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprString<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprString<S> implements TypeExprType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final SizeExprType<TN, TR, FN, FR, T>              size;
+  private final SizeExprType<S>                              size;
   private final String                                       encoding;
+  private final S                                            data;
 
   public TypeExprString(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final T in_type,
-    final SizeExprType<TN, TR, FN, FR, T> in_size,
+    final SizeExprType<S> in_size,
     final String in_encoding)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.type = NullCheck.notNull(in_type);
     this.size = NullCheck.notNull(in_size);
     this.encoding = NullCheck.notNull(in_encoding);
+    this.data = NullCheck.notNull(in_data);
   }
 
-  public SizeExprType<TN, TR, FN, FR, T> getSize()
+  public SizeExprType<S> getSize()
   {
     return this.size;
   }
@@ -53,8 +52,13 @@ public final class TypeExprString<TN, TR, FN, FR, T>
     return this.encoding;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchExprString(this);

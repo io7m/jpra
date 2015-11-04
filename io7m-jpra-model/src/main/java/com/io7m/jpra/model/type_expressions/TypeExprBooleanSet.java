@@ -25,29 +25,32 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprBooleanSet<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprBooleanSet<S> implements TypeExprType<S>
 {
-  private final SizeExprType<TN, TR, FN, FR, T>              size;
+  private final SizeExprType<S>                              size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final S                                            data;
 
   /**
    * Construct a type expression.
    *
+   * @param in_data   The supplemental data
    * @param in_lex    Lexical information
    * @param in_fields The fields of the set
    * @param in_size   The size in octets that will be used
    */
 
   public TypeExprBooleanSet(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
-    final SizeExprType<TN, TR, FN, FR, T> in_size)
+    final SizeExprType<S> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.fields = NullCheck.notNull(in_fields);
     this.size = NullCheck.notNull(in_size);
+    this.data = NullCheck.notNull(in_data);
   }
 
   /**
@@ -63,13 +66,18 @@ public final class TypeExprBooleanSet<TN, TR, FN, FR, T>
    * @return The size expression denoting the size in octets
    */
 
-  public SizeExprType<TN, TR, FN, FR, T> getSizeExpression()
+  public SizeExprType<S> getSizeExpression()
   {
     return this.size;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchBooleanSet(this);
@@ -79,10 +87,5 @@ public final class TypeExprBooleanSet<TN, TR, FN, FR, T>
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
-  }
-
-  public SizeExprType<TN, TR, FN, FR, T> getSize()
-  {
-    return size;
   }
 }

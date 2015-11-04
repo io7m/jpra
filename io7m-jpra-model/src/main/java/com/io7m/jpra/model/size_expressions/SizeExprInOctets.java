@@ -26,39 +26,44 @@ import java.util.Optional;
 
 /**
  * A size function denoting the size in octets of a given type expression.
- *
- * @param <TN> The type of identifiers
- * @param <FN> The type of field identifiers
- * @param <T>  The type of evaluated types
  */
 
-@Immutable public final class SizeExprInOctets<TN, TR, FN, FR, T>
-  implements SizeExprType<TN, TR, FN, FR, T>
+@Immutable public final class SizeExprInOctets<S> implements SizeExprType<S>
 {
-  private final TypeExprType<TN, TR, FN, FR, T> expression;
+  private final TypeExprType<S> expression;
+  private final S data;
 
   /**
    * Construct an expression.
    *
+   * @param in_data       The supplemental data
    * @param in_expression The type expression
    */
 
-  public SizeExprInOctets(final TypeExprType<TN, TR, FN, FR, T> in_expression)
+  public SizeExprInOctets(
+    final S in_data,
+    final TypeExprType<S> in_expression)
   {
     this.expression = NullCheck.notNull(in_expression);
+    this.data = NullCheck.notNull(in_data);
   }
 
   /**
    * @return The type expression
    */
 
-  public TypeExprType<TN, TR, FN, FR, T> getTypeExpression()
+  public TypeExprType<S> getTypeExpression()
   {
     return this.expression;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final SizeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchInOctets(this);

@@ -28,46 +28,50 @@ import java.util.Optional;
  * @param <T> The type of evaluated types
  */
 
-public final class TypeExprMatrix<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprMatrix<S> implements TypeExprType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final SizeExprType<TN, TR, FN, FR, T>              width;
-  private final SizeExprType<TN, TR, FN, FR, T>              height;
-  private final TypeExprType<TN, TR, FN, FR, T>              element_type;
+  private final SizeExprType<S>                              width;
+  private final SizeExprType<S>                              height;
+  private final TypeExprType<S>                              element_type;
+  private final S                                            data;
 
   public TypeExprMatrix(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final T in_type,
-    final SizeExprType<TN, TR, FN, FR, T> in_width,
-    final SizeExprType<TN, TR, FN, FR, T> in_height,
-    final TypeExprType<TN, TR, FN, FR, T> in_element_type)
+    final SizeExprType<S> in_width,
+    final SizeExprType<S> in_height,
+    final TypeExprType<S> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.type = NullCheck.notNull(in_type);
     this.width = NullCheck.notNull(in_width);
     this.height = NullCheck.notNull(in_height);
     this.element_type = NullCheck.notNull(in_element_type);
+    this.data = NullCheck.notNull(in_data);
   }
 
-  public SizeExprType<TN, TR, FN, FR, T> getHeight()
+  public SizeExprType<S> getHeight()
   {
     return this.height;
   }
 
-  public TypeExprType<TN, TR, FN, FR, T> getElementType()
+  public TypeExprType<S> getElementType()
   {
     return this.element_type;
   }
 
-  public SizeExprType<TN, TR, FN, FR, T> getWidth()
+  public SizeExprType<S> getWidth()
   {
     return this.width;
   }
 
+  @Override public S getData()
+  {
+    return this.data;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchExprMatrix(this);

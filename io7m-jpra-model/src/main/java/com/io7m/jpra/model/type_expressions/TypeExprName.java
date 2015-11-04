@@ -18,34 +18,36 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.TypeReference;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprName<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprName<S> implements TypeExprType<S>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final TR                                           name;
+  private final S             data;
+  private final TypeReference ref;
 
   public TypeExprName(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final TR in_name,
-    final T in_type)
+    final S in_data,
+    final TypeReference in_ref)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.name = NullCheck.notNull(in_name);
-    this.type = NullCheck.notNull(in_type);
+    this.data = NullCheck.notNull(in_data);
+    this.ref = NullCheck.notNull(in_ref);
   }
 
-  public TR getName()
+  public TypeReference getReference()
   {
-    return this.name;
+    return this.ref;
+  }
+
+  @Override public S getData()
+  {
+    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchName(this);
@@ -54,6 +56,6 @@ public final class TypeExprName<TN, TR, FN, FR, T>
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.lex;
+    return this.ref.getType().getLexicalInformation();
   }
 }

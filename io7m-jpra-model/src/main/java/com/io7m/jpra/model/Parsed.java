@@ -14,35 +14,28 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
-
-import com.io7m.jpra.model.ModelElementType;
+package com.io7m.jpra.model;
 
 /**
- * The type of type expressions.
+ * A type indicating that parsing but no name resolution or type checking
+ * has been performed.
  */
 
-public interface TypeExprType<S> extends ModelElementType
+public final class Parsed
 {
+  private static final Parsed INSTANCE = new Parsed();
+
+  private Parsed()
+  {
+
+  }
+
   /**
-   * @return The supplemental data associated with the expression
+   * @return The untyped value
    */
 
-  S getData();
-
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
-
-  <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
-    throws E;
+  public static Parsed get()
+  {
+    return Parsed.INSTANCE;
+  }
 }

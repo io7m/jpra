@@ -14,46 +14,79 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerUnsigned<S> implements TypeExprType<S>
-{
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              size;
-  private final S                                            data;
+/**
+ * A {@code packed} type field that specifies a number of padding bits.
+ */
 
-  public TypeExprIntegerUnsigned(
-    final S in_data,
+@Immutable public final class PackedFieldDeclPaddingBits<S>
+  implements PackedFieldDeclType<S>
+{
+  private final SizeExprType<S>                              size;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+
+  private PackedFieldDeclPaddingBits(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<S> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
   }
 
-  public SizeExprType<S> getSize()
+  /**
+   * Construct a field declaration.
+   *
+   * @param in_size The size expression
+   *
+   * @return A new field declaration
+   */
+
+  public static <S> PackedFieldDeclPaddingBits<S> newField(
+    final SizeExprType<S> in_size)
+  {
+    return new PackedFieldDeclPaddingBits<S>(Optional.empty(), in_size);
+  }
+
+  /**
+   * Construct a field declaration.
+   *
+   * @param lex     The lexical information for the name
+   * @param in_size The size expression
+   *
+   * @return A new field declaration
+   */
+
+  public static <S> PackedFieldDeclPaddingBits<S> newFieldWithLex(
+    final ImmutableLexicalPositionType<Path> lex,
+    final SizeExprType<S> in_size)
+  {
+    return new PackedFieldDeclPaddingBits<S>(
+      Optional.of(NullCheck.notNull(lex)), in_size);
+  }
+
+  /**
+   * @return The size expression for the field
+   */
+
+  public SizeExprType<S> getSizeExpression()
   {
     return this.size;
   }
 
-  @Override public S getData()
-  {
-    return this.data;
-  }
-
-  @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+  @Override public <A, E extends Exception> A matchPackedFieldDeclaration(
+    final PackedFieldDeclMatcherType<S, A, E> m)
     throws E
   {
-    return m.matchExprIntegerUnsigned(this);
+    return m.matchPaddingBits(this);
   }
 
   @Override

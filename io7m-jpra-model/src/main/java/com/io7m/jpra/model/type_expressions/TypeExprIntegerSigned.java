@@ -23,25 +23,29 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerSigned<TN, TR, FN, FR, T>
-  implements TypeExprType<TN, TR, FN, FR, T>
+public final class TypeExprIntegerSigned<S> implements TypeExprType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final SizeExprType<TN, TR, FN, FR, T>              size;
+  private final SizeExprType<S>                              size;
+  private final S                                            data;
 
   public TypeExprIntegerSigned(
+    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final T in_type,
-    final SizeExprType<TN, TR, FN, FR, T> in_size)
+    final SizeExprType<S> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.type = NullCheck.notNull(in_type);
     this.size = NullCheck.notNull(in_size);
+    this.data = NullCheck.notNull(in_data);
+  }
+
+  @Override public S getData()
+  {
+    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    final TypeExprMatcherType<S, A, E> m)
     throws E
   {
     return m.matchExprIntegerSigned(this);
@@ -53,8 +57,8 @@ public final class TypeExprIntegerSigned<TN, TR, FN, FR, T>
     return this.lex;
   }
 
-  public SizeExprType<TN, TR, FN, FR, T> getSize()
+  public SizeExprType<S> getSize()
   {
-    return size;
+    return this.size;
   }
 }
