@@ -16,35 +16,63 @@
 
 package com.io7m.jpra.model.type_expressions;
 
+import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerSignedNormalized<TN, TR, FN, FR, T>
+public final class TypeExprBooleanSet<TN, TR, FN, FR, T>
   implements TypeExprType<TN, TR, FN, FR, T>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
   private final SizeExprType<TN, TR, FN, FR, T>              size;
+  private final ImmutableList<FieldName>                     fields;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
-  public TypeExprIntegerSignedNormalized(
+  /**
+   * Construct a type expression.
+   *
+   * @param in_lex    Lexical information
+   * @param in_fields The fields of the set
+   * @param in_size   The size in octets that will be used
+   */
+
+  public TypeExprBooleanSet(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final T in_type,
+    final ImmutableList<FieldName> in_fields,
     final SizeExprType<TN, TR, FN, FR, T> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.type = NullCheck.notNull(in_type);
+    this.fields = NullCheck.notNull(in_fields);
     this.size = NullCheck.notNull(in_size);
+  }
+
+  /**
+   * @return The fields in declaration order
+   */
+
+  public ImmutableList<FieldName> getFieldsInDeclarationOrder()
+  {
+    return this.fields;
+  }
+
+  /**
+   * @return The size expression denoting the size in octets
+   */
+
+  public SizeExprType<TN, TR, FN, FR, T> getSizeExpression()
+  {
+    return this.size;
   }
 
   @Override public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
-    return m.matchExprIntegerSignedNormalized(this);
+    return m.matchBooleanSet(this);
   }
 
   @Override
@@ -55,6 +83,6 @@ public final class TypeExprIntegerSignedNormalized<TN, TR, FN, FR, T>
 
   public SizeExprType<TN, TR, FN, FR, T> getSize()
   {
-    return this.size;
+    return size;
   }
 }

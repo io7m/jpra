@@ -14,15 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.compiler.core.checker;
-
-import com.io7m.jpra.compiler.core.parser.JPRAParserREPLEventListenerType;
-
 /**
- * The type of type checkers.
+ * Size expressions.
  */
 
-public interface CheckerType extends JPRAParserREPLEventListenerType
-{
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.size_expressions;
 
-}

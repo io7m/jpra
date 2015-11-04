@@ -14,11 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.compiler.core.resolver;
+package com.io7m.jpra.model.size_expressions;
 
-import com.io7m.jpra.compiler.core.parser.JPRAParserREPLEventListenerType;
+import com.io7m.jpra.model.ModelElementType;
 
-public interface JPRAResolverType extends JPRAParserREPLEventListenerType
+/**
+ * The type of size expressions.
+ *
+ * @param <TN> The type of type identifiers
+ * @param <FN> The type of field identifiers
+ * @param <T>  The type of evaluated types
+ */
+
+public interface SizeExprType<TN, TR, FN, FR, T> extends ModelElementType
 {
+  /**
+   * Accept a matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
 
+  <A, E extends Exception> A matchSizeExpression(
+    final SizeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
+    throws E;
 }

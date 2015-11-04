@@ -14,19 +14,19 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.size_expressions;
 
 /**
  * A size expression matcher.
  *
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * @param <TN> The type of identifiers
+ * @param <FN> The type of field identifiers
+ * @param <T>  The type of evaluated types
  * @param <A>  The type of returned values
  * @param <E>  The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<I, T, S, A, E extends Exception>
+public interface SizeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
 {
   /**
    * Match an expression.
@@ -38,7 +38,7 @@ public interface SizeExprMatcherType<I, T, S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchConstant(SizeExprConstant<I, T, S> s)
+  A matchConstant(SizeExprConstant<TN, TR, FN, FR, T> s)
     throws E;
 
   /**
@@ -51,7 +51,7 @@ public interface SizeExprMatcherType<I, T, S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchInOctets(SizeExprInOctets<I, T, S> s)
+  A matchInOctets(SizeExprInOctets<TN, TR, FN, FR, T> s)
     throws E;
 
   /**
@@ -64,6 +64,6 @@ public interface SizeExprMatcherType<I, T, S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchInBits(SizeExprInBits<I, T, S> s)
+  A matchInBits(SizeExprInBits<TN, TR, FN, FR, T> s)
     throws E;
 }

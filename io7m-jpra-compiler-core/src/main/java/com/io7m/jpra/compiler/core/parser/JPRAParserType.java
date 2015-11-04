@@ -16,38 +16,48 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
-import com.io7m.jpra.compiler.core.JPRACompilerException;
+import com.io7m.jpra.model.Untyped;
+import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.FieldReference;
+import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.names.TypeReference;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jsx.SExpressionType;
 
-import java.nio.file.Path;
-import java.util.Optional;
-
 /**
- * The type of statement parsers.
+ * The type of parsers.
  */
 
 public interface JPRAParserType
 {
   /**
-   * Parse a statement.
+   * Parse a type expression.
    *
-   * @param e        A raw s-expression
-   * @param listener A listener that will receive the results of parsing
+   * @param expr The input expression
+   *
+   * @return A type expression
    *
    * @throws JPRACompilerParseException On parse errors
-   * @throws JPRACompilerException      Propagated from {@code listener}
    */
 
-  void parseStatement(
-    SExpressionType e,
-    JPRAParserREPLEventListenerType listener)
-    throws JPRACompilerException, JPRACompilerParseException;
+  TypeExprType<TypeName, TypeReference, FieldName, FieldReference, Untyped>
+  parseTypeExpression(
+    final SExpressionType expr)
+    throws JPRACompilerParseException;
 
   /**
-   * @return The current parsing position, if the underlying lexer is providing
-   * this information.
+   * Parse a size expression.
+   *
+   * @param expr The input expression
+   *
+   * @return A type expression
+   *
+   * @throws JPRACompilerParseException On parse errors
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getParsingPosition();
+  SizeExprType<TypeName, TypeReference, FieldName, FieldReference,
+    Untyped> parseSizeExpression(
+    final SExpressionType expr)
+    throws JPRACompilerParseException;
 }

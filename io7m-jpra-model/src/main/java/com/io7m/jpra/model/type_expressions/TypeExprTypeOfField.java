@@ -18,54 +18,41 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import net.jcip.annotations.Immutable;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * A size function denoting the size in octets of a given type expression.
- *
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
- */
-
-@Immutable public final class SizeExprInOctets<I, T, S>
-  implements SizeExprType<I, T, S>
+public final class TypeExprTypeOfField<TN, TR, FN, FR, T>
+  implements TypeExprType<TN, TR, FN, FR, T>
 {
-  private final TypeExprType<I, T, S> expression;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final T                                            type;
+  private final SizeExprType<TN, TR, FN, FR, T>              size;
+  private final FR                                           name;
 
-  /**
-   * Construct an expression.
-   *
-   * @param in_expression The type expression
-   */
-
-  public SizeExprInOctets(final TypeExprType<I, T, S> in_expression)
+  public TypeExprTypeOfField(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final FR in_name,
+    final T in_type,
+    final SizeExprType<TN, TR, FN, FR, T> in_size)
   {
-    this.expression = NullCheck.notNull(in_expression);
+    this.lex = NullCheck.notNull(in_lex);
+    this.name = NullCheck.notNull(in_name);
+    this.type = NullCheck.notNull(in_type);
+    this.size = NullCheck.notNull(in_size);
   }
 
-  /**
-   * @return The type expression
-   */
-
-  public TypeExprType<I, T, S> getTypeExpression()
-  {
-    return this.expression;
-  }
-
-  @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, T, S, A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
-    return m.matchInOctets(this);
+    return m.matchTypeOfField(this);
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.expression.getLexicalInformation();
+    return this.lex;
   }
 }

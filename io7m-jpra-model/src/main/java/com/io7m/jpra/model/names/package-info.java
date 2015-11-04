@@ -14,18 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.tests.compiler.core.resolver;
+/**
+ * Unresolved name types.
+ */
 
-import com.io7m.jpra.compiler.core.resolver.JPRAResolver;
-import com.io7m.jpra.compiler.core.resolver.JPRAResolverEventListenerType;
-import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.names;
 
-public final class JPRAResolverTest
-  extends JPRAResolverContract<JPRAResolverType>
-{
-  @Override
-  protected JPRAResolverType newResolver(final JPRAResolverEventListenerType e)
-  {
-    return JPRAResolver.newResolver(e);
-  }
-}

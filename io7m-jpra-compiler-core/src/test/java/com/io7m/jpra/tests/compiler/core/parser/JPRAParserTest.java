@@ -20,6 +20,8 @@ import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jpra.compiler.core.parser.JPRAParser;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
+import com.io7m.jpra.compiler.core.parser.JPRAReferenceParser;
+import com.io7m.jsx.SExpressionType;
 import com.io7m.jsx.lexer.JSXLexer;
 import com.io7m.jsx.lexer.JSXLexerConfiguration;
 import com.io7m.jsx.lexer.JSXLexerConfigurationBuilderType;
@@ -27,17 +29,21 @@ import com.io7m.jsx.lexer.JSXLexerType;
 import com.io7m.jsx.parser.JSXParser;
 import com.io7m.jsx.parser.JSXParserConfiguration;
 import com.io7m.jsx.parser.JSXParserConfigurationBuilderType;
+import com.io7m.jsx.parser.JSXParserException;
 import com.io7m.jsx.parser.JSXParserType;
+import com.io7m.jsx.serializer.JSXSerializerTrivial;
+import com.io7m.jsx.serializer.JSXSerializerType;
+import com.io7m.junreachable.UnreachableCodeException;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public final class JPRAParserTest
-  extends JPRAParserContract<JPRAParserType>
+public final class JPRAParserTest extends JPRAParserContract
 {
-  @Override protected JSXParserType newSExpressionParser(final String name)
+  private static JSXParserType newJSXParser(final InputStream s)
   {
-    final InputStream s = JPRAParserTest.class.getResourceAsStream(name);
     final InputStreamReader ir = new InputStreamReader(s);
     final UnicodeCharacterReaderPushBackType r =
       UnicodeCharacterReader.newReader(ir);
@@ -55,8 +61,32 @@ public final class JPRAParserTest
     return JSXParser.newParser(pc.build(), lex);
   }
 
-  @Override protected JPRAParserType newParser()
+  @Override protected JPRAParserType getParser()
   {
-    return JPRAParser.newParser();
+    final JSXSerializerType serial = JSXSerializerTrivial.newSerializer();
+    return JPRAParser.newParser(serial, JPRAReferenceParser.newParser(serial));
+  }
+
+  @Override protected SExpressionType newFileSExpr(final String name)
+  {
+    try {
+      final InputStream s = JPRAParserTest.class.getResourceAsStream(name);
+      final JSXParserType p = JPRAParserTest.newJSXParser(s);
+      return p.parseExpression();
+    } catch (final JSXParserException | IOException e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+  @Override
+  protected SExpressionType newStringSExpr(final String expr)
+  {
+    try {
+      final InputStream s = new ByteArrayInputStream(expr.getBytes("UTF-8"));
+      final JSXParserType p = JPRAParserTest.newJSXParser(s);
+      return p.parseExpression();
+    } catch (final JSXParserException | IOException e) {
+      throw new UnreachableCodeException(e);
+    }
   }
 }

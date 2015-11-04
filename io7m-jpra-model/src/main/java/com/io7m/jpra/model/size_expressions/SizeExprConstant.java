@@ -14,58 +14,71 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.size_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A size function denoting the size in bits of a given type expression.
+ * A constant size.
  *
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * @param <TN> The type of identifiers
+ * @param <FN> The type of field identifiers
+ * @param <T>  The type of evaluated types
  */
 
-@Immutable public final class SizeExprInBits<I, T, S>
-  implements SizeExprType<I, T, S>
+@Immutable public final class SizeExprConstant<TN, TR, FN, FR, T>
+  implements SizeExprType<TN, TR, FN, FR, T>
 {
-  private final TypeExprType<I, T, S> expression;
+  private final BigInteger                                   value;
+  private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
   /**
-   * Construct an expression.
+   * Construct a size expression.
    *
-   * @param in_expression The type expression
+   * @param in_lex  The lexical information for the name
+   * @param in_size The size expression
+   *
+   * @return A new size expression
    */
 
-  public SizeExprInBits(final TypeExprType<I, T, S> in_expression)
+  public SizeExprConstant(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final BigInteger in_size)
   {
-    this.expression = NullCheck.notNull(in_expression);
+    this.lex = NullCheck.notNull(in_lex);
+    this.value = NullCheck.notNull(in_size);
   }
 
   /**
-   * @return The type expression
+   * @return The size value
    */
 
-  public TypeExprType<I, T, S> getTypeExpression()
+  public BigInteger getValue()
   {
-    return this.expression;
+    return this.value;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, T, S, A, E> m)
+    final SizeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
-    return m.matchInBits(this);
+    return m.matchConstant(this);
+  }
+
+  @Override public String toString()
+  {
+    return this.value.toString();
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.expression.getLexicalInformation();
+    return this.lex;
   }
 }

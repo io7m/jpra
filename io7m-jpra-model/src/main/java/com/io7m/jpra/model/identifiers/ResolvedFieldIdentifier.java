@@ -19,20 +19,20 @@ package com.io7m.jpra.model.identifiers;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
-import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.names.FieldName;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeIdentifier implements ModelElementType
+public final class ResolvedFieldIdentifier implements ModelElementType
 {
-  private final TypeName   name;
+  private final FieldName  name;
   private final BigInteger id;
 
-  public TypeIdentifier(
+  public ResolvedFieldIdentifier(
     final BigInteger in_id,
-    final TypeName in_name)
+    final FieldName in_name)
   {
     this.id = NullCheck.notNull(in_id);
     this.name = NullCheck.notNull(in_name);
@@ -47,7 +47,7 @@ public final class TypeIdentifier implements ModelElementType
       return false;
     }
 
-    final TypeIdentifier that = (TypeIdentifier) o;
+    final ResolvedFieldIdentifier that = (ResolvedFieldIdentifier) o;
     return this.id.equals(that.id);
   }
 

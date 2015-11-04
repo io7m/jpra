@@ -24,8 +24,8 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.Size;
 import com.io7m.jpra.model.SizeUnitBitsType;
-import com.io7m.jpra.model.identifiers.FieldIdentifier;
-import com.io7m.jpra.model.identifiers.TypeIdentifier;
+import com.io7m.jpra.model.identifiers.ResolvedFieldIdentifier;
+import com.io7m.jpra.model.identifiers.ResolvedTypeIdentifier;
 import org.valid4j.Assertive;
 
 import java.nio.file.Path;
@@ -37,10 +37,12 @@ import java.util.Optional;
 
 public final class TPacked implements TType
 {
-  private final TypeIdentifier                            ident;
-  private final Size<SizeUnitBitsType>                    size_bits;
-  private final ImmutableMap<FieldIdentifier, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType>                  fields_by_order;
+  private final ResolvedTypeIdentifier                            ident;
+  private final Size<SizeUnitBitsType>                            size_bits;
+  private final ImmutableMap<ResolvedFieldIdentifier, FieldValue>
+                                                                  fields_by_name;
+  private final ImmutableList<FieldType>
+                                                                  fields_by_order;
 
   /**
    * Construct a record type.
@@ -51,8 +53,8 @@ public final class TPacked implements TType
    */
 
   public TPacked(
-    final ImmutableMap<FieldIdentifier, FieldValue> in_fields_by_name,
-    final TypeIdentifier in_ident,
+    final ImmutableMap<ResolvedFieldIdentifier, FieldValue> in_fields_by_name,
+    final ResolvedTypeIdentifier in_ident,
     final ImmutableList<FieldType> in_fields_by_order)
   {
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
@@ -162,8 +164,8 @@ public final class TPacked implements TType
 
   public static final class FieldValue implements FieldType
   {
-    private final FieldIdentifier identifier;
-    private final TType           type;
+    private final ResolvedFieldIdentifier identifier;
+    private final TType                   type;
 
     /**
      * Construct a field.
@@ -173,7 +175,7 @@ public final class TPacked implements TType
      */
 
     public FieldValue(
-      final FieldIdentifier in_identifier,
+      final ResolvedFieldIdentifier in_identifier,
       final TType in_type)
     {
       this.identifier = NullCheck.notNull(in_identifier);

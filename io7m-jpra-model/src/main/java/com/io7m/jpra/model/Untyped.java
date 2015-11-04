@@ -14,36 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.compiler.core.parser;
-
-import com.io7m.jpra.model.type_expressions.TypeExprType;
+package com.io7m.jpra.model;
 
 /**
- * A listener that will receive the results of REPL-specific expressions.
+ * A type indicating that no type checking has yet been performed.
  */
 
-public interface JPRAParserREPLEventListenerType
-  extends JPRAParserEventListenerType
+public final class Untyped
 {
-  /**
-   * Called on {@code :type} expressions.
-   *
-   * @param p The parser
-   * @param t The resulting type expression
-   */
+  private static final Untyped INSTANCE = new Untyped();
 
-  void onREPLType(
-    JPRAParserType p,
-    TypeExprType t);
+  private Untyped()
+  {
+
+  }
 
   /**
-   * Called on {@code :size} expressions.
-   *
-   * @param p The parser
-   * @param t The resulting size expression
+   * @return The untyped value
    */
 
-  void onREPLSize(
-    JPRAParserType p,
-    SizeExprType<?> t);
+  public static Untyped get()
+  {
+    return Untyped.INSTANCE;
+  }
 }

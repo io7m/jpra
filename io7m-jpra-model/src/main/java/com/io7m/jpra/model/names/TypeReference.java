@@ -14,33 +14,32 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.names;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jnull.NullCheck;
 
-/**
- * The type of size expressions.
- *
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
- */
+import java.util.Optional;
 
-public interface SizeExprType<I, T, S> extends ModelElementType
+public final class TypeReference
 {
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
+  private final Optional<PackageNameUnqualified> pack;
+  private final TypeName                         type;
 
-  <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, T, S, A, E> m)
-    throws E;
+  public TypeReference(
+    final Optional<PackageNameUnqualified> in_pack,
+    final TypeName in_type)
+  {
+    this.type = NullCheck.notNull(in_type);
+    this.pack = NullCheck.notNull(in_pack);
+  }
+
+  public Optional<PackageNameUnqualified> getPackage()
+  {
+    return this.pack;
+  }
+
+  public TypeName getType()
+  {
+    return this.type;
+  }
 }

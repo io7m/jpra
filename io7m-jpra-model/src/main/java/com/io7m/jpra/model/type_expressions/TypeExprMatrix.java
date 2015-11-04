@@ -18,31 +18,31 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-public final class TypeExprMatrix<I, T, S>
-  implements TypeExprType<I, T, S>
+public final class TypeExprMatrix<TN, TR, FN, FR, T>
+  implements TypeExprType<TN, TR, FN, FR, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final T                                            type;
-  private final S                                            width;
-  private final S                                            height;
-  private final TypeExprType<I, T, S>                element_type;
+  private final SizeExprType<TN, TR, FN, FR, T>              width;
+  private final SizeExprType<TN, TR, FN, FR, T>              height;
+  private final TypeExprType<TN, TR, FN, FR, T>              element_type;
 
   public TypeExprMatrix(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final T in_type,
-    final S in_width,
-    final S in_height,
-    final TypeExprType<I, T, S> in_element_type)
+    final SizeExprType<TN, TR, FN, FR, T> in_width,
+    final SizeExprType<TN, TR, FN, FR, T> in_height,
+    final TypeExprType<TN, TR, FN, FR, T> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.type = NullCheck.notNull(in_type);
@@ -51,8 +51,23 @@ public final class TypeExprMatrix<I, T, S>
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
+  public SizeExprType<TN, TR, FN, FR, T> getHeight()
+  {
+    return this.height;
+  }
+
+  public TypeExprType<TN, TR, FN, FR, T> getElementType()
+  {
+    return this.element_type;
+  }
+
+  public SizeExprType<TN, TR, FN, FR, T> getWidth()
+  {
+    return this.width;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
     return m.matchExprMatrix(this);

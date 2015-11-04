@@ -18,26 +18,22 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-/**
- * @param <I> The type of identifiers
- * @param <T> The type of types
- * @param <S> The type of sizes (in bits)
- */
-
-public final class TypeExprFloat<I, T, S> implements TypeExprType<I, T, S>
+public final class TypeExprFloat<TN, TR, FN, FR, T>
+  implements TypeExprType<TN, TR, FN, FR, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final T                                            type;
-  private final S                                            size;
+  private final SizeExprType<TN, TR, FN, FR, T>              size;
 
   public TypeExprFloat(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final T in_type,
-    final S in_size)
+    final SizeExprType<TN, TR, FN, FR, T> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.type = NullCheck.notNull(in_type);
@@ -45,7 +41,7 @@ public final class TypeExprFloat<I, T, S> implements TypeExprType<I, T, S>
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
     return m.matchExprFloat(this);
@@ -55,5 +51,10 @@ public final class TypeExprFloat<I, T, S> implements TypeExprType<I, T, S>
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
+  }
+
+  public SizeExprType<TN, TR, FN, FR, T> getSize()
+  {
+    return this.size;
   }
 }

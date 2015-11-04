@@ -14,35 +14,43 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.names.FieldReference;
+import com.io7m.jpra.model.names.TypeReference;
+import com.io7m.jsx.SExpressionSymbolType;
 
 /**
- * The type of type expressions.
- *
- * @param <TN> The type of type identifiers
- * @param <TR> The type of type references
- * @param <FN> The type of field identifiers
- * @param <FR> The type of field references
- * @param <T>  The type of evaluated types
+ * The type of name reference parsers.
  */
 
-public interface TypeExprType<TN, TR, FN, FR, T> extends ModelElementType
+public interface JPRAReferenceParserType
 {
   /**
-   * Accept a matcher.
+   * Parse a type reference.
    *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
+   * @param se The input symbol
    *
-   * @return The value returned by {@code m}
+   * @return A type reference
    *
-   * @throws E If {@code m} raises {@code E}
+   * @throws JPRACompilerParseException On parse errors
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
-    throws E;
+  TypeReference parseTypeReference(
+    SExpressionSymbolType se)
+    throws JPRACompilerParseException;
+
+  /**
+   * Parse a field reference.
+   *
+   * @param se The input symbol
+   *
+   * @return A field reference
+   *
+   * @throws JPRACompilerParseException On parse errors
+   */
+
+  FieldReference parseFieldReference(
+    SExpressionSymbolType se)
+    throws JPRACompilerParseException;
 }

@@ -22,28 +22,30 @@ import com.io7m.jnull.NullCheck;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprName<I, T, S>
-  implements TypeExprType<I, T, S>
+public final class TypeExprName<TN, TR, FN, FR, T>
+  implements TypeExprType<TN, TR, FN, FR, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final T                                            type;
-  private final S                                            size;
-  private final I                                            name;
+  private final TR                                           name;
 
   public TypeExprName(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final I in_name,
-    final T in_type,
-    final S in_size)
+    final TR in_name,
+    final T in_type)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
-    this.size = NullCheck.notNull(in_size);
+  }
+
+  public TR getName()
+  {
+    return this.name;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<TN, TR, FN, FR, T, A, E> m)
     throws E
   {
     return m.matchName(this);

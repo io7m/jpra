@@ -17,49 +17,56 @@
 package com.io7m.jpra.model.type_expressions;
 
 /**
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * @param <TN> The type of identifiers
+ * @param <FN> The type of field identifiers
+ * @param <T>  The type of evaluated types
  * @param <A>  The type of returned values
  * @param <E>  The type of raised exceptions
  */
 
-public interface TypeExprMatcherType<I, T, S, A, E extends Exception>
+public interface TypeExprMatcherType<TN, TR, FN, FR, T, A, E extends Exception>
 {
   A matchExprIntegerSigned(
-    TypeExprIntegerSigned<I, T, S> e)
+    TypeExprIntegerSigned<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprIntegerSignedNormalized(
-    TypeExprIntegerSignedNormalized<I, T, S> e)
+    TypeExprIntegerSignedNormalized<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprIntegerUnsigned(
-    TypeExprIntegerUnsigned<I, T, S> e)
+    TypeExprIntegerUnsigned<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprIntegerUnsignedNormalized(
-    TypeExprIntegerUnsignedNormalized<I, T, S> e)
+    TypeExprIntegerUnsignedNormalized<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprArray(
-    TypeExprArray<I, T, S> e)
+    TypeExprArray<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprFloat(
-    TypeExprFloat<I, T, S> e)
+    TypeExprFloat<TN, TR, FN, FR, T> e)
     throws E;
 
   A matchExprVector(
-    TypeExprVector<I, T, S> e)
+    TypeExprVector<TN, TR, FN, FR, T> e)
     throws E;
 
-  A matchExprMatrix(TypeExprMatrix<I, T, S> e)
+  A matchExprMatrix(TypeExprMatrix<TN, TR, FN, FR, T> e)
     throws E;
 
-  A matchExprString(TypeExprString<I, T, S> e)
+  A matchExprString(TypeExprString<TN, TR, FN, FR, T> e)
     throws E;
 
-  A matchName(TypeExprName<I, T, S> e)
+  A matchName(TypeExprName<TN, TR, FN, FR, T> e)
+    throws E;
+
+  A matchTypeOfField(TypeExprTypeOfField<TN, TR, FN, FR, T> e)
+    throws E;
+
+  A matchBooleanSet(
+    TypeExprBooleanSet<TN, TR, FN, FR, T> e)
     throws E;
 }
