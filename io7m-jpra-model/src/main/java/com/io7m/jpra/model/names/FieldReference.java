@@ -16,9 +16,7 @@
 
 package com.io7m.jpra.model.names;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
-import org.valid4j.Assertive;
 
 import java.util.Optional;
 
@@ -26,20 +24,19 @@ public final class FieldReference
 {
   private final Optional<PackageNameUnqualified> pack;
   private final Optional<TypeName>               type;
-  private final ImmutableList<FieldName>         field_path;
+  private final FieldPath                        field_path;
 
   public FieldReference(
     final Optional<PackageNameUnqualified> in_pack,
     final Optional<TypeName> in_type,
-    final ImmutableList<FieldName> in_field_path)
+    final FieldPath in_field_path)
   {
     this.pack = NullCheck.notNull(in_pack);
     this.type = NullCheck.notNull(in_type);
     this.field_path = NullCheck.notNull(in_field_path);
-    Assertive.require(!in_field_path.isEmpty());
   }
 
-  public ImmutableList<FieldName> getFieldPath()
+  public FieldPath getFieldPath()
   {
     return this.field_path;
   }

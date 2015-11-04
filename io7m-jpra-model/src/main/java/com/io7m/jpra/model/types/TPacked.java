@@ -24,8 +24,8 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.Size;
 import com.io7m.jpra.model.SizeUnitBitsType;
-import com.io7m.jpra.model.identifiers.ResolvedFieldIdentifier;
-import com.io7m.jpra.model.identifiers.ResolvedTypeIdentifier;
+import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
 
 import java.nio.file.Path;
@@ -37,28 +37,26 @@ import java.util.Optional;
 
 public final class TPacked implements TType
 {
-  private final ResolvedTypeIdentifier                            ident;
-  private final Size<SizeUnitBitsType>                            size_bits;
-  private final ImmutableMap<ResolvedFieldIdentifier, FieldValue>
-                                                                  fields_by_name;
-  private final ImmutableList<FieldType>
-                                                                  fields_by_order;
+  private final TypeName                            name;
+  private final Size<SizeUnitBitsType>              size_bits;
+  private final ImmutableMap<FieldName, FieldValue> fields_by_name;
+  private final ImmutableList<FieldType>            fields_by_order;
 
   /**
    * Construct a record type.
    *
+   * @param in_name            The type name
    * @param in_fields_by_name  The fields by name
-   * @param in_ident           The identifier
    * @param in_fields_by_order The fields in declaration order
    */
 
   public TPacked(
-    final ImmutableMap<ResolvedFieldIdentifier, FieldValue> in_fields_by_name,
-    final ResolvedTypeIdentifier in_ident,
+    final TypeName in_name,
+    final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
+    this.name = NullCheck.notNull(in_name);
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
-    this.ident = NullCheck.notNull(in_ident);
     this.fields_by_order = NullCheck.notNull(in_fields_by_order);
 
     Assertive.require(
@@ -66,13 +64,31 @@ public final class TPacked implements TType
 
     this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
       (Procedure<FieldValue>) f -> {
-        Assertive.require(this.fields_by_name.containsKey(f.identifier));
-        final FieldValue fr = this.fields_by_name.get(f.identifier);
+        Assertive.require(this.fields_by_name.containsKey(f));
+        final FieldValue fr = this.fields_by_name.get(f);
         Assertive.require(fr.equals(f));
       });
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
+  }
+
+  /**
+   * @return The subset of fields that have names
+   */
+
+  public ImmutableMap<FieldName, FieldValue> getFieldsByName()
+  {
+    return this.fields_by_name;
+  }
+
+  /**
+   * @return All fields in declaration order
+   */
+
+  public ImmutableList<FieldType> getFieldsByOrder()
+  {
+    return this.fields_by_order;
   }
 
   @Override public Size<SizeUnitBitsType> getSize()
@@ -90,7 +106,7 @@ public final class TPacked implements TType
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.ident.getLexicalInformation();
+    return this.name.getLexicalInformation();
   }
 
   /**
@@ -164,22 +180,40 @@ public final class TPacked implements TType
 
   public static final class FieldValue implements FieldType
   {
-    private final ResolvedFieldIdentifier identifier;
-    private final TType                   type;
+    private final FieldName name;
+    private final TType     type;
 
     /**
      * Construct a field.
      *
-     * @param in_identifier The identifier
+     * @param in_identifier The name
      * @param in_type       The field type
      */
 
     public FieldValue(
-      final ResolvedFieldIdentifier in_identifier,
+      final FieldName in_identifier,
       final TType in_type)
     {
-      this.identifier = NullCheck.notNull(in_identifier);
+      this.name = NullCheck.notNull(in_identifier);
       this.type = NullCheck.notNull(in_type);
+    }
+
+    /**
+     * @return The field name
+     */
+
+    public FieldName getName()
+    {
+      return this.name;
+    }
+
+    /**
+     * @return The field type
+     */
+
+    public TType getType()
+    {
+      return this.type;
     }
 
     @Override public Size<SizeUnitBitsType> getSize()
@@ -197,7 +231,7 @@ public final class TPacked implements TType
     @Override
     public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
     {
-      return this.identifier.getLexicalInformation();
+      return this.name.getLexicalInformation();
     }
   }
 

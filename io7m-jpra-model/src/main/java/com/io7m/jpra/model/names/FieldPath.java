@@ -14,9 +14,31 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Resolved identifiers.
- */
+package com.io7m.jpra.model.names;
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.identifiers;
+import com.gs.collections.api.list.ImmutableList;
+import com.io7m.jnull.NullCheck;
+import org.valid4j.Assertive;
 
+public final class FieldPath
+{
+  private final ImmutableList<FieldName> path;
+
+  private FieldPath(
+    final ImmutableList<FieldName> in_path)
+  {
+    this.path = NullCheck.notNull(in_path);
+    Assertive.require(!in_path.isEmpty(), "Field path cannot be empty");
+  }
+
+  public static FieldPath ofList(
+    final ImmutableList<FieldName> in_path)
+  {
+    return new FieldPath(in_path);
+  }
+
+  public ImmutableList<FieldName> getElements()
+  {
+    return this.path;
+  }
+}

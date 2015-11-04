@@ -22,6 +22,7 @@ import com.io7m.jlexing.core.ImmutableLexicalPosition;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
@@ -231,7 +232,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
         final ImmutableList<FieldName> fields =
           JPRAReferenceParser.getFieldPath(lex, se, m.group(3));
         return new FieldReference(
-          Optional.of(p_name), Optional.of(t_name), fields);
+          Optional.of(p_name), Optional.of(t_name), FieldPath.ofList(fields));
       }
     }
 
@@ -242,7 +243,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
         final ImmutableList<FieldName> fields =
           JPRAReferenceParser.getFieldPath(lex, se, m.group(2));
         return new FieldReference(
-          Optional.empty(), Optional.of(t_name), fields);
+          Optional.empty(), Optional.of(t_name), FieldPath.ofList(fields));
       }
     }
 
@@ -251,7 +252,8 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       if (m.matches()) {
         final ImmutableList<FieldName> fields =
           JPRAReferenceParser.getFieldPath(lex, se, text);
-        return new FieldReference(Optional.empty(), Optional.empty(), fields);
+        return new FieldReference(
+          Optional.empty(), Optional.empty(), FieldPath.ofList(fields));
       }
     }
 

@@ -18,6 +18,7 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 
 import java.nio.file.Path;
@@ -56,6 +57,7 @@ public final class TypeExprTypeOfField<S> implements TypeExprType<S>
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.field_reference.getFieldPath().get(0).getLexicalInformation();
+    final FieldPath path = this.field_reference.getFieldPath();
+    return path.getElements().get(0).getLexicalInformation();
   }
 }

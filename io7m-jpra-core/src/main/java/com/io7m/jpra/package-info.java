@@ -14,48 +14,8 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.compiler.core.checker;
-
 /**
- * Checker error codes.
+ * Core types.
  */
 
-public enum CheckerErrorCode
-{
-  /**
-   * A package must be in the process of being declared to perform this action.
-   */
-
-  NO_CURRENT_PACKAGE,
-
-  /**
-   * A package attempts to import itself.
-   */
-
-  PACKAGE_IMPORTS_SELF,
-
-  /**
-   * Nested packages are not allowed.
-   */
-
-  PACKAGE_NESTED,
-
-  /**
-   * An imported package conflicts with an existing import.
-   */
-
-  PACKAGE_IMPORT_CONFLICT,
-
-  /**
-   * A duplicate type was specified.
-   */
-
-  TYPE_DUPLICATE,
-
-  /**
-   * A duplicate package was specified.
-   */
-
-  PACKAGE_DUPLICATE
-
-}
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra;
