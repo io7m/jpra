@@ -27,21 +27,13 @@ public final class TypeExprFloat<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final SizeExprType<I>                              size;
-  private final I                                            data;
 
   public TypeExprFloat(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<I> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

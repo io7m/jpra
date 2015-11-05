@@ -75,17 +75,6 @@ public final class JPRAResolverTest extends JPRAResolverContract
     return JPRAResolver.newResolver(c);
   }
 
-  @Override protected SExpressionType newFileSExpr(final String name)
-  {
-    try {
-      final InputStream s = JPRAResolverTest.class.getResourceAsStream(name);
-      final JSXParserType p = JPRAResolverTest.newJSXParser(s);
-      return p.parseExpression();
-    } catch (final JSXParserException | IOException e) {
-      throw new UnreachableCodeException(e);
-    }
-  }
-
   @Override protected SExpressionType newStringSExpr(final String expr)
   {
     try {

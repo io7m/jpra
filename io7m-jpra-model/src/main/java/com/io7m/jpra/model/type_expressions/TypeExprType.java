@@ -25,12 +25,6 @@ import com.io7m.jpra.model.ModelElementType;
 public interface TypeExprType<I> extends ModelElementType
 {
   /**
-   * @return The supplemental data associated with the expression
-   */
-
-  I getData();
-
-  /**
    * Accept a matcher.
    *
    * @param m   The matcher

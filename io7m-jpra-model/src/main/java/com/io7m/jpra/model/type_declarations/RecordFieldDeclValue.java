@@ -39,22 +39,26 @@ import java.util.Optional;
   /**
    * Construct a field declaration.
    *
-   * @param in_data Supplemental data
-   * @param in_name The field name
-   * @param in_type The field type
+   * @param in_identifier The identifier
+   * @param in_name       The field name
+   * @param in_type       The field type
    */
 
   public RecordFieldDeclValue(
-    final I in_data,
+    final I in_identifier,
     final FieldName in_name,
     final TypeExprType<I> in_type)
   {
-    this.data = NullCheck.notNull(in_data);
+    this.data = NullCheck.notNull(in_identifier);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
   }
 
-  public I getData()
+  /**
+   * @return The identifier
+   */
+
+  public I getIdentifier()
   {
     return this.data;
   }

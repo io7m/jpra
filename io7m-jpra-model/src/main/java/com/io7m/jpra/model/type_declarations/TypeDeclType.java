@@ -27,6 +27,12 @@ import com.io7m.jpra.model.statements.StatementType;
 public interface TypeDeclType<I> extends ModelElementType, StatementType<I>
 {
   /**
+   * @return The identifier
+   */
+
+  I getIdentifier();
+
+  /**
    * @return The type name
    */
 

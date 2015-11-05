@@ -27,26 +27,18 @@ public final class TypeExprIntegerUnsigned<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final SizeExprType<I>                              size;
-  private final I                                            data;
 
   public TypeExprIntegerUnsigned(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<I> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
   }
 
   public SizeExprType<I> getSize()
   {
     return this.size;
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

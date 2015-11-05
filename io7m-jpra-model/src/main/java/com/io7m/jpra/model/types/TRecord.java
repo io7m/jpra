@@ -24,6 +24,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
 
@@ -41,11 +42,13 @@ public final class TRecord implements TType, TypeUserDefinedType
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
   private final ImmutableList<FieldType>            fields_by_order;
   private final PackageContextType                  package_ctx;
+  private final IdentifierType                      identifier;
 
   /**
    * Construct a record type.
    *
    * @param in_package         The package context
+   * @param in_identifier      The identifier
    * @param in_ident           The name
    * @param in_fields_by_name  The fields by name
    * @param in_fields_by_order The fields in declaration order
@@ -53,11 +56,13 @@ public final class TRecord implements TType, TypeUserDefinedType
 
   public TRecord(
     final PackageContextType in_package,
+    final IdentifierType in_identifier,
     final TypeName in_ident,
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
     this.package_ctx = NullCheck.notNull(in_package);
+    this.identifier = NullCheck.notNull(in_identifier);
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
     this.name = NullCheck.notNull(in_ident);
     this.fields_by_order = NullCheck.notNull(in_fields_by_order);
@@ -74,6 +79,11 @@ public final class TRecord implements TType, TypeUserDefinedType
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
+  }
+
+  @Override public IdentifierType getIdentifier()
+  {
+    return this.identifier;
   }
 
   @Override public PackageContextType getPackageContext()

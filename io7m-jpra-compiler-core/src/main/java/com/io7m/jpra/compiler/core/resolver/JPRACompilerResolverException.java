@@ -214,13 +214,85 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    * @see JPRAResolverErrorCode#PACKAGE_NONEXISTENT
    */
 
-  public static JPRACompilerException nonexistentPackage(
+  public static JPRACompilerResolverException nonexistentPackage(
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
       name.getLexicalInformation(),
       JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
       "Nonexistent package");
+  }
+
+  /**
+   * @param name The package name
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#PACKAGE_REFERENCE_NONEXISTENT
+   */
+
+  public static JPRACompilerResolverException nonexistentPackageReference(
+    final PackageNameUnqualified name)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("No package imported via the given name.");
+    sb.append(System.lineSeparator());
+    sb.append("Error: ");
+    sb.append(name);
+
+    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+      name.getLexicalInformation();
+    lex_opt.ifPresent(
+      lex -> {
+        sb.append(" at ");
+        sb.append(lex);
+      });
+
+    return new JPRACompilerResolverException(
+      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT,
+      sb.toString());
+  }
+
+  /**
+   * @param q_name The package name, if any
+   * @param t_name The type name
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#TYPE_NONEXISTENT
+   */
+
+  public static JPRACompilerResolverException nonexistentType(
+    final Optional<PackageNameQualified> q_name,
+    final TypeName t_name)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("No such type with the given name.");
+    sb.append(System.lineSeparator());
+
+    q_name.ifPresent(
+      q -> {
+        sb.append("Target package: ");
+        sb.append(q);
+        sb.append(System.lineSeparator());
+      });
+
+    sb.append("Type: ");
+    sb.append(t_name);
+
+    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+      t_name.getLexicalInformation();
+    lex_opt.ifPresent(
+      lex -> {
+        sb.append(" at ");
+        sb.append(lex);
+      });
+
+    return new JPRACompilerResolverException(
+      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      JPRAResolverErrorCode.TYPE_NONEXISTENT,
+      sb.toString());
   }
 
   /**

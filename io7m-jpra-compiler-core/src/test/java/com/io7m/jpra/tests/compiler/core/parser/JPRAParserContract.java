@@ -22,11 +22,14 @@ import com.io7m.jpra.compiler.core.parser.JPRAParseErrorCode;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.names.TypeReference;
 import com.io7m.jpra.model.size_expressions.SizeExprConstant;
 import com.io7m.jpra.model.size_expressions.SizeExprInBits;
 import com.io7m.jpra.model.size_expressions.SizeExprInOctets;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementCommandSize;
+import com.io7m.jpra.model.statements.StatementCommandType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.statements.StatementPackageImport;
@@ -176,7 +179,8 @@ import java.util.Optional;
       TypeExprIntegerUnsigned.class.cast(t_raw);
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
@@ -216,7 +220,8 @@ import java.util.Optional;
       TypeExprIntegerSigned.class.cast(t_raw);
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
@@ -260,7 +265,8 @@ import java.util.Optional;
       TypeExprIntegerSignedNormalized.class.cast(t_raw);
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
@@ -304,7 +310,8 @@ import java.util.Optional;
       TypeExprIntegerUnsignedNormalized.class.cast(t_raw);
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
@@ -502,7 +509,8 @@ import java.util.Optional;
     final TypeExprFloat<Unresolved> t = TypeExprFloat.class.cast(t_raw);
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
@@ -679,7 +687,8 @@ import java.util.Optional;
     Assert.assertEquals("UTF-8", t.getEncoding());
 
     Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
-    final SizeExprConstant<Unresolved> s = SizeExprConstant.class.cast(t.getSize());
+    final SizeExprConstant<Unresolved> s =
+      SizeExprConstant.class.cast(t.getSize());
     Assert.assertEquals(BigInteger.valueOf(64L), s.getValue());
   }
 
@@ -727,7 +736,8 @@ import java.util.Optional;
 
     final TypeExprType<Unresolved> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprBooleanSet.class, t_raw.getClass());
-    final TypeExprBooleanSet<Unresolved> t = TypeExprBooleanSet.class.cast(t_raw);
+    final TypeExprBooleanSet<Unresolved> t =
+      TypeExprBooleanSet.class.cast(t_raw);
 
     Assert.assertEquals(
       SizeExprConstant.class, t.getSizeExpression().getClass());
@@ -840,7 +850,8 @@ import java.util.Optional;
     final JPRAParserType p = this.newParser();
 
     final StatementType<Unresolved> st = p.parseStatement(e);
-    final StatementPackageEnd<Unresolved> pb = StatementPackageEnd.class.cast(st);
+    final StatementPackageEnd<Unresolved> pb =
+      StatementPackageEnd.class.cast(st);
   }
 
   @Test public final void testPackageImport_Error0()
@@ -1120,8 +1131,8 @@ import java.util.Optional;
 
     final ImmutableList<RecordFieldDeclType<Unresolved>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved>> field_names =
-      d.getFieldsByName();
+    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved>>
+      field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(1L, (long) field_names.size());
@@ -1146,8 +1157,8 @@ import java.util.Optional;
 
     final ImmutableList<RecordFieldDeclType<Unresolved>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved>> field_names =
-      d.getFieldsByName();
+    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved>>
+      field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(0L, (long) field_names.size());
@@ -1159,5 +1170,81 @@ import java.util.Optional;
     final SizeExprConstant<?> size =
       SizeExprConstant.class.cast(fp.getSizeExpression());
     Assert.assertEquals(BigInteger.valueOf(4L), size.getValue());
+  }
+
+  @Test public final void testCommandSize_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandSize_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size 32 32)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandSize_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size 32)");
+    final JPRAParserType p = this.newParser();
+
+    final StatementCommandSize<Unresolved> s =
+      StatementCommandSize.class.cast(p.parseStatement(e));
+    final SizeExprConstant<Unresolved> sc =
+      SizeExprConstant.class.cast(s.getExpression());
+    Assert.assertEquals(BigInteger.valueOf(32L), sc.getValue());
+  }
+
+  @Test public final void testCommandType_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandType_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type T T)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandType_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type T)");
+    final JPRAParserType p = this.newParser();
+
+    final StatementCommandType<Unresolved> s =
+      StatementCommandType.class.cast(p.parseStatement(e));
+    final TypeExprName<Unresolved> tn =
+      TypeExprName.class.cast(s.getExpression());
+    final TypeReference ref = tn.getReference();
+    Assert.assertEquals(new TypeName(Optional.empty(), "T"), ref.getType());
+    Assert.assertEquals(Optional.empty(), ref.getPackage());
   }
 }

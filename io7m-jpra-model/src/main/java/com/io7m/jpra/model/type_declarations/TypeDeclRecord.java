@@ -39,7 +39,7 @@ import java.util.Optional;
   private final TypeName                                         name;
   private final ImmutableList<RecordFieldDeclType<I>>            fields_order;
   private final ImmutableMap<FieldName, RecordFieldDeclValue<I>> fields_name;
-  private final I                                                data;
+  private final I                                                identifier;
 
   /**
    * Construct a declaration.
@@ -50,12 +50,12 @@ import java.util.Optional;
    */
 
   public TypeDeclRecord(
-    final I in_data,
+    final I in_identifier,
     final ImmutableMap<FieldName, RecordFieldDeclValue<I>> in_fields_name,
     final TypeName in_name,
     final ImmutableList<RecordFieldDeclType<I>> in_fields_order)
   {
-    this.data = NullCheck.notNull(in_data);
+    this.identifier = NullCheck.notNull(in_identifier);
     this.fields_name = NullCheck.notNull(in_fields_name);
     this.name = NullCheck.notNull(in_name);
     this.fields_order = NullCheck.notNull(in_fields_order);
@@ -111,9 +111,9 @@ import java.util.Optional;
     return this.name.getLexicalInformation();
   }
 
-  public I getData()
+  @Override public I getIdentifier()
   {
-    return this.data;
+    return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchStatement(

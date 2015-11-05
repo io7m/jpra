@@ -39,23 +39,24 @@ import java.util.Optional;
   private final TypeName                                         name;
   private final ImmutableList<PackedFieldDeclType<I>>            fields_order;
   private final ImmutableMap<FieldName, PackedFieldDeclValue<I>> fields_name;
-  private final I                                                data;
+  private final I                                                identifier;
 
   /**
    * Construct a type declaration.
    *
+   * @param in_identifier   The identifier
    * @param in_fields_name  The fields by name
    * @param in_name         The type name
    * @param in_fields_order The fields in declaration order
    */
 
   public TypeDeclPacked(
-    final I in_data,
+    final I in_identifier,
     final ImmutableMap<FieldName, PackedFieldDeclValue<I>> in_fields_name,
     final TypeName in_name,
     final ImmutableList<PackedFieldDeclType<I>> in_fields_order)
   {
-    this.data = NullCheck.notNull(in_data);
+    this.identifier = NullCheck.notNull(in_identifier);
     this.fields_name = NullCheck.notNull(in_fields_name);
     this.name = NullCheck.notNull(in_name);
     this.fields_order = NullCheck.notNull(in_fields_order);
@@ -93,9 +94,9 @@ import java.util.Optional;
     return this.name.getLexicalInformation();
   }
 
-  public I getData()
+  @Override public I getIdentifier()
   {
-    return this.data;
+    return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchStatement(
@@ -103,5 +104,14 @@ import java.util.Optional;
     throws E
   {
     return m.matchTypeDecl(this);
+  }
+
+  /**
+   * @return The fields in declaration order
+   */
+
+  public ImmutableList<PackedFieldDeclType<I>> getFieldsInDeclarationOrder()
+  {
+    return this.fields_order;
   }
 }

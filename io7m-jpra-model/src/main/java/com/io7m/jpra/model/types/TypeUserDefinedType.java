@@ -17,6 +17,7 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.names.IdentifierType;
 
 /**
  * The type of user defined types.
@@ -24,6 +25,12 @@ import com.io7m.jpra.model.contexts.PackageContextType;
 
 public interface TypeUserDefinedType
 {
+  /**
+   * @return The identifier
+   */
+
+  IdentifierType getIdentifier();
+
   /**
    * @return The package context
    */

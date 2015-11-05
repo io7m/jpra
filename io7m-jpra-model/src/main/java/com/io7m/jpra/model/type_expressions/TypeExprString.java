@@ -28,10 +28,8 @@ public final class TypeExprString<I> implements TypeExprType<I>
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final SizeExprType<I>                              size;
   private final String                                       encoding;
-  private final I                                            data;
 
   public TypeExprString(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<I> in_size,
     final String in_encoding)
@@ -39,7 +37,6 @@ public final class TypeExprString<I> implements TypeExprType<I>
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
     this.encoding = NullCheck.notNull(in_encoding);
-    this.data = NullCheck.notNull(in_data);
   }
 
   public SizeExprType<I> getSize()
@@ -50,11 +47,6 @@ public final class TypeExprString<I> implements TypeExprType<I>
   public String getEncoding()
   {
     return this.encoding;
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

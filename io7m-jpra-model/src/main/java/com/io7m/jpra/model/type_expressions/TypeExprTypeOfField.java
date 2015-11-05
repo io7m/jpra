@@ -26,15 +26,15 @@ import java.util.Optional;
 
 public final class TypeExprTypeOfField<I> implements TypeExprType<I>
 {
-  private final I              data;
+  private final I              identifier;
   private final FieldReference field_reference;
 
   public TypeExprTypeOfField(
-    final I in_data,
+    final I in_identifier,
     final FieldReference in_field_reference)
   {
     this.field_reference = NullCheck.notNull(in_field_reference);
-    this.data = NullCheck.notNull(in_data);
+    this.identifier = NullCheck.notNull(in_identifier);
   }
 
   public FieldReference getFieldReference()
@@ -42,9 +42,9 @@ public final class TypeExprTypeOfField<I> implements TypeExprType<I>
     return this.field_reference;
   }
 
-  @Override public I getData()
+   public I getIdentifier()
   {
-    return this.data;
+    return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchType(

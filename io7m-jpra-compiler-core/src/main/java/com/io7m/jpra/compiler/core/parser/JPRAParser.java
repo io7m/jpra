@@ -38,6 +38,8 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.statements.StatementPackageImport;
+import com.io7m.jpra.model.statements.StatementCommandSize;
+import com.io7m.jpra.model.statements.StatementCommandType;
 import com.io7m.jpra.model.statements.StatementType;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
@@ -524,9 +526,65 @@ public final class JPRAParser implements JPRAParserType
         return this.parsePackageImport(le, se);
       case JPRAParser.RECORD:
         return this.parseRecord(le, se);
+      case JPRAParser.COMMAND_SIZE:
+        return this.parseCommandSize(le, se);
+      case JPRAParser.COMMAND_TYPE:
+        return this.parseCommandType(le, se);
     }
 
     throw new UnreachableCodeException();
+  }
+
+  private StatementCommandType<Unresolved> parseCommandType(
+    final SExpressionListType le,
+    final SExpressionSymbolType se)
+    throws JPRACompilerParseException
+  {
+    Assertive.require(JPRAParser.COMMAND_TYPE.equals(se.getText()));
+
+    if (le.size() == 2) {
+      return new StatementCommandType<>(this.parseTypeExpression(le.get(1)));
+    }
+
+    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+      this.serial.serialize(le, bao);
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append("Syntax error.");
+      sb.append(System.lineSeparator());
+      sb.append("Expected: (:type <type-expression>)");
+      sb.append(System.lineSeparator());
+      sb.append("Got: ");
+      sb.append(bao.toString(StandardCharsets.UTF_8.name()));
+      throw JPRACompilerParseException.syntaxError(le, sb.toString());
+    } catch (final IOException e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+  private StatementCommandSize<Unresolved> parseCommandSize(
+    final SExpressionListType le,
+    final SExpressionSymbolType se)
+    throws JPRACompilerParseException
+  {
+    Assertive.require(JPRAParser.COMMAND_SIZE.equals(se.getText()));
+
+    if (le.size() == 2) {
+      return new StatementCommandSize<>(this.parseSizeExpression(le.get(1)));
+    }
+
+    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+      this.serial.serialize(le, bao);
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append("Syntax error.");
+      sb.append(System.lineSeparator());
+      sb.append("Expected: (:size <size-expression>)");
+      sb.append(System.lineSeparator());
+      sb.append("Got: ");
+      sb.append(bao.toString(StandardCharsets.UTF_8.name()));
+      throw JPRACompilerParseException.syntaxError(le, sb.toString());
+    } catch (final IOException e) {
+      throw new UnreachableCodeException(e);
+    }
   }
 
   private StatementType<Unresolved> parseRecord(
@@ -829,7 +887,7 @@ public final class JPRAParser implements JPRAParserType
       final ImmutableList<FieldName> fields = JPRAParser.parseFieldSet(f_expr);
       final Optional<ImmutableLexicalPositionType<Path>> lex =
         JPRAParser.getExpressionLexical(s_expr);
-      return new TypeExprBooleanSet<>(Unresolved.get(), lex, fields, size);
+      return new TypeExprBooleanSet<>(lex, fields, size);
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -865,7 +923,6 @@ public final class JPRAParser implements JPRAParserType
           (SExpressionQuotedStringType) e_expr;
         final SizeExprType<Unresolved> size = this.parseSizeExpression(s_expr);
         return new TypeExprString<>(
-          Unresolved.get(),
           JPRAParser.getExpressionLexical(le),
           size,
           qe.getText());
@@ -902,7 +959,7 @@ public final class JPRAParser implements JPRAParserType
       final SizeExprType<Unresolved> size = this.parseSizeExpression(s_expr);
       final TypeExprType<Unresolved> type = this.parseTypeExpression(t_expr);
       return new TypeExprArray<>(
-        Unresolved.get(), JPRAParser.getExpressionLexical(le), size, type);
+        JPRAParser.getExpressionLexical(le), size, type);
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -938,7 +995,7 @@ public final class JPRAParser implements JPRAParserType
       final TypeExprType<Unresolved> type = this.parseTypeExpression(t_expr);
 
       return new TypeExprMatrix<>(
-        Unresolved.get(), JPRAParser.getExpressionLexical(le), width, height, type);
+        JPRAParser.getExpressionLexical(le), width, height, type);
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -970,7 +1027,6 @@ public final class JPRAParser implements JPRAParserType
       final SExpressionType t_expr = le.get(1);
       final SExpressionType s_expr = le.get(2);
       return new TypeExprVector<>(
-        Unresolved.get(),
         lex.map(ImmutableLexicalPosition::newFrom),
         this.parseSizeExpression(s_expr),
         this.parseTypeExpression(t_expr));
@@ -1001,7 +1057,6 @@ public final class JPRAParser implements JPRAParserType
     if (le.size() == 2) {
       final SExpressionType s_expr = le.get(1);
       return new TypeExprFloat<>(
-        Unresolved.get(),
         JPRAParser.getExpressionLexical(s_expr),
         this.parseSizeExpression(s_expr));
     }
@@ -1041,19 +1096,19 @@ public final class JPRAParser implements JPRAParserType
         switch (t_name.getText()) {
           case JPRAParser.INTEGER_SIGNED: {
             return new TypeExprIntegerSigned<>(
-              Unresolved.get(), JPRAParser.getExpressionLexical(s_expr), size);
+              JPRAParser.getExpressionLexical(s_expr), size);
           }
           case JPRAParser.INTEGER_UNSIGNED: {
             return new TypeExprIntegerUnsigned<>(
-              Unresolved.get(), JPRAParser.getExpressionLexical(s_expr), size);
+              JPRAParser.getExpressionLexical(s_expr), size);
           }
           case JPRAParser.INTEGER_SIGNED_NORMALIZED: {
             return new TypeExprIntegerSignedNormalized<>(
-              Unresolved.get(), JPRAParser.getExpressionLexical(s_expr), size);
+              JPRAParser.getExpressionLexical(s_expr), size);
           }
           case JPRAParser.INTEGER_UNSIGNED_NORMALIZED: {
             return new TypeExprIntegerUnsignedNormalized<>(
-              Unresolved.get(), JPRAParser.getExpressionLexical(s_expr), size);
+              JPRAParser.getExpressionLexical(s_expr), size);
           }
         }
 

@@ -25,14 +25,14 @@ import java.util.Optional;
 
 public final class TypeExprName<I> implements TypeExprType<I>
 {
-  private final I             data;
+  private final I             identifier;
   private final TypeReference ref;
 
   public TypeExprName(
-    final I in_data,
+    final I in_identifier,
     final TypeReference in_ref)
   {
-    this.data = NullCheck.notNull(in_data);
+    this.identifier = NullCheck.notNull(in_identifier);
     this.ref = NullCheck.notNull(in_ref);
   }
 
@@ -41,9 +41,9 @@ public final class TypeExprName<I> implements TypeExprType<I>
     return this.ref;
   }
 
-  @Override public I getData()
+  public I getIdentifier()
   {
-    return this.data;
+    return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchType(

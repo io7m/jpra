@@ -28,10 +28,8 @@ public final class TypeExprVector<I> implements TypeExprType<I>
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final SizeExprType<I>                              element_count;
   private final TypeExprType<I>                              element_type;
-  private final I                                            data;
 
   public TypeExprVector(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<I> in_element_count,
     final TypeExprType<I> in_element_type)
@@ -39,12 +37,6 @@ public final class TypeExprVector<I> implements TypeExprType<I>
     this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_element_count);
     this.element_type = NullCheck.notNull(in_element_type);
-    this.data = NullCheck.notNull(in_data);
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

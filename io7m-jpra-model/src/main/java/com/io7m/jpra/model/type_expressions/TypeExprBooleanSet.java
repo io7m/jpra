@@ -30,19 +30,16 @@ public final class TypeExprBooleanSet<I> implements TypeExprType<I>
   private final SizeExprType<I>                              size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final I                                            data;
 
   /**
    * Construct a type expression.
    *
-   * @param in_data   The supplemental data
    * @param in_lex    Lexical information
    * @param in_fields The fields of the set
    * @param in_size   The size in octets that will be used
    */
 
   public TypeExprBooleanSet(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
     final SizeExprType<I> in_size)
@@ -50,7 +47,6 @@ public final class TypeExprBooleanSet<I> implements TypeExprType<I>
     this.lex = NullCheck.notNull(in_lex);
     this.fields = NullCheck.notNull(in_fields);
     this.size = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
   }
 
   /**
@@ -69,11 +65,6 @@ public final class TypeExprBooleanSet<I> implements TypeExprType<I>
   public SizeExprType<I> getSizeExpression()
   {
     return this.size;
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

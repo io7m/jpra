@@ -81,6 +81,11 @@ import java.util.regex.Pattern;
     return this.value;
   }
 
+  @Override public String toString()
+  {
+    return this.value;
+  }
+
   @Override public boolean equals(final Object o)
   {
     if (this == o) {

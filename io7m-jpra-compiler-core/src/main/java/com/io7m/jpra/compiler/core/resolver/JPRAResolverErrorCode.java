@@ -52,7 +52,25 @@ public enum JPRAResolverErrorCode
 
   PACKAGE_NONEXISTENT,
 
-  PACKAGE_LOADING_ERROR, /**
+  /**
+   * A package could not be loaded.
+   */
+
+  PACKAGE_LOADING_ERROR,
+
+  /**
+   * A reference was made using a nonexistent package name.
+   */
+
+  PACKAGE_REFERENCE_NONEXISTENT,
+
+  /**
+   * A reference was made to a nonexistent type.
+   */
+
+  TYPE_NONEXISTENT,
+
+  /**
    * A duplicate package was specified.
    */
 

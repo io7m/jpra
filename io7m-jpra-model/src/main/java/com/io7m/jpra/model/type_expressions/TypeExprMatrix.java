@@ -34,10 +34,8 @@ public final class TypeExprMatrix<I> implements TypeExprType<I>
   private final SizeExprType<I>                              width;
   private final SizeExprType<I>                              height;
   private final TypeExprType<I>                              element_type;
-  private final I                                            data;
 
   public TypeExprMatrix(
-    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<I> in_width,
     final SizeExprType<I> in_height,
@@ -47,7 +45,6 @@ public final class TypeExprMatrix<I> implements TypeExprType<I>
     this.width = NullCheck.notNull(in_width);
     this.height = NullCheck.notNull(in_height);
     this.element_type = NullCheck.notNull(in_element_type);
-    this.data = NullCheck.notNull(in_data);
   }
 
   public SizeExprType<I> getHeight()
@@ -63,11 +60,6 @@ public final class TypeExprMatrix<I> implements TypeExprType<I>
   public SizeExprType<I> getWidth()
   {
     return this.width;
-  }
-
-  @Override public I getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(

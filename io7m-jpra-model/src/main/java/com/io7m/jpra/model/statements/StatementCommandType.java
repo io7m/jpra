@@ -14,44 +14,42 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_expressions;
+package com.io7m.jpra.model.statements;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerUnsignedNormalized<I>
-  implements TypeExprType<I>
+public final class StatementCommandType<I>
+  implements ModelElementType, StatementType<I>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I>                              size;
+  private final TypeExprType<I> expr;
 
-  public TypeExprIntegerUnsignedNormalized(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_size)
+  public StatementCommandType(
+    final TypeExprType<I> e)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
+    this.expr = NullCheck.notNull(e);
   }
 
-  @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
-    throws E
+  public TypeExprType<I> getExpression()
   {
-    return m.matchExprIntegerUnsignedNormalized(this);
+    return this.expr;
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.lex;
+    return this.expr.getLexicalInformation();
   }
 
-  public SizeExprType<I> getSize()
+  @Override public <A, E extends Exception> A matchStatement(
+    final StatementMatcherType<I, A, E> m)
+    throws E
   {
-    return this.size;
+    return m.matchShowType(this);
   }
 }

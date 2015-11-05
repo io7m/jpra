@@ -32,22 +32,35 @@ import java.util.Optional;
 @Immutable public final class PackedFieldDeclValue<I>
   implements PackedFieldDeclType<I>
 {
-  private final FieldName    name;
+  private final I               identifier;
+  private final FieldName       name;
   private final TypeExprType<I> type;
 
   /**
    * Construct a {@code field} declaration.
    *
-   * @param in_name The name of the field
-   * @param in_type The type of the field
+   * @param in_identifier The identifier
+   * @param in_name       The name of the field
+   * @param in_type       The type of the field
    */
 
   public PackedFieldDeclValue(
+    final I in_identifier,
     final FieldName in_name,
     final TypeExprType<I> in_type)
   {
+    this.identifier = NullCheck.notNull(in_identifier);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
+  }
+
+  /**
+   * @return The identifier
+   */
+
+  public I getIdentifier()
+  {
+    return this.identifier;
   }
 
   /**

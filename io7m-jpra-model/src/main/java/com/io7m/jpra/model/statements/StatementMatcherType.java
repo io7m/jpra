@@ -32,6 +32,15 @@ public interface StatementMatcherType<I, A, E extends Exception>
     StatementPackageImport<I> s)
     throws E;
 
-  A matchTypeDecl(TypeDeclType<I> s)
+  A matchTypeDecl(
+    TypeDeclType<I> s)
+    throws E;
+
+  A matchShowType(
+    StatementCommandType<I> s)
+    throws E;
+
+  A matchShowSize(
+    StatementCommandSize<I> s)
     throws E;
 }
