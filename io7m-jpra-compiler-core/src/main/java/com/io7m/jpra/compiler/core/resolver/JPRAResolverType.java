@@ -17,7 +17,7 @@
 package com.io7m.jpra.compiler.core.resolver;
 
 import com.io7m.jpra.model.Unresolved;
-import com.io7m.jpra.model.ResolvedType;
+import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.TypeName;
@@ -47,7 +47,7 @@ public interface JPRAResolverType
    * package so far
    */
 
-  Map<TypeName, TypeDeclType<ResolvedType>> resolveGetCurrentTypes();
+  Map<TypeName, TypeDeclType<IdentifierType>> resolveGetCurrentTypes();
 
   /**
    * Resolve a package begin statement.
@@ -95,7 +95,7 @@ public interface JPRAResolverType
    * @throws JPRACompilerResolverException On resolution errors
    */
 
-  TypeDeclType<ResolvedType> resolveTypeDeclaration(
+  TypeDeclType<IdentifierType> resolveTypeDeclaration(
     final TypeDeclType<Unresolved> expr)
     throws JPRACompilerResolverException;
 
@@ -109,7 +109,7 @@ public interface JPRAResolverType
    * @throws JPRACompilerResolverException On resolution errors
    */
 
-  TypeExprType<ResolvedType> resolveTypeExpression(
+  TypeExprType<IdentifierType> resolveTypeExpression(
     final TypeExprType<Unresolved> expr)
     throws JPRACompilerResolverException;
 
@@ -123,7 +123,7 @@ public interface JPRAResolverType
    * @throws JPRACompilerResolverException On resolution errors
    */
 
-  SizeExprType<ResolvedType> resolveSizeExpression(
+  SizeExprType<IdentifierType> resolveSizeExpression(
     final SizeExprType<Unresolved> expr)
     throws JPRACompilerResolverException;
 }

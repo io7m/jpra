@@ -25,7 +25,6 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
-import com.io7m.jpra.model.ResolvedType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.loading.JPRAModelLoadingException;
@@ -75,9 +74,9 @@ public final class JPRAResolver implements JPRAResolverType
   private final MutableBiMap<PackageNameUnqualified, PackageNameQualified>
                                                                      import_names;
   private final MutableMap<PackageNameQualified, PackageContextType> imports;
-  private final MutableMap<TypeName, TypeDeclType<ResolvedType>>
+  private final MutableMap<TypeName, TypeDeclType<IdentifierType>>
                                                                      current_types;
-  private final MutableMap<FieldName, RecordFieldDeclValue<ResolvedType>>
+  private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType>>
                                                                      current_record_fields;
   private       Optional<PackageNameQualified>
                                                                      current_package;
@@ -111,7 +110,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override
-  public Map<TypeName, TypeDeclType<ResolvedType>> resolveGetCurrentTypes()
+  public Map<TypeName, TypeDeclType<IdentifierType>> resolveGetCurrentTypes()
   {
     return this.current_types.asUnmodifiable();
   }
@@ -185,7 +184,7 @@ public final class JPRAResolver implements JPRAResolverType
     this.current_package = Optional.empty();
   }
 
-  @Override public TypeDeclType<ResolvedType> resolveTypeDeclaration(
+  @Override public TypeDeclType<IdentifierType> resolveTypeDeclaration(
     final TypeDeclType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
@@ -194,18 +193,18 @@ public final class JPRAResolver implements JPRAResolverType
         expr.getLexicalInformation());
     }
 
-    final TypeDeclType<ResolvedType> rv = expr.matchTypeDeclaration(
-      new TypeDeclMatcherType<Unresolved, TypeDeclType<ResolvedType>,
+    final TypeDeclType<IdentifierType> rv = expr.matchTypeDeclaration(
+      new TypeDeclMatcherType<Unresolved, TypeDeclType<IdentifierType>,
         JPRACompilerResolverException>()
       {
-        @Override public TypeDeclType<ResolvedType> matchRecord(
+        @Override public TypeDeclType<IdentifierType> matchRecord(
           final TypeDeclRecord<Unresolved> t)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeDeclarationRecord(t);
         }
 
-        @Override public TypeDeclType<ResolvedType> matchPacked(
+        @Override public TypeDeclType<IdentifierType> matchPacked(
           final TypeDeclPacked<Unresolved> t)
           throws JPRACompilerResolverException
         {
@@ -217,27 +216,27 @@ public final class JPRAResolver implements JPRAResolverType
     return rv;
   }
 
-  private TypeDeclType<ResolvedType> resolveTypeDeclarationPacked(
+  private TypeDeclType<IdentifierType> resolveTypeDeclarationPacked(
     final TypeDeclPacked<Unresolved> t)
   {
     throw new UnimplementedCodeException();
   }
 
-  private TypeDeclType<ResolvedType> resolveTypeDeclarationRecord(
+  private TypeDeclType<IdentifierType> resolveTypeDeclarationRecord(
     final TypeDeclRecord<Unresolved> t)
     throws JPRACompilerResolverException
   {
     final ImmutableList<RecordFieldDeclType<Unresolved>> o =
       t.getFieldsInDeclarationOrder();
-    final MutableList<RecordFieldDeclType<ResolvedType>> by_order =
+    final MutableList<RecordFieldDeclType<IdentifierType>> by_order =
       Lists.mutable.empty();
 
     for (int index = 0; index < o.size(); ++index) {
       by_order.add(this.resolveTypeDeclarationRecordField(o.get(index)));
     }
 
-    final TypeDeclRecord<ResolvedType> rv = new TypeDeclRecord<>(
-      this.getResolvedFresh(),
+    final TypeDeclRecord<IdentifierType> rv = new TypeDeclRecord<>(
+      this.context.getFreshIdentifier(),
       this.current_record_fields.toImmutable(),
       t.getName(),
       by_order.toImmutable());
@@ -246,20 +245,15 @@ public final class JPRAResolver implements JPRAResolverType
     return rv;
   }
 
-  private ResolvedType getResolvedFresh()
-  {
-    return new Resolved(this.context.getFreshIdentifier());
-  }
-
-  private RecordFieldDeclType<ResolvedType> resolveTypeDeclarationRecordField(
+  private RecordFieldDeclType<IdentifierType> resolveTypeDeclarationRecordField(
     final RecordFieldDeclType<Unresolved> rf)
     throws JPRACompilerResolverException
   {
     return rf.matchRecordFieldDeclaration(
       new RecordFieldDeclMatcherType<Unresolved,
-        RecordFieldDeclType<ResolvedType>, JPRACompilerResolverException>()
+        RecordFieldDeclType<IdentifierType>, JPRACompilerResolverException>()
       {
-        @Override public RecordFieldDeclType<ResolvedType> matchPadding(
+        @Override public RecordFieldDeclType<IdentifierType> matchPadding(
           final RecordFieldDeclPaddingOctets<Unresolved> r)
           throws JPRACompilerResolverException
         {
@@ -268,13 +262,13 @@ public final class JPRAResolver implements JPRAResolverType
             JPRAResolver.this.resolveSizeExpression(r.getSizeExpression()));
         }
 
-        @Override public RecordFieldDeclType<ResolvedType> matchValue(
+        @Override public RecordFieldDeclType<IdentifierType> matchValue(
           final RecordFieldDeclValue<Unresolved> r)
           throws JPRACompilerResolverException
         {
-          final RecordFieldDeclValue<ResolvedType> v =
+          final RecordFieldDeclValue<IdentifierType> v =
             new RecordFieldDeclValue<>(
-              JPRAResolver.this.getResolvedFresh(),
+              JPRAResolver.this.context.getFreshIdentifier(),
               r.getName(),
               JPRAResolver.this.resolveTypeExpression(r.getType()));
 
@@ -284,7 +278,7 @@ public final class JPRAResolver implements JPRAResolverType
       });
   }
 
-  @Override public TypeExprType<ResolvedType> resolveTypeExpression(
+  @Override public TypeExprType<IdentifierType> resolveTypeExpression(
     final TypeExprType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
@@ -292,15 +286,15 @@ public final class JPRAResolver implements JPRAResolverType
     throw new UnimplementedCodeException();
   }
 
-  @Override public SizeExprType<ResolvedType> resolveSizeExpression(
+  @Override public SizeExprType<IdentifierType> resolveSizeExpression(
     final SizeExprType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
     return expr.matchSizeExpression(
-      new SizeExprMatcherType<Unresolved, SizeExprType<ResolvedType>,
+      new SizeExprMatcherType<Unresolved, SizeExprType<IdentifierType>,
         JPRACompilerResolverException>()
       {
-        @Override public SizeExprType<ResolvedType> matchConstant(
+        @Override public SizeExprType<IdentifierType> matchConstant(
           final SizeExprConstant<Unresolved> s)
           throws JPRACompilerResolverException
         {
@@ -308,7 +302,7 @@ public final class JPRAResolver implements JPRAResolverType
             s.getLexicalInformation(), s.getValue());
         }
 
-        @Override public SizeExprType<ResolvedType> matchInOctets(
+        @Override public SizeExprType<IdentifierType> matchInOctets(
           final SizeExprInOctets<Unresolved> s)
           throws JPRACompilerResolverException
         {
@@ -316,7 +310,7 @@ public final class JPRAResolver implements JPRAResolverType
             JPRAResolver.this.resolveTypeExpression(s.getTypeExpression()));
         }
 
-        @Override public SizeExprType<ResolvedType> matchInBits(
+        @Override public SizeExprType<IdentifierType> matchInBits(
           final SizeExprInBits<Unresolved> s)
           throws JPRACompilerResolverException
         {
@@ -324,20 +318,5 @@ public final class JPRAResolver implements JPRAResolverType
             JPRAResolver.this.resolveTypeExpression(s.getTypeExpression()));
         }
       });
-  }
-
-  private static final class Resolved implements ResolvedType
-  {
-    private final IdentifierType id;
-
-    Resolved(final IdentifierType in_id)
-    {
-      this.id = NullCheck.notNull(in_id);
-    }
-
-    @Override public IdentifierType getIdentifier()
-    {
-      return this.id;
-    }
   }
 }
