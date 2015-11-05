@@ -38,19 +38,19 @@ public final class RecordFieldDecl
    * @return The name defined for the given field declaration, if any
    */
 
-  public static <S> Optional<FieldName> name(final RecordFieldDeclType<S> r)
+  public static <I> Optional<FieldName> name(final RecordFieldDeclType<I> r)
   {
     return r.matchRecordFieldDeclaration(
-      new RecordFieldDeclMatcherType<S, Optional<FieldName>, RuntimeException>()
+      new RecordFieldDeclMatcherType<I, Optional<FieldName>, RuntimeException>()
       {
         @Override public Optional<FieldName> matchPadding(
-          final RecordFieldDeclPaddingOctets<S> r)
+          final RecordFieldDeclPaddingOctets<I> r)
         {
           return Optional.empty();
         }
 
         @Override
-        public Optional<FieldName> matchValue(final RecordFieldDeclValue r)
+        public Optional<FieldName> matchValue(final RecordFieldDeclValue<I> r)
         {
           return Optional.of(r.getName());
         }

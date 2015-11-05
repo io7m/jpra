@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
-import com.io7m.jpra.model.Parsed;
+import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.ResolvedType;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.names.PackageNameQualified;
@@ -58,7 +58,7 @@ public interface JPRAResolverType
    */
 
   void resolvePackageBegin(
-    final StatementPackageBegin<Parsed> s)
+    final StatementPackageBegin<Unresolved> s)
     throws JPRACompilerResolverException;
 
   /**
@@ -70,7 +70,7 @@ public interface JPRAResolverType
    */
 
   void resolvePackageImport(
-    final StatementPackageImport<Parsed> s)
+    final StatementPackageImport<Unresolved> s)
     throws JPRACompilerResolverException;
 
   /**
@@ -82,7 +82,7 @@ public interface JPRAResolverType
    */
 
   void resolvePackageEnd(
-    final StatementPackageEnd<Parsed> s)
+    final StatementPackageEnd<Unresolved> s)
     throws JPRACompilerResolverException;
 
   /**
@@ -96,7 +96,7 @@ public interface JPRAResolverType
    */
 
   TypeDeclType<ResolvedType> resolveTypeDeclaration(
-    final TypeDeclType<Parsed> expr)
+    final TypeDeclType<Unresolved> expr)
     throws JPRACompilerResolverException;
 
   /**
@@ -110,7 +110,7 @@ public interface JPRAResolverType
    */
 
   TypeExprType<ResolvedType> resolveTypeExpression(
-    final TypeExprType<Parsed> expr)
+    final TypeExprType<Unresolved> expr)
     throws JPRACompilerResolverException;
 
   /**
@@ -124,6 +124,6 @@ public interface JPRAResolverType
    */
 
   SizeExprType<ResolvedType> resolveSizeExpression(
-    final SizeExprType<Parsed> expr)
+    final SizeExprType<Unresolved> expr)
     throws JPRACompilerResolverException;
 }

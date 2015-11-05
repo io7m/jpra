@@ -28,7 +28,7 @@ import java.util.Optional;
  * A constant size.
  */
 
-@Immutable public final class SizeExprConstant<S> implements SizeExprType<S>
+@Immutable public final class SizeExprConstant<I> implements SizeExprType<I>
 {
   private final BigInteger                                   value;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
@@ -60,7 +60,7 @@ import java.util.Optional;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<S, A, E> m)
+    final SizeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchConstant(this);

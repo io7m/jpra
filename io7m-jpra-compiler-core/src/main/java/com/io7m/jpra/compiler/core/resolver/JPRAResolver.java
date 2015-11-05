@@ -24,7 +24,7 @@ import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Parsed;
+import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.ResolvedType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -117,7 +117,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public void resolvePackageBegin(
-    final StatementPackageBegin<Parsed> s)
+    final StatementPackageBegin<Unresolved> s)
     throws JPRACompilerResolverException
   {
     if (this.current_package.isPresent()) {
@@ -137,7 +137,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public void resolvePackageImport(
-    final StatementPackageImport<Parsed> s)
+    final StatementPackageImport<Unresolved> s)
     throws JPRACompilerResolverException
   {
     if (!this.current_package.isPresent()) {
@@ -171,7 +171,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public void resolvePackageEnd(
-    final StatementPackageEnd<Parsed> s)
+    final StatementPackageEnd<Unresolved> s)
     throws JPRACompilerResolverException
   {
     if (!this.current_package.isPresent()) {
@@ -186,7 +186,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public TypeDeclType<ResolvedType> resolveTypeDeclaration(
-    final TypeDeclType<Parsed> expr)
+    final TypeDeclType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
     if (!this.current_package.isPresent()) {
@@ -195,18 +195,18 @@ public final class JPRAResolver implements JPRAResolverType
     }
 
     final TypeDeclType<ResolvedType> rv = expr.matchTypeDeclaration(
-      new TypeDeclMatcherType<Parsed, TypeDeclType<ResolvedType>,
+      new TypeDeclMatcherType<Unresolved, TypeDeclType<ResolvedType>,
         JPRACompilerResolverException>()
       {
         @Override public TypeDeclType<ResolvedType> matchRecord(
-          final TypeDeclRecord<Parsed> t)
+          final TypeDeclRecord<Unresolved> t)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeDeclarationRecord(t);
         }
 
         @Override public TypeDeclType<ResolvedType> matchPacked(
-          final TypeDeclPacked<Parsed> t)
+          final TypeDeclPacked<Unresolved> t)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeDeclarationPacked(t);
@@ -218,16 +218,16 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   private TypeDeclType<ResolvedType> resolveTypeDeclarationPacked(
-    final TypeDeclPacked<Parsed> t)
+    final TypeDeclPacked<Unresolved> t)
   {
     throw new UnimplementedCodeException();
   }
 
   private TypeDeclType<ResolvedType> resolveTypeDeclarationRecord(
-    final TypeDeclRecord<Parsed> t)
+    final TypeDeclRecord<Unresolved> t)
     throws JPRACompilerResolverException
   {
-    final ImmutableList<RecordFieldDeclType<Parsed>> o =
+    final ImmutableList<RecordFieldDeclType<Unresolved>> o =
       t.getFieldsInDeclarationOrder();
     final MutableList<RecordFieldDeclType<ResolvedType>> by_order =
       Lists.mutable.empty();
@@ -252,15 +252,15 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   private RecordFieldDeclType<ResolvedType> resolveTypeDeclarationRecordField(
-    final RecordFieldDeclType<Parsed> rf)
+    final RecordFieldDeclType<Unresolved> rf)
     throws JPRACompilerResolverException
   {
     return rf.matchRecordFieldDeclaration(
-      new RecordFieldDeclMatcherType<Parsed,
+      new RecordFieldDeclMatcherType<Unresolved,
         RecordFieldDeclType<ResolvedType>, JPRACompilerResolverException>()
       {
         @Override public RecordFieldDeclType<ResolvedType> matchPadding(
-          final RecordFieldDeclPaddingOctets<Parsed> r)
+          final RecordFieldDeclPaddingOctets<Unresolved> r)
           throws JPRACompilerResolverException
         {
           return new RecordFieldDeclPaddingOctets<>(
@@ -269,7 +269,7 @@ public final class JPRAResolver implements JPRAResolverType
         }
 
         @Override public RecordFieldDeclType<ResolvedType> matchValue(
-          final RecordFieldDeclValue<Parsed> r)
+          final RecordFieldDeclValue<Unresolved> r)
           throws JPRACompilerResolverException
         {
           final RecordFieldDeclValue<ResolvedType> v =
@@ -285,7 +285,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public TypeExprType<ResolvedType> resolveTypeExpression(
-    final TypeExprType<Parsed> expr)
+    final TypeExprType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
     // TODO: Generated method stub!
@@ -293,15 +293,15 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public SizeExprType<ResolvedType> resolveSizeExpression(
-    final SizeExprType<Parsed> expr)
+    final SizeExprType<Unresolved> expr)
     throws JPRACompilerResolverException
   {
     return expr.matchSizeExpression(
-      new SizeExprMatcherType<Parsed, SizeExprType<ResolvedType>,
+      new SizeExprMatcherType<Unresolved, SizeExprType<ResolvedType>,
         JPRACompilerResolverException>()
       {
         @Override public SizeExprType<ResolvedType> matchConstant(
-          final SizeExprConstant<Parsed> s)
+          final SizeExprConstant<Unresolved> s)
           throws JPRACompilerResolverException
         {
           return new SizeExprConstant<>(
@@ -309,7 +309,7 @@ public final class JPRAResolver implements JPRAResolverType
         }
 
         @Override public SizeExprType<ResolvedType> matchInOctets(
-          final SizeExprInOctets<Parsed> s)
+          final SizeExprInOctets<Unresolved> s)
           throws JPRACompilerResolverException
         {
           return new SizeExprInOctets<>(
@@ -317,7 +317,7 @@ public final class JPRAResolver implements JPRAResolverType
         }
 
         @Override public SizeExprType<ResolvedType> matchInBits(
-          final SizeExprInBits<Parsed> s)
+          final SizeExprInBits<Unresolved> s)
           throws JPRACompilerResolverException
         {
           return new SizeExprInBits<>(

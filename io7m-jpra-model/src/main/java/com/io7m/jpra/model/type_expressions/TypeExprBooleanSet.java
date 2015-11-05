@@ -25,12 +25,12 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprBooleanSet<S> implements TypeExprType<S>
+public final class TypeExprBooleanSet<I> implements TypeExprType<I>
 {
-  private final SizeExprType<S>                              size;
+  private final SizeExprType<I>                              size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final S                                            data;
+  private final I                                            data;
 
   /**
    * Construct a type expression.
@@ -42,10 +42,10 @@ public final class TypeExprBooleanSet<S> implements TypeExprType<S>
    */
 
   public TypeExprBooleanSet(
-    final S in_data,
+    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
-    final SizeExprType<S> in_size)
+    final SizeExprType<I> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.fields = NullCheck.notNull(in_fields);
@@ -66,18 +66,18 @@ public final class TypeExprBooleanSet<S> implements TypeExprType<S>
    * @return The size expression denoting the size in octets
    */
 
-  public SizeExprType<S> getSizeExpression()
+  public SizeExprType<I> getSizeExpression()
   {
     return this.size;
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchBooleanSet(this);

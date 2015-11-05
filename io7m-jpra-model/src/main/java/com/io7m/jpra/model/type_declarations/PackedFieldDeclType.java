@@ -22,7 +22,7 @@ import com.io7m.jpra.model.ModelElementType;
  * The type of field declarations for {@code packed} types.
  */
 
-public interface PackedFieldDeclType<S> extends ModelElementType
+public interface PackedFieldDeclType<I> extends ModelElementType
 {
   /**
    * Accept a matcher.
@@ -37,6 +37,6 @@ public interface PackedFieldDeclType<S> extends ModelElementType
    */
 
   <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<S, A, E> m)
+    final PackedFieldDeclMatcherType<I, A, E> m)
     throws E;
 }

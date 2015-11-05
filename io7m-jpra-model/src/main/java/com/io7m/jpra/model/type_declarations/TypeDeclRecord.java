@@ -34,12 +34,12 @@ import java.util.Optional;
  * A {@code record} type declaration.
  */
 
-@Immutable public final class TypeDeclRecord<S> implements TypeDeclType<S>
+@Immutable public final class TypeDeclRecord<I> implements TypeDeclType<I>
 {
   private final TypeName                                         name;
-  private final ImmutableList<RecordFieldDeclType<S>>            fields_order;
-  private final ImmutableMap<FieldName, RecordFieldDeclValue<S>> fields_name;
-  private final S                                                data;
+  private final ImmutableList<RecordFieldDeclType<I>>            fields_order;
+  private final ImmutableMap<FieldName, RecordFieldDeclValue<I>> fields_name;
+  private final I                                                data;
 
   /**
    * Construct a declaration.
@@ -50,10 +50,10 @@ import java.util.Optional;
    */
 
   public TypeDeclRecord(
-    final S in_data,
-    final ImmutableMap<FieldName, RecordFieldDeclValue<S>> in_fields_name,
+    final I in_data,
+    final ImmutableMap<FieldName, RecordFieldDeclValue<I>> in_fields_name,
     final TypeName in_name,
-    final ImmutableList<RecordFieldDeclType<S>> in_fields_order)
+    final ImmutableList<RecordFieldDeclType<I>> in_fields_order)
   {
     this.data = NullCheck.notNull(in_data);
     this.fields_name = NullCheck.notNull(in_fields_name);
@@ -67,7 +67,7 @@ import java.util.Optional;
       Integer.valueOf(this.fields_order.size()));
 
     this.fields_order.forEach(
-      (Procedure<RecordFieldDeclType<S>>) r -> {
+      (Procedure<RecordFieldDeclType<I>>) r -> {
         final Optional<FieldName> r_name = RecordFieldDecl.name(r);
         if (r_name.isPresent()) {
           Assertive.require(this.fields_name.containsKey(r_name.get()));
@@ -79,7 +79,7 @@ import java.util.Optional;
    * @return The fields by name
    */
 
-  public ImmutableMap<FieldName, RecordFieldDeclValue<S>> getFieldsByName()
+  public ImmutableMap<FieldName, RecordFieldDeclValue<I>> getFieldsByName()
   {
     return this.fields_name;
   }
@@ -88,7 +88,7 @@ import java.util.Optional;
    * @return The fields in declaration order
    */
 
-  public ImmutableList<RecordFieldDeclType<S>> getFieldsInDeclarationOrder()
+  public ImmutableList<RecordFieldDeclType<I>> getFieldsInDeclarationOrder()
   {
     return this.fields_order;
   }
@@ -99,7 +99,7 @@ import java.util.Optional;
   }
 
   @Override public <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<S, A, E> m)
+    final TypeDeclMatcherType<I, A, E> m)
     throws E
   {
     return m.matchRecord(this);
@@ -111,13 +111,13 @@ import java.util.Optional;
     return this.name.getLexicalInformation();
   }
 
-  public S getData()
+  public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<S, A, E> m)
+    final StatementMatcherType<I, A, E> m)
     throws E
   {
     return m.matchTypeDecl(this);

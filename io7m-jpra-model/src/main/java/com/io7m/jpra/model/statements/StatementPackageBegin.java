@@ -24,8 +24,8 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageBegin<S>
-  implements ModelElementType, StatementType<S>
+public final class StatementPackageBegin<I>
+  implements ModelElementType, StatementType<I>
 {
   private final PackageNameQualified pack;
 
@@ -47,7 +47,7 @@ public final class StatementPackageBegin<S>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<S, A, E> m)
+    final StatementMatcherType<I, A, E> m)
     throws E
   {
     return m.matchPackageBegin(this);

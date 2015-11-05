@@ -23,29 +23,29 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprFloat<S> implements TypeExprType<S>
+public final class TypeExprFloat<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              size;
-  private final S                                            data;
+  private final SizeExprType<I>                              size;
+  private final I                                            data;
 
   public TypeExprFloat(
-    final S in_data,
+    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_size)
+    final SizeExprType<I> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
     this.data = NullCheck.notNull(in_data);
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchExprFloat(this);
@@ -57,7 +57,7 @@ public final class TypeExprFloat<S> implements TypeExprType<S>
     return this.lex;
   }
 
-  public SizeExprType<S> getSize()
+  public SizeExprType<I> getSize()
   {
     return this.size;
   }

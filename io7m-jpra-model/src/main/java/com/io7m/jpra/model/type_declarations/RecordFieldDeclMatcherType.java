@@ -23,7 +23,7 @@ package com.io7m.jpra.model.type_declarations;
  * @param <E> The type of raised exceptions
  */
 
-public interface RecordFieldDeclMatcherType<S, A, E extends Exception>
+public interface RecordFieldDeclMatcherType<I, A, E extends Exception>
 {
   /**
    * Match a field.
@@ -35,7 +35,7 @@ public interface RecordFieldDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchPadding(RecordFieldDeclPaddingOctets<S> r)
+  A matchPadding(RecordFieldDeclPaddingOctets<I> r)
     throws E;
 
   /**
@@ -48,6 +48,6 @@ public interface RecordFieldDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchValue(RecordFieldDeclValue<S> r)
+  A matchValue(RecordFieldDeclValue<I> r)
     throws E;
 }

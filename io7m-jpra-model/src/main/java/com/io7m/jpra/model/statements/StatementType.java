@@ -20,9 +20,9 @@ package com.io7m.jpra.model.statements;
  * The type of statements.
  */
 
-public interface StatementType<S>
+public interface StatementType<I>
 {
   <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<S, A, E> m)
+    final StatementMatcherType<I, A, E> m)
     throws E;
 }

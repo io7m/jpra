@@ -25,8 +25,8 @@ import com.io7m.jpra.model.names.PackageNameUnqualified;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageImport<S>
-  implements ModelElementType, StatementType<S>
+public final class StatementPackageImport<I>
+  implements ModelElementType, StatementType<I>
 {
   private final PackageNameQualified   pack;
   private final PackageNameUnqualified using;
@@ -56,7 +56,7 @@ public final class StatementPackageImport<S>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<S, A, E> m)
+    final StatementMatcherType<I, A, E> m)
     throws E
   {
     return m.matchPackageImport(this);

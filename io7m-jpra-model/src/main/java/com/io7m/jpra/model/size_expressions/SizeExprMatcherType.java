@@ -23,7 +23,7 @@ package com.io7m.jpra.model.size_expressions;
  * @param <E> The type of raised exceptions
  */
 
-public interface SizeExprMatcherType<S, A, E extends Exception>
+public interface SizeExprMatcherType<I, A, E extends Exception>
 {
   /**
    * Match an expression.
@@ -36,7 +36,7 @@ public interface SizeExprMatcherType<S, A, E extends Exception>
    */
 
   A matchConstant(
-    SizeExprConstant<S> s)
+    SizeExprConstant<I> s)
     throws E;
 
   /**
@@ -50,7 +50,7 @@ public interface SizeExprMatcherType<S, A, E extends Exception>
    */
 
   A matchInOctets(
-    SizeExprInOctets<S> s)
+    SizeExprInOctets<I> s)
     throws E;
 
   /**
@@ -64,6 +64,6 @@ public interface SizeExprMatcherType<S, A, E extends Exception>
    */
 
   A matchInBits(
-    SizeExprInBits<S> s)
+    SizeExprInBits<I> s)
     throws E;
 }

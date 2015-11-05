@@ -23,13 +23,13 @@ import com.io7m.jpra.model.names.TypeReference;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprName<S> implements TypeExprType<S>
+public final class TypeExprName<I> implements TypeExprType<I>
 {
-  private final S             data;
+  private final I             data;
   private final TypeReference ref;
 
   public TypeExprName(
-    final S in_data,
+    final I in_data,
     final TypeReference in_ref)
   {
     this.data = NullCheck.notNull(in_data);
@@ -41,13 +41,13 @@ public final class TypeExprName<S> implements TypeExprType<S>
     return this.ref;
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchName(this);

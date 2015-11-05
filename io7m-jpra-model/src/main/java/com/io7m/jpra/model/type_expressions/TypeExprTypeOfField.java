@@ -24,13 +24,13 @@ import com.io7m.jpra.model.names.FieldReference;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprTypeOfField<S> implements TypeExprType<S>
+public final class TypeExprTypeOfField<I> implements TypeExprType<I>
 {
-  private final S              data;
+  private final I              data;
   private final FieldReference field_reference;
 
   public TypeExprTypeOfField(
-    final S in_data,
+    final I in_data,
     final FieldReference in_field_reference)
   {
     this.field_reference = NullCheck.notNull(in_field_reference);
@@ -42,13 +42,13 @@ public final class TypeExprTypeOfField<S> implements TypeExprType<S>
     return this.field_reference;
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchTypeOfField(this);

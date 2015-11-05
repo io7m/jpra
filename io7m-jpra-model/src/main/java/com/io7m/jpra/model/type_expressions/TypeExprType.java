@@ -22,13 +22,13 @@ import com.io7m.jpra.model.ModelElementType;
  * The type of type expressions.
  */
 
-public interface TypeExprType<S> extends ModelElementType
+public interface TypeExprType<I> extends ModelElementType
 {
   /**
    * @return The supplemental data associated with the expression
    */
 
-  S getData();
+  I getData();
 
   /**
    * Accept a matcher.
@@ -43,6 +43,6 @@ public interface TypeExprType<S> extends ModelElementType
    */
 
   <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E;
 }

@@ -29,12 +29,12 @@ import java.util.Optional;
  * A {@code record} {@code field} declaration.
  */
 
-@Immutable public final class RecordFieldDeclValue<S>
-  implements RecordFieldDeclType<S>
+@Immutable public final class RecordFieldDeclValue<I>
+  implements RecordFieldDeclType<I>
 {
   private final FieldName       name;
-  private final TypeExprType<S> type;
-  private final S               data;
+  private final TypeExprType<I> type;
+  private final I               data;
 
   /**
    * Construct a field declaration.
@@ -45,16 +45,16 @@ import java.util.Optional;
    */
 
   public RecordFieldDeclValue(
-    final S in_data,
+    final I in_data,
     final FieldName in_name,
-    final TypeExprType<S> in_type)
+    final TypeExprType<I> in_type)
   {
     this.data = NullCheck.notNull(in_data);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
   }
 
-  public S getData()
+  public I getData()
   {
     return this.data;
   }
@@ -63,13 +63,13 @@ import java.util.Optional;
    * @return The field type
    */
 
-  public TypeExprType<S> getType()
+  public TypeExprType<I> getType()
   {
     return this.type;
   }
 
   @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<S, A, E> m)
+    final RecordFieldDeclMatcherType<I, A, E> m)
     throws E
   {
     return m.matchValue(this);

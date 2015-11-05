@@ -29,11 +29,11 @@ import java.util.Optional;
  * A {@code field} declaration in a {@code packed} type.
  */
 
-@Immutable public final class PackedFieldDeclValue<S>
-  implements PackedFieldDeclType<S>
+@Immutable public final class PackedFieldDeclValue<I>
+  implements PackedFieldDeclType<I>
 {
   private final FieldName    name;
-  private final TypeExprType<S> type;
+  private final TypeExprType<I> type;
 
   /**
    * Construct a {@code field} declaration.
@@ -44,7 +44,7 @@ import java.util.Optional;
 
   public PackedFieldDeclValue(
     final FieldName in_name,
-    final TypeExprType<S> in_type)
+    final TypeExprType<I> in_type)
   {
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
@@ -63,13 +63,13 @@ import java.util.Optional;
    * @return The field type
    */
 
-  public TypeExprType<S> getType()
+  public TypeExprType<I> getType()
   {
     return this.type;
   }
 
   @Override public <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<S, A, E> m)
+    final PackedFieldDeclMatcherType<I, A, E> m)
     throws E
   {
     return m.matchValue(this);

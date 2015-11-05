@@ -23,17 +23,17 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprString<S> implements TypeExprType<S>
+public final class TypeExprString<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              size;
+  private final SizeExprType<I>                              size;
   private final String                                       encoding;
-  private final S                                            data;
+  private final I                                            data;
 
   public TypeExprString(
-    final S in_data,
+    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_size,
+    final SizeExprType<I> in_size,
     final String in_encoding)
   {
     this.lex = NullCheck.notNull(in_lex);
@@ -42,7 +42,7 @@ public final class TypeExprString<S> implements TypeExprType<S>
     this.data = NullCheck.notNull(in_data);
   }
 
-  public SizeExprType<S> getSize()
+  public SizeExprType<I> getSize()
   {
     return this.size;
   }
@@ -52,13 +52,13 @@ public final class TypeExprString<S> implements TypeExprType<S>
     return this.encoding;
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchExprString(this);

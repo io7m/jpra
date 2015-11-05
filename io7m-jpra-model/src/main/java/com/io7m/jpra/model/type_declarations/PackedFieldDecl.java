@@ -38,19 +38,19 @@ public final class PackedFieldDecl
    * @return The name defined for the given field declaration, if any
    */
 
-  public static <S> Optional<FieldName> name(final PackedFieldDeclType<S> r)
+  public static <I> Optional<FieldName> name(final PackedFieldDeclType<I> r)
   {
     return r.matchPackedFieldDeclaration(
-      new PackedFieldDeclMatcherType<S, Optional<FieldName>, RuntimeException>()
+      new PackedFieldDeclMatcherType<I, Optional<FieldName>, RuntimeException>()
       {
         @Override public Optional<FieldName> matchPaddingBits(
-          final PackedFieldDeclPaddingBits<S> r)
+          final PackedFieldDeclPaddingBits<I> r)
         {
           return Optional.empty();
         }
 
         @Override
-        public Optional<FieldName> matchValue(final PackedFieldDeclValue<S> r)
+        public Optional<FieldName> matchValue(final PackedFieldDeclValue<I> r)
         {
           return Optional.of(r.getName());
         }

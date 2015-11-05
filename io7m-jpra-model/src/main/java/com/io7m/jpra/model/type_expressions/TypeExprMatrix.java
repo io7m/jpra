@@ -28,20 +28,20 @@ import java.util.Optional;
  * @param <T> The type of evaluated types
  */
 
-public final class TypeExprMatrix<S> implements TypeExprType<S>
+public final class TypeExprMatrix<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              width;
-  private final SizeExprType<S>                              height;
-  private final TypeExprType<S>                              element_type;
-  private final S                                            data;
+  private final SizeExprType<I>                              width;
+  private final SizeExprType<I>                              height;
+  private final TypeExprType<I>                              element_type;
+  private final I                                            data;
 
   public TypeExprMatrix(
-    final S in_data,
+    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_width,
-    final SizeExprType<S> in_height,
-    final TypeExprType<S> in_element_type)
+    final SizeExprType<I> in_width,
+    final SizeExprType<I> in_height,
+    final TypeExprType<I> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.width = NullCheck.notNull(in_width);
@@ -50,28 +50,28 @@ public final class TypeExprMatrix<S> implements TypeExprType<S>
     this.data = NullCheck.notNull(in_data);
   }
 
-  public SizeExprType<S> getHeight()
+  public SizeExprType<I> getHeight()
   {
     return this.height;
   }
 
-  public TypeExprType<S> getElementType()
+  public TypeExprType<I> getElementType()
   {
     return this.element_type;
   }
 
-  public SizeExprType<S> getWidth()
+  public SizeExprType<I> getWidth()
   {
     return this.width;
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchExprMatrix(this);

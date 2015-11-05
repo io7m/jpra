@@ -28,15 +28,15 @@ import java.util.Optional;
  * A {@code packed} type field that specifies a number of padding bits.
  */
 
-@Immutable public final class PackedFieldDeclPaddingBits<S>
-  implements PackedFieldDeclType<S>
+@Immutable public final class PackedFieldDeclPaddingBits<I>
+  implements PackedFieldDeclType<I>
 {
-  private final SizeExprType<S>                              size;
+  private final SizeExprType<I>                              size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
   public PackedFieldDeclPaddingBits(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_size)
+    final SizeExprType<I> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
@@ -46,13 +46,13 @@ import java.util.Optional;
    * @return The size expression for the field
    */
 
-  public SizeExprType<S> getSizeExpression()
+  public SizeExprType<I> getSizeExpression()
   {
     return this.size;
   }
 
   @Override public <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<S, A, E> m)
+    final PackedFieldDeclMatcherType<I, A, E> m)
     throws E
   {
     return m.matchPaddingBits(this);

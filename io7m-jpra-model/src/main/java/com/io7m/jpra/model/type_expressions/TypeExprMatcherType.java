@@ -21,49 +21,49 @@ package com.io7m.jpra.model.type_expressions;
  * @param <E>  The type of raised exceptions
  */
 
-public interface TypeExprMatcherType<S, A, E extends Exception>
+public interface TypeExprMatcherType<I, A, E extends Exception>
 {
   A matchExprIntegerSigned(
-    TypeExprIntegerSigned<S> e)
+    TypeExprIntegerSigned<I> e)
     throws E;
 
   A matchExprIntegerSignedNormalized(
-    TypeExprIntegerSignedNormalized<S> e)
+    TypeExprIntegerSignedNormalized<I> e)
     throws E;
 
   A matchExprIntegerUnsigned(
-    TypeExprIntegerUnsigned<S> e)
+    TypeExprIntegerUnsigned<I> e)
     throws E;
 
   A matchExprIntegerUnsignedNormalized(
-    TypeExprIntegerUnsignedNormalized<S> e)
+    TypeExprIntegerUnsignedNormalized<I> e)
     throws E;
 
   A matchExprArray(
-    TypeExprArray<S> e)
+    TypeExprArray<I> e)
     throws E;
 
   A matchExprFloat(
-    TypeExprFloat<S> e)
+    TypeExprFloat<I> e)
     throws E;
 
   A matchExprVector(
-    TypeExprVector<S> e)
+    TypeExprVector<I> e)
     throws E;
 
-  A matchExprMatrix(TypeExprMatrix<S> e)
+  A matchExprMatrix(TypeExprMatrix<I> e)
     throws E;
 
-  A matchExprString(TypeExprString<S> e)
+  A matchExprString(TypeExprString<I> e)
     throws E;
 
-  A matchName(TypeExprName<S> e)
+  A matchName(TypeExprName<I> e)
     throws E;
 
-  A matchTypeOfField(TypeExprTypeOfField<S> e)
+  A matchTypeOfField(TypeExprTypeOfField<I> e)
     throws E;
 
   A matchBooleanSet(
-    TypeExprBooleanSet<S> e)
+    TypeExprBooleanSet<I> e)
     throws E;
 }

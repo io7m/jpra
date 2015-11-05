@@ -18,20 +18,20 @@ package com.io7m.jpra.model.statements;
 
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 
-public interface StatementMatcherType<S, A, E extends Exception>
+public interface StatementMatcherType<I, A, E extends Exception>
 {
   A matchPackageBegin(
-    StatementPackageBegin<S> s)
+    StatementPackageBegin<I> s)
     throws E;
 
   A matchPackageEnd(
-    StatementPackageEnd<S> s)
+    StatementPackageEnd<I> s)
     throws E;
 
   A matchPackageImport(
-    StatementPackageImport<S> s)
+    StatementPackageImport<I> s)
     throws E;
 
-  A matchTypeDecl(TypeDeclType<S> s)
+  A matchTypeDecl(TypeDeclType<I> s)
     throws E;
 }

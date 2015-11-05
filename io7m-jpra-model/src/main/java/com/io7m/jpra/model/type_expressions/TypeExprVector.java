@@ -23,18 +23,18 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprVector<S> implements TypeExprType<S>
+public final class TypeExprVector<I> implements TypeExprType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<S>                              element_count;
-  private final TypeExprType<S>                              element_type;
-  private final S                                            data;
+  private final SizeExprType<I>                              element_count;
+  private final TypeExprType<I>                              element_type;
+  private final I                                            data;
 
   public TypeExprVector(
-    final S in_data,
+    final I in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<S> in_element_count,
-    final TypeExprType<S> in_element_type)
+    final SizeExprType<I> in_element_count,
+    final TypeExprType<I> in_element_type)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_element_count);
@@ -42,13 +42,13 @@ public final class TypeExprVector<S> implements TypeExprType<S>
     this.data = NullCheck.notNull(in_data);
   }
 
-  @Override public S getData()
+  @Override public I getData()
   {
     return this.data;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<S, A, E> m)
+    final TypeExprMatcherType<I, A, E> m)
     throws E
   {
     return m.matchExprVector(this);
@@ -60,12 +60,12 @@ public final class TypeExprVector<S> implements TypeExprType<S>
     return this.lex;
   }
 
-  public SizeExprType<S> getElementCount()
+  public SizeExprType<I> getElementCount()
   {
     return this.element_count;
   }
 
-  public TypeExprType<S> getElementType()
+  public TypeExprType<I> getElementType()
   {
     return this.element_type;
   }

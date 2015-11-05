@@ -23,7 +23,7 @@ package com.io7m.jpra.model.type_declarations;
  * @param <E> The type of raised exceptions
  */
 
-public interface PackedFieldDeclMatcherType<S, A, E extends Exception>
+public interface PackedFieldDeclMatcherType<I, A, E extends Exception>
 {
   /**
    * Match a field.
@@ -35,7 +35,7 @@ public interface PackedFieldDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchPaddingBits(PackedFieldDeclPaddingBits<S> r)
+  A matchPaddingBits(PackedFieldDeclPaddingBits<I> r)
     throws E;
 
   /**
@@ -48,6 +48,6 @@ public interface PackedFieldDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchValue(PackedFieldDeclValue<S> r)
+  A matchValue(PackedFieldDeclValue<I> r)
     throws E;
 }

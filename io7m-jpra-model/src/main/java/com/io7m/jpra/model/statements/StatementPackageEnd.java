@@ -23,8 +23,8 @@ import com.io7m.jpra.model.ModelElementType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageEnd<S>
-  implements ModelElementType, StatementType<S>
+public final class StatementPackageEnd<I>
+  implements ModelElementType, StatementType<I>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
@@ -41,7 +41,7 @@ public final class StatementPackageEnd<S>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<S, A, E> m)
+    final StatementMatcherType<I, A, E> m)
     throws E
   {
     return m.matchPackageEnd(this);

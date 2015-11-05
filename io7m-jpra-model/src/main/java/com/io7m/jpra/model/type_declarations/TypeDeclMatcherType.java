@@ -23,7 +23,7 @@ package com.io7m.jpra.model.type_declarations;
  * @param <E> The type of raised exceptions
  */
 
-public interface TypeDeclMatcherType<S, A, E extends Exception>
+public interface TypeDeclMatcherType<I, A, E extends Exception>
 {
   /**
    * Match a type declaration.
@@ -35,7 +35,7 @@ public interface TypeDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchRecord(TypeDeclRecord<S> t)
+  A matchRecord(TypeDeclRecord<I> t)
     throws E;
 
   /**
@@ -48,6 +48,6 @@ public interface TypeDeclMatcherType<S, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchPacked(TypeDeclPacked<S> t)
+  A matchPacked(TypeDeclPacked<I> t)
     throws E;
 }

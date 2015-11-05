@@ -24,7 +24,7 @@ import com.io7m.jpra.model.statements.StatementType;
  * The type of type declarations.
  */
 
-public interface TypeDeclType<S> extends ModelElementType, StatementType<S>
+public interface TypeDeclType<I> extends ModelElementType, StatementType<I>
 {
   /**
    * @return The type name
@@ -45,6 +45,6 @@ public interface TypeDeclType<S> extends ModelElementType, StatementType<S>
    */
 
   <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<S, A, E> m)
+    final TypeDeclMatcherType<I, A, E> m)
     throws E;
 }

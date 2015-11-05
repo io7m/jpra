@@ -22,7 +22,7 @@ import com.io7m.jpra.model.ModelElementType;
  * The type of record field declarations.
  */
 
-public interface RecordFieldDeclType<S> extends ModelElementType
+public interface RecordFieldDeclType<I> extends ModelElementType
 {
   /**
    * Accept a field matcher.
@@ -37,6 +37,6 @@ public interface RecordFieldDeclType<S> extends ModelElementType
    */
 
   <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<S, A, E> m)
+    final RecordFieldDeclMatcherType<I, A, E> m)
     throws E;
 }

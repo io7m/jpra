@@ -21,11 +21,11 @@ package com.io7m.jpra.model;
  * has been performed.
  */
 
-public final class Parsed
+public final class Unresolved
 {
-  private static final Parsed INSTANCE = new Parsed();
+  private static final Unresolved INSTANCE = new Unresolved();
 
-  private Parsed()
+  private Unresolved()
   {
 
   }
@@ -34,8 +34,8 @@ public final class Parsed
    * @return The untyped value
    */
 
-  public static Parsed get()
+  public static Unresolved get()
   {
-    return Parsed.INSTANCE;
+    return Unresolved.INSTANCE;
   }
 }

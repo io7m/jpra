@@ -22,7 +22,7 @@ import com.io7m.jpra.model.ModelElementType;
  * The type of size expressions.
  */
 
-public interface SizeExprType<S> extends ModelElementType
+public interface SizeExprType<I> extends ModelElementType
 {
   /**
    * Accept a matcher.
@@ -37,6 +37,6 @@ public interface SizeExprType<S> extends ModelElementType
    */
 
   <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<S, A, E> m)
+    final SizeExprMatcherType<I, A, E> m)
     throws E;
 }
