@@ -32,7 +32,6 @@ import java.util.Optional;
 {
   private final BigInteger                                   value;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final S                                            data;
 
   /**
    * Construct a size expression.
@@ -44,13 +43,11 @@ import java.util.Optional;
    */
 
   public SizeExprConstant(
-    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final BigInteger in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.value = NullCheck.notNull(in_size);
-    this.data = NullCheck.notNull(in_data);
   }
 
   /**
@@ -60,11 +57,6 @@ import java.util.Optional;
   public BigInteger getValue()
   {
     return this.value;
-  }
-
-  @Override public S getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(

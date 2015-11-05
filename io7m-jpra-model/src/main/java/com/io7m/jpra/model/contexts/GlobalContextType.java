@@ -14,35 +14,40 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.types;
+package com.io7m.jpra.model.contexts;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.loading.JPRAModelLoadingException;
+import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.names.PackageNameQualified;
+
+import java.util.Map;
 
 /**
- * The type of types.
+ * The global context.
  */
 
-public interface TType extends ModelElementType
+public interface GlobalContextType
 {
   /**
-   * @return The size in bits
+   * @return A fresh identifier that has not been returned before
    */
 
-  Size<SizeUnitBitsType> getSize();
+  IdentifierType getFreshIdentifier();
 
   /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
+   * @return A read-only view of the set of packages in the context
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
-    throws E;
+  Map<PackageNameQualified, PackageContextType> getPackages();
+
+  /**
+   * Load and return a package into the context.
+   *
+   * @param p The name of the package
+   *
+   * @return The loaded package
+   */
+
+  PackageContextType getPackage(PackageNameQualified p)
+    throws JPRAModelLoadingException;
 }

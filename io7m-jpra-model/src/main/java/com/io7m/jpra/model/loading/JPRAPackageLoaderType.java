@@ -14,35 +14,21 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.types;
+package com.io7m.jpra.model.loading;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.contexts.GlobalContextType;
+import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.names.PackageNameQualified;
 
 /**
- * The type of types.
+ * The type of functions  that take fully qualified package names and yield
+ * packages.
  */
 
-public interface TType extends ModelElementType
+public interface JPRAPackageLoaderType
 {
-  /**
-   * @return The size in bits
-   */
-
-  Size<SizeUnitBitsType> getSize();
-
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
-
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
-    throws E;
+  PackageContextType evaluate(
+    GlobalContextType c,
+    PackageNameQualified p)
+    throws JPRAModelLoadingException;
 }

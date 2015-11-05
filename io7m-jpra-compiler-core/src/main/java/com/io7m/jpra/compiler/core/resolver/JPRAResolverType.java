@@ -18,12 +18,17 @@ package com.io7m.jpra.compiler.core.resolver;
 
 import com.io7m.jpra.model.Parsed;
 import com.io7m.jpra.model.ResolvedType;
+import com.io7m.jpra.model.type_declarations.TypeDeclType;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.statements.StatementPackageImport;
-import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The type of name resolvers.
@@ -31,6 +36,19 @@ import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 public interface JPRAResolverType
 {
+  /**
+   * @return The current package name, if any
+   */
+
+  Optional<PackageNameQualified> resolveGetCurrentPackage();
+
+  /**
+   * @return A read-only view of the types that have been resolved in the
+   * package so far
+   */
+
+  Map<TypeName, TypeDeclType<ResolvedType>> resolveGetCurrentTypes();
+
   /**
    * Resolve a package begin statement.
    *

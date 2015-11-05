@@ -14,13 +14,36 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.contexts;
+
+import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.types.TypeUserDefinedType;
+
+import java.util.Map;
 
 /**
- * An empty type indicating that a given size value is in octets.
+ * The context of a specific package
  */
 
-public interface SizeUnitOctetsType extends SizeUnitType
+public interface PackageContextType extends ModelElementType
 {
+  /**
+   * @return A reference to the global context
+   */
 
+  GlobalContextType getGlobalContext();
+
+  /**
+   * @return The defined types within the package
+   */
+
+  Map<TypeName, TypeUserDefinedType> getTypes();
+
+  /**
+   * @return The fully-qualified package name
+   */
+
+  PackageNameQualified getName();
 }

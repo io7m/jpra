@@ -111,7 +111,7 @@ import java.util.Optional;
     return this.name.getLexicalInformation();
   }
 
-  @Override public S getData()
+  public S getData()
   {
     return this.data;
   }

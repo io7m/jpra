@@ -27,25 +27,17 @@ public final class StatementPackageEnd<S>
   implements ModelElementType, StatementType<S>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final S                                            data;
 
   public StatementPackageEnd(
-    final S in_data,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex)
   {
     this.lex = NullCheck.notNull(in_lex);
-    this.data = NullCheck.notNull(in_data);
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
-  }
-
-  @Override public S getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchStatement(

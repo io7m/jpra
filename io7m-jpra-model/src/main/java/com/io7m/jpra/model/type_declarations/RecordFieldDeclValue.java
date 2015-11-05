@@ -32,22 +32,31 @@ import java.util.Optional;
 @Immutable public final class RecordFieldDeclValue<S>
   implements RecordFieldDeclType<S>
 {
-  private final FieldName    name;
+  private final FieldName       name;
   private final TypeExprType<S> type;
+  private final S               data;
 
   /**
    * Construct a field declaration.
    *
+   * @param in_data Supplemental data
    * @param in_name The field name
    * @param in_type The field type
    */
 
   public RecordFieldDeclValue(
+    final S in_data,
     final FieldName in_name,
     final TypeExprType<S> in_type)
   {
+    this.data = NullCheck.notNull(in_data);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
+  }
+
+  public S getData()
+  {
+    return this.data;
   }
 
   /**

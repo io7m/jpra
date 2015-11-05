@@ -25,12 +25,6 @@ import com.io7m.jpra.model.ModelElementType;
 public interface SizeExprType<S> extends ModelElementType
 {
   /**
-   * @return The supplemental data associated with the expression
-   */
-
-  S getData();
-
-  /**
    * Accept a matcher.
    *
    * @param m   The matcher

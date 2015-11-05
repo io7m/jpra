@@ -14,30 +14,26 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.contexts;
 
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.IdentifierType;
 
 import java.math.BigInteger;
 
-public final class Size<U extends SizeUnitType>
+final class Identifier implements IdentifierType
 {
   private final BigInteger value;
 
-  public Size(final BigInteger in_value)
+  Identifier(
+    final BigInteger in_value)
   {
     this.value = NullCheck.notNull(in_value);
   }
 
-  public static <U extends SizeUnitType> Size<U> zero()
+  @Override public String toString()
   {
-    return new Size<>(BigInteger.ZERO);
-  }
-
-  public static Size<SizeUnitBitsType> toBits(
-    final Size<SizeUnitOctetsType> size)
-  {
-    return new Size<>(size.getValue().multiply(BigInteger.valueOf(8L)));
+    return this.value.toString();
   }
 
   @Override public boolean equals(final Object o)
@@ -49,27 +45,12 @@ public final class Size<U extends SizeUnitType>
       return false;
     }
 
-    final Size<?> size = (Size<?>) o;
-    return this.getValue().equals(size.getValue());
-  }
-
-  @Override public String toString()
-  {
-    return this.value.toString();
+    final Identifier that = (Identifier) o;
+    return this.value.equals(that.value);
   }
 
   @Override public int hashCode()
   {
-    return this.getValue().hashCode();
-  }
-
-  public BigInteger getValue()
-  {
-    return this.value;
-  }
-
-  public Size<U> add(final Size<U> size)
-  {
-    return new Size<>(this.value.add(size.getValue()));
+    return this.value.hashCode();
   }
 }

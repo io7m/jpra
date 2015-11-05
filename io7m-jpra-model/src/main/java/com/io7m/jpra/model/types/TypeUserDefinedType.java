@@ -16,19 +16,19 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jpra.model.ModelElementType;
+import com.io7m.jpra.model.contexts.PackageContextType;
 
 /**
- * The type of types.
+ * The type of user defined types.
  */
 
-public interface TType extends ModelElementType
+public interface TypeUserDefinedType
 {
   /**
-   * @return The size in bits
+   * @return The package context
    */
 
-  Size<SizeUnitBitsType> getSize();
+  PackageContextType getPackageContext();
 
   /**
    * Accept a matcher.
@@ -42,7 +42,7 @@ public interface TType extends ModelElementType
    * @throws E If {@code m} raises {@code E}
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
+  <A, E extends Exception> A matchTypeUserDefined(
+    final TypeUserDefinedMatcherType<A, E> m)
     throws E;
 }

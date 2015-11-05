@@ -52,7 +52,7 @@ public enum JPRAResolverErrorCode
 
   PACKAGE_NONEXISTENT,
 
-  /**
+  PACKAGE_LOADING_ERROR, /**
    * A duplicate package was specified.
    */
 

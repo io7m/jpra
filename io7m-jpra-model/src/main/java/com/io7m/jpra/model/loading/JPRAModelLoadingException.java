@@ -14,13 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
+package com.io7m.jpra.model.loading;
 
-/**
- * An empty type indicating that a given size value is in bits.
- */
-
-public interface SizeUnitBitsType extends SizeUnitType
+public final class JPRAModelLoadingException extends Exception
 {
+  public JPRAModelLoadingException(final String message)
+  {
+    super(message);
+  }
 
+  public JPRAModelLoadingException(
+    final String message,
+    final Throwable cause)
+  {
+    super(message, cause);
+  }
+
+  public JPRAModelLoadingException(final Throwable cause)
+  {
+    super(cause);
+  }
 }

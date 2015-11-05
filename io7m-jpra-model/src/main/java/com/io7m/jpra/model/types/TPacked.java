@@ -22,8 +22,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
+import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
@@ -35,26 +34,30 @@ import java.util.Optional;
  * A {@code packed} type.
  */
 
-public final class TPacked implements TType
+public final class TPacked implements TType, TypeUserDefinedType
 {
   private final TypeName                            name;
   private final Size<SizeUnitBitsType>              size_bits;
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
   private final ImmutableList<FieldType>            fields_by_order;
+  private final PackageContextType                  package_ctx;
 
   /**
    * Construct a record type.
    *
+   * @param in_package         The package context
    * @param in_name            The type name
    * @param in_fields_by_name  The fields by name
    * @param in_fields_by_order The fields in declaration order
    */
 
   public TPacked(
+    final PackageContextType in_package,
     final TypeName in_name,
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
+    this.package_ctx = NullCheck.notNull(in_package);
     this.name = NullCheck.notNull(in_name);
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
     this.fields_by_order = NullCheck.notNull(in_fields_by_order);
@@ -107,6 +110,18 @@ public final class TPacked implements TType
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
+  }
+
+  @Override public PackageContextType getPackageContext()
+  {
+    return this.package_ctx;
+  }
+
+  @Override public <A, E extends Exception> A matchTypeUserDefined(
+    final TypeUserDefinedMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchPacked(this);
   }
 
   /**
@@ -180,22 +195,35 @@ public final class TPacked implements TType
 
   public static final class FieldValue implements FieldType
   {
+    private final TPacked   owner;
     private final FieldName name;
     private final TType     type;
 
     /**
      * Construct a field.
      *
+     * @param in_owner      The owning type
      * @param in_identifier The name
      * @param in_type       The field type
      */
 
     public FieldValue(
+      final TPacked in_owner,
       final FieldName in_identifier,
       final TType in_type)
     {
+      this.owner = NullCheck.notNull(in_owner);
       this.name = NullCheck.notNull(in_identifier);
       this.type = NullCheck.notNull(in_type);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TPacked getOwner()
+    {
+      return this.owner;
     }
 
     /**
@@ -243,20 +271,33 @@ public final class TPacked implements TType
   {
     private final Size<SizeUnitBitsType>                       size_bits;
     private final Optional<ImmutableLexicalPositionType<Path>> lex;
+    private final TPacked                                      owner;
 
     /**
      * Construct a field.
      *
+     * @param in_owner     The owning type
      * @param in_size_bits The size in bits
      * @param in_lex       Lexical information
      */
 
     public FieldPaddingBits(
+      final TPacked in_owner,
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<ImmutableLexicalPositionType<Path>> in_lex)
     {
+      this.owner = NullCheck.notNull(in_owner);
       this.size_bits = NullCheck.notNull(in_size_bits);
       this.lex = NullCheck.notNull(in_lex);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TPacked getOwner()
+    {
+      return this.owner;
     }
 
     @Override public Size<SizeUnitBitsType> getSize()

@@ -22,8 +22,6 @@ package com.io7m.jpra.model.statements;
 
 public interface StatementType<S>
 {
-  S getData();
-
   <A, E extends Exception> A matchStatement(
     final StatementMatcherType<S, A, E> m)
     throws E;

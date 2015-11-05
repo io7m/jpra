@@ -31,21 +31,17 @@ import java.util.Optional;
 @Immutable public final class SizeExprInOctets<S> implements SizeExprType<S>
 {
   private final TypeExprType<S> expression;
-  private final S data;
 
   /**
    * Construct an expression.
    *
-   * @param in_data       The supplemental data
    * @param in_expression The type expression
    */
 
   public SizeExprInOctets(
-    final S in_data,
     final TypeExprType<S> in_expression)
   {
     this.expression = NullCheck.notNull(in_expression);
-    this.data = NullCheck.notNull(in_data);
   }
 
   /**
@@ -55,11 +51,6 @@ import java.util.Optional;
   public TypeExprType<S> getTypeExpression()
   {
     return this.expression;
-  }
-
-  @Override public S getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(

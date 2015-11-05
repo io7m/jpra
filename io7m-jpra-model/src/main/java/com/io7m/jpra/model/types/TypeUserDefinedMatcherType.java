@@ -16,33 +16,38 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jpra.model.ModelElementType;
-
 /**
- * The type of types.
+ * The type of user-defined type matchers.
+ *
+ * @param <A> The type of returned values
+ * @param <E> The type of raised exceptions
  */
 
-public interface TType extends ModelElementType
+public interface TypeUserDefinedMatcherType<A, E extends Exception>
 {
   /**
-   * @return The size in bits
+   * Match an {@code record} type.
+   *
+   * @param t The type expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
    */
 
-  Size<SizeUnitBitsType> getSize();
+  A matchRecord(TRecord t)
+    throws E;
 
   /**
-   * Accept a matcher.
+   * Match a {@code packed} type.
    *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
+   * @param t The type expression
    *
-   * @return The value returned by {@code m}
+   * @return A value of {@code A}
    *
-   * @throws E If {@code m} raises {@code E}
+   * @throws E If required
    */
 
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
+  A matchPacked(TPacked t)
     throws E;
 }

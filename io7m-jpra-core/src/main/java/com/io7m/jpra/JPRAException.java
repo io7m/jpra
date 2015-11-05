@@ -14,35 +14,28 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.types;
-
-import com.io7m.jpra.model.ModelElementType;
+package com.io7m.jpra;
 
 /**
- * The type of types.
+ * The root type of exceptions.
  */
 
-public interface TType extends ModelElementType
+public abstract class JPRAException extends Exception
 {
-  /**
-   * @return The size in bits
-   */
+  public JPRAException(final String message)
+  {
+    super(message);
+  }
 
-  Size<SizeUnitBitsType> getSize();
+  public JPRAException(final Throwable cause)
+  {
+    super(cause);
+  }
 
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
-
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
-    throws E;
+  public JPRAException(
+    final String message,
+    final Throwable cause)
+  {
+    super(message, cause);
+  }
 }

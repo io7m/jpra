@@ -30,16 +30,13 @@ public final class StatementPackageImport<S>
 {
   private final PackageNameQualified   pack;
   private final PackageNameUnqualified using;
-  private final S                      data;
 
   public StatementPackageImport(
-    final S in_data,
     final PackageNameQualified in_pack,
     final PackageNameUnqualified in_using)
   {
     this.pack = NullCheck.notNull(in_pack);
     this.using = NullCheck.notNull(in_using);
-    this.data = NullCheck.notNull(in_data);
   }
 
   public PackageNameUnqualified getUsing()
@@ -56,11 +53,6 @@ public final class StatementPackageImport<S>
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.pack.getLexicalInformation();
-  }
-
-  @Override public S getData()
-  {
-    return this.data;
   }
 
   @Override public <A, E extends Exception> A matchStatement(

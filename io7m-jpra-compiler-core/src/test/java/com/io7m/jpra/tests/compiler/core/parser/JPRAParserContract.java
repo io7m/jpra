@@ -60,7 +60,7 @@ import java.util.Optional;
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract JPRAParserType getParser();
+  protected abstract JPRAParserType newParser();
 
   protected abstract SExpressionType newFileSExpr(
     final String name);
@@ -72,7 +72,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -84,7 +84,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -96,7 +96,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -108,7 +108,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer \"x\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -120,7 +120,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed \"x\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -132,7 +132,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -144,7 +144,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer raspberry 23)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -156,7 +156,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -168,7 +168,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprIntegerUnsigned.class, t_raw.getClass());
@@ -184,7 +184,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -196,7 +196,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -208,7 +208,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprIntegerSigned.class, t_raw.getClass());
@@ -225,7 +225,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer signed-normalized)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -238,7 +238,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer signed-normalized q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -251,7 +251,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer signed-normalized 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(
@@ -269,7 +269,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer unsigned-normalized)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -282,7 +282,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer unsigned-normalized q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -295,7 +295,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newStringSExpr(
       "(integer unsigned-normalized 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(
@@ -312,7 +312,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -324,7 +324,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"\"");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -336,7 +336,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(unknown)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -348,7 +348,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(\"\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -360,7 +360,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -372,7 +372,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"\"");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -384,7 +384,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-meters T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -396,7 +396,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("32");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final SizeExprType<Parsed> s = p.parseSizeExpression(e);
     final SizeExprConstant<Parsed> sc = SizeExprConstant.class.cast(s);
@@ -407,7 +407,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-bits T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final SizeExprType<Parsed> s = p.parseSizeExpression(e);
     final SizeExprInBits<Parsed> sb = SizeExprInBits.class.cast(s);
@@ -421,7 +421,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-bits)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -433,7 +433,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-octets T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final SizeExprType<Parsed> s = p.parseSizeExpression(e);
     final SizeExprInOctets<Parsed> sb = SizeExprInOctets.class.cast(s);
@@ -447,7 +447,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-octets)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -459,7 +459,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -471,7 +471,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -483,7 +483,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float \"x\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -495,7 +495,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprFloat.class, t_raw.getClass());
@@ -510,7 +510,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector T 3)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprVector.class, t_raw.getClass());
@@ -526,7 +526,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -538,7 +538,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -550,7 +550,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector T ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -562,7 +562,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 4 2)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprMatrix.class, t_raw.getClass());
@@ -583,7 +583,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -595,7 +595,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 2)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -607,7 +607,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 2 ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -619,7 +619,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array T 3)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprArray.class, t_raw.getClass());
@@ -635,7 +635,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -647,7 +647,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -659,7 +659,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array T ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -671,7 +671,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string 64 \"UTF-8\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprString.class, t_raw.getClass());
@@ -687,7 +687,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -699,7 +699,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string 32)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -711,7 +711,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string T ())");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -723,7 +723,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x y z))");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final TypeExprType<Parsed> t_raw = p.parseTypeExpression(e);
     Assert.assertEquals(TypeExprBooleanSet.class, t_raw.getClass());
@@ -740,7 +740,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -752,7 +752,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set x)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -764,7 +764,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 \"\")");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -776,7 +776,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x x))");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -788,7 +788,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (T))");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -800,7 +800,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 x)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -812,7 +812,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin x.y.z)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final StatementType<Parsed> st = p.parseStatement(e);
     final StatementPackageBegin<Parsed> pb =
@@ -824,7 +824,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z as q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final StatementType<Parsed> st = p.parseStatement(e);
     final StatementPackageImport<Parsed> pi =
@@ -837,7 +837,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-end)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final StatementType<Parsed> st = p.parseStatement(e);
     final StatementPackageEnd<Parsed> pb = StatementPackageEnd.class.cast(st);
@@ -847,7 +847,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -859,7 +859,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -871,7 +871,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z as)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -883,7 +883,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z T q)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -895,7 +895,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -907,7 +907,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -919,7 +919,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-end T)");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -931,7 +931,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -943,7 +943,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("x");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -955,7 +955,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"x\"");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -967,7 +967,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-0.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -979,7 +979,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-1.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -991,7 +991,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-3.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1003,7 +1003,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-6.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1015,7 +1015,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-0.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1027,7 +1027,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-1.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1039,7 +1039,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-2.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1051,7 +1051,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-3.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1063,7 +1063,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-4.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1075,7 +1075,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-5.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1087,7 +1087,7 @@ import java.util.Optional;
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-6.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1100,7 +1100,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newFileSExpr(
       "t-record-padding-octets-invalid-0.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
@@ -1113,7 +1113,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newFileSExpr(
       "t-record-0.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final StatementType<Parsed> s = p.parseStatement(e);
     final TypeDeclRecord<Parsed> d = TypeDeclRecord.class.cast(s);
@@ -1139,7 +1139,7 @@ import java.util.Optional;
   {
     final SExpressionType e = this.newFileSExpr(
       "t-record-1.jpr");
-    final JPRAParserType p = this.getParser();
+    final JPRAParserType p = this.newParser();
 
     final StatementType<Parsed> s = p.parseStatement(e);
     final TypeDeclRecord<Parsed> d = TypeDeclRecord.class.cast(s);

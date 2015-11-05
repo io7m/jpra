@@ -14,35 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.types;
-
-import com.io7m.jpra.model.ModelElementType;
-
 /**
- * The type of types.
+ * Model loading.
  */
 
-public interface TType extends ModelElementType
-{
-  /**
-   * @return The size in bits
-   */
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.loading;
 
-  Size<SizeUnitBitsType> getSize();
-
-  /**
-   * Accept a matcher.
-   *
-   * @param m   The matcher
-   * @param <A> The type of returned values
-   * @param <E> The type of raised exceptions
-   *
-   * @return The value returned by {@code m}
-   *
-   * @throws E If {@code m} raises {@code E}
-   */
-
-  <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
-    throws E;
-}

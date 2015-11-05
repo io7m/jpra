@@ -36,54 +36,56 @@ public final class TRecords
     final FieldPath p)
   {
     NullCheck.notNull(t);
-    return TRecords.typeForFieldPathActual(
-      t, NullCheck.notNull(p).getElements());
+    NullCheck.notNull(p);
+
+    final ImmutableList<FieldName> es = p.getElements();
+    final FieldName first = es.get(0);
+    final ImmutableList<FieldName> rest = es.drop(1);
+
+    return TRecords.typeForFieldPathActual(t, first, rest);
   }
 
   private static TypeLookupType typeForFieldPathActual(
     final TType rt,
-    final ImmutableList<FieldName> elements)
+    final FieldName name,
+    final ImmutableList<FieldName> rest)
   {
-    if (elements.isEmpty()) {
-      return new TypeLookupSucceeded(rt);
-    }
-
     return rt.matchType(
       new TypeMatcherType<TypeLookupType, UnreachableCodeException>()
       {
         @Override public TypeLookupType matchArray(final TArray t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchString(final TString t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchBooleanSet(final TBooleanSet t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchInteger(final TIntegerType t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchFloat(final TFloat t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchVector(final TVector t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchMatrix(final TMatrix t)
         {
-          return new TypeLookupFailed(t);
+          return new TypeLookupFailed(t, name, rest);
         }
 
         @Override public TypeLookupType matchRecord(final TRecord t)
@@ -91,14 +93,14 @@ public final class TRecords
           final ImmutableMap<FieldName, TRecord.FieldValue> by_name =
             t.getFieldsByName();
 
-          final FieldName head = elements.get(0);
-          if (!by_name.containsKey(head)) {
-            return new TypeLookupFailed(t);
+          if (!by_name.containsKey(name)) {
+            return new TypeLookupFailed(t, name, rest);
           }
 
-          final TRecord.FieldValue f = by_name.get(head);
+          final TRecord.FieldValue f = by_name.get(name);
+          final FieldName next = rest.get(0);
           return TRecords.typeForFieldPathActual(
-            f.getType(), elements.drop(1));
+            f.getType(), next, rest.drop(1));
         }
 
         @Override public TypeLookupType matchPacked(final TPacked t)
@@ -106,14 +108,14 @@ public final class TRecords
           final ImmutableMap<FieldName, TPacked.FieldValue> by_name =
             t.getFieldsByName();
 
-          final FieldName head = elements.get(0);
-          if (!by_name.containsKey(head)) {
-            return new TypeLookupFailed(t);
+          if (!by_name.containsKey(name)) {
+            return new TypeLookupFailed(t, name, rest);
           }
 
-          final TPacked.FieldValue f = by_name.get(head);
+          final TPacked.FieldValue f = by_name.get(name);
+          final FieldName next = rest.get(0);
           return TRecords.typeForFieldPathActual(
-            f.getType(), elements.drop(1));
+            f.getType(), next, rest.drop(1));
         }
       });
   }
@@ -128,12 +130,18 @@ public final class TRecords
 
   public static final class TypeLookupFailed implements TypeLookupType
   {
-    private final TType result;
+    private final TType                    end;
+    private final FieldName                name;
+    private final ImmutableList<FieldName> rest;
 
     public TypeLookupFailed(
-      final TType in_result)
+      final TType in_t,
+      final FieldName in_name,
+      final ImmutableList<FieldName> in_rest)
     {
-      this.result = NullCheck.notNull(in_result);
+      this.end = NullCheck.notNull(in_t);
+      this.name = NullCheck.notNull(in_name);
+      this.rest = NullCheck.notNull(in_rest);
     }
 
     @Override public <A, E extends Exception> A matchTypeLookup(

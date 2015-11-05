@@ -479,7 +479,7 @@ public final class JPRAParser implements JPRAParserType
         final PackageNameUnqualified up_name =
           JPRAParser.parsePackageNameUnqualified(u_sym);
 
-        return new StatementPackageImport<>(Parsed.get(), p_name, up_name);
+        return new StatementPackageImport<>(p_name, up_name);
       }
     }
 
@@ -663,7 +663,7 @@ public final class JPRAParser implements JPRAParserType
         (SExpressionSymbolType) l_expr.get(1);
       final FieldName name = JPRAParser.parseFieldName(f_name);
       final TypeExprType<Parsed> te = this.parseTypeExpression(l_expr.get(2));
-      return new RecordFieldDeclValue<>(name, te);
+      return new RecordFieldDeclValue<>(Parsed.get(), name, te);
     } else {
       try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
         this.serial.serialize(l_expr, bao);
@@ -689,8 +689,7 @@ public final class JPRAParser implements JPRAParserType
     Assertive.require(JPRAParser.PACKAGE_END.equals(se.getText()));
 
     if (le.size() == 1) {
-      return new StatementPackageEnd<>(
-        Parsed.get(), JPRAParser.getExpressionLexical(se));
+      return new StatementPackageEnd<>(JPRAParser.getExpressionLexical(se));
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -721,7 +720,7 @@ public final class JPRAParser implements JPRAParserType
         final SExpressionSymbolType name = (SExpressionSymbolType) e_name;
         final PackageNameQualified p_name =
           JPRAParser.parsePackageNameQualified(name);
-        return new StatementPackageBegin<>(Parsed.get(), p_name);
+        return new StatementPackageBegin<>(p_name);
       }
     }
 
@@ -1121,7 +1120,6 @@ public final class JPRAParser implements JPRAParserType
         {
           try {
             return new SizeExprConstant<>(
-              Parsed.get(),
               JPRAParser.getExpressionLexical(se),
               new BigInteger(se.getText()));
           } catch (final NumberFormatException x) {
@@ -1139,8 +1137,7 @@ public final class JPRAParser implements JPRAParserType
     Assertive.require(JPRAParser.SIZE_IN_BITS.equals(se.getText()));
 
     if (le.size() == 2) {
-      return new SizeExprInBits<>(
-        Parsed.get(), this.parseTypeExpression(le.get(1)));
+      return new SizeExprInBits<>(this.parseTypeExpression(le.get(1)));
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -1166,8 +1163,7 @@ public final class JPRAParser implements JPRAParserType
     Assertive.require(JPRAParser.SIZE_IN_OCTETS.equals(se.getText()));
 
     if (le.size() == 2) {
-      return new SizeExprInOctets<>(
-        Parsed.get(), this.parseTypeExpression(le.get(1)));
+      return new SizeExprInOctets<>(this.parseTypeExpression(le.get(1)));
     }
 
     try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {

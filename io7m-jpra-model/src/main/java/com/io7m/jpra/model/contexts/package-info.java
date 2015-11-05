@@ -14,13 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model;
-
 /**
- * An empty type used to indicate the units of size expressions.
+ * Context types.
  */
 
-public interface SizeUnitType
-{
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.contexts;
 
-}

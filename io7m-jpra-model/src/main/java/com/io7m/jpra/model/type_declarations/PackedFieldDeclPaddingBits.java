@@ -34,43 +34,12 @@ import java.util.Optional;
   private final SizeExprType<S>                              size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
-  private PackedFieldDeclPaddingBits(
+  public PackedFieldDeclPaddingBits(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final SizeExprType<S> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
-  }
-
-  /**
-   * Construct a field declaration.
-   *
-   * @param in_size The size expression
-   *
-   * @return A new field declaration
-   */
-
-  public static <S> PackedFieldDeclPaddingBits<S> newField(
-    final SizeExprType<S> in_size)
-  {
-    return new PackedFieldDeclPaddingBits<S>(Optional.empty(), in_size);
-  }
-
-  /**
-   * Construct a field declaration.
-   *
-   * @param lex     The lexical information for the name
-   * @param in_size The size expression
-   *
-   * @return A new field declaration
-   */
-
-  public static <S> PackedFieldDeclPaddingBits<S> newFieldWithLex(
-    final ImmutableLexicalPositionType<Path> lex,
-    final SizeExprType<S> in_size)
-  {
-    return new PackedFieldDeclPaddingBits<S>(
-      Optional.of(NullCheck.notNull(lex)), in_size);
   }
 
   /**

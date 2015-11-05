@@ -18,8 +18,6 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;

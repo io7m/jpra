@@ -22,8 +22,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
+import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
@@ -35,26 +34,30 @@ import java.util.Optional;
  * A {@code record} type.
  */
 
-public final class TRecord implements TType
+public final class TRecord implements TType, TypeUserDefinedType
 {
   private final TypeName                            name;
   private final Size<SizeUnitBitsType>              size_bits;
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
   private final ImmutableList<FieldType>            fields_by_order;
+  private final PackageContextType                  package_ctx;
 
   /**
    * Construct a record type.
    *
+   * @param in_package         The package context
    * @param in_ident           The name
    * @param in_fields_by_name  The fields by name
    * @param in_fields_by_order The fields in declaration order
    */
 
   public TRecord(
+    final PackageContextType in_package,
     final TypeName in_ident,
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
+    this.package_ctx = NullCheck.notNull(in_package);
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
     this.name = NullCheck.notNull(in_ident);
     this.fields_by_order = NullCheck.notNull(in_fields_by_order);
@@ -71,6 +74,18 @@ public final class TRecord implements TType
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
+  }
+
+  @Override public PackageContextType getPackageContext()
+  {
+    return this.package_ctx;
+  }
+
+  @Override public <A, E extends Exception> A matchTypeUserDefined(
+    final TypeUserDefinedMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchRecord(this);
   }
 
   /**
@@ -182,20 +197,33 @@ public final class TRecord implements TType
   {
     private final FieldName name;
     private final TType     type;
+    private final TRecord   owner;
 
     /**
      * Construct a field.
      *
-     * @param in_name The name
-     * @param in_type The field type
+     * @param in_owner The owning type
+     * @param in_name  The name
+     * @param in_type  The field type
      */
 
     public FieldValue(
+      final TRecord in_owner,
       final FieldName in_name,
       final TType in_type)
     {
+      this.owner = NullCheck.notNull(in_owner);
       this.name = NullCheck.notNull(in_name);
       this.type = NullCheck.notNull(in_type);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TRecord getOwner()
+    {
+      return this.owner;
     }
 
     /**
@@ -243,20 +271,33 @@ public final class TRecord implements TType
   {
     private final Size<SizeUnitBitsType>                       size_bits;
     private final Optional<ImmutableLexicalPositionType<Path>> lex;
+    private final TRecord                                      owner;
 
     /**
      * Construct a field.
      *
+     * @param in_owner     The owning type
      * @param in_size_bits The size in bits
      * @param in_lex       Lexical information
      */
 
     public FieldPaddingOctets(
+      final TRecord in_owner,
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<ImmutableLexicalPositionType<Path>> in_lex)
     {
+      this.owner = NullCheck.notNull(in_owner);
       this.size_bits = NullCheck.notNull(in_size_bits);
       this.lex = NullCheck.notNull(in_lex);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TRecord getOwner()
+    {
+      return this.owner;
     }
 
     @Override public Size<SizeUnitBitsType> getSize()

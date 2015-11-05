@@ -16,7 +16,9 @@
 
 package com.io7m.jpra.model;
 
+import com.io7m.jpra.model.names.IdentifierType;
+
 public interface ResolvedType
 {
-
+  IdentifierType getIdentifier();
 }
