@@ -20,22 +20,63 @@ import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
 import org.valid4j.Assertive;
 
+/**
+ * A path to a field.
+ */
+
 public final class FieldPath
 {
   private final ImmutableList<FieldName> path;
+  private final String                   image;
 
   private FieldPath(
     final ImmutableList<FieldName> in_path)
   {
     this.path = NullCheck.notNull(in_path);
     Assertive.require(!in_path.isEmpty(), "Field path cannot be empty");
+    this.image = in_path.makeString(".");
   }
 
+  /**
+   * Construct a field path from a non-empty list of path elements.
+   *
+   * @param in_elements The elements
+   *
+   * @return A field path
+   */
+
   public static FieldPath ofList(
-    final ImmutableList<FieldName> in_path)
+    final ImmutableList<FieldName> in_elements)
   {
-    return new FieldPath(in_path);
+    return new FieldPath(in_elements);
   }
+
+  @Override public boolean equals(final Object o)
+  {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+
+    final FieldPath fp = (FieldPath) o;
+    return this.image.equals(fp.image);
+  }
+
+  @Override public int hashCode()
+  {
+    return this.image.hashCode();
+  }
+
+  @Override public String toString()
+  {
+    return this.image;
+  }
+
+  /**
+   * @return The path elements
+   */
 
   public ImmutableList<FieldName> getElements()
   {

@@ -18,11 +18,26 @@ package com.io7m.jpra.model.statements;
 
 /**
  * The type of statements.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface StatementType<I>
+public interface StatementType<I, T>
 {
+  /**
+   * Accept a matcher.
+   *
+   * @param m   The matcher
+   * @param <A> The type of returned values
+   * @param <E> The type of raised exceptions
+   *
+   * @return The value returned by {@code m}
+   *
+   * @throws E If {@code m} raises {@code E}
+   */
+
   <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E;
 }

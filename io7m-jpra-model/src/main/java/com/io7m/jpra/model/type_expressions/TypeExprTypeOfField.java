@@ -24,31 +24,62 @@ import com.io7m.jpra.model.names.FieldReference;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprTypeOfField<I> implements TypeExprType<I>
+/**
+ * A {@code type-of} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
+ */
+
+public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
 {
   private final I              identifier;
   private final FieldReference field_reference;
+  private final T              type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_identifier      The identifier
+   * @param in_type            The expression type
+   * @param in_field_reference The reference to the field
+   */
 
   public TypeExprTypeOfField(
     final I in_identifier,
+    final T in_type,
     final FieldReference in_field_reference)
   {
     this.field_reference = NullCheck.notNull(in_field_reference);
     this.identifier = NullCheck.notNull(in_identifier);
+    this.type = NullCheck.notNull(in_type);
   }
+
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return The field reference
+   */
 
   public FieldReference getFieldReference()
   {
     return this.field_reference;
   }
 
-   public I getIdentifier()
+  /**
+   * @return The identifier
+   */
+
+  public I getIdentifier()
   {
     return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchTypeOfField(this);

@@ -17,11 +17,12 @@
 package com.io7m.jpra.tests.compiler.core.resolver;
 
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
+import com.io7m.jpra.model.Unresolved;
+import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.GlobalContexts;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -30,7 +31,6 @@ import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.size_expressions.SizeExprConstant;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementCommandType;
@@ -48,7 +48,6 @@ import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsignedNormalized;
 import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
 import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprVector;
-import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.jsx.SExpressionType;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -57,21 +56,16 @@ import org.junit.internal.matchers.ThrowableCauseMatcher;
 import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @SuppressWarnings("unchecked") public abstract class JPRAResolverContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  private static <T> void checkSizeExpressionConstant(
-    final SizeExprType<T> s,
+  private static <I, T> void checkSizeExpressionConstant(
+    final SizeExprType<I, T> s,
     final BigInteger v)
   {
-    final SizeExprConstant<T> sc = SizeExprConstant.class.cast(s);
+    final SizeExprConstant<I, T> sc = SizeExprConstant.class.cast(s);
     final BigInteger rv = sc.getValue();
     Assert.assertEquals(v, rv);
   }
@@ -100,6 +94,24 @@ import java.util.Optional;
     r.resolvePackageBegin(
       StatementPackageBegin.class.cast(
         p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+  }
+
+  @Test public final void testPackageBegin()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementPackageBegin<Unresolved, Untyped> pb =
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin x.y.z)")));
+    final StatementPackageBegin<IdentifierType, Untyped> rp =
+      r.resolvePackageBegin(pb);
+
+    Assert.assertEquals(pb.getPackageName(), rp.getPackageName());
+    Assert.assertEquals(pb.getLexicalInformation(), rp.getLexicalInformation());
   }
 
   @Test public final void testPackageDuplicate()
@@ -364,11 +376,13 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(this.newStringSExpr("(:type [integer signed 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr("(:type [integer signed 32])"))));
 
-    final TypeExprIntegerSigned<IdentifierType> ee =
+    final TypeExprIntegerSigned<IdentifierType, Untyped> ee =
       TypeExprIntegerSigned.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -382,12 +396,13 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr("(:type [integer unsigned 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr("(:type [integer unsigned 32])"))));
 
-    final TypeExprIntegerUnsigned<IdentifierType> ee =
+    final TypeExprIntegerUnsigned<IdentifierType, Untyped> ee =
       TypeExprIntegerUnsigned.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -401,13 +416,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [integer unsigned-normalized 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [integer unsigned-normalized 32])"))));
 
-    final TypeExprIntegerUnsignedNormalized<IdentifierType> ee =
+    final TypeExprIntegerUnsignedNormalized<IdentifierType, Untyped> ee =
       TypeExprIntegerUnsignedNormalized.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -421,13 +437,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [integer signed-normalized 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [integer signed-normalized 32])"))));
 
-    final TypeExprIntegerSignedNormalized<IdentifierType> ee =
+    final TypeExprIntegerSignedNormalized<IdentifierType, Untyped> ee =
       TypeExprIntegerSignedNormalized.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -441,13 +458,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [float 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [float 32])"))));
 
-    final TypeExprFloat<IdentifierType> ee =
+    final TypeExprFloat<IdentifierType, Untyped> ee =
       TypeExprFloat.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -461,13 +479,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [string 32 \"UTF-8\"])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [string 32 \"UTF-8\"])"))));
 
-    final TypeExprString<IdentifierType> ee =
+    final TypeExprString<IdentifierType, Untyped> ee =
       TypeExprString.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
@@ -481,13 +500,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [vector (integer signed 32) 32])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [vector (integer signed 32) 32])"))));
 
-    final TypeExprVector<IdentifierType> ee =
+    final TypeExprVector<IdentifierType, Untyped> ee =
       TypeExprVector.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getElementCount(), BigInteger.valueOf(32L));
@@ -501,13 +521,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [matrix (integer signed 32) 2 4])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [matrix (integer signed 32) 2 4])"))));
 
-    final TypeExprMatrix<IdentifierType> ee =
+    final TypeExprMatrix<IdentifierType, Untyped> ee =
       TypeExprMatrix.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getWidth(), BigInteger.valueOf(2L));
@@ -523,13 +544,14 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [boolean-set 1 (x)])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [boolean-set 1 (x)])"))));
 
-    final TypeExprBooleanSet<IdentifierType> ee =
+    final TypeExprBooleanSet<IdentifierType, Untyped> ee =
       TypeExprBooleanSet.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getSizeExpression(), BigInteger.valueOf(1L));
@@ -543,49 +565,17 @@ import java.util.Optional;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    final StatementCommandType<IdentifierType> ex = r.resolveCommandType(
-      StatementCommandType.class.cast(
-        p.parseStatement(
-          this.newStringSExpr(
-            "(:type [array (integer signed 32) 64])"))));
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [array (integer signed 32) 64])"))));
 
-    final TypeExprArray<IdentifierType> ee =
+    final TypeExprArray<IdentifierType, Untyped> ee =
       TypeExprArray.class.cast(ex.getExpression());
     JPRAResolverContract.checkSizeExpressionConstant(
       ee.getElementCount(), BigInteger.valueOf(64L));
-  }
-
-  private static final class AlwaysEmptyLoader implements JPRAPackageLoaderType
-  {
-    @Override public PackageContextType evaluate(
-      final GlobalContextType c,
-      final PackageNameQualified p)
-    {
-      return new PackageContextType()
-      {
-        @Override public GlobalContextType getGlobalContext()
-        {
-          return c;
-        }
-
-        @Override public Map<TypeName, TypeUserDefinedType> getTypes()
-        {
-          return Collections.unmodifiableMap(new HashMap<>());
-        }
-
-        @Override public PackageNameQualified getName()
-        {
-          return p;
-        }
-
-        @Override
-        public Optional<ImmutableLexicalPositionType<Path>>
-        getLexicalInformation()
-        {
-          return p.getLexicalInformation();
-        }
-      };
-    }
   }
 
   private static final class NoPackagesLoader implements JPRAPackageLoaderType

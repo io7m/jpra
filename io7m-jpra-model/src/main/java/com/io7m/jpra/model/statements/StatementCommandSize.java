@@ -20,23 +20,39 @@ import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
-import com.io7m.jpra.model.type_expressions.TypeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementCommandSize<I>
-  implements ModelElementType, StatementType<I>
+/**
+ * A {@code :size} command.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class StatementCommandSize<I, T>
+  implements ModelElementType, StatementType<I, T>
 {
-  private final SizeExprType<I> expr;
+  private final SizeExprType<I, T> expr;
+
+  /**
+   * Construct a size command.
+   *
+   * @param e A size expression
+   */
 
   public StatementCommandSize(
-    final SizeExprType<I> e)
+    final SizeExprType<I, T> e)
   {
     this.expr = NullCheck.notNull(e);
   }
 
-  public SizeExprType<I> getExpression()
+  /**
+   * @return The size expression
+   */
+
+  public SizeExprType<I, T> getExpression()
   {
     return this.expr;
   }
@@ -48,7 +64,7 @@ public final class StatementCommandSize<I>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchShowSize(this);

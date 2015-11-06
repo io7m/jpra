@@ -22,10 +22,20 @@ import com.io7m.jpra.model.statements.StatementType;
 
 /**
  * The type of type declarations.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface TypeDeclType<I> extends ModelElementType, StatementType<I>
+public interface TypeDeclType<I, T>
+  extends ModelElementType, StatementType<I, T>
 {
+  /**
+   * @return The type
+   */
+
+  T getType();
+
   /**
    * @return The identifier
    */
@@ -51,6 +61,6 @@ public interface TypeDeclType<I> extends ModelElementType, StatementType<I>
    */
 
   <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<I, A, E> m)
+    final TypeDeclMatcherType<I, T, A, E> m)
     throws E;
 }

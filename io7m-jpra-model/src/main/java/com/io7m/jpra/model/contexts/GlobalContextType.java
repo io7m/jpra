@@ -19,6 +19,7 @@ package com.io7m.jpra.model.contexts;
 import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.types.TypeUserDefinedType;
 
 import java.util.Map;
 
@@ -46,8 +47,28 @@ public interface GlobalContextType
    * @param p The name of the package
    *
    * @return The loaded package
+   *
+   * @throws JPRAModelLoadingException Iff the package cannot be loaded
    */
 
   PackageContextType getPackage(PackageNameQualified p)
     throws JPRAModelLoadingException;
+
+  /**
+   * Return a type previously added with {@link #putType(TypeUserDefinedType)}.
+   *
+   * @param id The identifier
+   *
+   * @return The type associated with the given identifier
+   */
+
+  TypeUserDefinedType getType(IdentifierType id);
+
+  /**
+   * Introduce a new type into the global context
+   *
+   * @param t The type
+   */
+
+  void putType(final TypeUserDefinedType t);
 }

@@ -26,11 +26,14 @@ import java.util.Optional;
 
 /**
  * A size function denoting the size in bits of a given type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class SizeExprInBits<I> implements SizeExprType<I>
+@Immutable public final class SizeExprInBits<I, T> implements SizeExprType<I, T>
 {
-  private final TypeExprType<I> expression;
+  private final TypeExprType<I, T> expression;
 
   /**
    * Construct an expression.
@@ -39,7 +42,7 @@ import java.util.Optional;
    */
 
   public SizeExprInBits(
-    final TypeExprType<I> in_expression)
+    final TypeExprType<I, T> in_expression)
   {
     this.expression = NullCheck.notNull(in_expression);
   }
@@ -48,13 +51,13 @@ import java.util.Optional;
    * @return The type expression
    */
 
-  public TypeExprType<I> getTypeExpression()
+  public TypeExprType<I, T> getTypeExpression()
   {
     return this.expression;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, A, E> m)
+    final SizeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchInBits(this);

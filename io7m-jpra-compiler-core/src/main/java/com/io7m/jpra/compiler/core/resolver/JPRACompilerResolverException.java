@@ -299,7 +299,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    * @return The error code
    */
 
-  public JPRAResolverErrorCode getJPRAResolverErrorCode()
+  public JPRAResolverErrorCode getErrorCode()
   {
     return this.code;
   }

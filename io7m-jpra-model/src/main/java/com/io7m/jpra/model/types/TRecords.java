@@ -24,12 +24,25 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.junreachable.UnreachableCodeException;
 
+/**
+ * Functions over record types.
+ */
+
 public final class TRecords
 {
   private TRecords()
   {
     throw new UnreachableCodeException();
   }
+
+  /**
+   * Lookup a type based on a field path.
+   *
+   * @param t The starting type
+   * @param p The path
+   *
+   * @return A lookup result
+   */
 
   public static TypeLookupType typeForFieldPath(
     final TRecord t,
@@ -120,19 +133,48 @@ public final class TRecords
       });
   }
 
+  /**
+   * The type of lookup results.
+   */
+
   public interface TypeLookupType
   {
+    /**
+     * Evaluate functions to inspect the lookup result.
+     *
+     * @param <A>     The type of returned values
+     * @param <E>     The type of raised exceptions
+     * @param success Evaluated if this result denotes success
+     * @param failure Evaluated if this result denotes failure
+     *
+     * @return The value returned by {@code m}
+     *
+     * @throws E If {@code m} raises {@code E}
+     */
+
     <A, E extends Exception> A matchTypeLookup(
       PartialFunctionType<TypeLookupSucceeded, A, E> success,
       PartialFunctionType<TypeLookupFailed, A, E> failure)
       throws E;
   }
 
+  /**
+   * The type of lookup failures.
+   */
+
   public static final class TypeLookupFailed implements TypeLookupType
   {
     private final TType                    end;
     private final FieldName                name;
     private final ImmutableList<FieldName> rest;
+
+    /**
+     * Construct a failure.
+     *
+     * @param in_t    The last type encountered before the failure
+     * @param in_name The last name
+     * @param in_rest The remaining path elements
+     */
 
     public TypeLookupFailed(
       final TType in_t,
@@ -153,9 +195,19 @@ public final class TRecords
     }
   }
 
+  /**
+   * The type of successful lookups.
+   */
+
   public static final class TypeLookupSucceeded implements TypeLookupType
   {
     private final TType result;
+
+    /**
+     * Construct a success result.
+     *
+     * @param in_result The resulting type
+     */
 
     public TypeLookupSucceeded(
       final TType in_result)

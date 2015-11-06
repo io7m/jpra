@@ -68,7 +68,7 @@ import java.util.Optional;
    * @return The number of rows in the matrix
    */
 
-  public Size<?> getHeightExpression()
+  public Size<?> getHeight()
   {
     return this.size_height;
   }
@@ -77,7 +77,7 @@ import java.util.Optional;
    * @return The number of columns in the matrix
    */
 
-  public Size<?> getWidthExpression()
+  public Size<?> getWidth()
   {
     return this.size_width;
   }

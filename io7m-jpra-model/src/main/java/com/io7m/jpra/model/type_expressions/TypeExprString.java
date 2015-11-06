@@ -23,26 +23,59 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprString<I> implements TypeExprType<I>
+/**
+ * A {@code string} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
+ */
+
+public final class TypeExprString<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I>                              size;
+  private final SizeExprType<I, T>                           size;
   private final String                                       encoding;
+  private final T                                            type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type     The expression type
+   * @param in_lex      Lexical information
+   * @param in_size     The number of octets
+   * @param in_encoding The string encoding
+   */
 
   public TypeExprString(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_size,
+    final SizeExprType<I, T> in_size,
     final String in_encoding)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
     this.encoding = NullCheck.notNull(in_encoding);
   }
 
-  public SizeExprType<I> getSize()
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return The size expression denoting the maximum length of the string in
+   * octets
+   */
+
+  public SizeExprType<I, T> getSize()
   {
     return this.size;
   }
+
+  /**
+   * @return The string encoding
+   */
 
   public String getEncoding()
   {
@@ -50,7 +83,7 @@ public final class TypeExprString<I> implements TypeExprType<I>
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprString(this);

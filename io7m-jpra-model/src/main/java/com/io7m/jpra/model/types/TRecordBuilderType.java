@@ -14,47 +14,48 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.model.types;
+
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.IdentifierType;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
- * The type of model loading exceptions.
+ * The type of mutable records for {@link TRecord} values.
  */
 
-public final class JPRAModelLoadingException extends Exception
+public interface TRecordBuilderType
 {
   /**
-   * Construct an exception.
+   * Add a field of padding octets.
    *
-   * @param message The message
+   * @param lex  The lexical information, if any
+   * @param size The size of the padding in bits
    */
 
-  public JPRAModelLoadingException(final String message)
-  {
-    super(message);
-  }
+  void addPaddingOctets(
+    Optional<ImmutableLexicalPositionType<Path>> lex,
+    Size<SizeUnitOctetsType> size);
 
   /**
-   * Construct an exception.
+   * Add a value field.
    *
-   * @param message The message
-   * @param cause   The cause
+   * @param name The field name
+   * @param id   The field identifier
+   * @param type The field type
    */
 
-  public JPRAModelLoadingException(
-    final String message,
-    final Throwable cause)
-  {
-    super(message, cause);
-  }
+  void addField(
+    FieldName name,
+    IdentifierType id,
+    TType type);
 
   /**
-   * Construct an exception.
-   *
-   * @param cause The cause
+   * @return A constructed record
    */
 
-  public JPRAModelLoadingException(final Throwable cause)
-  {
-    super(cause);
-  }
+  TRecord build();
 }

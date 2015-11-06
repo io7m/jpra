@@ -17,6 +17,7 @@
 package com.io7m.jpra.compiler.core.parser;
 
 import com.io7m.jpra.model.Unresolved;
+import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
@@ -38,7 +39,7 @@ public interface JPRAParserType
    * @throws JPRACompilerParseException On parse errors
    */
 
-  StatementType<Unresolved> parseStatement(
+  StatementType<Unresolved, Untyped> parseStatement(
     final SExpressionType expr)
     throws JPRACompilerParseException;
 
@@ -52,7 +53,7 @@ public interface JPRAParserType
    * @throws JPRACompilerParseException On parse errors
    */
 
-  TypeExprType<Unresolved> parseTypeExpression(
+  TypeExprType<Unresolved, Untyped> parseTypeExpression(
     final SExpressionType expr)
     throws JPRACompilerParseException;
 
@@ -66,7 +67,7 @@ public interface JPRAParserType
    * @throws JPRACompilerParseException On parse errors
    */
 
-  SizeExprType<Unresolved> parseSizeExpression(
+  SizeExprType<Unresolved, Untyped> parseSizeExpression(
     final SExpressionType expr)
     throws JPRACompilerParseException;
 }

@@ -21,9 +21,11 @@ package com.io7m.jpra.model.type_declarations;
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
+ *               @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface TypeDeclMatcherType<I, A, E extends Exception>
+public interface TypeDeclMatcherType<I, T, A, E extends Exception>
 {
   /**
    * Match a type declaration.
@@ -35,7 +37,7 @@ public interface TypeDeclMatcherType<I, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchRecord(TypeDeclRecord<I> t)
+  A matchRecord(TypeDeclRecord<I, T> t)
     throws E;
 
   /**
@@ -48,6 +50,6 @@ public interface TypeDeclMatcherType<I, A, E extends Exception>
    * @throws E If required
    */
 
-  A matchPacked(TypeDeclPacked<I> t)
+  A matchPacked(TypeDeclPacked<I, T> t)
     throws E;
 }

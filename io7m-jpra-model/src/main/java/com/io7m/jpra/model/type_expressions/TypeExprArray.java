@@ -23,34 +23,66 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprArray<I> implements TypeExprType<I>
+/**
+ * An {@code array} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class TypeExprArray<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I>                              element_count;
-  private final TypeExprType<I>                              element_type;
+  private final SizeExprType<I, T>                           element_count;
+  private final TypeExprType<I, T>                           element_type;
+  private final T                                            type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type          The expression type
+   * @param in_lex           Lexical information
+   * @param in_element_count The number of array elements
+   * @param in_element_type  The type of array elements
+   */
 
   public TypeExprArray(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_element_count,
-    final TypeExprType<I> in_element_type)
+    final SizeExprType<I, T> in_element_count,
+    final TypeExprType<I, T> in_element_type)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_element_count);
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
-  public TypeExprType<I> getElementType()
+  /**
+   * @return The type of array elements
+   */
+
+  public TypeExprType<I, T> getElementType()
   {
     return this.element_type;
   }
 
-  public SizeExprType<I> getElementCount()
+  /**
+   * @return The number of array elements
+   */
+
+  public SizeExprType<I, T> getElementCount()
   {
     return this.element_count;
   }
 
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprArray(this);

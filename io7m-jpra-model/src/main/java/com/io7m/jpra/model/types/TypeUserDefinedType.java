@@ -18,6 +18,7 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.names.TypeName;
 
 /**
  * The type of user defined types.
@@ -25,6 +26,12 @@ import com.io7m.jpra.model.names.IdentifierType;
 
 public interface TypeUserDefinedType
 {
+  /**
+   * @return The type name
+   */
+
+  TypeName getName();
+
   /**
    * @return The identifier
    */

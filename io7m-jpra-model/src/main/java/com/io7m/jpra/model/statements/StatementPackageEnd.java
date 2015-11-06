@@ -23,10 +23,23 @@ import com.io7m.jpra.model.ModelElementType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageEnd<I>
-  implements ModelElementType, StatementType<I>
+/**
+ * The {@code package-end} statement.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class StatementPackageEnd<I, T>
+  implements ModelElementType, StatementType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+
+  /**
+   * Construct a statement.
+   *
+   * @param in_lex Lexical information
+   */
 
   public StatementPackageEnd(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex)
@@ -41,7 +54,7 @@ public final class StatementPackageEnd<I>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchPackageEnd(this);

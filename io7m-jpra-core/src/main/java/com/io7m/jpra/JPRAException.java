@@ -22,15 +22,34 @@ package com.io7m.jpra;
 
 public abstract class JPRAException extends Exception
 {
+  /**
+   * Construct an exception.
+   *
+   * @param message The message
+   */
+
   public JPRAException(final String message)
   {
     super(message);
   }
 
+  /**
+   * Construct an exception.
+   *
+   * @param cause The cause
+   */
+
   public JPRAException(final Throwable cause)
   {
     super(cause);
   }
+
+  /**
+   * Construct an exception.
+   *
+   * @param message The message
+   * @param cause   The cause
+   */
 
   public JPRAException(
     final String message,

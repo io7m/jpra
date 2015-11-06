@@ -22,7 +22,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 import java.util.Optional;
 
 /**
- * Functions ove record field declarations.
+ * Functions over record field declarations.
  */
 
 public final class RecordFieldDecl
@@ -33,24 +33,28 @@ public final class RecordFieldDecl
   }
 
   /**
-   * @param r The field declaration
+   * @param r   The field declaration
+   * @param <T> The type of type information
+   * @param <I> The type of identifiers
    *
    * @return The name defined for the given field declaration, if any
    */
 
-  public static <I> Optional<FieldName> name(final RecordFieldDeclType<I> r)
+  public static <I, T> Optional<FieldName> name(
+    final RecordFieldDeclType<I, T> r)
   {
     return r.matchRecordFieldDeclaration(
-      new RecordFieldDeclMatcherType<I, Optional<FieldName>, RuntimeException>()
+      new RecordFieldDeclMatcherType<I, T, Optional<FieldName>,
+        RuntimeException>()
       {
         @Override public Optional<FieldName> matchPadding(
-          final RecordFieldDeclPaddingOctets<I> r)
+          final RecordFieldDeclPaddingOctets<I, T> r)
         {
           return Optional.empty();
         }
 
-        @Override
-        public Optional<FieldName> matchValue(final RecordFieldDeclValue<I> r)
+        @Override public Optional<FieldName> matchValue(
+          final RecordFieldDeclValue<I, T> r)
         {
           return Optional.of(r.getName());
         }

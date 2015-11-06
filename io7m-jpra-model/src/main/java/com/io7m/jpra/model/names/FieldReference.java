@@ -20,11 +20,23 @@ import com.io7m.jnull.NullCheck;
 
 import java.util.Optional;
 
+/**
+ * A reference to a field.
+ */
+
 public final class FieldReference
 {
   private final Optional<PackageNameUnqualified> pack;
   private final Optional<TypeName>               type;
   private final FieldPath                        field_path;
+
+  /**
+   * Construct a reference.
+   *
+   * @param in_pack       The package name, if any
+   * @param in_type       The type name, if any
+   * @param in_field_path The field path
+   */
 
   public FieldReference(
     final Optional<PackageNameUnqualified> in_pack,
@@ -36,15 +48,27 @@ public final class FieldReference
     this.field_path = NullCheck.notNull(in_field_path);
   }
 
+  /**
+   * @return The field path
+   */
+
   public FieldPath getFieldPath()
   {
     return this.field_path;
   }
 
+  /**
+   * @return The package name, if any
+   */
+
   public Optional<PackageNameUnqualified> getPackage()
   {
     return this.pack;
   }
+
+  /**
+   * @return The type name, if any
+   */
 
   public Optional<TypeName> getType()
   {

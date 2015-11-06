@@ -23,23 +23,54 @@ import com.io7m.jpra.model.names.TypeReference;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprName<I> implements TypeExprType<I>
+/**
+ * A name.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
+ */
+
+public final class TypeExprName<I, T> implements TypeExprType<I, T>
 {
   private final I             identifier;
   private final TypeReference ref;
+  private final T             type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_identifier The identifier
+   * @param in_type       The expression type
+   * @param in_ref        The type reference
+   */
 
   public TypeExprName(
     final I in_identifier,
+    final T in_type,
     final TypeReference in_ref)
   {
+    this.type = NullCheck.notNull(in_type);
     this.identifier = NullCheck.notNull(in_identifier);
     this.ref = NullCheck.notNull(in_ref);
   }
+
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return The type reference
+   */
 
   public TypeReference getReference()
   {
     return this.ref;
   }
+
+  /**
+   * @return The identifier
+   */
 
   public I getIdentifier()
   {
@@ -47,7 +78,7 @@ public final class TypeExprName<I> implements TypeExprType<I>
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchName(this);

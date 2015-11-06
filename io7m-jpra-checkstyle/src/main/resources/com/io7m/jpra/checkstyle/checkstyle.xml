@@ -51,7 +51,7 @@
     <module name="AvoidStaticImport"/>
     <module name="BooleanExpressionComplexity"/>
     <module name="ClassDataAbstractionCoupling">
-      <property name="max" value="35"/>
+      <property name="max" value="60"/>
     </module>
     <module name="ClassFanOutComplexity">
       <property name="max" value="125"/>

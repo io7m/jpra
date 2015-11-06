@@ -14,42 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.type_declarations;
+package com.io7m.jpra.model;
 
 /**
- * A {@code packed} field declaration matcher.
- *
- * @param <A> The type of returned values
- * @param <E> The type of raised exceptions
- * @param <I> The type of identifiers
- * @param <T> The type of type information
+ * A type indicating that no type checking has been performed.
  */
 
-public interface PackedFieldDeclMatcherType<I, T, A, E extends Exception>
+public final class Untyped
 {
-  /**
-   * Match a field.
-   *
-   * @param r The field
-   *
-   * @return A value of {@code A}
-   *
-   * @throws E If required
-   */
+  private static final Untyped INSTANCE = new Untyped();
 
-  A matchPaddingBits(PackedFieldDeclPaddingBits<I, T> r)
-    throws E;
+  private Untyped()
+  {
+
+  }
 
   /**
-   * Match a field.
-   *
-   * @param r The field
-   *
-   * @return A value of {@code A}
-   *
-   * @throws E If required
+   * @return The untyped value
    */
 
-  A matchValue(PackedFieldDeclValue<I, T> r)
-    throws E;
+  public static Untyped get()
+  {
+    return Untyped.INSTANCE;
+  }
 }

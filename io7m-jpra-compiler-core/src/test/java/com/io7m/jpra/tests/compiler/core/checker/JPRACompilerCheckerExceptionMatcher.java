@@ -14,39 +14,39 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.tests.compiler.core.resolver;
+package com.io7m.jpra.tests.compiler.core.checker;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
-import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
+import com.io7m.jpra.compiler.core.checker.JPRACheckerErrorCode;
+import com.io7m.jpra.compiler.core.checker.JPRACompilerCheckerException;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class JPRACompilerResolverExceptionMatcher
-  extends TypeSafeDiagnosingMatcher<JPRACompilerResolverException>
+final class JPRACompilerCheckerExceptionMatcher
+  extends TypeSafeDiagnosingMatcher<JPRACompilerCheckerException>
 {
   private static final Logger LOG;
 
   static {
-    LOG = LoggerFactory.getLogger(JPRACompilerResolverExceptionMatcher.class);
+    LOG = LoggerFactory.getLogger(JPRACompilerCheckerExceptionMatcher.class);
   }
 
-  private final JPRAResolverErrorCode code;
+  private final JPRACheckerErrorCode code;
 
-  JPRACompilerResolverExceptionMatcher(final JPRAResolverErrorCode in_code)
+  JPRACompilerCheckerExceptionMatcher(final JPRACheckerErrorCode in_code)
   {
     this.code = NullCheck.notNull(in_code);
   }
 
   @Override protected boolean matchesSafely(
-    final JPRACompilerResolverException item,
+    final JPRACompilerCheckerException item,
     final Description mismatchDescription)
   {
-    JPRACompilerResolverExceptionMatcher.LOG.debug("exception: ", item);
+    JPRACompilerCheckerExceptionMatcher.LOG.debug("exception: ", item);
 
-    final JPRAResolverErrorCode ec = item.getErrorCode();
+    final JPRACheckerErrorCode ec = item.getErrorCode();
     final boolean ok = ec.equals(this.code);
     mismatchDescription.appendText("has error code " + ec);
     return ok;

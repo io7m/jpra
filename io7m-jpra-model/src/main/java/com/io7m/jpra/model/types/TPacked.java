@@ -117,6 +117,11 @@ public final class TPacked implements TType, TypeUserDefinedType
     return this.name.getLexicalInformation();
   }
 
+  @Override public TypeName getName()
+  {
+    return this.name;
+  }
+
   @Override public IdentifierType getIdentifier()
   {
     return this.identifier;

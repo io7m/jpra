@@ -25,25 +25,36 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprBooleanSet<I> implements TypeExprType<I>
+/**
+ * A {@code boolean-set} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
 {
-  private final SizeExprType<I>                              size;
+  private final SizeExprType<I, T>                           size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final T                                            type;
 
   /**
    * Construct a type expression.
    *
+   * @param in_type   The type
    * @param in_lex    Lexical information
    * @param in_fields The fields of the set
    * @param in_size   The size in octets that will be used
    */
 
   public TypeExprBooleanSet(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
-    final SizeExprType<I> in_size)
+    final SizeExprType<I, T> in_size)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
     this.fields = NullCheck.notNull(in_fields);
     this.size = NullCheck.notNull(in_size);
@@ -62,13 +73,18 @@ public final class TypeExprBooleanSet<I> implements TypeExprType<I>
    * @return The size expression denoting the size in octets
    */
 
-  public SizeExprType<I> getSizeExpression()
+  public SizeExprType<I, T> getSizeExpression()
   {
     return this.size;
   }
 
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchBooleanSet(this);

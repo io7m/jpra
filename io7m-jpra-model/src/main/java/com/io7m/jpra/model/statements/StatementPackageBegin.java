@@ -24,16 +24,33 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageBegin<I>
-  implements ModelElementType, StatementType<I>
+/**
+ * A {@code package-begin} statement.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class StatementPackageBegin<I, T>
+  implements ModelElementType, StatementType<I, T>
 {
   private final PackageNameQualified pack;
+
+  /**
+   * Construct a statement.
+   *
+   * @param in_pack The package name
+   */
 
   public StatementPackageBegin(
     final PackageNameQualified in_pack)
   {
     this.pack = NullCheck.notNull(in_pack);
   }
+
+  /**
+   * @return The package name
+   */
 
   public PackageNameQualified getPackageName()
   {
@@ -47,7 +64,7 @@ public final class StatementPackageBegin<I>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchPackageBegin(this);

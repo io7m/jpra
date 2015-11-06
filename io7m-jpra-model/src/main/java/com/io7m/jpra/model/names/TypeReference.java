@@ -20,10 +20,21 @@ import com.io7m.jnull.NullCheck;
 
 import java.util.Optional;
 
+/**
+ * A reference to a type by name.
+ */
+
 public final class TypeReference
 {
   private final Optional<PackageNameUnqualified> pack;
   private final TypeName                         type;
+
+  /**
+   * Construct a reference.
+   *
+   * @param in_pack The package name, if any
+   * @param in_type The type name
+   */
 
   public TypeReference(
     final Optional<PackageNameUnqualified> in_pack,
@@ -33,10 +44,18 @@ public final class TypeReference
     this.pack = NullCheck.notNull(in_pack);
   }
 
+  /**
+   * @return The package name, if any
+   */
+
   public Optional<PackageNameUnqualified> getPackage()
   {
     return this.pack;
   }
+
+  /**
+   * @return The type name
+   */
 
   public TypeName getType()
   {

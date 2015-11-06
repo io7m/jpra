@@ -24,18 +24,35 @@ import com.io7m.jpra.model.type_expressions.TypeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementCommandType<I>
-  implements ModelElementType, StatementType<I>
+/**
+ * A {@code :type} command.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class StatementCommandType<I, T>
+  implements ModelElementType, StatementType<I, T>
 {
-  private final TypeExprType<I> expr;
+  private final TypeExprType<I, T> expr;
+
+  /**
+   * Construct a type expression.
+   *
+   * @param e The type expression
+   */
 
   public StatementCommandType(
-    final TypeExprType<I> e)
+    final TypeExprType<I, T> e)
   {
     this.expr = NullCheck.notNull(e);
   }
 
-  public TypeExprType<I> getExpression()
+  /**
+   * @return The type expression
+   */
+
+  public TypeExprType<I, T> getExpression()
   {
     return this.expr;
   }
@@ -47,7 +64,7 @@ public final class StatementCommandType<I>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchShowType(this);

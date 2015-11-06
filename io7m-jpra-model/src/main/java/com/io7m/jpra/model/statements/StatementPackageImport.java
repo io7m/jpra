@@ -25,11 +25,25 @@ import com.io7m.jpra.model.names.PackageNameUnqualified;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class StatementPackageImport<I>
-  implements ModelElementType, StatementType<I>
+/**
+ * The {@code import} statement.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class StatementPackageImport<I, T>
+  implements ModelElementType, StatementType<I, T>
 {
   private final PackageNameQualified   pack;
   private final PackageNameUnqualified using;
+
+  /**
+   * Construct a statement.
+   *
+   * @param in_pack  The imported package
+   * @param in_using The name that will be used to refer to the package
+   */
 
   public StatementPackageImport(
     final PackageNameQualified in_pack,
@@ -39,10 +53,18 @@ public final class StatementPackageImport<I>
     this.using = NullCheck.notNull(in_using);
   }
 
+  /**
+   * @return The short name
+   */
+
   public PackageNameUnqualified getUsing()
   {
     return this.using;
   }
+
+  /**
+   * @return The target package name
+   */
 
   public PackageNameQualified getPackageName()
   {
@@ -56,7 +78,7 @@ public final class StatementPackageImport<I>
   }
 
   @Override public <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, A, E> m)
+    final StatementMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchPackageImport(this);

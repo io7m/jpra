@@ -27,12 +27,15 @@ import java.util.Optional;
 /**
  * A {@code record} field declaration that specifies a number of padding
  * octets.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class RecordFieldDeclPaddingOctets<I>
-  implements RecordFieldDeclType<I>
+@Immutable public final class RecordFieldDeclPaddingOctets<I, T>
+  implements RecordFieldDeclType<I, T>
 {
-  private final SizeExprType<I>                              size;
+  private final SizeExprType<I, T>                           size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
   /**
@@ -44,7 +47,7 @@ import java.util.Optional;
 
   public RecordFieldDeclPaddingOctets(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_size)
+    final SizeExprType<I, T> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
@@ -54,13 +57,13 @@ import java.util.Optional;
    * @return The field size expression
    */
 
-  public SizeExprType<I> getSizeExpression()
+  public SizeExprType<I, T> getSizeExpression()
   {
     return this.size;
   }
 
   @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<I, A, E> m)
+    final RecordFieldDeclMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchPadding(this);

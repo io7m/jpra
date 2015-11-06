@@ -17,22 +17,47 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jnull.NullCheck;
+import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
 
-public final class Size<U extends SizeUnitType>
+/**
+ * A size value.
+ *
+ * @param <U> The unit of measurement
+ */
+
+@Immutable public final class Size<U extends SizeUnitType>
 {
   private final BigInteger value;
+
+  /**
+   * Construct a size value.
+   *
+   * @param in_value The size
+   */
 
   public Size(final BigInteger in_value)
   {
     this.value = NullCheck.notNull(in_value);
   }
 
+  /**
+   * @param <U> The unit of measurement
+   *
+   * @return The zero value
+   */
+
   public static <U extends SizeUnitType> Size<U> zero()
   {
     return new Size<>(BigInteger.ZERO);
   }
+
+  /**
+   * @param size A size value in octets
+   *
+   * @return The original size value converted to bits
+   */
 
   public static Size<SizeUnitBitsType> toBits(
     final Size<SizeUnitOctetsType> size)
@@ -63,10 +88,20 @@ public final class Size<U extends SizeUnitType>
     return this.getValue().hashCode();
   }
 
+  /**
+   * @return The raw numeric value
+   */
+
   public BigInteger getValue()
   {
     return this.value;
   }
+
+  /**
+   * @param size A size value
+   *
+   * @return The current value plus {@code size}
+   */
 
   public Size<U> add(final Size<U> size)
   {

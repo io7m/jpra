@@ -23,8 +23,10 @@ import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.types.TypeUserDefinedType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -43,6 +45,7 @@ public final class GlobalContexts implements GlobalContextType
 
   private final MutableMap<PackageNameQualified, PackageContextType> packages;
   private final JPRAPackageLoaderType                                loader;
+  private final MutableMap<IdentifierType, TypeUserDefinedType>      types;
   private       BigInteger                                           id_pool;
 
   GlobalContexts(final JPRAPackageLoaderType in_loader)
@@ -50,6 +53,7 @@ public final class GlobalContexts implements GlobalContextType
     this.id_pool = BigInteger.ZERO;
     this.packages = Maps.mutable.empty();
     this.loader = NullCheck.notNull(in_loader);
+    this.types = Maps.mutable.empty();
   }
 
   /**
@@ -93,5 +97,20 @@ public final class GlobalContexts implements GlobalContextType
     final PackageContextType r = this.loader.evaluate(this, p);
     this.packages.put(p, r);
     return r;
+  }
+
+  @Override public void putType(final TypeUserDefinedType t)
+  {
+    NullCheck.notNull(t);
+    final IdentifierType id = t.getIdentifier();
+    Assertive.require(!this.types.containsKey(id));
+    this.types.put(id, t);
+  }
+
+  @Override public TypeUserDefinedType getType(final IdentifierType id)
+  {
+    NullCheck.notNull(id);
+    Assertive.require(this.types.containsKey(id));
+    return this.types.get(id);
   }
 }

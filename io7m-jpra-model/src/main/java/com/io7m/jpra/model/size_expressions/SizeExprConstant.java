@@ -26,9 +26,13 @@ import java.util.Optional;
 
 /**
  * A constant size.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class SizeExprConstant<I> implements SizeExprType<I>
+@Immutable public final class SizeExprConstant<I, T>
+  implements SizeExprType<I, T>
 {
   private final BigInteger                                   value;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
@@ -38,8 +42,6 @@ import java.util.Optional;
    *
    * @param in_lex  The lexical information for the name
    * @param in_size The size expression
-   *
-   * @return A new size expression
    */
 
   public SizeExprConstant(
@@ -60,7 +62,7 @@ import java.util.Optional;
   }
 
   @Override public <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, A, E> m)
+    final SizeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchConstant(this);

@@ -23,27 +23,51 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprVector<I> implements TypeExprType<I>
+/**
+ * A {@code vector} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
+ */
+
+public final class TypeExprVector<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I>                              element_count;
-  private final TypeExprType<I>                              element_type;
+  private final SizeExprType<I, T>                           element_count;
+  private final TypeExprType<I, T>                           element_type;
+  private final T                                            type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type          The expression type
+   * @param in_lex           Lexical information
+   * @param in_element_count The number of elements
+   * @param in_element_type  The type of elements
+   */
 
   public TypeExprVector(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_element_count,
-    final TypeExprType<I> in_element_type)
+    final SizeExprType<I, T> in_element_count,
+    final TypeExprType<I, T> in_element_type)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_element_count);
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprVector(this);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
   }
 
   @Override
@@ -52,12 +76,20 @@ public final class TypeExprVector<I> implements TypeExprType<I>
     return this.lex;
   }
 
-  public SizeExprType<I> getElementCount()
+  /**
+   * @return A size expression denoting the number of elements
+   */
+
+  public SizeExprType<I, T> getElementCount()
   {
     return this.element_count;
   }
 
-  public TypeExprType<I> getElementType()
+  /**
+   * @return A type expression denoting the type of elements
+   */
+
+  public TypeExprType<I, T> getElementType()
   {
     return this.element_type;
   }

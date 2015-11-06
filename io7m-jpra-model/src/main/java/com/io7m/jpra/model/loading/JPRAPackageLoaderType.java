@@ -27,6 +27,17 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 
 public interface JPRAPackageLoaderType
 {
+  /**
+   * Attempt to load a package.
+   *
+   * @param c The global context
+   * @param p The qualified package name
+   *
+   * @return A loaded package
+   *
+   * @throws JPRAModelLoadingException On errors
+   */
+
   PackageContextType evaluate(
     GlobalContextType c,
     PackageNameQualified p)

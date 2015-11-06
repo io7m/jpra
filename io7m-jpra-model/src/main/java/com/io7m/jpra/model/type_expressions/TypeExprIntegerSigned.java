@@ -23,21 +23,44 @@ import com.io7m.jpra.model.size_expressions.SizeExprType;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprIntegerSigned<I> implements TypeExprType<I>
+/**
+ * An {@code integer signed} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
+ */
+
+public final class TypeExprIntegerSigned<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I>                              size;
+  private final SizeExprType<I, T>                           size;
+  private final T                                            type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type The expression type
+   * @param in_lex  Lexical information
+   * @param in_size The size in bits
+   */
 
   public TypeExprIntegerSigned(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<I> in_size)
+    final SizeExprType<I, T> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
+    this.type = NullCheck.notNull(in_type);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprIntegerSigned(this);
@@ -49,7 +72,11 @@ public final class TypeExprIntegerSigned<I> implements TypeExprType<I>
     return this.lex;
   }
 
-  public SizeExprType<I> getSize()
+  /**
+   * @return The size expression denoting the size in bits
+   */
+
+  public SizeExprType<I, T> getSize()
   {
     return this.size;
   }

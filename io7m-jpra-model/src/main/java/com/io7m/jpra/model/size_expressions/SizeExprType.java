@@ -20,9 +20,12 @@ import com.io7m.jpra.model.ModelElementType;
 
 /**
  * The type of size expressions.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface SizeExprType<I> extends ModelElementType
+public interface SizeExprType<I, T> extends ModelElementType
 {
   /**
    * Accept a matcher.
@@ -37,6 +40,6 @@ public interface SizeExprType<I> extends ModelElementType
    */
 
   <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, A, E> m)
+    final SizeExprMatcherType<I, T, A, E> m)
     throws E;
 }
