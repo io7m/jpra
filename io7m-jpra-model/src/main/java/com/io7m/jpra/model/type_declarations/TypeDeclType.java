@@ -18,13 +18,30 @@ package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.statements.StatementType;
 
 /**
  * The type of type declarations.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface TypeDeclType extends ModelElementType
+public interface TypeDeclType<I, T>
+  extends ModelElementType, StatementType<I, T>
 {
+  /**
+   * @return The type
+   */
+
+  T getType();
+
+  /**
+   * @return The identifier
+   */
+
+  I getIdentifier();
+
   /**
    * @return The type name
    */
@@ -44,6 +61,6 @@ public interface TypeDeclType extends ModelElementType
    */
 
   <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<A, E> m)
+    final TypeDeclMatcherType<I, T, A, E> m)
     throws E;
 }

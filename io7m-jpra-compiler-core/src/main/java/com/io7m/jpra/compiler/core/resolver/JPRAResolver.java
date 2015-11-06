@@ -16,180 +16,703 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
+import com.gs.collections.api.bimap.MutableBiMap;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.factory.BiMaps;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.compiler.core.JPRACompilerException;
-import com.io7m.jpra.compiler.core.parser.JPRAParserType;
+import com.io7m.jpra.model.Unresolved;
+import com.io7m.jpra.model.Untyped;
+import com.io7m.jpra.model.contexts.GlobalContextType;
+import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.names.FieldName;
-import com.io7m.jpra.model.PackageImport;
+import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.names.TypeReference;
+import com.io7m.jpra.model.size_expressions.SizeExprConstant;
+import com.io7m.jpra.model.size_expressions.SizeExprInBits;
+import com.io7m.jpra.model.size_expressions.SizeExprInOctets;
+import com.io7m.jpra.model.size_expressions.SizeExprMatcherType;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementCommandType;
+import com.io7m.jpra.model.statements.StatementPackageBegin;
+import com.io7m.jpra.model.statements.StatementPackageEnd;
+import com.io7m.jpra.model.statements.StatementPackageImport;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclMatcherType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclPaddingBits;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclMatcherType;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.TypeDeclMatcherType;
+import com.io7m.jpra.model.type_declarations.TypeDeclPacked;
 import com.io7m.jpra.model.type_declarations.TypeDeclRecord;
+import com.io7m.jpra.model.type_declarations.TypeDeclType;
+import com.io7m.jpra.model.type_expressions.TypeExprArray;
+import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
+import com.io7m.jpra.model.type_expressions.TypeExprFloat;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerSigned;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerSignedNormalized;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsigned;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsignedNormalized;
+import com.io7m.jpra.model.type_expressions.TypeExprMatcherType;
+import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
+import com.io7m.jpra.model.type_expressions.TypeExprName;
+import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
+import com.io7m.jpra.model.type_expressions.TypeExprTypeOfField;
+import com.io7m.jpra.model.type_expressions.TypeExprVector;
+import com.io7m.jpra.model.types.TypeUserDefinedType;
+import com.io7m.junreachable.UnimplementedCodeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
 
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * The default implementation of the {@link JPRAResolverType} interface.
+ */
+
 public final class JPRAResolver implements JPRAResolverType
 {
-  private final Map<PackageNameQualified, PackageContext> packages;
-  private final JPRAResolverEventListenerType             listener;
-  private       Optional<PackageContext>                  current;
+  private static final Logger LOG;
 
-  private JPRAResolver(final JPRAResolverEventListenerType e)
-  {
-    this.packages = new UnifiedMap<>();
-    this.current = Optional.empty();
-    this.listener = NullCheck.notNull(e);
+  static {
+    LOG = LoggerFactory.getLogger(JPRAResolver.class);
   }
+
+  private final GlobalContextType                                    context;
+  private final MutableBiMap<PackageNameUnqualified, PackageNameQualified>
+                                                                     import_names;
+  private final MutableMap<PackageNameQualified, PackageContextType> imports;
+  private final MutableMap<TypeName, TypeDeclType<IdentifierType, Untyped>>
+                                                                     current_types;
+  private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType,
+    Untyped>>
+                                                                     current_record_fields;
+  private final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType,
+    Untyped>>
+                                                                     current_packed_fields;
+  private       Optional<PackageNameQualified>
+                                                                     current_package;
+
+  private JPRAResolver(
+    final GlobalContextType c)
+  {
+    this.context = NullCheck.notNull(c);
+    this.current_package = Optional.empty();
+    this.current_record_fields = Maps.mutable.empty();
+    this.current_packed_fields = Maps.mutable.empty();
+    this.current_types = Maps.mutable.empty();
+    this.imports = Maps.mutable.empty();
+    this.import_names = BiMaps.mutable.empty();
+  }
+
+  /**
+   * @param c A global context
+   *
+   * @return A new resolver
+   */
 
   public static JPRAResolverType newResolver(
-    final JPRAResolverEventListenerType e)
+    final GlobalContextType c)
   {
-    return new JPRAResolver(e);
+    return new JPRAResolver(c);
   }
 
-  @Override public void onREPLType(
-    final JPRAParserType parser,
-    final TypeExprType t)
+  @Override public Optional<PackageNameQualified> resolveGetCurrentPackage()
   {
-
+    return this.current_package;
   }
 
-  @Override public void onREPLSize(
-    final JPRAParserType parser,
-    final SizeExprType<?> t)
+  @Override
+  public Map<TypeName, TypeDeclType<IdentifierType, Untyped>>
+  resolveGetCurrentTypes()
   {
-
+    return this.current_types.asUnmodifiable();
   }
 
-  @Override public void onPackageBegin(
-    final JPRAParserType parser,
-    final PackageNameQualified name)
-    throws JPRACompilerException
+  @Override
+  public StatementPackageBegin<IdentifierType, Untyped> resolvePackageBegin(
+    final StatementPackageBegin<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
   {
-    if (this.current.isPresent()) {
-      throw JPRACompilerResolverException.nestedPackage(name);
+    if (this.current_package.isPresent()) {
+      throw JPRACompilerResolverException.nestedPackage(s.getPackageName());
     }
 
-    if (this.packages.containsKey(name)) {
-      final PackageContext context = this.packages.get(name);
-      throw JPRACompilerResolverException.duplicatePackage(name, context.name);
+    final Map<PackageNameQualified, PackageContextType> existing =
+      this.context.getPackages();
+
+    final PackageNameQualified name = s.getPackageName();
+    if (existing.containsKey(name)) {
+      final PackageContextType p = existing.get(name);
+      throw JPRACompilerResolverException.duplicatePackage(name, p.getName());
     }
 
-    this.current = Optional.of(new PackageContext(name));
+    this.current_package = Optional.of(s.getPackageName());
+    return new StatementPackageBegin<>(s.getPackageName());
   }
 
-  @Override public void onImport(
-    final JPRAParserType parser,
-    final PackageNameQualified p_name,
-    final PackageNameUnqualified up_name)
-    throws JPRACompilerException
+  @Override public void resolvePackageImport(
+    final StatementPackageImport<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
   {
-    if (!this.current.isPresent()) {
+    if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        p_name.getLexicalInformation());
+        s.getLexicalInformation());
     }
 
-    final PackageContext p = this.current.get();
-    if (p.imports.containsKey(up_name)) {
-      final PackageImport i = p.imports.get(up_name);
-      throw JPRACompilerResolverException.packageImportConflict(up_name, i);
+    final PackageNameUnqualified s_new = s.getUsing();
+    final PackageNameQualified q_name = s.getPackageName();
+    if (this.import_names.containsKey(s_new)) {
+      final PackageNameQualified q_existing = this.import_names.get(s_new);
+      final MutableBiMap<PackageNameQualified, PackageNameUnqualified> ini =
+        this.import_names.inverse();
+
+      Assertive.require(ini.containsKey(q_existing));
+      final PackageNameUnqualified s_existing = ini.get(q_existing);
+      throw JPRACompilerResolverException.packageImportConflict(
+        s_existing, s_new);
     }
 
-    if (!this.packages.containsKey(p_name)) {
-      throw JPRACompilerResolverException.nonexistentPackage(p_name);
+    try {
+      final PackageContextType p = this.context.getPackage(q_name);
+      this.imports.put(q_name, p);
+      this.import_names.put(s_new, q_name);
+    } catch (final JPRAModelLoadingException e) {
+      throw new JPRACompilerResolverException(
+        s_new.getLexicalInformation(),
+        JPRAResolverErrorCode.PACKAGE_LOADING_ERROR,
+        e);
     }
-
-    p.imports.put(up_name, new PackageImport(p.name, p_name, up_name));
   }
 
-  @Override public void onPackageEnd(final JPRAParserType parser)
-    throws JPRACompilerException
+  @Override public void resolvePackageEnd(
+    final StatementPackageEnd<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
   {
-    if (!this.current.isPresent()) {
+    if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        parser.getParsingPosition());
+        s.getLexicalInformation());
     }
 
-    final PackageContext p = this.current.get();
-    this.packages.put(p.name, p);
-    this.current = Optional.empty();
+    this.imports.clear();
+    this.import_names.clear();
+    this.current_types.clear();
+    this.current_package = Optional.empty();
   }
 
-  @Override public void onRecordBegin(
-    final JPRAParserType parser,
-    final TypeName t)
-    throws JPRACompilerException
+  @Override public TypeDeclType<IdentifierType, Untyped> resolveTypeDeclaration(
+    final TypeDeclType<Unresolved, Untyped> expr)
+    throws JPRACompilerResolverException
   {
-    if (!this.current.isPresent()) {
+    if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        t.getLexicalInformation());
+        expr.getLexicalInformation());
     }
 
-    final PackageContext p = this.current.get();
-    if (p.types.containsKey(t)) {
-      final TypeDeclRecord o = p.types.get(t);
-      throw JPRACompilerResolverException.duplicateType(t, o.getName());
+    final TypeDeclType<IdentifierType, Untyped> rv = expr.matchTypeDeclaration(
+      new TypeDeclMatcherType<Unresolved, Untyped,
+        TypeDeclType<IdentifierType, Untyped>, JPRACompilerResolverException>()
+      {
+        @Override public TypeDeclType<IdentifierType, Untyped> matchRecord(
+          final TypeDeclRecord<Unresolved, Untyped> t)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeDeclarationRecord(t);
+        }
+
+        @Override public TypeDeclType<IdentifierType, Untyped> matchPacked(
+          final TypeDeclPacked<Unresolved, Untyped> t)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeDeclarationPacked(t);
+        }
+      });
+
+    final TypeName t_name = rv.getName();
+    if (this.current_types.containsKey(t_name)) {
+      final TypeDeclType<IdentifierType, Untyped> o =
+        this.current_types.get(t_name);
+      throw JPRACompilerResolverException.duplicateType(t_name, o.getName());
     }
 
-    p.current_type = Optional.of(new TypeContext(t));
+    this.current_types.put(t_name, rv);
+    return rv;
   }
 
-  @Override public void onRecordFieldPaddingOctets(
-    final JPRAParserType parser,
-    final SizeExprType<SizeUnitOctetsType> size)
-    throws JPRACompilerException
+  private TypeDeclType<IdentifierType, Untyped> resolveTypeDeclarationPacked(
+    final TypeDeclPacked<Unresolved, Untyped> t)
+    throws JPRACompilerResolverException
   {
+    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> o =
+      t.getFieldsInDeclarationOrder();
+    final MutableList<PackedFieldDeclType<IdentifierType, Untyped>> by_order =
+      Lists.mutable.empty();
 
-  }
-
-  @Override public void onRecordFieldValue(
-    final JPRAParserType parser,
-    final FieldName name,
-    final TypeExprType type)
-  {
-
-  }
-
-  @Override public void onRecordEnd(final JPRAParserType parser)
-    throws JPRACompilerException
-  {
-    Assertive.require(this.current.isPresent());
-    final PackageContext p = this.current.get();
-    Assertive.require(p.current_type.isPresent());
-    final TypeContext t = p.current_type.get();
-    Assertive.require(!p.types.containsKey(t.name));
-  }
-
-  private static final class PackageContext
-  {
-    private final PackageNameQualified                       name;
-    private final Map<PackageNameUnqualified, PackageImport> imports;
-    private final Map<TypeName, TypeDeclRecord>              types;
-    private       Optional<TypeContext>                      current_type;
-
-    PackageContext(final PackageNameQualified in_name)
-    {
-      this.name = NullCheck.notNull(in_name);
-      this.imports = Maps.mutable.empty();
-      this.types = Maps.mutable.empty();
-      this.current_type = Optional.empty();
+    for (int index = 0; index < o.size(); ++index) {
+      by_order.add(this.resolveTypeDeclPackedField(o.get(index)));
     }
+
+    final TypeDeclPacked<IdentifierType, Untyped> rv = new TypeDeclPacked<>(
+      this.context.getFreshIdentifier(),
+      Untyped.get(),
+      this.current_packed_fields.toImmutable(),
+      t.getName(),
+      by_order.toImmutable());
+
+    this.current_record_fields.clear();
+    return rv;
   }
 
-  private class TypeContext
+  private PackedFieldDeclType<IdentifierType, Untyped>
+  resolveTypeDeclPackedField(
+    final PackedFieldDeclType<Unresolved, Untyped> f)
+    throws JPRACompilerResolverException
   {
-    private final TypeName name;
+    return f.matchPackedFieldDeclaration(
+      new PackedFieldDeclMatcherType<Unresolved, Untyped,
+        PackedFieldDeclType<IdentifierType, Untyped>,
+        JPRACompilerResolverException>()
+      {
+        @Override
+        public PackedFieldDeclType<IdentifierType, Untyped> matchPaddingBits(
+          final PackedFieldDeclPaddingBits<Unresolved, Untyped> r)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeDeclPackedFieldPaddingBits(r);
+        }
 
-    TypeContext(final TypeName in_name)
-    {
-      this.name = NullCheck.notNull(in_name);
+        @Override
+        public PackedFieldDeclType<IdentifierType, Untyped> matchValue(
+          final PackedFieldDeclValue<Unresolved, Untyped> r)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeDeclPackedFieldValue(r);
+        }
+      });
+  }
+
+  private PackedFieldDeclType<IdentifierType, Untyped>
+  resolveTypeDeclPackedFieldPaddingBits(
+    final PackedFieldDeclPaddingBits<Unresolved, Untyped> r)
+    throws JPRACompilerResolverException
+  {
+    return new PackedFieldDeclPaddingBits<>(
+      r.getLexicalInformation(),
+      this.resolveSizeExpression(r.getSizeExpression()));
+  }
+
+  private PackedFieldDeclType<IdentifierType, Untyped>
+  resolveTypeDeclPackedFieldValue(
+    final PackedFieldDeclValue<Unresolved, Untyped> r)
+    throws JPRACompilerResolverException
+  {
+    return new PackedFieldDeclValue<>(
+      this.context.getFreshIdentifier(),
+      r.getName(),
+      this.resolveTypeExpression(r.getType()));
+  }
+
+  private TypeDeclType<IdentifierType, Untyped> resolveTypeDeclarationRecord(
+    final TypeDeclRecord<Unresolved, Untyped> t)
+    throws JPRACompilerResolverException
+  {
+    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> o =
+      t.getFieldsInDeclarationOrder();
+    final MutableList<RecordFieldDeclType<IdentifierType, Untyped>> by_order =
+      Lists.mutable.empty();
+
+    for (int index = 0; index < o.size(); ++index) {
+      by_order.add(this.resolveTypeDeclRecordField(o.get(index)));
     }
+
+    final TypeDeclRecord<IdentifierType, Untyped> rv = new TypeDeclRecord<>(
+      this.context.getFreshIdentifier(),
+      Untyped.get(),
+      this.current_record_fields.toImmutable(),
+      t.getName(),
+      by_order.toImmutable());
+
+    this.current_record_fields.clear();
+    return rv;
+  }
+
+  private RecordFieldDeclType<IdentifierType, Untyped>
+  resolveTypeDeclRecordField(
+    final RecordFieldDeclType<Unresolved, Untyped> rf)
+    throws JPRACompilerResolverException
+  {
+    return rf.matchRecordFieldDeclaration(
+      new RecordFieldDeclMatcherType<Unresolved, Untyped,
+        RecordFieldDeclType<IdentifierType, Untyped>,
+        JPRACompilerResolverException>()
+      {
+        @Override
+        public RecordFieldDeclType<IdentifierType, Untyped> matchPadding(
+          final RecordFieldDeclPaddingOctets<Unresolved, Untyped> r)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeDeclRecordFieldPaddingOctets(r);
+        }
+
+        @Override
+        public RecordFieldDeclType<IdentifierType, Untyped> matchValue(
+          final RecordFieldDeclValue<Unresolved, Untyped> r)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeRecordFieldDeclValue(r);
+        }
+      });
+  }
+
+  private RecordFieldDeclType<IdentifierType, Untyped>
+  resolveTypeDeclRecordFieldPaddingOctets(
+    final RecordFieldDeclPaddingOctets<Unresolved, Untyped> r)
+    throws JPRACompilerResolverException
+  {
+    return new RecordFieldDeclPaddingOctets<>(
+      r.getLexicalInformation(),
+      this.resolveSizeExpression(r.getSizeExpression()));
+  }
+
+  private RecordFieldDeclType<IdentifierType, Untyped>
+  resolveTypeRecordFieldDeclValue(
+    final RecordFieldDeclValue<Unresolved, Untyped> r)
+    throws JPRACompilerResolverException
+  {
+    final RecordFieldDeclValue<IdentifierType, Untyped> v =
+      new RecordFieldDeclValue<>(
+        this.context.getFreshIdentifier(),
+        r.getName(),
+        this.resolveTypeExpression(r.getType()));
+
+    this.current_record_fields.put(r.getName(), v);
+    return v;
+  }
+
+  @Override public TypeExprType<IdentifierType, Untyped> resolveTypeExpression(
+    final TypeExprType<Unresolved, Untyped> expr)
+    throws JPRACompilerResolverException
+  {
+    return expr.matchType(
+      new TypeExprMatcherType<Unresolved, Untyped,
+        TypeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>()
+      {
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprIntegerSigned(
+          final TypeExprIntegerSigned<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprIntegerSigned(e);
+        }
+
+        @Override
+        public TypeExprType<IdentifierType, Untyped>
+        matchExprIntegerSignedNormalized(
+          final TypeExprIntegerSignedNormalized<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprIntegerSignedNormalized(e);
+        }
+
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprIntegerUnsigned(
+          final TypeExprIntegerUnsigned<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprIntegerUnsigned(e);
+        }
+
+        @Override
+        public TypeExprType<IdentifierType, Untyped>
+        matchExprIntegerUnsignedNormalized(
+          final TypeExprIntegerUnsignedNormalized<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprIntegerUnsignedNormalized(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchExprArray(
+          final TypeExprArray<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprArray(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchExprFloat(
+          final TypeExprFloat<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprFloat(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchExprVector(
+          final TypeExprVector<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprVector(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchExprMatrix(
+          final TypeExprMatrix<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprMatrix(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchExprString(
+          final TypeExprString<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprString(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchName(
+          final TypeExprName<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprName(e);
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchTypeOfField(
+          final TypeExprTypeOfField<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          // TODO: Generated method stub!
+          throw new UnimplementedCodeException();
+        }
+
+        @Override public TypeExprType<IdentifierType, Untyped> matchBooleanSet(
+          final TypeExprBooleanSet<Unresolved, Untyped> e)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveTypeExprBooleanSet(e);
+        }
+      });
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprName(
+    final TypeExprName<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    final TypeReference ref = e.getReference();
+    return new TypeExprName<>(
+      JPRAResolver.this.resolveName(ref), Untyped.get(), ref);
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprIntegerSigned(
+    final TypeExprIntegerSigned<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprIntegerSigned<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped>
+  resolveTypeExprIntegerSignedNormalized(
+    final TypeExprIntegerSignedNormalized<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprIntegerSignedNormalized<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprIntegerUnsigned(
+    final TypeExprIntegerUnsigned<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprIntegerUnsigned<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped>
+  resolveTypeExprIntegerUnsignedNormalized(
+    final TypeExprIntegerUnsignedNormalized<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprIntegerUnsignedNormalized<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprBooleanSet(
+    final TypeExprBooleanSet<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprBooleanSet<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      e.getFieldsInDeclarationOrder(),
+      this.resolveSizeExpression(e.getSizeExpression()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprFloat(
+    final TypeExprFloat<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprFloat<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprVector(
+    final TypeExprVector<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprVector<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getElementCount()),
+      this.resolveTypeExpression(e.getElementType()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprString(
+    final TypeExprString<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprString<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getSize()),
+      e.getEncoding());
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprMatrix(
+    final TypeExprMatrix<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprMatrix<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getWidth()),
+      this.resolveSizeExpression(e.getHeight()),
+      this.resolveTypeExpression(e.getElementType()));
+  }
+
+  private TypeExprType<IdentifierType, Untyped> resolveTypeExprArray(
+    final TypeExprArray<Unresolved, Untyped> e)
+    throws JPRACompilerResolverException
+  {
+    return new TypeExprArray<>(
+      Untyped.get(),
+      e.getLexicalInformation(),
+      this.resolveSizeExpression(e.getElementCount()),
+      this.resolveTypeExpression(e.getElementType()));
+  }
+
+  private IdentifierType resolveName(
+    final TypeReference ref)
+    throws JPRACompilerResolverException
+  {
+    final TypeName t_name = ref.getType();
+    final Optional<PackageNameUnqualified> pack_opt = ref.getPackage();
+    if (pack_opt.isPresent()) {
+      final PackageNameUnqualified p_name = pack_opt.get();
+      if (!this.import_names.containsKey(p_name)) {
+        throw JPRACompilerResolverException.nonexistentPackageReference(p_name);
+      }
+
+      final PackageNameQualified q_name = this.import_names.get(p_name);
+      Assertive.require(this.imports.containsKey(q_name));
+
+      final PackageContextType p = this.imports.get(q_name);
+      final Map<TypeName, TypeUserDefinedType> pt = p.getTypes();
+
+      if (!pt.containsKey(t_name)) {
+        throw JPRACompilerResolverException.nonexistentType(
+          Optional.of(q_name), t_name);
+      }
+
+      return pt.get(t_name).getIdentifier();
+    }
+
+    if (!this.current_types.containsKey(t_name)) {
+      throw JPRACompilerResolverException.nonexistentType(
+        this.current_package, t_name);
+    }
+
+    return this.current_types.get(t_name).getIdentifier();
+  }
+
+  @Override public SizeExprType<IdentifierType, Untyped> resolveSizeExpression(
+    final SizeExprType<Unresolved, Untyped> expr)
+    throws JPRACompilerResolverException
+  {
+    return expr.matchSizeExpression(
+      new SizeExprMatcherType<Unresolved, Untyped,
+        SizeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>()
+      {
+        @Override public SizeExprType<IdentifierType, Untyped> matchConstant(
+          final SizeExprConstant<Unresolved, Untyped> s)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveSizeExprConstant(s);
+        }
+
+        @Override public SizeExprType<IdentifierType, Untyped> matchInOctets(
+          final SizeExprInOctets<Unresolved, Untyped> s)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveSizeExprInOctets(s);
+        }
+
+        @Override public SizeExprType<IdentifierType, Untyped> matchInBits(
+          final SizeExprInBits<Unresolved, Untyped> s)
+          throws JPRACompilerResolverException
+        {
+          return JPRAResolver.this.resolveSizeExprInBits(s);
+        }
+      });
+  }
+
+  @Override
+  public StatementCommandType<IdentifierType, Untyped> resolveCommandType(
+    final StatementCommandType<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
+  {
+    return new StatementCommandType<>(
+      this.resolveTypeExpression(s.getExpression()));
+  }
+
+  private SizeExprType<IdentifierType, Untyped> resolveSizeExprInBits(
+    final SizeExprInBits<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
+  {
+    return new SizeExprInBits<>(
+      this.resolveTypeExpression(s.getTypeExpression()));
+  }
+
+  private SizeExprType<IdentifierType, Untyped> resolveSizeExprInOctets(
+    final SizeExprInOctets<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException
+  {
+    return new SizeExprInOctets<>(
+      this.resolveTypeExpression(s.getTypeExpression()));
+  }
+
+  private SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
+    final SizeExprConstant<Unresolved, Untyped> s)
+  {
+    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
   }
 }

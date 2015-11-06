@@ -21,6 +21,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
+import org.valid4j.exceptions.RequireViolation;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -70,6 +71,23 @@ import java.util.regex.Pattern;
       matcher.matches(),
       "Package names must match the pattern '%s'",
       PackageNameUnqualified.PATTERN_TEXT);
+  }
+
+  /**
+   * Construct a name.
+   *
+   * @param value The raw string value
+   *
+   * @return A new name, if valid
+   *
+   * @throws RequireViolation If the name is not valid
+   */
+
+  public static PackageNameUnqualified of(
+    final String value)
+    throws RequireViolation
+  {
+    return new PackageNameUnqualified(Optional.empty(), value);
   }
 
   @Override public String toString()

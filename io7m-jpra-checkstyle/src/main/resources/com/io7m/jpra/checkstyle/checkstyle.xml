@@ -51,12 +51,14 @@
     <module name="AvoidStaticImport"/>
     <module name="BooleanExpressionComplexity"/>
     <module name="ClassDataAbstractionCoupling">
-      <property name="max" value="35"/>
+      <property name="max" value="60"/>
     </module>
     <module name="ClassFanOutComplexity">
       <property name="max" value="125"/>
     </module>
-    <module name="ClassTypeParameterName"/>
+    <module name="ClassTypeParameterName">
+      <property name="format" value="^[A-Z][A-Z0-9]*$"/>
+    </module>
     <module name="ConstantName"/>
     <module name="CovariantEquals"/>
     <module name="CyclomaticComplexity">

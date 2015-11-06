@@ -18,68 +18,79 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import net.jcip.annotations.Immutable;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
  * A {@code vector} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-@Immutable public final class TypeExprVector implements TypeExprType
+public final class TypeExprVector<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final TypeExprScalarType                           type;
-  private final SizeExprType<?> size;
+  private final SizeExprType<I, T>                           element_count;
+  private final TypeExprType<I, T>                           element_type;
+  private final T                                            type;
 
   /**
-   * Construct a type expression.
+   * Construct an expression.
    *
-   * @param in_lex  Lexical information
-   * @param in_size The number of elements in the vector
-   * @param in_type The type of vector elements
+   * @param in_type          The expression type
+   * @param in_lex           Lexical information
+   * @param in_element_count The number of elements
+   * @param in_element_type  The type of elements
    */
 
   public TypeExprVector(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<?> in_size,
-    final TypeExprScalarType in_type)
+    final SizeExprType<I, T> in_element_count,
+    final TypeExprType<I, T> in_element_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
     this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex);
+    this.element_count = NullCheck.notNull(in_element_count);
+    this.element_type = NullCheck.notNull(in_element_type);
   }
 
-  /**
-   * @return The number of elements in the vector
-   */
-
-  public SizeExprType<?> getElementCountExpression()
-  {
-    return this.size;
-  }
-
-  /**
-   * @return The type of elements
-   */
-
-  public TypeExprScalarType getElementType()
-  {
-    return this.type;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
-    return m.matchVector(this);
+    return m.matchExprVector(this);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
+  }
+
+  /**
+   * @return A size expression denoting the number of elements
+   */
+
+  public SizeExprType<I, T> getElementCount()
+  {
+    return this.element_count;
+  }
+
+  /**
+   * @return A type expression denoting the type of elements
+   */
+
+  public TypeExprType<I, T> getElementType()
+  {
+    return this.element_type;
   }
 }

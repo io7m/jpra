@@ -18,57 +18,61 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitBitsType;
-import net.jcip.annotations.Immutable;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * An {@code unsigned} integer type expression.
+ * An {@code integer unsigned} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class TypeExprIntegerUnsigned
-  implements TypeExprIntegerType
+public final class TypeExprIntegerUnsigned<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<SizeUnitBitsType> size;
+  private final SizeExprType<I, T>                           size;
+  private final T                                            type;
 
   /**
-   * Construct an {@code integer unsigned} type expression.
+   * Construct an expression.
    *
+   * @param in_type The expression type
    * @param in_lex  Lexical information
-   * @param in_size The size in bits that will be used
+   * @param in_size The size in bits
    */
 
   public TypeExprIntegerUnsigned(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<SizeUnitBitsType> in_size)
+    final SizeExprType<I, T> in_size)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
   }
 
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
-    throws E
+  @Override public T getType()
   {
-    return m.matchInteger(this);
+    return this.type;
   }
 
-  @Override public <A, E extends Exception> A matchTypeIntegerExpression(
-    final TypeExprIntegerMatcherType<A, E> m)
-    throws E
+  /**
+   * @return The size expression denoting the size in bits
+   */
+
+  public SizeExprType<I, T> getSize()
   {
-    return m.matchIntegerUnsigned(this);
+    return this.size;
   }
 
-  @Override public <A, E extends Exception> A matchTypeScalarExpression(
-    final TypeExprScalarMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
-    return m.matchScalarInteger(this);
+    return m.matchExprIntegerUnsigned(this);
   }
 
   @Override

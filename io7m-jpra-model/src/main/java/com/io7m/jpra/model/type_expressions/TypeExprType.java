@@ -20,10 +20,19 @@ import com.io7m.jpra.model.ModelElementType;
 
 /**
  * The type of type expressions.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-public interface TypeExprType extends ModelElementType
+public interface TypeExprType<I, T> extends ModelElementType
 {
+  /**
+   * @return The assigned expression type
+   */
+
+  T getType();
+
   /**
    * Accept a matcher.
    *
@@ -36,7 +45,7 @@ public interface TypeExprType extends ModelElementType
    * @throws E If {@code m} raises {@code E}
    */
 
-  <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E;
 }

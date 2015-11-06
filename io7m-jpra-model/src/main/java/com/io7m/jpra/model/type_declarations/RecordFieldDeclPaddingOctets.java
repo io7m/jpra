@@ -18,8 +18,7 @@ package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -28,24 +27,27 @@ import java.util.Optional;
 /**
  * A {@code record} field declaration that specifies a number of padding
  * octets.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class RecordFieldDeclPaddingOctets
-  implements RecordFieldDeclType
+@Immutable public final class RecordFieldDeclPaddingOctets<I, T>
+  implements RecordFieldDeclType<I, T>
 {
-  private final SizeExprType<SizeUnitOctetsType>             size;
+  private final SizeExprType<I, T>                           size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
 
   /**
    * Construct a field declaration.
    *
-   * @param in_lex     The lexical information for the name
+   * @param in_lex  The lexical information for the name
    * @param in_size The size expression
    */
 
   public RecordFieldDeclPaddingOctets(
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final SizeExprType<SizeUnitOctetsType> in_size)
+    final SizeExprType<I, T> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
@@ -55,13 +57,13 @@ import java.util.Optional;
    * @return The field size expression
    */
 
-  public SizeExprType<SizeUnitOctetsType> getSizeExpression()
+  public SizeExprType<I, T> getSizeExpression()
   {
     return this.size;
   }
 
   @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<A, E> m)
+    final RecordFieldDeclMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchPadding(this);

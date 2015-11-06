@@ -20,9 +20,12 @@ import com.io7m.jpra.model.ModelElementType;
 
 /**
  * The type of record field declarations.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface RecordFieldDeclType extends ModelElementType
+public interface RecordFieldDeclType<I, T> extends ModelElementType
 {
   /**
    * Accept a field matcher.
@@ -37,6 +40,6 @@ public interface RecordFieldDeclType extends ModelElementType
    */
 
   <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<A, E> m)
+    final RecordFieldDeclMatcherType<I, T, A, E> m)
     throws E;
 }

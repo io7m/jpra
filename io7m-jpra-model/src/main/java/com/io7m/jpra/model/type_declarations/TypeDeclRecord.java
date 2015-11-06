@@ -23,6 +23,7 @@ import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.statements.StatementMatcherType;
 import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
 
@@ -31,27 +32,39 @@ import java.util.Optional;
 
 /**
  * A {@code record} type declaration.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class TypeDeclRecord implements TypeDeclType
+@Immutable public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
 {
-  private final TypeName                                      name;
-  private final ImmutableList<RecordFieldDeclType>            fields_order;
-  private final ImmutableMap<FieldName, RecordFieldDeclValue> fields_name;
+  private final TypeName                                            name;
+  private final ImmutableList<RecordFieldDeclType<I, T>>
+                                                                    fields_order;
+  private final ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> fields_name;
+  private final I                                                   identifier;
+  private final T                                                   type;
 
   /**
    * Construct a declaration.
    *
+   * @param in_identifier   The identifier
+   * @param in_type         The type information
    * @param in_fields_name  The fields by name
    * @param in_name         The type name
    * @param in_fields_order The fields in declaration order
    */
 
   public TypeDeclRecord(
-    final ImmutableMap<FieldName, RecordFieldDeclValue> in_fields_name,
+    final I in_identifier,
+    final T in_type,
+    final ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> in_fields_name,
     final TypeName in_name,
-    final ImmutableList<RecordFieldDeclType> in_fields_order)
+    final ImmutableList<RecordFieldDeclType<I, T>> in_fields_order)
   {
+    this.identifier = NullCheck.notNull(in_identifier);
+    this.type = NullCheck.notNull(in_type);
     this.fields_name = NullCheck.notNull(in_fields_name);
     this.name = NullCheck.notNull(in_name);
     this.fields_order = NullCheck.notNull(in_fields_order);
@@ -63,7 +76,7 @@ import java.util.Optional;
       Integer.valueOf(this.fields_order.size()));
 
     this.fields_order.forEach(
-      (Procedure<RecordFieldDeclType>) r -> {
+      (Procedure<RecordFieldDeclType<I, T>>) r -> {
         final Optional<FieldName> r_name = RecordFieldDecl.name(r);
         if (r_name.isPresent()) {
           Assertive.require(this.fields_name.containsKey(r_name.get()));
@@ -75,7 +88,7 @@ import java.util.Optional;
    * @return The fields by name
    */
 
-  public ImmutableMap<FieldName, RecordFieldDeclValue> getFieldsByName()
+  public ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> getFieldsByName()
   {
     return this.fields_name;
   }
@@ -84,7 +97,7 @@ import java.util.Optional;
    * @return The fields in declaration order
    */
 
-  public ImmutableList<RecordFieldDeclType> getFieldsInDeclarationOrder()
+  public ImmutableList<RecordFieldDeclType<I, T>> getFieldsInDeclarationOrder()
   {
     return this.fields_order;
   }
@@ -95,7 +108,7 @@ import java.util.Optional;
   }
 
   @Override public <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<A, E> m)
+    final TypeDeclMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchRecord(this);
@@ -105,5 +118,22 @@ import java.util.Optional;
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  @Override public I getIdentifier()
+  {
+    return this.identifier;
+  }
+
+  @Override public <A, E extends Exception> A matchStatement(
+    final StatementMatcherType<I, T, A, E> m)
+    throws E
+  {
+    return m.matchTypeDecl(this);
   }
 }

@@ -27,27 +27,43 @@ import java.util.Optional;
 
 /**
  * A {@code field} declaration in a {@code packed} type.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class PackedFieldDeclValue
-  implements PackedFieldDeclType
+@Immutable public final class PackedFieldDeclValue<I, T>
+  implements PackedFieldDeclType<I, T>
 {
-  private final FieldName    name;
-  private final TypeExprType type;
+  private final I                  identifier;
+  private final FieldName          name;
+  private final TypeExprType<I, T> type;
 
   /**
    * Construct a {@code field} declaration.
    *
-   * @param in_name The name of the field
-   * @param in_type The type of the field
+   * @param in_identifier The identifier
+   * @param in_name       The name of the field
+   * @param in_type       The type of the field
    */
 
   public PackedFieldDeclValue(
+    final I in_identifier,
     final FieldName in_name,
-    final TypeExprType in_type)
+    final TypeExprType<I, T> in_type)
   {
+    this.identifier = NullCheck.notNull(in_identifier);
     this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
+  }
+
+  /**
+   * @return The identifier
+   */
+
+  public I getIdentifier()
+  {
+    return this.identifier;
   }
 
   /**
@@ -63,13 +79,13 @@ import java.util.Optional;
    * @return The field type
    */
 
-  public TypeExprType getType()
+  public TypeExprType<I, T> getType()
   {
     return this.type;
   }
 
   @Override public <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<A, E> m)
+    final PackedFieldDeclMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchValue(this);

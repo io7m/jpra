@@ -18,9 +18,9 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Size;
 import net.jcip.annotations.Immutable;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -33,6 +33,7 @@ import java.util.Optional;
   private final Size<?>                                      element_count;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final TType                                        element_type;
+  private final Size<SizeUnitBitsType>                       size_bits;
 
   /**
    * Construct an {@code array} type expression.
@@ -50,6 +51,10 @@ import java.util.Optional;
     this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_size);
     this.element_type = NullCheck.notNull(in_type);
+
+    final BigInteger ecv = this.element_count.getValue();
+    final BigInteger etv = this.element_type.getSize().getValue();
+    this.size_bits = new Size<>(ecv.multiply(etv));
   }
 
   /**
@@ -74,6 +79,11 @@ import java.util.Optional;
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
+  }
+
+  @Override public Size<SizeUnitBitsType> getSize()
+  {
+    return this.size_bits;
   }
 
   @Override public <A, E extends Exception> A matchType(

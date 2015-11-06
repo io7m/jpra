@@ -21,9 +21,11 @@ package com.io7m.jpra.model.type_declarations;
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface PackedFieldDeclMatcherType<A, E extends Exception>
+public interface PackedFieldDeclMatcherType<I, T, A, E extends Exception>
 {
   /**
    * Match a field.
@@ -35,7 +37,7 @@ public interface PackedFieldDeclMatcherType<A, E extends Exception>
    * @throws E If required
    */
 
-  A matchPaddingBits(PackedFieldDeclPaddingBits r)
+  A matchPaddingBits(PackedFieldDeclPaddingBits<I, T> r)
     throws E;
 
   /**
@@ -48,6 +50,6 @@ public interface PackedFieldDeclMatcherType<A, E extends Exception>
    * @throws E If required
    */
 
-  A matchValue(PackedFieldDeclValue r)
+  A matchValue(PackedFieldDeclValue<I, T> r)
     throws E;
 }

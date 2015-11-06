@@ -18,40 +18,59 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
-import net.jcip.annotations.Immutable;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
  * A {@code string} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-@Immutable public final class TypeExprString implements TypeExprType
+public final class TypeExprString<I, T> implements TypeExprType<I, T>
 {
-  private final String                                       encoding;
-  private final SizeExprType<SizeUnitOctetsType>             size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final SizeExprType<I, T>                           size;
+  private final String                                       encoding;
+  private final T                                            type;
 
   /**
    * Construct an expression.
    *
+   * @param in_type     The expression type
    * @param in_lex      Lexical information
+   * @param in_size     The number of octets
    * @param in_encoding The string encoding
-   * @param in_size     An expression denoting the maximum size of the string in
-   *                    octets
    */
 
   public TypeExprString(
+    final T in_type,
     final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final String in_encoding,
-    final SizeExprType<SizeUnitOctetsType> in_size)
+    final SizeExprType<I, T> in_size,
+    final String in_encoding)
   {
+    this.type = NullCheck.notNull(in_type);
     this.lex = NullCheck.notNull(in_lex);
-    this.encoding = NullCheck.notNull(in_encoding);
     this.size = NullCheck.notNull(in_size);
+    this.encoding = NullCheck.notNull(in_encoding);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return The size expression denoting the maximum length of the string in
+   * octets
+   */
+
+  public SizeExprType<I, T> getSize()
+  {
+    return this.size;
   }
 
   /**
@@ -63,20 +82,11 @@ import java.util.Optional;
     return this.encoding;
   }
 
-  /**
-   * @return The expression denoting the maximum size of the string in octets
-   */
-
-  public SizeExprType<SizeUnitOctetsType> getSizeExpression()
-  {
-    return this.size;
-  }
-
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
-    return m.matchString(this);
+    return m.matchExprString(this);
   }
 
   @Override

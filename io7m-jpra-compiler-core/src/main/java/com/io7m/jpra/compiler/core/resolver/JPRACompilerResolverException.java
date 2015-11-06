@@ -20,7 +20,6 @@ import com.io7m.jlexing.core.ImmutableLexicalPosition;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
-import com.io7m.jpra.model.PackageImport;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
@@ -50,6 +49,23 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final String message)
   {
     super(in_lex, message);
+    this.code = NullCheck.notNull(in_code);
+  }
+
+  /**
+   * Construct an exception.
+   *
+   * @param in_lex  Lexical information, if any
+   * @param in_code The error code
+   * @param e       The cause
+   */
+
+  public JPRACompilerResolverException(
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final JPRAResolverErrorCode in_code,
+    final Exception e)
+  {
+    super(in_lex, e);
     this.code = NullCheck.notNull(in_code);
   }
 
@@ -127,8 +143,8 @@ public final class JPRACompilerResolverException extends JPRACompilerException
   }
 
   /**
-   * @param up_name The import name
-   * @param i       The original import
+   * @param existing_name The original name
+   * @param new_name      The new name
    *
    * @return An exception
    *
@@ -136,24 +152,24 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public static JPRACompilerResolverException packageImportConflict(
-    final PackageNameUnqualified up_name,
-    final PackageImport i)
+    final PackageNameUnqualified existing_name,
+    final PackageNameUnqualified new_name)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Package import conflict.");
     sb.append(System.lineSeparator());
     sb.append("Original: Name ");
-    sb.append(up_name);
+    sb.append(existing_name);
 
     final Optional<ImmutableLexicalPositionType<Path>> lex_orig_opt =
-      up_name.getLexicalInformation();
+      existing_name.getLexicalInformation();
     if (lex_orig_opt.isPresent()) {
       sb.append(" at ");
       sb.append(lex_orig_opt.get());
     }
 
     return new JPRACompilerResolverException(
-      up_name.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
+      new_name.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
       JPRAResolverErrorCode.PACKAGE_IMPORT_CONFLICT,
       sb.toString());
   }
@@ -198,7 +214,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    * @see JPRAResolverErrorCode#PACKAGE_NONEXISTENT
    */
 
-  public static JPRACompilerException nonexistentPackage(
+  public static JPRACompilerResolverException nonexistentPackage(
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
@@ -208,10 +224,82 @@ public final class JPRACompilerResolverException extends JPRACompilerException
   }
 
   /**
+   * @param name The package name
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#PACKAGE_REFERENCE_NONEXISTENT
+   */
+
+  public static JPRACompilerResolverException nonexistentPackageReference(
+    final PackageNameUnqualified name)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("No package imported via the given name.");
+    sb.append(System.lineSeparator());
+    sb.append("Error: ");
+    sb.append(name);
+
+    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+      name.getLexicalInformation();
+    lex_opt.ifPresent(
+      lex -> {
+        sb.append(" at ");
+        sb.append(lex);
+      });
+
+    return new JPRACompilerResolverException(
+      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT,
+      sb.toString());
+  }
+
+  /**
+   * @param q_name The package name, if any
+   * @param t_name The type name
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#TYPE_NONEXISTENT
+   */
+
+  public static JPRACompilerResolverException nonexistentType(
+    final Optional<PackageNameQualified> q_name,
+    final TypeName t_name)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("No such type with the given name.");
+    sb.append(System.lineSeparator());
+
+    q_name.ifPresent(
+      q -> {
+        sb.append("Target package: ");
+        sb.append(q);
+        sb.append(System.lineSeparator());
+      });
+
+    sb.append("Type: ");
+    sb.append(t_name);
+
+    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+      t_name.getLexicalInformation();
+    lex_opt.ifPresent(
+      lex -> {
+        sb.append(" at ");
+        sb.append(lex);
+      });
+
+    return new JPRACompilerResolverException(
+      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      JPRAResolverErrorCode.TYPE_NONEXISTENT,
+      sb.toString());
+  }
+
+  /**
    * @return The error code
    */
 
-  public JPRAResolverErrorCode getJPRAResolverErrorCode()
+  public JPRAResolverErrorCode getErrorCode()
   {
     return this.code;
   }

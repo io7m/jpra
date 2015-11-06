@@ -20,65 +20,44 @@ import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
-import net.jcip.annotations.Immutable;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A {@code boolean-set} type.
+ * A {@code boolean-set} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-@Immutable public final class TypeExprBooleanSet implements TypeExprType
+public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
 {
-  private final SizeExprType<SizeUnitOctetsType>             size;
+  private final SizeExprType<I, T>                           size;
   private final ImmutableList<FieldName>                     fields;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
-
-  private TypeExprBooleanSet(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final ImmutableList<FieldName> in_fields,
-    final SizeExprType<SizeUnitOctetsType> in_size)
-  {
-    this.lex = NullCheck.notNull(in_lex);
-    this.fields = NullCheck.notNull(in_fields);
-    this.size = NullCheck.notNull(in_size);
-  }
+  private final T                                            type;
 
   /**
-   * Construct a {@code boolean-set} type expression.
+   * Construct a type expression.
    *
-   * @param in_fields The fields of the set
-   * @param in_size   The size in octets that will be used
-   *
-   * @return A type expression
-   */
-
-  public static TypeExprBooleanSet newSet(
-    final ImmutableList<FieldName> in_fields,
-    final SizeExprType<SizeUnitOctetsType> in_size)
-  {
-    return new TypeExprBooleanSet(Optional.empty(), in_fields, in_size);
-  }
-
-  /**
-   * Construct a {@code boolean-set} type expression.
-   *
+   * @param in_type   The type
    * @param in_lex    Lexical information
    * @param in_fields The fields of the set
    * @param in_size   The size in octets that will be used
-   *
-   * @return A type expression
    */
 
-  public static TypeExprBooleanSet newSetWithLex(
-    final ImmutableLexicalPositionType<Path> in_lex,
+  public TypeExprBooleanSet(
+    final T in_type,
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
-    final SizeExprType<SizeUnitOctetsType> in_size)
+    final SizeExprType<I, T> in_size)
   {
-    return new TypeExprBooleanSet(Optional.of(in_lex), in_fields, in_size);
+    this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex);
+    this.fields = NullCheck.notNull(in_fields);
+    this.size = NullCheck.notNull(in_size);
   }
 
   /**
@@ -94,13 +73,18 @@ import java.util.Optional;
    * @return The size expression denoting the size in octets
    */
 
-  public SizeExprType<SizeUnitOctetsType> getSizeExpression()
+  public SizeExprType<I, T> getSizeExpression()
   {
     return this.size;
   }
 
-  @Override public <A, E extends Exception> A matchTypeExpression(
-    final TypeExprMatcherType<A, E> m)
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  @Override public <A, E extends Exception> A matchType(
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchBooleanSet(this);

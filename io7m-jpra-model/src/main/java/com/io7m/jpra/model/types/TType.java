@@ -25,6 +25,12 @@ import com.io7m.jpra.model.ModelElementType;
 public interface TType extends ModelElementType
 {
   /**
+   * @return The size in bits
+   */
+
+  Size<SizeUnitBitsType> getSize();
+
+  /**
    * Accept a matcher.
    *
    * @param m   The matcher

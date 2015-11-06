@@ -17,115 +17,177 @@
 package com.io7m.jpra.model.type_expressions;
 
 /**
- * A type expression matcher.
+ * The type of type expression matchers.
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
+ * @param <I> The type of identifiers
+ * @param <T> The type of type information
  */
 
-public interface TypeExprMatcherType<A, E extends Exception>
+public interface TypeExprMatcherType<I, T, A, E extends Exception>
 {
   /**
-   * Match an {@code array} type expression.
+   * Match an {@code integer signed} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchArray(TypeExprArray t)
+  A matchExprIntegerSigned(
+    TypeExprIntegerSigned<I, T> e)
     throws E;
 
   /**
-   * Match a {@code string} type expression.
+   * Match an {@code integer signed-normalized} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchString(TypeExprString t)
+  A matchExprIntegerSignedNormalized(
+    TypeExprIntegerSignedNormalized<I, T> e)
     throws E;
 
   /**
-   * Match a {@code boolean-set} type expression.
+   * Match an {@code integer unsigned} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchBooleanSet(TypeExprBooleanSet t)
+  A matchExprIntegerUnsigned(
+    TypeExprIntegerUnsigned<I, T> e)
     throws E;
 
   /**
-   * Match a type reference.
+   * Match an {@code integer unsigned-normalized} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchReference(TypeExprNameType t)
+  A matchExprIntegerUnsignedNormalized(
+    TypeExprIntegerUnsignedNormalized<I, T> e)
     throws E;
 
   /**
-   * Match an {@code integer} type expression.
+   * Match an {@code array} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchInteger(TypeExprIntegerType t)
+  A matchExprArray(
+    TypeExprArray<I, T> e)
     throws E;
 
   /**
-   * Match a {@code float} type expression.
+   * Match a {@code float} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchFloat(TypeExprFloat t)
+  A matchExprFloat(
+    TypeExprFloat<I, T> e)
     throws E;
 
   /**
-   * Match a {@code vector} type expression.
+   * Match a {@code vector} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchVector(TypeExprVector t)
+  A matchExprVector(
+    TypeExprVector<I, T> e)
     throws E;
 
   /**
-   * Match a {@code matrix} type expression.
+   * Match a {@code matrix} expression.
    *
-   * @param t The expression
+   * @param e The expression
    *
    * @return A value of {@code A}
    *
    * @throws E If required
    */
 
-  A matchMatrix(TypeExprMatrix t)
+  A matchExprMatrix(TypeExprMatrix<I, T> e)
+    throws E;
+
+  /**
+   * Match a {@code string} expression.
+   *
+   * @param e The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchExprString(TypeExprString<I, T> e)
+    throws E;
+
+  /**
+   * Match a name expression.
+   *
+   * @param e The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchName(TypeExprName<I, T> e)
+    throws E;
+
+  /**
+   * Match a {@code type-of} expression.
+   *
+   * @param e The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchTypeOfField(TypeExprTypeOfField<I, T> e)
+    throws E;
+
+  /**
+   * Match a {@code boolean-set} expression.
+   *
+   * @param e The expression
+   *
+   * @return A value of {@code A}
+   *
+   * @throws E If required
+   */
+
+  A matchBooleanSet(
+    TypeExprBooleanSet<I, T> e)
     throws E;
 }

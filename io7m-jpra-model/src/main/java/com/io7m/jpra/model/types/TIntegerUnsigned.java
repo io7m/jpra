@@ -18,8 +18,6 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -47,6 +45,11 @@ import java.util.Optional;
   {
     this.lex = NullCheck.notNull(in_lex);
     this.size = NullCheck.notNull(in_size);
+  }
+
+  @Override public Size<SizeUnitBitsType> getSize()
+  {
+    return this.size;
   }
 
   @Override public <A, E extends Exception> A matchType(

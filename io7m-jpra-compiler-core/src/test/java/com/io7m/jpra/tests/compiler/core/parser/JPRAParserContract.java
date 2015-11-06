@@ -17,20 +17,28 @@
 package com.io7m.jpra.tests.compiler.core.parser;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jpra.compiler.core.JPRACompilerException;
-import com.io7m.jpra.compiler.core.parser.JPRAAbstractParserEventListener;
+import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jpra.compiler.core.parser.JPRAParseErrorCode;
-import com.io7m.jpra.compiler.core.parser.JPRAParserREPLEventListenerType;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
+import com.io7m.jpra.model.Unresolved;
+import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.FieldName;
-import com.io7m.jpra.model.names.PackageNameQualified;
-import com.io7m.jpra.model.names.PackageNameUnqualified;
-import com.io7m.jpra.model.SizeExprConstant;
-import com.io7m.jpra.model.SizeExprInBits;
-import com.io7m.jpra.model.SizeExprInOctets;
-import com.io7m.jpra.model.SizeExprType;
-import com.io7m.jpra.model.SizeUnitOctetsType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.names.TypeReference;
+import com.io7m.jpra.model.size_expressions.SizeExprConstant;
+import com.io7m.jpra.model.size_expressions.SizeExprInBits;
+import com.io7m.jpra.model.size_expressions.SizeExprInOctets;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementCommandSize;
+import com.io7m.jpra.model.statements.StatementCommandType;
+import com.io7m.jpra.model.statements.StatementPackageBegin;
+import com.io7m.jpra.model.statements.StatementPackageEnd;
+import com.io7m.jpra.model.statements.StatementPackageImport;
+import com.io7m.jpra.model.statements.StatementType;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
+import com.io7m.jpra.model.type_declarations.RecordFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.TypeDeclRecord;
 import com.io7m.jpra.model.type_expressions.TypeExprArray;
 import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
 import com.io7m.jpra.model.type_expressions.TypeExprFloat;
@@ -39,1885 +47,1213 @@ import com.io7m.jpra.model.type_expressions.TypeExprIntegerSignedNormalized;
 import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsigned;
 import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsignedNormalized;
 import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
-import com.io7m.jpra.model.type_expressions.TypeExprNamePT;
-import com.io7m.jpra.model.type_expressions.TypeExprNameT;
-import com.io7m.jpra.model.type_expressions.TypeExprScalarType;
+import com.io7m.jpra.model.type_expressions.TypeExprName;
 import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jpra.model.type_expressions.TypeExprVector;
-import com.io7m.jsx.parser.JSXParserGrammarException;
-import com.io7m.jsx.parser.JSXParserType;
-import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jsx.SExpressionType;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class JPRAParserContract<P extends JPRAParserType>
+@SuppressWarnings("unchecked") public abstract class JPRAParserContract
 {
-  @Rule public ExpectedException expected = ExpectedException.none();
+  @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract JSXParserType newSExpressionParser(String name);
+  protected abstract JPRAParserType newParser();
 
-  protected abstract P newParser();
+  protected abstract SExpressionType newFileSExpr(
+    final String name);
 
-  @Test public final void testImport()
+  protected abstract SExpressionType newStringSExpr(
+    final String expr);
+
+  @Test public final void testTypeExprIntegerUnsigned32_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-0.jpr");
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onImport(
-          final JPRAParserType p,
-          final PackageNameQualified p_name,
-          final PackageNameUnqualified up_name)
-        {
-          final ImmutableList<PackageNameUnqualified> elems = p_name.getValue();
-          Assert.assertEquals(3L, (long) elems.size());
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "x"), elems.get(0));
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "y"), elems.get(1));
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "z"), elems.get(2));
-          Assert.assertEquals("x.y.z", p_name.toString());
-          Assert.assertEquals("k", up_name.getValue());
-          called.set(true);
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testPackageBegin()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-package-begin-0.jpr");
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onPackageBegin(
-          final JPRAParserType p,
-          final PackageNameQualified name)
-        {
-          final ImmutableList<PackageNameUnqualified> elems = name.getValue();
-          Assert.assertEquals(3L, (long) elems.size());
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "x"), elems.get(0));
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "y"), elems.get(1));
-          Assert.assertEquals(
-            new PackageNameUnqualified(Optional.empty(), "z"), elems.get(2));
-          Assert.assertEquals("x.y.z", name.toString());
-          called.set(true);
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testPackageEnd()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-package-end-0.jpr");
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onPackageEnd(final JPRAParserType p)
-        {
-          called.set(true);
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testPackageEndInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-end-invalid-0.jpr");
-
-    this.expected.expect(JSXParserGrammarException.class);
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testPackageEndInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-end-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer unsigned)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testPackageBeginInvalid0()
+  @Test public final void testTypeExprInteger_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-begin-invalid-0.jpr");
-
-    this.expected.expect(JSXParserGrammarException.class);
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testPackageBeginInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-begin-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testPackageBeginInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-begin-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testPackageBeginInvalid3()
+  @Test public final void testTypeExprInteger_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-begin-invalid-3.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer ())");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testPackageBeginInvalid4()
+  @Test public final void testTypeExprInteger_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-package-begin-invalid-4.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_PACKAGE_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer \"x\")");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testImportInvalid1()
+  @Test public final void testTypeExprInteger_Error3()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid4()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-4.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid5()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-5.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_PACKAGE_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testImportInvalid6()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-import-invalid-6.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_PACKAGE_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.UNRECOGNIZED_KEYWORD));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense4()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-4.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_QUOTED_STRING));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testNonsense5()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-nonsense-5.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_LIST));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testRecordInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testRecordInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testRecordInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_TYPE_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testRecordInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-      });
-  }
-
-  @Test public final void testRecordInvalid4()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-4.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.UNRECOGNIZED_RECORD_FIELD_KEYWORD));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-      });
-  }
-
-  @Test public final void testRecordInvalid5()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-5.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-      });
-  }
-
-  @Test public final void testRecordInvalid6()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-invalid-6.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.DUPLICATE_FIELD_NAME));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-
-        @Override public void onRecordFieldValue(
-          final JPRAParserType p,
-          final FieldName name,
-          final TypeExprType type)
-        {
-          Assert.assertEquals(new FieldName(Optional.empty(), "f0"), name);
-        }
-      });
-  }
-
-  @Test public final void testRecordFieldInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-record-field-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(t, new TypeName(Optional.empty(), "T"));
-        }
-      });
-  }
-
-  @Test public final void testRecordFieldInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-record-field-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_FIELD_NAME));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(t, new TypeName(Optional.empty(), "T"));
-        }
-      });
-  }
-
-  @Test public final void testRecordFieldInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-record-field-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_TYPE_REFERENCE));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(t, new TypeName(Optional.empty(), "T"));
-        }
-      });
-  }
-
-  @Test public final void testRecordFieldInvalid6()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-record-field-invalid-6.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(t, new TypeName(Optional.empty(), "T"));
-        }
-      });
-  }
-
-  @Test public final void testRecordPaddingOctetsInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-record-padding-octets-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(t, new TypeName(Optional.empty(), "T"));
-        }
-      });
-  }
-
-  @Test public final void testRecord0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-0.jpr");
-    final AtomicInteger called_begin = new AtomicInteger(0);
-    final AtomicInteger called_field = new AtomicInteger(0);
-    final AtomicInteger called_end = new AtomicInteger(0);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(0L, (long) called_begin.get());
-          Assert.assertEquals(0L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_begin.incrementAndGet();
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-
-        @Override public void onRecordEnd(final JPRAParserType p)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(1L, (long) called_begin.get());
-          Assert.assertEquals(1L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_end.incrementAndGet();
-        }
-
-        @Override public void onRecordFieldValue(
-          final JPRAParserType p,
-          final FieldName name,
-          final TypeExprType type)
-        {
-          Assert.assertEquals(1L, (long) called_begin.get());
-          Assert.assertEquals(0L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_field.incrementAndGet();
-
-          final FieldName field_name = new FieldName(Optional.empty(), "f0");
-          Assert.assertEquals(field_name, name);
-        }
-      });
-
-    Assert.assertEquals(1L, (long) called_begin.get());
-    Assert.assertEquals(1L, (long) called_field.get());
-    Assert.assertEquals(1L, (long) called_end.get());
-  }
-
-  @Test public final void testRecord1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-record-1.jpr");
-    final AtomicInteger called_begin = new AtomicInteger(0);
-    final AtomicInteger called_field = new AtomicInteger(0);
-    final AtomicInteger called_end = new AtomicInteger(0);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onRecordBegin(
-          final JPRAParserType p,
-          final TypeName t)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(0L, (long) called_begin.get());
-          Assert.assertEquals(0L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_begin.incrementAndGet();
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), t);
-        }
-
-        @Override public void onRecordEnd(final JPRAParserType p)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(1L, (long) called_begin.get());
-          Assert.assertEquals(1L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_end.incrementAndGet();
-        }
-
-        @Override public void onRecordFieldPaddingOctets(
-          final JPRAParserType p,
-          final SizeExprType<SizeUnitOctetsType> size)
-          throws JPRACompilerException
-        {
-          Assert.assertEquals(1L, (long) called_begin.get());
-          Assert.assertEquals(0L, (long) called_field.get());
-          Assert.assertEquals(0L, (long) called_end.get());
-
-          called_field.incrementAndGet();
-        }
-      });
-
-    Assert.assertEquals(1L, (long) called_begin.get());
-    Assert.assertEquals(1L, (long) called_field.get());
-    Assert.assertEquals(1L, (long) called_end.get());
-  }
-
-  @Test public final void testTypeIntegerInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.UNRECOGNIZED_TYPE_KEYWORD));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer signed \"x\")");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeInvalid3()
+  @Test public final void testTypeExprInteger_Error4()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-invalid-3.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer signed ())");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerInvalid1()
+  @Test public final void testTypeExprInteger_Error5()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeIntegerInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer raspberry 23)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.UNRECOGNIZED_INTEGER_TYPE_KEYWORD));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerUnsignedInvalid0()
+  @Test public final void testTypeExprIntegerUnsigned32_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-unsigned-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer unsigned q)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerUnsigned0()
+  @Test public final void testTypeExprIntegerUnsigned32_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-unsigned-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer unsigned 32)");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprIntegerUnsigned.class, t_raw.getClass());
+    final TypeExprIntegerUnsigned<Unresolved, Untyped> t =
+      TypeExprIntegerUnsigned.class.cast(t_raw);
 
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprIntegerUnsigned.class, t.getClass());
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeIntegerUnsignedNormalized0()
+  @Test public final void testTypeExprIntegerSigned32_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-unsigned-normalized-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer signed)");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(
-            TypeExprIntegerUnsignedNormalized.class, t.getClass());
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerSignedNormalized0()
+  @Test public final void testTypeExprIntegerSigned32_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-signed-normalized-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(
-            TypeExprIntegerSignedNormalized.class, t.getClass());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeIntegerUnsignedNormalizedInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser(
-      "t-type-integer-unsigned-normalized-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer signed q)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerSignedInvalid0()
+  @Test public final void testTypeExprIntegerSigned32_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-signed-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(integer signed 32)");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprIntegerSigned.class, t_raw.getClass());
+    final TypeExprIntegerSigned<Unresolved, Untyped> t =
+      TypeExprIntegerSigned.class.cast(t_raw);
+
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
+  }
+
+  @Test public final void testTypeExprIntegerSignedNormalized32_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr(
+      "(integer signed-normalized)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExprIntegerSignedNormalized32_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr(
+      "(integer signed-normalized q)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerSignedNormalizedInvalid0()
+  @Test public final void testTypeExprIntegerSignedNormalized32_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser(
-      "t-type-integer-signed-normalized-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr(
+      "(integer signed-normalized 32)");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(
+      TypeExprIntegerSignedNormalized.class, t_raw.getClass());
+    final TypeExprIntegerSignedNormalized<Unresolved, Untyped> t =
+      TypeExprIntegerSignedNormalized.class.cast(t_raw);
+
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
+  }
+
+  @Test public final void testTypeExprIntegerUnsignedNormalized32_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr(
+      "(integer unsigned-normalized)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExprIntegerUnsignedNormalized32_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr(
+      "(integer unsigned-normalized q)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeIntegerSigned0()
+  @Test public final void testTypeExprIntegerUnsignedNormalized32_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-integer-signed-0.jpr");
+    final SExpressionType e = this.newStringSExpr(
+      "(integer unsigned-normalized 32)");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(
+      TypeExprIntegerUnsignedNormalized.class, t_raw.getClass());
+    final TypeExprIntegerUnsignedNormalized<Unresolved, Untyped> t =
+      TypeExprIntegerUnsignedNormalized.class.cast(t_raw);
 
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprIntegerSigned.class, t.getClass());
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testSizeConstant0()
+  @Test public final void testTypeExpr_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-constant-0.jpr");
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLSize(
-          final JPRAParserType p,
-          final SizeExprType<?> t)
-        {
-          called.set(true);
-
-          Assert.assertEquals(SizeExprConstant.class, t.getClass());
-          final SizeExprConstant<?> sc = (SizeExprConstant<?>) t;
-          Assert.assertEquals(BigInteger.valueOf(23L), sc.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testSizeInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testSizeInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testSizeInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("()");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testSizeInvalid3()
+  @Test public final void testTypeExpr_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-invalid-3.jpr");
+    final SExpressionType e = this.newStringSExpr("\"\"");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+        JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testSizeInvalid4()
+  @Test public final void testTypeExpr_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-invalid-4.jpr");
+    final SExpressionType e = this.newStringSExpr("(unknown)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.UNRECOGNIZED_TYPE_KEYWORD));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExpr_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(\"\")");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_QUOTED_STRING));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testSizeExpr_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("()");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseSizeExpression(e);
+  }
+
+  @Test public final void testSizeExpr_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("\"\"");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING));
+    p.parseSizeExpression(e);
+  }
+
+  @Test public final void testSizeExpr_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(size-in-meters T)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.UNRECOGNIZED_SIZE_FUNCTION));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeOctetsInvalid0()
+  @Test public final void testSizeExpr_Constant_OK0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-size-octets-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("32");
+    final JPRAParserType p = this.newParser();
+
+    final SizeExprType<Unresolved, Untyped> s = p.parseSizeExpression(e);
+    final SizeExprConstant<Unresolved, Untyped> sc =
+      SizeExprConstant.class.cast(s);
+    Assert.assertEquals(BigInteger.valueOf(32L), sc.getValue());
+  }
+
+  @Test public final void testSizeExpr_Bits_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(size-in-bits T)");
+    final JPRAParserType p = this.newParser();
+
+    final SizeExprType<Unresolved, Untyped> s = p.parseSizeExpression(e);
+    final SizeExprInBits<Unresolved, Untyped> sb = SizeExprInBits.class.cast(s);
+    final TypeExprName<Unresolved, Untyped> tn =
+      TypeExprName.class.cast(sb.getTypeExpression());
+    final TypeReference tr = TypeReference.class.cast(tn.getReference());
+    Assert.assertEquals("T", tr.getType().getValue());
+  }
+
+  @Test public final void testSizeExpr_Bits_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(size-in-bits)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeOctets0()
+  @Test public final void testSizeExpr_Octets_OK0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-octets-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(size-in-octets T)");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLSize(
-          final JPRAParserType p,
-          final SizeExprType<?> t)
-        {
-          called.set(true);
-          Assert.assertEquals(SizeExprInOctets.class, t.getClass());
-          final SizeExprInOctets s = (SizeExprInOctets) t;
-          final TypeExprType e = s.getTypeExpression();
-          Assert.assertEquals(TypeExprNameT.class, e.getClass());
-          final TypeExprNameT r = (TypeExprNameT) e;
-          final TypeName n = r.getName();
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), n);
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    final SizeExprType<Unresolved, Untyped> s = p.parseSizeExpression(e);
+    final SizeExprInOctets<Unresolved, Untyped> sb =
+      SizeExprInOctets.class.cast(s);
+    final TypeExprName<Unresolved, Untyped> tn =
+      TypeExprName.class.cast(sb.getTypeExpression());
+    final TypeReference tr = TypeReference.class.cast(tn.getReference());
+    Assert.assertEquals("T", tr.getType().getValue());
   }
 
-  @Test public final void testSizeBits0()
+  @Test public final void testSizeExpr_Octets_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-size-bits-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLSize(
-          final JPRAParserType p,
-          final SizeExprType<?> t)
-        {
-          called.set(true);
-          Assert.assertEquals(SizeExprInBits.class, t.getClass());
-          final SizeExprInBits s = (SizeExprInBits) t;
-          final TypeExprType e = s.getTypeExpression();
-          Assert.assertEquals(TypeExprNameT.class, e.getClass());
-          final TypeExprNameT r = (TypeExprNameT) e;
-          final TypeName n = r.getName();
-          Assert.assertEquals(new TypeName(Optional.empty(), "T"), n);
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testSizeOctetsInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-size-octets-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(size-in-octets)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeBitsInvalid0()
+  @Test public final void testTypeExprFloat_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-size-bits-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(float)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testSizeBitsInvalid1()
+  @Test public final void testTypeExprFloat_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-size-bits-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(float ())");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExprFloat_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(float \"x\")");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExprFloat_Correct0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(float 32)");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprFloat.class, t_raw.getClass());
+    final TypeExprFloat<Unresolved, Untyped> t =
+      TypeExprFloat.class.cast(t_raw);
+
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
+  }
+
+  @Test public final void testTypeExprVector_Correct0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(vector T 3)");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprVector.class, t_raw.getClass());
+    final TypeExprVector<Unresolved, Untyped> t =
+      TypeExprVector.class.cast(t_raw);
+
+    Assert.assertEquals(SizeExprConstant.class, t.getElementCount().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getElementCount());
+    Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
+  }
+
+  @Test public final void testTypeExprVector_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(vector)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeFloatInvalid0()
+  @Test public final void testTypeExprVector_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-float-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(vector 32)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeFloatInvalid1()
+  @Test public final void testTypeExprVector_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-float-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(vector T ())");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeFloatInvalid2()
+  @Test public final void testTypeExprMatrix_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-float-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(matrix T 4 2)");
+    final JPRAParserType p = this.newParser();
 
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprMatrix.class, t_raw.getClass());
+    final TypeExprMatrix<Unresolved, Untyped> t =
+      TypeExprMatrix.class.cast(t_raw);
 
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    Assert.assertEquals(SizeExprConstant.class, t.getWidth().getClass());
+    final SizeExprConstant<Unresolved, Untyped> w =
+      SizeExprConstant.class.cast(t.getWidth());
+    Assert.assertEquals(BigInteger.valueOf(4L), w.getValue());
+
+    Assert.assertEquals(SizeExprConstant.class, t.getHeight().getClass());
+    final SizeExprConstant<Unresolved, Untyped> h =
+      SizeExprConstant.class.cast(t.getHeight());
+    Assert.assertEquals(BigInteger.valueOf(2L), h.getValue());
   }
 
-  @Test public final void testTypeVectorInvalid0()
+  @Test public final void testTypeExprMatrix_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-vector-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeVectorInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-vector-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(matrix T)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeVectorInvalid2()
+  @Test public final void testTypeExprMatrix_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-vector-invalid-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeVectorInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-vector-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_SCALAR_TYPE_EXPRESSION));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeMatrixInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(matrix T 2)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeMatrixInvalid1()
+  @Test public final void testTypeExprMatrix_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(matrix T 2 ())");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseTypeExpression(e);
+  }
+
+  @Test public final void testTypeExprArray_Correct0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(array T 3)");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprArray.class, t_raw.getClass());
+    final TypeExprArray<Unresolved, Untyped> t =
+      TypeExprArray.class.cast(t_raw);
+
+    Assert.assertEquals(SizeExprConstant.class, t.getElementCount().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getElementCount());
+    Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
+  }
+
+  @Test public final void testTypeExprArray_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(array)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeMatrixInvalid2()
+  @Test public final void testTypeExprArray_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(array 32)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeMatrixInvalid3()
+  @Test public final void testTypeExprArray_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-3.jpr");
+    final SExpressionType e = this.newStringSExpr("(array T ())");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeMatrixInvalid4()
+  @Test public final void testTypeExprString_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-4.jpr");
+    final SExpressionType e = this.newStringSExpr("(string 64 \"UTF-8\")");
+    final JPRAParserType p = this.newParser();
 
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprString.class, t_raw.getClass());
+    final TypeExprString<Unresolved, Untyped> t =
+      TypeExprString.class.cast(t_raw);
+    Assert.assertEquals("UTF-8", t.getEncoding());
 
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    Assert.assertEquals(SizeExprConstant.class, t.getSize().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSize());
+    Assert.assertEquals(BigInteger.valueOf(64L), s.getValue());
   }
 
-  @Test public final void testTypeMatrixInvalid5()
+  @Test public final void testTypeExprString_Error0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-matrix-invalid-5.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_SCALAR_TYPE_EXPRESSION));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeVector0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-vector-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprVector.class, t.getClass());
-          final TypeExprVector v = (TypeExprVector) t;
-          final TypeExprScalarType et = v.getElementType();
-          Assert.assertEquals(TypeExprFloat.class, et.getClass());
-          final SizeExprType<?> se = v.getElementCountExpression();
-          Assert.assertEquals(SizeExprConstant.class, se.getClass());
-          final SizeExprConstant<?> s = (SizeExprConstant<?>) se;
-          Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeMatrix0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-matrix-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprMatrix.class, t.getClass());
-          final TypeExprMatrix v = (TypeExprMatrix) t;
-          final TypeExprScalarType et = v.getElementType();
-          Assert.assertEquals(TypeExprFloat.class, et.getClass());
-          final SizeExprType<?> we = v.getWidthExpression();
-          final SizeExprType<?> he = v.getHeightExpression();
-          Assert.assertEquals(SizeExprConstant.class, we.getClass());
-          Assert.assertEquals(SizeExprConstant.class, he.getClass());
-          final SizeExprConstant<?> w = (SizeExprConstant<?>) we;
-          final SizeExprConstant<?> h = (SizeExprConstant<?>) he;
-          Assert.assertEquals(BigInteger.valueOf(2L), w.getValue());
-          Assert.assertEquals(BigInteger.valueOf(4L), h.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeFloat0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-float-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprFloat.class, t.getClass());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeArrayInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-array-invalid-0.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeArrayInvalid1()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-array-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeArrayInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-array-invalid-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeArrayInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-array-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeStringInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-string-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(string)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeStringInvalid1()
+  @Test public final void testTypeExprString_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-string-invalid-1.jpr");
+    final SExpressionType e = this.newStringSExpr("(string 32)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeStringInvalid2()
+  @Test public final void testTypeExprString_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-string-invalid-2.jpr");
+    final SExpressionType e = this.newStringSExpr("(string T ())");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeStringInvalid3()
+  @Test public final void testTypeExprBooleanSet_Correct0()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-string-invalid-3.jpr");
+    final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x y z))");
+    final JPRAParserType p = this.newParser();
+
+    final TypeExprType<Unresolved, Untyped> t_raw = p.parseTypeExpression(e);
+    Assert.assertEquals(TypeExprBooleanSet.class, t_raw.getClass());
+    final TypeExprBooleanSet<Unresolved, Untyped> t =
+      TypeExprBooleanSet.class.cast(t_raw);
+
+    Assert.assertEquals(
+      SizeExprConstant.class, t.getSizeExpression().getClass());
+    final SizeExprConstant<Unresolved, Untyped> s =
+      SizeExprConstant.class.cast(t.getSizeExpression());
+    Assert.assertEquals(BigInteger.valueOf(1L), s.getValue());
+  }
+
+  @Test public final void testTypeExprBooleanSet_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(boolean-set)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeString0()
+  @Test public final void testTypeExprBooleanSet_Error1()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-string-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprString.class, t.getClass());
-          final TypeExprString v = (TypeExprString) t;
-          Assert.assertEquals("UTF-8", v.getEncoding());
-          final SizeExprType<SizeUnitOctetsType> se = v.getSizeExpression();
-          Assert.assertEquals(SizeExprConstant.class, se.getClass());
-          final SizeExprConstant<SizeUnitOctetsType> s =
-            (SizeExprConstant<SizeUnitOctetsType>) se;
-          Assert.assertEquals(BigInteger.valueOf(64L), s.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeArray0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-array-0.jpr");
-
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprArray.class, t.getClass());
-          final TypeExprArray v = (TypeExprArray) t;
-          final TypeExprType et = v.getElementType();
-          Assert.assertEquals(TypeExprFloat.class, et.getClass());
-          final SizeExprType<?> se = v.getElementCountExpression();
-          Assert.assertEquals(SizeExprConstant.class, se.getClass());
-          final SizeExprConstant<?> s = (SizeExprConstant<?>) se;
-          Assert.assertEquals(BigInteger.valueOf(64L), s.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid0()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(boolean-set x)");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeBooleanSetInvalid1()
+  @Test public final void testTypeExprBooleanSet_Error2()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-1.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.SYNTAX_ERROR));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid2()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-2.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.INVALID_INTEGER_CONSTANT));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid3()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-3.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid4()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-4.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.BAD_FIELD_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid5()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-5.jpr");
-
-    this.expected.expect(
-      new JPRACompilerParseExceptionMatcher(
-        JPRAParseErrorCode.DUPLICATE_FIELD_NAME));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
-  }
-
-  @Test public final void testTypeBooleanSetInvalid6()
-    throws Exception
-  {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-invalid-6.jpr");
+    final SExpressionType e = this.newStringSExpr("(boolean-set 1 \"\")");
+    final JPRAParserType p = this.newParser();
 
     this.expected.expect(
       new JPRACompilerParseExceptionMatcher(
         JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
-
-    p.parseStatement(q.parseExpression(), new CheckedListener());
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeReference0()
+  @Test public final void testTypeExprBooleanSet_Error3()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q = this.newSExpressionParser("t-type-reference-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x x))");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprNamePT.class, t.getClass());
-          final TypeExprNamePT v = (TypeExprNamePT) t;
-          final PackageNameUnqualified pn = v.getPackage();
-          Assert.assertEquals("x", pn.getValue());
-          Assert.assertEquals("T", v.getType().getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.DUPLICATE_FIELD_NAME));
+    p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeBooleanSet0()
+  @Test public final void testTypeExprBooleanSet_Error4()
     throws Exception
   {
-    final P p = this.newParser();
-    final JSXParserType q =
-      this.newSExpressionParser("t-type-boolean-set-0.jpr");
+    final SExpressionType e = this.newStringSExpr("(boolean-set 1 (T))");
+    final JPRAParserType p = this.newParser();
 
-    final AtomicBoolean called = new AtomicBoolean(false);
-
-    p.parseStatement(
-      q.parseExpression(), new CheckedListener()
-      {
-        @Override public void onREPLType(
-          final JPRAParserType p,
-          final TypeExprType t)
-        {
-          called.set(true);
-          Assert.assertEquals(TypeExprBooleanSet.class, t.getClass());
-          final TypeExprBooleanSet v = (TypeExprBooleanSet) t;
-          final ImmutableList<FieldName> fields =
-            v.getFieldsInDeclarationOrder();
-          Assert.assertEquals(3L, (long) fields.size());
-          Assert.assertEquals("a", fields.get(0).getValue());
-          Assert.assertEquals("b", fields.get(1).getValue());
-          Assert.assertEquals("c", fields.get(2).getValue());
-
-          final SizeExprType<SizeUnitOctetsType> se = v.getSizeExpression();
-          Assert.assertEquals(SizeExprConstant.class, se.getClass());
-          final SizeExprConstant<?> sc = (SizeExprConstant<?>) se;
-          Assert.assertEquals(BigInteger.valueOf(1L), sc.getValue());
-        }
-      });
-
-    Assert.assertTrue(called.get());
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_FIELD_NAME));
+    p.parseTypeExpression(e);
   }
 
-  private static class CheckedListener extends JPRAAbstractParserEventListener
-    implements JPRAParserREPLEventListenerType
+  @Test public final void testTypeExprBooleanSet_Error5()
+    throws Exception
   {
-    private static final Logger LOG;
+    final SExpressionType e = this.newStringSExpr("(boolean-set 1 x)");
+    final JPRAParserType p = this.newParser();
 
-    static {
-      LOG = LoggerFactory.getLogger(CheckedListener.class);
-    }
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
+    p.parseTypeExpression(e);
+  }
 
-    @Override public void onImport(
-      final JPRAParserType p,
-      final PackageNameQualified p_name,
-      final PackageNameUnqualified up_name)
-      throws JPRACompilerException
-    {
-      super.onImport(p, p_name, up_name);
-      throw new UnreachableCodeException();
-    }
+  @Test public final void testPackageBegin_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(package-begin x.y.z)");
+    final JPRAParserType p = this.newParser();
 
-    @Override
-    public void onPackageBegin(
-      final JPRAParserType p,
-      final PackageNameQualified name)
-      throws JPRACompilerException
-    {
-      super.onPackageBegin(p, name);
-      throw new UnreachableCodeException();
-    }
+    final StatementType<Unresolved, Untyped> st = p.parseStatement(e);
+    final StatementPackageBegin<Unresolved, Untyped> pb =
+      StatementPackageBegin.class.cast(st);
+    Assert.assertEquals("x.y.z", pb.getPackageName().toString());
+  }
 
-    @Override public void onPackageEnd(final JPRAParserType p)
-      throws JPRACompilerException
-    {
-      super.onPackageEnd(p);
-      throw new UnreachableCodeException();
-    }
+  @Test public final void testPackageImport_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(import x.y.z as q)");
+    final JPRAParserType p = this.newParser();
 
-    @Override
-    public void onRecordBegin(
-      final JPRAParserType p,
-      final TypeName t)
-      throws JPRACompilerException
-    {
-      super.onRecordBegin(p, t);
-      throw new UnreachableCodeException();
-    }
+    final StatementType<Unresolved, Untyped> st = p.parseStatement(e);
+    final StatementPackageImport<Unresolved, Untyped> pi =
+      StatementPackageImport.class.cast(st);
+    Assert.assertEquals("x.y.z", pi.getPackageName().toString());
+    Assert.assertEquals("q", pi.getUsing().toString());
+  }
 
-    @Override public void onRecordEnd(final JPRAParserType p)
-      throws JPRACompilerException
-    {
-      super.onRecordEnd(p);
-      throw new UnreachableCodeException();
-    }
+  @Test public final void testPackageEnd_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(package-end)");
+    final JPRAParserType p = this.newParser();
 
-    @Override public void onRecordFieldPaddingOctets(
-      final JPRAParserType p,
-      final SizeExprType<SizeUnitOctetsType> size)
-      throws JPRACompilerException
-    {
-      super.onRecordFieldPaddingOctets(p, size);
-      throw new UnreachableCodeException();
-    }
+    final StatementType<Unresolved, Untyped> st = p.parseStatement(e);
+    final StatementPackageEnd<Unresolved, Untyped> pb =
+      StatementPackageEnd.class.cast(st);
+  }
 
-    @Override public void onRecordFieldValue(
-      final JPRAParserType p,
-      final FieldName name,
-      final TypeExprType type)
-    {
-      super.onRecordFieldValue(p, name, type);
-      throw new UnreachableCodeException();
-    }
+  @Test public final void testPackageImport_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(import)");
+    final JPRAParserType p = this.newParser();
 
-    @Override
-    public void onREPLSize(
-      final JPRAParserType p,
-      final SizeExprType<?> t)
-    {
-      super.onREPLSize(p, t);
-      throw new UnreachableCodeException();
-    }
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
 
-    @Override
-    public void onREPLType(
-      final JPRAParserType p,
-      final TypeExprType t)
-    {
-      super.onREPLType(p, t);
-      throw new UnreachableCodeException();
-    }
+  @Test public final void testPackageImport_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(import x.y.z)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackageImport_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(import x.y.z as)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackageImport_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(import x.y.z T q)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackageBegin_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(package-begin)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackageBegin_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(package-begin T)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_PACKAGE_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackageEnd_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(package-end T)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testStatement_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("()");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testStatement_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("x");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testStatement_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("\"x\"");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecordField_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-field-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecordField_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-field-invalid-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_FIELD_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecordField_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-field-invalid-3.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_TYPE_REFERENCE));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecordField_Error6()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-field-invalid-6.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-2.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_TYPE_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-3.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error4()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-4.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.UNRECOGNIZED_RECORD_FIELD_KEYWORD));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error5()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-5.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_Error6()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-record-invalid-6.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.DUPLICATE_FIELD_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecordPaddingOctets_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr(
+      "t-record-padding-octets-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testRecord_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr(
+      "t-record-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
+    final TypeDeclRecord<Unresolved, Untyped> d = TypeDeclRecord.class.cast(s);
+
+    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> field_order =
+      d.getFieldsInDeclarationOrder();
+    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+      field_names = d.getFieldsByName();
+
+    Assert.assertEquals(1L, (long) field_order.size());
+    Assert.assertEquals(1L, (long) field_names.size());
+
+    final FieldName f_name = new FieldName(Optional.empty(), "f0");
+    final RecordFieldDeclValue<Unresolved, Untyped> f0 =
+      field_names.get(f_name);
+    final RecordFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
+    Assert.assertSame(f0, f1);
+
+    Assert.assertEquals(f_name, f0.getName());
+  }
+
+  @Test public final void testRecord_OK1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr(
+      "t-record-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
+    final TypeDeclRecord<Unresolved, Untyped> d = TypeDeclRecord.class.cast(s);
+
+    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> field_order =
+      d.getFieldsInDeclarationOrder();
+    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+      field_names = d.getFieldsByName();
+
+    Assert.assertEquals(1L, (long) field_order.size());
+    Assert.assertEquals(0L, (long) field_names.size());
+
+    final RecordFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
+    final RecordFieldDeclPaddingOctets<Unresolved, Untyped> fp =
+      RecordFieldDeclPaddingOctets.class.cast(f1);
+
+    final SizeExprConstant<?, ?> size =
+      SizeExprConstant.class.cast(fp.getSizeExpression());
+    Assert.assertEquals(BigInteger.valueOf(4L), size.getValue());
+  }
+
+  @Test public final void testCommandSize_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandSize_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size 32 32)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandSize_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:size 32)");
+    final JPRAParserType p = this.newParser();
+
+    final StatementCommandSize<Unresolved, Untyped> s =
+      StatementCommandSize.class.cast(p.parseStatement(e));
+    final SizeExprConstant<Unresolved, Untyped> sc =
+      SizeExprConstant.class.cast(s.getExpression());
+    Assert.assertEquals(BigInteger.valueOf(32L), sc.getValue());
+  }
+
+  @Test public final void testCommandType_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandType_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type T T)");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testCommandType_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newStringSExpr("(:type T)");
+    final JPRAParserType p = this.newParser();
+
+    final StatementCommandType<Unresolved, Untyped> s =
+      StatementCommandType.class.cast(p.parseStatement(e));
+    final TypeExprName<Unresolved, Untyped> tn =
+      TypeExprName.class.cast(s.getExpression());
+    final TypeReference ref = tn.getReference();
+    Assert.assertEquals(new TypeName(Optional.empty(), "T"), ref.getType());
+    Assert.assertEquals(Optional.empty(), ref.getPackage());
   }
 }

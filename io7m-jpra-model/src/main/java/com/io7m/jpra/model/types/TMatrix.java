@@ -18,9 +18,9 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Size;
 import net.jcip.annotations.Immutable;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -34,6 +34,7 @@ import java.util.Optional;
   private final Size<?>                                      size_width;
   private final Size<?>                                      size_height;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final Size<SizeUnitBitsType>                       size_bits;
 
   /**
    * Construct an {@code integer unsigned} type expression.
@@ -56,13 +57,18 @@ import java.util.Optional;
     this.size_width = NullCheck.notNull(in_size_width);
     this.size_height = NullCheck.notNull(in_size_height);
     this.type = NullCheck.notNull(in_type);
+
+    final BigInteger sw = this.size_width.getValue();
+    final BigInteger sh = this.size_height.getValue();
+    final BigInteger ts = this.type.getSize().getValue();
+    this.size_bits = new Size<>(sw.multiply(sh).multiply(ts));
   }
 
   /**
    * @return The number of rows in the matrix
    */
 
-  public Size<?> getHeightExpression()
+  public Size<?> getHeight()
   {
     return this.size_height;
   }
@@ -71,7 +77,7 @@ import java.util.Optional;
    * @return The number of columns in the matrix
    */
 
-  public Size<?> getWidthExpression()
+  public Size<?> getWidth()
   {
     return this.size_width;
   }
@@ -83,6 +89,11 @@ import java.util.Optional;
   public TypeScalarType getElementType()
   {
     return this.type;
+  }
+
+  @Override public Size<SizeUnitBitsType> getSize()
+  {
+    return this.size_bits;
   }
 
   @Override public <A, E extends Exception> A matchType(
