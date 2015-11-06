@@ -18,41 +18,84 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * A {@code matrix} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-public final class TypeExprMatrix<I, T, S>
-  implements TypeExprType<I, T, S>
+public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final SizeExprType<I, T>                           width;
+  private final SizeExprType<I, T>                           height;
+  private final TypeExprType<I, T>                           element_type;
   private final T                                            type;
-  private final S                                            width;
-  private final S                                            height;
-  private final TypeExprType<I, T, S>                element_type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type         The expression type
+   * @param in_lex          Lexical information
+   * @param in_width        The number of columns
+   * @param in_height       The number of rows
+   * @param in_element_type The type of elements
+   */
 
   public TypeExprMatrix(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final T in_type,
-    final S in_width,
-    final S in_height,
-    final TypeExprType<I, T, S> in_element_type)
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final SizeExprType<I, T> in_width,
+    final SizeExprType<I, T> in_height,
+    final TypeExprType<I, T> in_element_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
     this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex);
     this.width = NullCheck.notNull(in_width);
     this.height = NullCheck.notNull(in_height);
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return A size expression denoting the number of rows
+   */
+
+  public SizeExprType<I, T> getHeight()
+  {
+    return this.height;
+  }
+
+  /**
+   * @return A type expression denoting the type of elements
+   */
+
+  public TypeExprType<I, T> getElementType()
+  {
+    return this.element_type;
+  }
+
+  /**
+   * @return A size expression denoting the number of columns
+   */
+
+  public SizeExprType<I, T> getWidth()
+  {
+    return this.width;
+  }
+
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprMatrix(this);

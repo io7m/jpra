@@ -18,46 +18,79 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * @param <I>  The type of identifiers
- * @param <T>  The type of types
- * @param <S>  The type of sizes (in bits)
+ * A {@code vector} type expression.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
  */
 
-public final class TypeExprVector<I, T, S>
-  implements TypeExprType<I, T, S>
+public final class TypeExprVector<I, T> implements TypeExprType<I, T>
 {
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final SizeExprType<I, T>                           element_count;
+  private final TypeExprType<I, T>                           element_type;
   private final T                                            type;
-  private final S                                            element_count;
-  private final TypeExprType<I, T, S>                element_type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_type          The expression type
+   * @param in_lex           Lexical information
+   * @param in_element_count The number of elements
+   * @param in_element_type  The type of elements
+   */
 
   public TypeExprVector(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
     final T in_type,
-    final S in_element_count,
-    final TypeExprType<I, T, S> in_element_type)
+    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final SizeExprType<I, T> in_element_count,
+    final TypeExprType<I, T> in_element_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
     this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex);
     this.element_count = NullCheck.notNull(in_element_count);
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprVector(this);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.lex;
+  }
+
+  /**
+   * @return A size expression denoting the number of elements
+   */
+
+  public SizeExprType<I, T> getElementCount()
+  {
+    return this.element_count;
+  }
+
+  /**
+   * @return A type expression denoting the type of elements
+   */
+
+  public TypeExprType<I, T> getElementType()
+  {
+    return this.element_type;
   }
 }

@@ -17,8 +17,6 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jpra.model.ModelElementType;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
 
 /**
  * The type of types.

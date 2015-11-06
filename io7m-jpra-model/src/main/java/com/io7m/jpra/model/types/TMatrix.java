@@ -18,8 +18,6 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
@@ -70,7 +68,7 @@ import java.util.Optional;
    * @return The number of rows in the matrix
    */
 
-  public Size<?> getHeightExpression()
+  public Size<?> getHeight()
   {
     return this.size_height;
   }
@@ -79,7 +77,7 @@ import java.util.Optional;
    * @return The number of columns in the matrix
    */
 
-  public Size<?> getWidthExpression()
+  public Size<?> getWidth()
   {
     return this.size_width;
   }

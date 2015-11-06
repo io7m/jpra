@@ -18,32 +18,67 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.TypeReference;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class TypeExprName<I, T, S>
-  implements TypeExprType<I, T, S>
+/**
+ * A name.
+ *
+ * @param <I> The type of identifiers
+ * @param <T> The type of evaluated types
+ */
+
+public final class TypeExprName<I, T> implements TypeExprType<I, T>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
-  private final S                                            size;
-  private final I                                            name;
+  private final I             identifier;
+  private final TypeReference ref;
+  private final T             type;
+
+  /**
+   * Construct an expression.
+   *
+   * @param in_identifier The identifier
+   * @param in_type       The expression type
+   * @param in_ref        The type reference
+   */
 
   public TypeExprName(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
-    final I in_name,
+    final I in_identifier,
     final T in_type,
-    final S in_size)
+    final TypeReference in_ref)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.name = NullCheck.notNull(in_name);
     this.type = NullCheck.notNull(in_type);
-    this.size = NullCheck.notNull(in_size);
+    this.identifier = NullCheck.notNull(in_identifier);
+    this.ref = NullCheck.notNull(in_ref);
+  }
+
+  @Override public T getType()
+  {
+    return this.type;
+  }
+
+  /**
+   * @return The type reference
+   */
+
+  public TypeReference getReference()
+  {
+    return this.ref;
+  }
+
+  /**
+   * @return The identifier
+   */
+
+  public I getIdentifier()
+  {
+    return this.identifier;
   }
 
   @Override public <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, S, A, E> m)
+    final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchName(this);
@@ -52,6 +87,6 @@ public final class TypeExprName<I, T, S>
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.lex;
+    return this.ref.getType().getLexicalInformation();
   }
 }

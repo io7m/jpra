@@ -46,7 +46,7 @@ final class JPRACompilerResolverExceptionMatcher
   {
     JPRACompilerResolverExceptionMatcher.LOG.debug("exception: ", item);
 
-    final JPRAResolverErrorCode ec = item.getJPRAResolverErrorCode();
+    final JPRAResolverErrorCode ec = item.getErrorCode();
     final boolean ok = ec.equals(this.code);
     mismatchDescription.appendText("has error code " + ec);
     return ok;

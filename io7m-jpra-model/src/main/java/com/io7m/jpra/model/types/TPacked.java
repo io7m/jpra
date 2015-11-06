@@ -22,10 +22,10 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
-import com.io7m.jpra.model.Size;
-import com.io7m.jpra.model.SizeUnitBitsType;
-import com.io7m.jpra.model.identifiers.FieldIdentifier;
-import com.io7m.jpra.model.identifiers.TypeIdentifier;
+import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
 
 import java.nio.file.Path;
@@ -35,28 +35,36 @@ import java.util.Optional;
  * A {@code packed} type.
  */
 
-public final class TPacked implements TType
+public final class TPacked implements TType, TypeUserDefinedType
 {
-  private final TypeIdentifier                            ident;
-  private final Size<SizeUnitBitsType>                    size_bits;
-  private final ImmutableMap<FieldIdentifier, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType>                  fields_by_order;
+  private final TypeName                            name;
+  private final Size<SizeUnitBitsType>              size_bits;
+  private final ImmutableMap<FieldName, FieldValue> fields_by_name;
+  private final ImmutableList<FieldType>            fields_by_order;
+  private final PackageContextType                  package_ctx;
+  private final IdentifierType                      identifier;
 
   /**
    * Construct a record type.
    *
+   * @param in_package         The package context
+   * @param in_identifier      The identifier
+   * @param in_name            The type name
    * @param in_fields_by_name  The fields by name
-   * @param in_ident           The identifier
    * @param in_fields_by_order The fields in declaration order
    */
 
   public TPacked(
-    final ImmutableMap<FieldIdentifier, FieldValue> in_fields_by_name,
-    final TypeIdentifier in_ident,
+    final PackageContextType in_package,
+    final IdentifierType in_identifier,
+    final TypeName in_name,
+    final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
+    this.package_ctx = NullCheck.notNull(in_package);
+    this.identifier = NullCheck.notNull(in_identifier);
+    this.name = NullCheck.notNull(in_name);
     this.fields_by_name = NullCheck.notNull(in_fields_by_name);
-    this.ident = NullCheck.notNull(in_ident);
     this.fields_by_order = NullCheck.notNull(in_fields_by_order);
 
     Assertive.require(
@@ -64,13 +72,31 @@ public final class TPacked implements TType
 
     this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
       (Procedure<FieldValue>) f -> {
-        Assertive.require(this.fields_by_name.containsKey(f.identifier));
-        final FieldValue fr = this.fields_by_name.get(f.identifier);
+        Assertive.require(this.fields_by_name.containsKey(f));
+        final FieldValue fr = this.fields_by_name.get(f);
         Assertive.require(fr.equals(f));
       });
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
+  }
+
+  /**
+   * @return The subset of fields that have names
+   */
+
+  public ImmutableMap<FieldName, FieldValue> getFieldsByName()
+  {
+    return this.fields_by_name;
+  }
+
+  /**
+   * @return All fields in declaration order
+   */
+
+  public ImmutableList<FieldType> getFieldsByOrder()
+  {
+    return this.fields_by_order;
   }
 
   @Override public Size<SizeUnitBitsType> getSize()
@@ -88,7 +114,29 @@ public final class TPacked implements TType
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.ident.getLexicalInformation();
+    return this.name.getLexicalInformation();
+  }
+
+  @Override public TypeName getName()
+  {
+    return this.name;
+  }
+
+  @Override public IdentifierType getIdentifier()
+  {
+    return this.identifier;
+  }
+
+  @Override public PackageContextType getPackageContext()
+  {
+    return this.package_ctx;
+  }
+
+  @Override public <A, E extends Exception> A matchTypeUserDefined(
+    final TypeUserDefinedMatcherType<A, E> m)
+    throws E
+  {
+    return m.matchPacked(this);
   }
 
   /**
@@ -162,22 +210,53 @@ public final class TPacked implements TType
 
   public static final class FieldValue implements FieldType
   {
-    private final FieldIdentifier identifier;
-    private final TType           type;
+    private final TPacked   owner;
+    private final FieldName name;
+    private final TType     type;
 
     /**
      * Construct a field.
      *
-     * @param in_identifier The identifier
+     * @param in_owner      The owning type
+     * @param in_identifier The name
      * @param in_type       The field type
      */
 
     public FieldValue(
-      final FieldIdentifier in_identifier,
+      final TPacked in_owner,
+      final FieldName in_identifier,
       final TType in_type)
     {
-      this.identifier = NullCheck.notNull(in_identifier);
+      this.owner = NullCheck.notNull(in_owner);
+      this.name = NullCheck.notNull(in_identifier);
       this.type = NullCheck.notNull(in_type);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TPacked getOwner()
+    {
+      return this.owner;
+    }
+
+    /**
+     * @return The field name
+     */
+
+    public FieldName getName()
+    {
+      return this.name;
+    }
+
+    /**
+     * @return The field type
+     */
+
+    public TType getType()
+    {
+      return this.type;
     }
 
     @Override public Size<SizeUnitBitsType> getSize()
@@ -195,7 +274,7 @@ public final class TPacked implements TType
     @Override
     public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
     {
-      return this.identifier.getLexicalInformation();
+      return this.name.getLexicalInformation();
     }
   }
 
@@ -207,20 +286,33 @@ public final class TPacked implements TType
   {
     private final Size<SizeUnitBitsType>                       size_bits;
     private final Optional<ImmutableLexicalPositionType<Path>> lex;
+    private final TPacked                                      owner;
 
     /**
      * Construct a field.
      *
+     * @param in_owner     The owning type
      * @param in_size_bits The size in bits
      * @param in_lex       Lexical information
      */
 
     public FieldPaddingBits(
+      final TPacked in_owner,
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<ImmutableLexicalPositionType<Path>> in_lex)
     {
+      this.owner = NullCheck.notNull(in_owner);
       this.size_bits = NullCheck.notNull(in_size_bits);
       this.lex = NullCheck.notNull(in_lex);
+    }
+
+    /**
+     * @return The owning type
+     */
+
+    public TPacked getOwner()
+    {
+      return this.owner;
     }
 
     @Override public Size<SizeUnitBitsType> getSize()

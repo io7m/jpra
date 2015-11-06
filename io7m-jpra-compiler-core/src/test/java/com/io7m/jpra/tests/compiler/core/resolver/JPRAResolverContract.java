@@ -16,176 +16,580 @@
 
 package com.io7m.jpra.tests.compiler.core.resolver;
 
-import com.io7m.jeucreader.UnicodeCharacterReader;
-import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
-import com.io7m.jpra.compiler.core.JPRACompilerException;
-import com.io7m.jpra.compiler.core.parser.JPRAParser;
+import com.gs.collections.impl.factory.Lists;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
+import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
-import com.io7m.jpra.compiler.core.resolver.JPRAResolverEventListenerType;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
+import com.io7m.jpra.model.Unresolved;
+import com.io7m.jpra.model.Untyped;
+import com.io7m.jpra.model.contexts.GlobalContextType;
+import com.io7m.jpra.model.contexts.GlobalContexts;
+import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.loading.JPRAModelLoadingException;
+import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
+import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import com.io7m.jpra.model.names.PackageNameUnqualified;
+import com.io7m.jpra.model.size_expressions.SizeExprConstant;
+import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementCommandType;
+import com.io7m.jpra.model.statements.StatementPackageBegin;
+import com.io7m.jpra.model.statements.StatementPackageEnd;
+import com.io7m.jpra.model.statements.StatementPackageImport;
+import com.io7m.jpra.model.type_declarations.TypeDeclType;
+import com.io7m.jpra.model.type_expressions.TypeExprArray;
+import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
+import com.io7m.jpra.model.type_expressions.TypeExprFloat;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerSigned;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerSignedNormalized;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsigned;
+import com.io7m.jpra.model.type_expressions.TypeExprIntegerUnsignedNormalized;
+import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
+import com.io7m.jpra.model.type_expressions.TypeExprString;
+import com.io7m.jpra.model.type_expressions.TypeExprVector;
 import com.io7m.jsx.SExpressionType;
-import com.io7m.jsx.lexer.JSXLexer;
-import com.io7m.jsx.lexer.JSXLexerConfiguration;
-import com.io7m.jsx.lexer.JSXLexerConfigurationBuilderType;
-import com.io7m.jsx.lexer.JSXLexerType;
-import com.io7m.jsx.parser.JSXParser;
-import com.io7m.jsx.parser.JSXParserConfiguration;
-import com.io7m.jsx.parser.JSXParserConfigurationBuilderType;
-import com.io7m.jsx.parser.JSXParserException;
-import com.io7m.jsx.parser.JSXParserType;
-import com.io7m.junreachable.UnreachableCodeException;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.matchers.ThrowableCauseMatcher;
 import org.junit.rules.ExpectedException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Optional;
+import java.math.BigInteger;
 
-public abstract class JPRAResolverContract<R extends JPRAResolverType>
+@SuppressWarnings("unchecked") public abstract class JPRAResolverContract
 {
-  @Rule public ExpectedException expected = ExpectedException.none();
+  @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract R newResolver(JPRAResolverEventListenerType e);
+  private static <I, T> void checkSizeExpressionConstant(
+    final SizeExprType<I, T> s,
+    final BigInteger v)
+  {
+    final SizeExprConstant<I, T> sc = SizeExprConstant.class.cast(s);
+    final BigInteger rv = sc.getValue();
+    Assert.assertEquals(v, rv);
+  }
 
-  @Test public final void testPackageBeginInvalid0()
+  protected abstract JPRAParserType newParser();
+
+  protected abstract JPRAResolverType newResolver(final GlobalContextType c);
+
+  protected abstract SExpressionType newStringSExpr(
+    final String expr);
+
+  @Test public final void testPackageNested()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin x.y.z)"))));
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.PACKAGE_NESTED));
-
-    this.runResolver("t-package-begin-invalid-0.jpr", c);
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
   }
 
-  @Test public final void testPackageBeginInvalid1()
+  @Test public final void testPackageBegin()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementPackageBegin<Unresolved, Untyped> pb =
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin x.y.z)")));
+    final StatementPackageBegin<IdentifierType, Untyped> rp =
+      r.resolvePackageBegin(pb);
+
+    Assert.assertEquals(pb.getPackageName(), rp.getPackageName());
+    Assert.assertEquals(pb.getLexicalInformation(), rp.getLexicalInformation());
+  }
+
+  @Test public final void testPackageDuplicate()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    c.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.PACKAGE_DUPLICATE));
-
-    this.runResolver("t-package-begin-invalid-1.jpr", c);
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin x.y.z)"))));
   }
 
-  @Test public final void testPackageEndInvalid0()
+  @Test public final void testPackageEndNoCurrent()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.NO_CURRENT_PACKAGE));
-
-    this.runResolver("t-package-end-invalid-0.jpr", c);
+    r.resolvePackageEnd(
+      StatementPackageEnd.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-end)"))));
   }
 
-  @Test public final void testPackageImportInvalid0()
+  @Test public final void testPackageImportNoCurrent()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.NO_CURRENT_PACKAGE));
-
-    this.runResolver("t-package-import-invalid-0.jpr", c);
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.y.z as q)"))));
   }
 
-  @Test public final void testPackageImportInvalid1()
+  @Test public final void testPackageImportConflict()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
-    this.expected.expect(
-      new JPRACompilerResolverExceptionMatcher(
-        JPRAResolverErrorCode.PACKAGE_NONEXISTENT));
+    c.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"), PackageNameUnqualified.of("a"))));
+    c.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"), PackageNameUnqualified.of("b"))));
 
-    this.runResolver("t-package-import-invalid-1.jpr", c);
-  }
-
-  @Test public final void testPackageImportInvalid2()
-    throws Exception
-  {
-    final R c = this.newResolver(new CheckedListener());
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.a as q)"))));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.PACKAGE_IMPORT_CONFLICT));
-
-    this.runResolver("t-package-import-invalid-2.jpr", c);
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.b as q)"))));
   }
 
-  private void runResolver(
-    final String file,
-    final R resolver)
-    throws JPRACompilerException
-  {
-    final InputStream s = JPRAResolverContract.class.getResourceAsStream(file);
-    final InputStreamReader ir = new InputStreamReader(s);
-    final UnicodeCharacterReaderPushBackType r =
-      UnicodeCharacterReader.newReader(ir);
-
-    final JSXLexerConfigurationBuilderType lc =
-      JSXLexerConfiguration.newBuilder();
-    lc.setNewlinesInQuotedStrings(false);
-    lc.setSquareBrackets(true);
-
-    final JSXLexerType lex = JSXLexer.newLexer(lc.build(), r);
-    final JSXParserConfigurationBuilderType pc =
-      JSXParserConfiguration.newBuilder();
-    pc.preserveLexicalInformation(true);
-
-    final JSXParserType jp = JSXParser.newParser(pc.build(), lex);
-    final JPRAParserType sp = JPRAParser.newParser();
-
-    while (true) {
-      try {
-        final Optional<SExpressionType> exp = jp.parseExpressionOrEOF();
-        if (!exp.isPresent()) {
-          return;
-        }
-        final SExpressionType e = exp.get();
-        sp.parseStatement(e, resolver);
-      } catch (final JSXParserException | IOException ex) {
-        throw new UnreachableCodeException(ex);
-      }
-    }
-  }
-
-  @Test public final void testTypeRecordInvalid0()
+  @Test public final void testPackageImportNonexistent()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new NoPackagesLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new ThrowableCauseMatcher<>(
+        new ThrowableCauseMatcher<>(
+          new JPRACompilerResolverExceptionMatcher(
+            JPRAResolverErrorCode.PACKAGE_NONEXISTENT))));
+
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.a as q)"))));
+  }
+
+  @Test public final void testTypeDeclNoCurrent()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.NO_CURRENT_PACKAGE));
-
-    this.runResolver("t-type-record-invalid-0.jpr", c);
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(this.newStringSExpr("(record T ())"))));
   }
 
-  @Test public final void testTypeRecordInvalid1()
+  @Test public final void testTypeDeclNonexistentPackage0()
     throws Exception
   {
-    final R c = this.newResolver(new CheckedListener());
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x p:T)])"))));
+  }
+
+  @Test public final void testTypeDeclNonexistentPackageType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.y as p)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x p:T)])"))));
+  }
+
+  @Test public final void testTypeDeclNonexistentLocalType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x U)])"))));
+  }
+
+  @Test public final void testTypeDeclNonexistentLocalType1()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x T)])"))));
+  }
+
+  @Test public final void testTypeDeclDuplicateType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x [integer signed 32])])"))));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.TYPE_DUPLICATE));
-
-    this.runResolver("t-type-record-invalid-1.jpr", c);
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(record T [(field x [integer signed 32])])"))));
   }
 
-  private final static class CheckedListener
-    implements JPRAResolverEventListenerType
+  @Test public final void testTypeExprName_Error0()
+    throws Exception
   {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
 
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveCommandType(
+      StatementCommandType.class.cast(
+        p.parseStatement(this.newStringSExpr("(:type T)"))));
+  }
+
+  @Test public final void testTypeExprIntegerSigned_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr("(:type [integer signed 32])"))));
+
+    final TypeExprIntegerSigned<IdentifierType, Untyped> ee =
+      TypeExprIntegerSigned.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprIntegerUnsigned_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr("(:type [integer unsigned 32])"))));
+
+    final TypeExprIntegerUnsigned<IdentifierType, Untyped> ee =
+      TypeExprIntegerUnsigned.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprIntegerUnsignedNormalized_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [integer unsigned-normalized 32])"))));
+
+    final TypeExprIntegerUnsignedNormalized<IdentifierType, Untyped> ee =
+      TypeExprIntegerUnsignedNormalized.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprIntegerSignedNormalized_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [integer signed-normalized 32])"))));
+
+    final TypeExprIntegerSignedNormalized<IdentifierType, Untyped> ee =
+      TypeExprIntegerSignedNormalized.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprFloat_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [float 32])"))));
+
+    final TypeExprFloat<IdentifierType, Untyped> ee =
+      TypeExprFloat.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprString_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [string 32 \"UTF-8\"])"))));
+
+    final TypeExprString<IdentifierType, Untyped> ee =
+      TypeExprString.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSize(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprVector_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [vector (integer signed 32) 32])"))));
+
+    final TypeExprVector<IdentifierType, Untyped> ee =
+      TypeExprVector.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getElementCount(), BigInteger.valueOf(32L));
+  }
+
+  @Test public final void testTypeExprMatrix_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [matrix (integer signed 32) 2 4])"))));
+
+    final TypeExprMatrix<IdentifierType, Untyped> ee =
+      TypeExprMatrix.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getWidth(), BigInteger.valueOf(2L));
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getHeight(), BigInteger.valueOf(4L));
+  }
+
+  @Test public final void testTypeExprBooleanSet_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [boolean-set 1 (x)])"))));
+
+    final TypeExprBooleanSet<IdentifierType, Untyped> ee =
+      TypeExprBooleanSet.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getSizeExpression(), BigInteger.valueOf(1L));
+  }
+
+  @Test public final void testTypeExprArray_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    final StatementCommandType<IdentifierType, Untyped> ex =
+      r.resolveCommandType(
+        StatementCommandType.class.cast(
+          p.parseStatement(
+            this.newStringSExpr(
+              "(:type [array (integer signed 32) 64])"))));
+
+    final TypeExprArray<IdentifierType, Untyped> ee =
+      TypeExprArray.class.cast(ex.getExpression());
+    JPRAResolverContract.checkSizeExpressionConstant(
+      ee.getElementCount(), BigInteger.valueOf(64L));
+  }
+
+  private static final class NoPackagesLoader implements JPRAPackageLoaderType
+  {
+    @Override public PackageContextType evaluate(
+      final GlobalContextType c,
+      final PackageNameQualified p)
+      throws JPRAModelLoadingException
+    {
+      throw new JPRAModelLoadingException(
+        new JPRACompilerResolverException(
+          p.getLexicalInformation(),
+          JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
+          "No such package"));
+    }
   }
 }
