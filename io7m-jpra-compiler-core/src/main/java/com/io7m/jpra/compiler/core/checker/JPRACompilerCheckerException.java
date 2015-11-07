@@ -24,6 +24,8 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
 import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
 import com.io7m.jpra.model.type_expressions.TypeExprFloat;
 import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
@@ -35,6 +37,7 @@ import com.io7m.jpra.model.types.SizeUnitBitsType;
 import com.io7m.jpra.model.types.SizeUnitType;
 import com.io7m.jpra.model.types.TFloat;
 import com.io7m.jpra.model.types.TIntegerType;
+import com.io7m.jpra.model.types.TType;
 import com.io7m.jranges.RangeInclusiveB;
 
 import java.math.BigInteger;
@@ -646,6 +649,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    * @param value The size value
    *
    * @return An exception
+   *
+   * @see JPRACheckerErrorCode#PADDING_SIZE_INVALID
    */
 
   public static JPRACompilerCheckerException paddingSizeInvalid(
@@ -660,6 +665,62 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
 
     return new JPRACompilerCheckerException(
       lex, JPRACheckerErrorCode.PADDING_SIZE_INVALID, sb.toString());
+  }
+
+  /**
+   * @param r   The field declaration
+   * @param rvt The type expression
+   *
+   * @return An exception
+   *
+   * @see JPRACheckerErrorCode#PACKED_NON_INTEGER
+   */
+
+  public static JPRACompilerCheckerException packedNonIntegerType(
+    final PackedFieldDeclValue<IdentifierType, Untyped> r,
+    final TypeExprType<IdentifierType, TType> rvt)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("Packed types may only contain integer fields.");
+    sb.append(System.lineSeparator());
+    sb.append("Field name: ");
+    sb.append(r.getName());
+    sb.append(System.lineSeparator());
+    sb.append("Field type: ");
+    sb.append(rvt.getType());
+
+    return new JPRACompilerCheckerException(
+      rvt.getLexicalInformation(),
+      JPRACheckerErrorCode.PACKED_NON_INTEGER,
+      sb.toString());
+  }
+
+  /**
+   * @param name The type name
+   * @param sv   The type expression
+   *
+   * @return An exception
+   *
+   * @see JPRACheckerErrorCode#PACKED_SIZE_NOT_DIVISIBLE_8
+   */
+
+  public static JPRACompilerCheckerException packedSizeNotDivisible8(
+    final TypeName name,
+    final BigInteger sv)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("The size in bits of packed types must be divisible by 8.");
+    sb.append(System.lineSeparator());
+    sb.append("Type name: ");
+    sb.append(name);
+    sb.append(System.lineSeparator());
+    sb.append("Current size (bits): ");
+    sb.append(sv);
+
+    return new JPRACompilerCheckerException(
+      name.getLexicalInformation(),
+      JPRACheckerErrorCode.PACKED_SIZE_NOT_DIVISIBLE_8,
+      sb.toString());
   }
 
   /**

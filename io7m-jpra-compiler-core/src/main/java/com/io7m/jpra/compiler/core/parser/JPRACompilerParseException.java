@@ -422,30 +422,30 @@ public final class JPRACompilerParseException extends JPRACompilerException
   }
 
   /**
-   * @param e The expression
-   * @param s The exception message
-   *
-   * @return A parser exception
-   *
-   * @see JPRAParseErrorCode#EXPECTED_SCALAR_TYPE_EXPRESSION
-   */
-
-  public static JPRACompilerParseException expectedScalarTypeExpression(
-    final SExpressionType e,
-    final String s)
-  {
-    return new JPRACompilerParseException(
-      e.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
-      JPRAParseErrorCode.EXPECTED_SCALAR_TYPE_EXPRESSION,
-      s);
-  }
-
-  /**
    * @return The parser error code
    */
 
   public JPRAParseErrorCode getErrorCode()
   {
     return this.code;
+  }
+
+  /**
+   * @param e       The expression
+   * @param message The exception message
+   *
+   * @return A parser exception
+   *
+   * @see JPRAParseErrorCode#UNRECOGNIZED_PACKED_FIELD_KEYWORD
+   */
+
+  public static JPRACompilerParseException unrecognizedPackedFieldKeyword(
+    final SExpressionSymbolType e,
+    final String message)
+  {
+    return new JPRACompilerParseException(
+      e.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
+      JPRAParseErrorCode.UNRECOGNIZED_PACKED_FIELD_KEYWORD,
+      message);
   }
 }

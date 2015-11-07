@@ -272,7 +272,7 @@ public final class JPRAResolver implements JPRAResolverType
       t.getName(),
       by_order.toImmutable());
 
-    this.current_record_fields.clear();
+    this.current_packed_fields.clear();
     return rv;
   }
 
@@ -319,10 +319,14 @@ public final class JPRAResolver implements JPRAResolverType
     final PackedFieldDeclValue<Unresolved, Untyped> r)
     throws JPRACompilerResolverException
   {
-    return new PackedFieldDeclValue<>(
-      this.context.getFreshIdentifier(),
-      r.getName(),
-      this.resolveTypeExpression(r.getType()));
+    final PackedFieldDeclValue<IdentifierType, Untyped> v =
+      new PackedFieldDeclValue<>(
+        this.context.getFreshIdentifier(),
+        r.getName(),
+        this.resolveTypeExpression(r.getType()));
+
+    this.current_packed_fields.put(v.getName(), v);
+    return v;
   }
 
   private TypeDeclType<IdentifierType, Untyped> resolveTypeDeclarationRecord(

@@ -35,6 +35,7 @@ import java.math.BigInteger;
 public final class JPRACheckerStandardCapabilities
   implements JPRACheckerCapabilitiesType
 {
+  private final ImmutableList<RangeInclusiveB> packed_integer_sizes;
   private final ImmutableList<RangeInclusiveB> record_integer_sizes;
   private final ImmutableList<RangeInclusiveB> record_float_sizes;
   private final ImmutableSet<String>           encodings;
@@ -54,6 +55,12 @@ public final class JPRACheckerStandardCapabilities
     final BigInteger b16 = BigInteger.valueOf(16L);
     final BigInteger b32 = BigInteger.valueOf(32L);
     final BigInteger b64 = BigInteger.valueOf(64L);
+
+    {
+      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      s.add(new RangeInclusiveB(b2, b64));
+      this.packed_integer_sizes = s.toImmutable();
+    }
 
     {
       final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
@@ -230,5 +237,17 @@ public final class JPRACheckerStandardCapabilities
   @Override public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
   {
     return this.matrix_float_sizes;
+  }
+
+  @Override
+  public ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
+  {
+    return this.packed_integer_sizes;
+  }
+
+  @Override
+  public boolean isPackedIntegerSizeBitsSupported(final BigInteger size)
+  {
+    return this.packed_integer_sizes.anySatisfy(r -> r.includesValue(size));
   }
 }

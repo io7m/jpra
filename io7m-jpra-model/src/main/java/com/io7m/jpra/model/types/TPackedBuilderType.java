@@ -24,21 +24,21 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * The type of mutable records for {@link TRecord} values.
+ * The type of mutable records for {@link TPacked} values.
  */
 
-public interface TRecordBuilderType
+public interface TPackedBuilderType
 {
   /**
-   * Add a field of padding octets.
+   * Add a field of padding bits.
    *
    * @param lex  The lexical information, if any
-   * @param size The size of the padding in octets
+   * @param size The size of the padding in bits
    */
 
-  void addPaddingOctets(
+  void addPaddingBits(
     Optional<ImmutableLexicalPositionType<Path>> lex,
-    Size<SizeUnitOctetsType> size);
+    Size<SizeUnitBitsType> size);
 
   /**
    * Add a value field.
@@ -51,11 +51,17 @@ public interface TRecordBuilderType
   void addField(
     FieldName name,
     IdentifierType id,
-    TType type);
+    TIntegerType type);
+
+  /**
+   * @return The current size of the type in bits
+   */
+
+  Size<SizeUnitBitsType> getCurrentSize();
 
   /**
    * @return A constructed record
    */
 
-  TRecord build();
+  TPacked build();
 }

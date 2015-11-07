@@ -57,6 +57,16 @@ import java.util.Optional;
     this.size_bits = new Size<>(ecv.multiply(etv));
   }
 
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[array ");
+    sb.append(this.element_count.getValue());
+    sb.append(" ");
+    sb.append(this.element_type);
+    sb.append("]");
+    return sb.toString();
+  }
+
   /**
    * @return The type of elements
    */

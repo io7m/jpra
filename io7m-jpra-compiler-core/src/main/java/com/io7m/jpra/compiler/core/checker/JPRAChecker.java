@@ -39,6 +39,10 @@ import com.io7m.jpra.model.size_expressions.SizeExprMatcherType;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclMatcherType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclPaddingBits;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclMatcherType;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
@@ -74,6 +78,8 @@ import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
 import com.io7m.jpra.model.types.TMatrix;
+import com.io7m.jpra.model.types.TPacked;
+import com.io7m.jpra.model.types.TPackedBuilderType;
 import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TRecordBuilderType;
 import com.io7m.jpra.model.types.TString;
@@ -109,6 +115,7 @@ public final class JPRAChecker implements JPRACheckerType
   private final JPRACheckerCapabilitiesType    caps;
   private       PackageContextType             package_ctx;
   private       Optional<PackageNameQualified> current_package;
+  private       TypeExpressionContext          type_context;
 
   private JPRAChecker(
     final GlobalContextType c,
@@ -116,6 +123,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     this.context = NullCheck.notNull(c);
     this.caps = NullCheck.notNull(in_caps);
+    this.type_context = TypeExpressionContext.NONE;
   }
 
   /**
@@ -157,42 +165,181 @@ public final class JPRAChecker implements JPRACheckerType
   {
     NullCheck.notNull(decl);
 
-    final TypeDeclType<IdentifierType, TType> rv = decl.matchTypeDeclaration(
-      new TypeDeclMatcherType<IdentifierType, Untyped,
-        TypeDeclType<IdentifierType, TType>, JPRACompilerCheckerException>()
-      {
-        @Override public TypeDeclType<IdentifierType, TType> matchRecord(
-          final TypeDeclRecord<IdentifierType, Untyped> t)
-          throws JPRACompilerCheckerException
+    try {
+      final TypeDeclType<IdentifierType, TType> rv = decl.matchTypeDeclaration(
+        new TypeDeclMatcherType<IdentifierType, Untyped,
+          TypeDeclType<IdentifierType, TType>, JPRACompilerCheckerException>()
         {
-          return JPRAChecker.this.checkTypeDeclRecord(t);
-        }
+          @Override public TypeDeclType<IdentifierType, TType> matchRecord(
+            final TypeDeclRecord<IdentifierType, Untyped> t)
+            throws JPRACompilerCheckerException
+          {
+            return JPRAChecker.this.checkTypeDeclRecord(t);
+          }
 
-        @Override public TypeDeclType<IdentifierType, TType> matchPacked(
-          final TypeDeclPacked<IdentifierType, Untyped> t)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeDeclPacked(t);
-        }
-      });
+          @Override public TypeDeclType<IdentifierType, TType> matchPacked(
+            final TypeDeclPacked<IdentifierType, Untyped> t)
+            throws JPRACompilerCheckerException
+          {
+            return JPRAChecker.this.checkTypeDeclPacked(t);
+          }
+        });
 
-    final TType tt = rv.getType();
-    Assertive.require(tt instanceof TypeUserDefinedType);
-    this.context.putType((TypeUserDefinedType) tt);
-    return rv;
+      final TType tt = rv.getType();
+      Assertive.require(tt instanceof TypeUserDefinedType);
+      this.context.putType((TypeUserDefinedType) tt);
+      return rv;
+    } finally {
+      this.type_context = TypeExpressionContext.NONE;
+    }
   }
 
   private TypeDeclPacked<IdentifierType, TType> checkTypeDeclPacked(
     final TypeDeclPacked<IdentifierType, Untyped> t)
+    throws JPRACompilerCheckerException
   {
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    this.type_context = TypeExpressionContext.PACKED;
+
+    final ImmutableMap<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>>
+      orig_named = t.getFieldsByName();
+    final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+      fields_named = Maps.mutable.empty();
+    final ImmutableList<PackedFieldDeclType<IdentifierType, Untyped>>
+      orig_ordered = t.getFieldsInDeclarationOrder();
+    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
+      fields_ordered = Lists.mutable.empty();
+
+    final TPackedBuilderType b =
+      TPacked.newBuilder(this.package_ctx, t.getIdentifier(), t.getName());
+
+    for (int index = 0; index < orig_ordered.size(); ++index) {
+      orig_ordered.get(index).matchPackedFieldDeclaration(
+        new PackedFieldDeclMatcherType<IdentifierType, Untyped,
+          PackedFieldDeclType<IdentifierType, TType>,
+          JPRACompilerCheckerException>()
+        {
+          @Override
+          public PackedFieldDeclType<IdentifierType, TType> matchPaddingBits(
+            final PackedFieldDeclPaddingBits<IdentifierType, Untyped> r)
+            throws JPRACompilerCheckerException
+          {
+            return JPRAChecker.this.checkTypeDeclPackedFieldPaddingBits(
+              r, fields_ordered, b);
+          }
+
+          @Override
+          public PackedFieldDeclType<IdentifierType, TType> matchValue(
+            final PackedFieldDeclValue<IdentifierType, Untyped> r)
+            throws JPRACompilerCheckerException
+          {
+            return JPRAChecker.this.checkTypeDeclPackedFieldValue(
+              r, fields_ordered, fields_named, b);
+          }
+        });
+    }
+
+    Assertive.require(fields_ordered.size() == orig_ordered.size());
+    Assertive.require(fields_named.size() == orig_named.size());
+    fields_named.forEachKey(
+      k -> Assertive.require(orig_named.containsKey(k)));
+
+    final BigInteger sv = b.getCurrentSize().getValue();
+    final BigInteger b8 = BigInteger.valueOf(8L);
+    if (!sv.remainder(b8).equals(BigInteger.ZERO)) {
+      throw JPRACompilerCheckerException.packedSizeNotDivisible8(
+        t.getName(), sv);
+    }
+
+    final TPacked type = b.build();
+    Assertive.require(
+      type.getFieldsInDeclarationOrder().size() == orig_ordered.size());
+    Assertive.require(type.getFieldsByName().size() == orig_named.size());
+    type.getFieldsByName().forEachKey(
+      k -> Assertive.require(orig_named.containsKey(k)));
+
+    return new TypeDeclPacked<>(
+      t.getIdentifier(),
+      type,
+      fields_named.toImmutable(),
+      t.getName(),
+      fields_ordered.toImmutable());
+  }
+
+  private PackedFieldDeclType<IdentifierType, TType>
+  checkTypeDeclPackedFieldValue(
+    final PackedFieldDeclValue<IdentifierType, Untyped> r,
+    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
+      fields_ordered,
+    final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+      fields_named,
+    final TPackedBuilderType b)
+    throws JPRACompilerCheckerException
+  {
+    final PackedFieldDeclValue<IdentifierType, TType> rv =
+      this.checkPackedFieldValue(r);
+    final TypeExprType<IdentifierType, TType> rvt = rv.getType();
+
+    final TIntegerType rvti;
+    final TType rvtt = rvt.getType();
+    if (!(rvtt instanceof TIntegerType)) {
+      throw JPRACompilerCheckerException.packedNonIntegerType(r, rvt);
+    }
+    rvti = (TIntegerType) rvtt;
+
+    fields_ordered.add(rv);
+    fields_named.put(rv.getName(), rv);
+    b.addField(rv.getName(), rv.getIdentifier(), rvti);
+    return rv;
+  }
+
+  private PackedFieldDeclValue<IdentifierType, TType> checkPackedFieldValue(
+    final PackedFieldDeclValue<IdentifierType, Untyped> r)
+    throws JPRACompilerCheckerException
+  {
+    final TypeExprType<IdentifierType, TType> type =
+      this.checkTypeExpression(r.getType());
+    return new PackedFieldDeclValue<>(r.getIdentifier(), r.getName(), type);
+  }
+
+  private PackedFieldDeclType<IdentifierType, TType>
+  checkTypeDeclPackedFieldPaddingBits(
+    final PackedFieldDeclPaddingBits<IdentifierType, Untyped> r,
+    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
+      fields_ordered,
+    final TPackedBuilderType b)
+    throws JPRACompilerCheckerException
+  {
+    final PackedFieldDeclPaddingBits<IdentifierType, TType> rv =
+      this.checkPackedFieldPaddingBits(r);
+    final Size<SizeUnitBitsType> size =
+      this.evaluateSize(rv.getSizeExpression());
+
+    if (size.getValue().compareTo(BigInteger.ZERO) <= 0) {
+      throw JPRACompilerCheckerException.paddingSizeInvalid(
+        r.getLexicalInformation(), size.getValue());
+    }
+
+    fields_ordered.add(rv);
+    b.addPaddingBits(r.getLexicalInformation(), size);
+    return rv;
+  }
+
+  private PackedFieldDeclPaddingBits<IdentifierType, TType>
+  checkPackedFieldPaddingBits(
+    final PackedFieldDeclPaddingBits<IdentifierType, Untyped> r)
+    throws JPRACompilerCheckerException
+  {
+    final SizeExprType<IdentifierType, TType> size =
+      this.checkSizeExpr(r.getSizeExpression());
+    return new PackedFieldDeclPaddingBits<>(r.getLexicalInformation(), size);
   }
 
   private TypeDeclRecord<IdentifierType, TType> checkTypeDeclRecord(
     final TypeDeclRecord<IdentifierType, Untyped> t)
     throws JPRACompilerCheckerException
   {
+    this.type_context = TypeExpressionContext.RECORD;
+
     final ImmutableMap<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>>
       orig_named = t.getFieldsByName();
     final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
@@ -628,13 +775,12 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkSizeExpr(e.getSize());
     final Size<SizeUnitBitsType> size = this.evaluateSize(se);
 
-    if (this.caps.isRecordIntegerSizeBitsSupported(size.getValue())) {
-      final TType type = new TIntegerUnsigned(e.getLexicalInformation(), size);
-      return new TypeExprIntegerUnsigned<>(type, e.getLexicalInformation(), se);
-    }
+    final TType type = new TIntegerUnsigned(e.getLexicalInformation(), size);
+    final TypeExprIntegerUnsigned<IdentifierType, TType> rv =
+      new TypeExprIntegerUnsigned<>(type, e.getLexicalInformation(), se);
 
-    throw JPRACompilerCheckerException.integerSizeNotSupported(
-      e, size, this.caps.getRecordIntegerSizeBitsSupported());
+    this.checkTypeExprIntegerSize(e, size);
+    return rv;
   }
 
   private TypeExprIntegerSignedNormalized<IdentifierType, TType>
@@ -646,15 +792,14 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkSizeExpr(e.getSize());
     final Size<SizeUnitBitsType> size = this.evaluateSize(se);
 
-    if (this.caps.isRecordIntegerSizeBitsSupported(size.getValue())) {
-      final TType type =
-        new TIntegerSignedNormalized(e.getLexicalInformation(), size);
-      return new TypeExprIntegerSignedNormalized<>(
+    final TType type =
+      new TIntegerSignedNormalized(e.getLexicalInformation(), size);
+    final TypeExprIntegerSignedNormalized<IdentifierType, TType> rv =
+      new TypeExprIntegerSignedNormalized<>(
         type, e.getLexicalInformation(), se);
-    }
 
-    throw JPRACompilerCheckerException.integerSizeNotSupported(
-      e, size, this.caps.getRecordIntegerSizeBitsSupported());
+    this.checkTypeExprIntegerSize(e, size);
+    return rv;
   }
 
   private TypeExprIntegerUnsignedNormalized<IdentifierType, TType>
@@ -666,15 +811,40 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkSizeExpr(e.getSize());
     final Size<SizeUnitBitsType> size = this.evaluateSize(se);
 
-    if (this.caps.isRecordIntegerSizeBitsSupported(size.getValue())) {
-      final TType type =
-        new TIntegerUnsignedNormalized(e.getLexicalInformation(), size);
-      return new TypeExprIntegerUnsignedNormalized<>(
+    final TType type =
+      new TIntegerUnsignedNormalized(e.getLexicalInformation(), size);
+    final TypeExprIntegerUnsignedNormalized<IdentifierType, TType> rv =
+      new TypeExprIntegerUnsignedNormalized<>(
         type, e.getLexicalInformation(), se);
-    }
 
-    throw JPRACompilerCheckerException.integerSizeNotSupported(
-      e, size, this.caps.getRecordIntegerSizeBitsSupported());
+    this.checkTypeExprIntegerSize(e, size);
+    return rv;
+  }
+
+  private void checkTypeExprIntegerSize(
+    final TypeExprType<IdentifierType, Untyped> e,
+    final Size<SizeUnitBitsType> size)
+    throws JPRACompilerCheckerException
+  {
+    switch (this.type_context) {
+      case NONE: {
+        break;
+      }
+      case PACKED: {
+        if (!this.caps.isPackedIntegerSizeBitsSupported(size.getValue())) {
+          throw JPRACompilerCheckerException.integerSizeNotSupported(
+            e, size, this.caps.getPackedIntegerSizeBitsSupported());
+        }
+        break;
+      }
+      case RECORD: {
+        if (!this.caps.isRecordIntegerSizeBitsSupported(size.getValue())) {
+          throw JPRACompilerCheckerException.integerSizeNotSupported(
+            e, size, this.caps.getRecordIntegerSizeBitsSupported());
+        }
+        break;
+      }
+    }
   }
 
   private TypeExprIntegerSigned<IdentifierType, TType>
@@ -686,13 +856,13 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkSizeExpr(e.getSize());
     final Size<SizeUnitBitsType> size = this.evaluateSize(se);
 
-    if (this.caps.isRecordIntegerSizeBitsSupported(size.getValue())) {
-      final TType type = new TIntegerSigned(e.getLexicalInformation(), size);
-      return new TypeExprIntegerSigned<>(type, e.getLexicalInformation(), se);
-    }
+    final TType type = new TIntegerSigned(e.getLexicalInformation(), size);
+    final TypeExprIntegerSigned<IdentifierType, TType> rv =
+      new TypeExprIntegerSigned<>(
+        type, e.getLexicalInformation(), se);
 
-    throw JPRACompilerCheckerException.integerSizeNotSupported(
-      e, size, this.caps.getRecordIntegerSizeBitsSupported());
+    this.checkTypeExprIntegerSize(e, size);
+    return rv;
   }
 
   private <T extends SizeUnitType> Size<T> evaluateSize(
@@ -775,6 +945,13 @@ public final class JPRAChecker implements JPRACheckerType
     final SizeExprConstant<IdentifierType, Untyped> s)
   {
     return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
+  }
+
+  private enum TypeExpressionContext
+  {
+    NONE,
+    RECORD,
+    PACKED
   }
 
   private static final class PackageContext implements PackageContextType

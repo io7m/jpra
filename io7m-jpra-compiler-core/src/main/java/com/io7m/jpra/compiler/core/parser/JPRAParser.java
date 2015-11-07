@@ -42,9 +42,13 @@ import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.statements.StatementPackageImport;
 import com.io7m.jpra.model.statements.StatementType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclPaddingBits;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.TypeDeclPacked;
 import com.io7m.jpra.model.type_declarations.TypeDeclRecord;
 import com.io7m.jpra.model.type_expressions.TypeExprArray;
 import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
@@ -94,11 +98,13 @@ public final class JPRAParser implements JPRAParserType
   private static final Set<String> INTEGER_TYPES;
   private static final Set<String> SIZE_FUNCTIONS;
   private static final Set<String> RECORD_FIELD_KEYWORDS;
+  private static final Set<String> PACKED_FIELD_KEYWORDS;
 
   private static final String PACKAGE_BEGIN = "package-begin";
   private static final String PACKAGE_END   = "package-end";
   private static final String IMPORT        = "import";
   private static final String RECORD        = "record";
+  private static final String PACKED        = "packed";
   private static final String COMMAND_TYPE  = ":type";
   private static final String COMMAND_SIZE  = ":size";
 
@@ -121,6 +127,7 @@ public final class JPRAParser implements JPRAParserType
 
   private static final String FIELD          = "field";
   private static final String PADDING_OCTETS = "padding-octets";
+  private static final String PADDING_BITS   = "padding-bits";
 
   static {
     KEYWORDS = new HashSet<>(16);
@@ -128,12 +135,17 @@ public final class JPRAParser implements JPRAParserType
     JPRAParser.KEYWORDS.add(JPRAParser.PACKAGE_END);
     JPRAParser.KEYWORDS.add(JPRAParser.IMPORT);
     JPRAParser.KEYWORDS.add(JPRAParser.RECORD);
+    JPRAParser.KEYWORDS.add(JPRAParser.PACKED);
     JPRAParser.KEYWORDS.add(JPRAParser.COMMAND_TYPE);
     JPRAParser.KEYWORDS.add(JPRAParser.COMMAND_SIZE);
 
     RECORD_FIELD_KEYWORDS = new HashSet<>(16);
     JPRAParser.RECORD_FIELD_KEYWORDS.add(JPRAParser.FIELD);
     JPRAParser.RECORD_FIELD_KEYWORDS.add(JPRAParser.PADDING_OCTETS);
+
+    PACKED_FIELD_KEYWORDS = new HashSet<>(16);
+    JPRAParser.PACKED_FIELD_KEYWORDS.add(JPRAParser.FIELD);
+    JPRAParser.PACKED_FIELD_KEYWORDS.add(JPRAParser.PADDING_BITS);
 
     TYPES = new HashSet<>(16);
     JPRAParser.TYPES.add(JPRAParser.INTEGER);
@@ -448,6 +460,23 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
+  private static void checkPackedFieldKeyword(final SExpressionSymbolType se)
+    throws JPRACompilerParseException
+  {
+    if (!JPRAParser.PACKED_FIELD_KEYWORDS.contains(se.getText())) {
+      final StringBuilder sb = new StringBuilder(256);
+      sb.append("Unrecognized packed field keyword '");
+      sb.append(se.getText());
+      sb.append("'");
+      sb.append(System.lineSeparator());
+      sb.append("Expected one of: ");
+      sb.append(JPRAParser.PACKED_FIELD_KEYWORDS);
+      sb.append(System.lineSeparator());
+      throw JPRACompilerParseException.unrecognizedPackedFieldKeyword(
+        se, sb.toString());
+    }
+  }
+
   private static FieldName parseFieldName(final SExpressionSymbolType name)
     throws JPRACompilerParseException
   {
@@ -528,6 +557,8 @@ public final class JPRAParser implements JPRAParserType
         return this.parsePackageImport(le, se);
       case JPRAParser.RECORD:
         return this.parseRecord(le, se);
+      case JPRAParser.PACKED:
+        return this.parsePacked(le, se);
       case JPRAParser.COMMAND_SIZE:
         return this.parseCommandSize(le, se);
       case JPRAParser.COMMAND_TYPE:
@@ -588,6 +619,166 @@ public final class JPRAParser implements JPRAParserType
       throw new UnreachableCodeException(e);
     }
   }
+
+  private StatementType<Unresolved, Untyped> parsePacked(
+    final SExpressionListType le,
+    final SExpressionSymbolType se)
+    throws JPRACompilerParseException
+  {
+    Assertive.require(JPRAParser.PACKED.equals(se.getText()));
+
+    if (le.size() == 3) {
+      final SExpressionType n_expr = le.get(1);
+      final SExpressionType f_expr = le.get(2);
+
+      if (n_expr instanceof SExpressionSymbolType
+          && f_expr instanceof SExpressionListType) {
+
+        final TypeName t_name =
+          JPRAParser.parseTypeName((SExpressionSymbolType) n_expr);
+        final SExpressionListType fl_expr = (SExpressionListType) f_expr;
+
+        final MutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+          fields_by_name = Maps.mutable.empty();
+        final MutableList<PackedFieldDeclType<Unresolved, Untyped>>
+          fields_ordered = Lists.mutable.empty();
+
+        this.parsePackedFields(fl_expr, fields_by_name, fields_ordered);
+
+        return new TypeDeclPacked<>(
+          Unresolved.get(),
+          Untyped.get(),
+          fields_by_name.toImmutable(),
+          t_name,
+          fields_ordered.toImmutable());
+      }
+    }
+
+    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+      this.serial.serialize(le, bao);
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append("Syntax error.");
+      sb.append(System.lineSeparator());
+      sb.append("Expected: (packed <type-name> (<field> ... <field>))");
+      sb.append(System.lineSeparator());
+      sb.append("Got: ");
+      sb.append(bao.toString(StandardCharsets.UTF_8.name()));
+      throw JPRACompilerParseException.syntaxError(le, sb.toString());
+    } catch (final IOException e) {
+      throw new UnreachableCodeException(e);
+    }
+  }
+
+
+  private void parsePackedFields(
+    final SExpressionListType fields,
+    final MutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+      fields_named,
+    final MutableList<PackedFieldDeclType<Unresolved, Untyped>> fields_order)
+    throws JPRACompilerParseException
+  {
+    for (int index = 0; index < fields.size(); ++index) {
+      final SExpressionListType l_expr =
+        JPRAParser.requireList(fields.get(index));
+      if (l_expr.isEmpty()) {
+        throw JPRACompilerParseException.expectedNonEmptyList(l_expr);
+      }
+
+      final SExpressionSymbolType k = JPRAParser.requireSymbol(l_expr.get(0));
+      JPRAParser.checkPackedFieldKeyword(k);
+
+      final int e_count = l_expr.size();
+      switch (k.getText()) {
+        case JPRAParser.FIELD: {
+          final PackedFieldDeclValue<Unresolved, Untyped> f =
+            this.parsePackedFieldValue(l_expr, e_count);
+
+          final FieldName f_name = f.getName();
+          if (fields_named.containsKey(f_name)) {
+            final StringBuilder sb = new StringBuilder(128);
+            sb.append("Duplicate field name.");
+            sb.append(System.lineSeparator());
+            sb.append("Name: ");
+            sb.append(f_name.getValue());
+            throw JPRACompilerParseException.duplicateFieldName(
+              k, sb.toString());
+          }
+
+          fields_named.put(f_name, f);
+          fields_order.add(f);
+          continue;
+        }
+        case JPRAParser.PADDING_BITS: {
+          final PackedFieldDeclPaddingBits<Unresolved, Untyped> f =
+            this.parsePackedPaddingBits(l_expr, e_count);
+
+          fields_order.add(f);
+          continue;
+        }
+      }
+
+      throw new UnreachableCodeException();
+    }
+  }
+
+  private PackedFieldDeclPaddingBits<Unresolved, Untyped>
+  parsePackedPaddingBits(
+    final SExpressionListType l_expr,
+    final int e_count)
+    throws JPRACompilerParseException
+  {
+    if (e_count == 2) {
+      final SizeExprType<Unresolved, Untyped> s =
+        this.parseSizeExpression(l_expr.get(1));
+      return new PackedFieldDeclPaddingBits<>(
+        JPRAParser.getExpressionLexical(l_expr), s);
+    }
+
+    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+      this.serial.serialize(l_expr, bao);
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append("Syntax error.");
+      sb.append(System.lineSeparator());
+      sb.append("Expected: (padding-bits <size-expression>)");
+      sb.append(System.lineSeparator());
+      sb.append("Got: ");
+      sb.append(bao.toString(StandardCharsets.UTF_8.name()));
+      throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
+    } catch (final IOException x) {
+      throw new UnreachableCodeException(x);
+    }
+  }
+
+  private PackedFieldDeclValue<Unresolved, Untyped> parsePackedFieldValue(
+    final SExpressionListType l_expr,
+    final int e_count)
+    throws JPRACompilerParseException
+  {
+    if (e_count == 3 && l_expr.get(1) instanceof SExpressionSymbolType) {
+      final SExpressionSymbolType f_name =
+        (SExpressionSymbolType) l_expr.get(1);
+      final FieldName name = JPRAParser.parseFieldName(f_name);
+      final TypeExprType<Unresolved, Untyped> te =
+        this.parseTypeExpression(l_expr.get(2));
+      return new PackedFieldDeclValue<>(Unresolved.get(), name, te);
+    }
+
+    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+      this.serial.serialize(l_expr, bao);
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append("Syntax error.");
+      sb.append(System.lineSeparator());
+      sb.append("Expected: (field <field-name> <type-expression>)");
+      sb.append(System.lineSeparator());
+      sb.append("Got: ");
+      sb.append(bao.toString(StandardCharsets.UTF_8.name()));
+      throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
+    } catch (final IOException x) {
+      throw new UnreachableCodeException(x);
+    }
+  }
+
+
 
   private StatementType<Unresolved, Untyped> parseRecord(
     final SExpressionListType le,

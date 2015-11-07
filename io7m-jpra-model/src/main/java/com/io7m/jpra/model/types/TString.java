@@ -80,4 +80,15 @@ import java.util.Optional;
   {
     return this.lex;
   }
+
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[string ");
+    sb.append(this.size.getValue());
+    sb.append(" \"");
+    sb.append(this.encoding);
+    sb.append("\"");
+    sb.append("]");
+    return sb.toString();
+  }
 }

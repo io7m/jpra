@@ -131,8 +131,8 @@ public enum JPRAParseErrorCode
   BAD_TYPE_REFERENCE,
 
   /**
-   * Expected a scalar type expression, but got something else.
+   * An unrecognized packed field keyword was specified.
    */
 
-  EXPECTED_SCALAR_TYPE_EXPRESSION,
+  UNRECOGNIZED_PACKED_FIELD_KEYWORD
 }

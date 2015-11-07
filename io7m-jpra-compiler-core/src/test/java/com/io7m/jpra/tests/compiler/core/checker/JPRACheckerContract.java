@@ -31,8 +31,11 @@ import com.io7m.jpra.model.contexts.GlobalContexts;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.TypeDeclPacked;
 import com.io7m.jpra.model.type_declarations.TypeDeclRecord;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.type_expressions.TypeExprArray;
@@ -55,6 +58,7 @@ import com.io7m.jpra.model.types.TIntegerSignedNormalized;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
 import com.io7m.jpra.model.types.TMatrix;
+import com.io7m.jpra.model.types.TPacked;
 import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TType;
@@ -84,27 +88,7 @@ import java.math.BigInteger;
   protected abstract SExpressionType newStringSExpr(
     final String expr);
 
-  @Test public final void testRecordTypeExprIntegerSignedSizeUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(integer signed 128)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
-  @Test public final void testRecordTypeExprIntegerSignedSizeSupported()
+  @Test public final void testTypeExprIntegerSignedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -124,29 +108,7 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
   }
 
-  @Test
-  public final void testRecordTypeExprIntegerSignedNormalizedSizeUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(integer signed-normalized 128)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
-  @Test
-  public final void testRecordTypeExprIntegerSignedNormalizedSizeSupported()
+  @Test public final void testTypeExprIntegerSignedNormalizedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -167,27 +129,7 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
   }
 
-  @Test public final void testRecordTypeExprIntegerUnsignedSizeUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(integer unsigned 128)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
-  @Test public final void testRecordTypeExprIntegerUnsignedSizeSupported()
+  @Test public final void testTypeExprIntegerUnsignedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -207,29 +149,7 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
   }
 
-  @Test
-  public final void testRecordTypeExprIntegerUnsignedNormalizedSizeUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(integer unsigned-normalized 128)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
-  @Test
-  public final void testRecordTypeExprIntegerUnsignedNormalizedSizeSupported()
+  @Test public final void testTypeExprIntegerUnsignedNormalizedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -818,5 +738,367 @@ import java.math.BigInteger;
 
     Assert.assertEquals(td.getIdentifier(), te.getIdentifier());
     Assert.assertEquals(td.getName(), te.getReference().getType());
+  }
+
+  private void checkPackedInvariants(
+    final TypeDeclPacked<IdentifierType, TType> tr,
+    final TPacked tt)
+  {
+    Assert.assertEquals(tr.getName(), tt.getName());
+    Assert.assertEquals(tr.getIdentifier(), tt.getIdentifier());
+
+    final ImmutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+      tr_named = tr.getFieldsByName();
+    final ImmutableMap<FieldName, TPacked.FieldValue> tt_named =
+      tt.getFieldsByName();
+    final ImmutableList<PackedFieldDeclType<IdentifierType, TType>> tr_order =
+      tr.getFieldsInDeclarationOrder();
+    final ImmutableList<TPacked.FieldType> tt_order =
+      tt.getFieldsInDeclarationOrder();
+
+    Assert.assertEquals((long) tt_named.size(), (long) tr_named.size());
+    Assert.assertEquals((long) tt_order.size(), (long) tr_order.size());
+
+    for (int index = 0; index < tt_order.size(); ++index) {
+      final TPacked.FieldType f = tt_order.get(index);
+      Assert.assertEquals(f.getOwner(), tt);
+    }
+
+    tt_named.forEachKey(
+      k -> Assert.assertTrue("Map contains " + k, tr_named.containsKey(k)));
+  }
+
+  @Test public final void testTypeDeclPackedField_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    final TypeDeclType<IdentifierType, TType> td = ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(packed T [(field x [integer signed 32])])"))));
+
+    final TypeDeclPacked<IdentifierType, TType> tr =
+      TypeDeclPacked.class.cast(td);
+
+    final TPacked tt = TPacked.class.cast(tr.getType());
+    this.checkPackedInvariants(tr, tt);
+  }
+
+  @Test public final void testTypeDeclPackedPadding_0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    final TypeDeclType<IdentifierType, TType> td = ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(packed T [(padding-bits 8)])"))));
+
+    final TypeDeclPacked<IdentifierType, TType> tr =
+      TypeDeclPacked.class.cast(td);
+
+    final TPacked tt = TPacked.class.cast(tr.getType());
+    this.checkPackedInvariants(tr, tt);
+
+    final TPacked.FieldPaddingBits f = TPacked.FieldPaddingBits.class.cast(
+      tt.getFieldsInDeclarationOrder().get(0));
+    Assert.assertEquals(BigInteger.valueOf(8L), f.getSize().getValue());
+  }
+
+  @Test public final void testTypeDeclPackedPaddingBits_Error0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.PADDING_SIZE_INVALID));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(packed T [(padding-bits 0)])"))));
+  }
+
+  @Test public final void testTypeDeclPackedField_Error0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.PACKED_NON_INTEGER));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(packed T [(field x [boolean-set 1 (x)])])"))));
+  }
+
+  @Test public final void testTypeDeclPackedSize_Error0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.PACKED_SIZE_NOT_DIVISIBLE_8));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(packed T [(field x [integer signed 4])])"))));
+  }
+
+  @Test public final void testRecordTypeExprIntegerSignedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(record T [(field x [integer signed 128])])"))));
+  }
+
+  @Test public final void testRecordTypeExprIntegerUnsignedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(record T [(field x [integer unsigned 128])])"))));
+  }
+
+  @Test
+  public final void testRecordTypeExprIntegerUnsignedNormalizedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(record T [(field x [integer unsigned-normalized 128])])"))));
+  }
+
+  @Test
+  public final void testRecordTypeExprIntegerSignedNormalizedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(record T [(field x [integer signed-normalized 128])])"))));
+  }
+
+  @Test public final void testPackedTypeExprIntegerSignedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(packed T [(field x [integer signed 128])])"))));
+  }
+
+  @Test public final void testPackedTypeExprIntegerUnsignedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(packed T [(field x [integer unsigned 128])])"))));
+  }
+
+  @Test
+  public final void testPackedTypeExprIntegerUnsignedNormalizedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(packed T [(field x [integer unsigned-normalized 128])])"))));
+  }
+
+  @Test
+  public final void testPackedTypeExprIntegerSignedNormalizedSizeUnsupported()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+    final JPRACheckerType ch = this.newChecker(
+      c, JPRACheckerStandardCapabilities.newCapabilities());
+
+    ch.checkPackageBegin(
+      r.resolvePackageBegin(
+        (StatementPackageBegin<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr("(package-begin x.y)"))));
+
+    this.expected.expect(
+      new JPRACompilerCheckerExceptionMatcher(
+        JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED));
+    ch.checkTypeDeclaration(
+      r.resolveTypeDeclaration(
+        (TypeDeclType<Unresolved, Untyped>) p.parseStatement(
+          this.newStringSExpr(
+            "(packed T [(field x [integer signed-normalized 128])])"))));
   }
 }

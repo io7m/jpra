@@ -92,4 +92,14 @@ import java.util.Optional;
   {
     return this.lex;
   }
+
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[vector ");
+    sb.append(this.size.getValue());
+    sb.append(" ");
+    sb.append(this.type);
+    sb.append("]");
+    return sb.toString();
+  }
 }

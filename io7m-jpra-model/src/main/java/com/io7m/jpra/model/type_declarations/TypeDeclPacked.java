@@ -33,7 +33,7 @@ import java.util.Optional;
 /**
  * A {@code packed} type declaration.
  *
- *     @param <I> The type of identifiers
+ * @param <I> The type of identifiers
  * @param <T> The type of type information
  */
 
@@ -79,7 +79,9 @@ import java.util.Optional;
       (Procedure<PackedFieldDeclType<I, T>>) r -> {
         final Optional<FieldName> r_name = PackedFieldDecl.name(r);
         if (r_name.isPresent()) {
-          Assertive.require(this.fields_name.containsKey(r_name.get()));
+          final FieldName rn = r_name.get();
+          Assertive.require(
+            this.fields_name.containsKey(rn), "Fields must contain %s", rn);
         }
       });
   }
@@ -126,5 +128,14 @@ import java.util.Optional;
   public ImmutableList<PackedFieldDeclType<I, T>> getFieldsInDeclarationOrder()
   {
     return this.fields_order;
+  }
+
+  /**
+   * @return The fields by name
+   */
+
+  public ImmutableMap<FieldName, PackedFieldDeclValue<I, T>> getFieldsByName()
+  {
+    return this.fields_name;
   }
 }

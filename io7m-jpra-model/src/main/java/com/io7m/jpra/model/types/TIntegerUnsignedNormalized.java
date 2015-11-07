@@ -78,4 +78,12 @@ import java.util.Optional;
   {
     return this.lex;
   }
+
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[integer unsigned-normalized ");
+    sb.append(this.size.getValue());
+    sb.append("]");
+    return sb.toString();
+  }
 }

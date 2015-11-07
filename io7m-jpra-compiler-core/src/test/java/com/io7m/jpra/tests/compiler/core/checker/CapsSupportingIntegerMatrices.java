@@ -26,8 +26,7 @@ import com.io7m.jranges.RangeInclusiveB;
 
 import java.math.BigInteger;
 
-final class CapsSupportingIntegerMatrices
-  implements JPRACheckerCapabilitiesType
+final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
 {
   private final JPRACheckerCapabilitiesType delegate;
 
@@ -37,10 +36,21 @@ final class CapsSupportingIntegerMatrices
     this.delegate = NullCheck.notNull(in_delegate);
   }
 
-  @Override
-  public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
+  @Override public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
   {
     return this.delegate.getMatrixFloatSizeSupported();
+  }
+
+  @Override
+  public ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
+  {
+    return this.delegate.getPackedIntegerSizeBitsSupported();
+  }
+
+  @Override
+  public boolean isPackedIntegerSizeBitsSupported(final BigInteger size)
+  {
+    return this.delegate.isPackedIntegerSizeBitsSupported(size);
   }
 
   @Override
@@ -75,8 +85,7 @@ final class CapsSupportingIntegerMatrices
     return this.delegate.getStringEncodingsSupported();
   }
 
-  @Override
-  public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
+  @Override public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
   {
     return this.delegate.getVectorFloatSizeSupported();
   }
@@ -109,8 +118,7 @@ final class CapsSupportingIntegerMatrices
     return this.delegate.isMatrixSizeElementsSupported(width, height);
   }
 
-  @Override
-  public boolean isRecordFloatSizeBitsSupported(final BigInteger size)
+  @Override public boolean isRecordFloatSizeBitsSupported(final BigInteger size)
   {
     return this.delegate.isRecordFloatSizeBitsSupported(size);
   }
@@ -136,8 +144,7 @@ final class CapsSupportingIntegerMatrices
     return this.delegate.isVectorIntegerSizeSupported(size);
   }
 
-  @Override
-  public boolean isVectorSizeElementsSupported(final BigInteger size)
+  @Override public boolean isVectorSizeElementsSupported(final BigInteger size)
   {
     return this.delegate.isVectorSizeElementsSupported(size);
   }

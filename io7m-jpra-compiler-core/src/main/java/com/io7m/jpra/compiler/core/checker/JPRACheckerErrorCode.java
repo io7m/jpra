@@ -106,6 +106,19 @@ public enum JPRACheckerErrorCode
   PADDING_SIZE_INVALID,
 
   /**
+   * A non-{@code integer} type was specified as a field of a {@code packed}
+   * type.
+   */
+
+  PACKED_NON_INTEGER,
+
+  /**
+   * The size of a {@code packed} type is not divisible by {@code 8}.
+   */
+
+  PACKED_SIZE_NOT_DIVISIBLE_8,
+
+  /**
    * The specified {@code integer} size is not supported when being used as a
    * record field.
    */

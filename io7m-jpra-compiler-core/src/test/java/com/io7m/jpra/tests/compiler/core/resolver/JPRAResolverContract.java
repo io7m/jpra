@@ -224,7 +224,7 @@ import java.math.BigInteger;
         p.parseStatement(this.newStringSExpr("(import x.a as q)"))));
   }
 
-  @Test public final void testTypeDeclNoCurrent()
+  @Test public final void testTypeDeclRecordNoCurrent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -240,7 +240,7 @@ import java.math.BigInteger;
         p.parseStatement(this.newStringSExpr("(record T ())"))));
   }
 
-  @Test public final void testTypeDeclNonexistentPackage0()
+  @Test public final void testTypeDeclRecordNonexistentPackage0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -261,7 +261,7 @@ import java.math.BigInteger;
           this.newStringSExpr("(record T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclNonexistentPackageType0()
+  @Test public final void testTypeDeclRecordNonexistentPackageType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -285,7 +285,7 @@ import java.math.BigInteger;
           this.newStringSExpr("(record T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclNonexistentLocalType0()
+  @Test public final void testTypeDeclRecordNonexistentLocalType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -306,7 +306,7 @@ import java.math.BigInteger;
           this.newStringSExpr("(record T [(field x U)])"))));
   }
 
-  @Test public final void testTypeDeclNonexistentLocalType1()
+  @Test public final void testTypeDeclRecordNonexistentLocalType1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -327,7 +327,7 @@ import java.math.BigInteger;
           this.newStringSExpr("(record T [(field x T)])"))));
   }
 
-  @Test public final void testTypeDeclDuplicateType0()
+  @Test public final void testTypeDeclRecordDuplicateType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -578,6 +578,134 @@ import java.math.BigInteger;
       ee.getElementCount(), BigInteger.valueOf(64L));
   }
 
+  @Test public final void testTypeDeclPackedNoCurrent()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.NO_CURRENT_PACKAGE));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(this.newStringSExpr("(packed T ())"))));
+  }
+
+  @Test public final void testTypeDeclPackedNonexistentPackage0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x p:T)])"))));
+  }
+
+  @Test public final void testTypeDeclPackedNonexistentPackageType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+    r.resolvePackageImport(
+      StatementPackageImport.class.cast(
+        p.parseStatement(this.newStringSExpr("(import x.y as p)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x p:T)])"))));
+  }
+
+  @Test public final void testTypeDeclPackedNonexistentLocalType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x U)])"))));
+  }
+
+  @Test public final void testTypeDeclPackedNonexistentLocalType1()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_NONEXISTENT));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x T)])"))));
+  }
+
+  @Test public final void testTypeDeclPackedDuplicateType0()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final JPRAResolverType r = this.newResolver(c);
+
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x [integer signed 32])])"))));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.TYPE_DUPLICATE));
+    r.resolveTypeDeclaration(
+      TypeDeclType.class.cast(
+        p.parseStatement(
+          this.newStringSExpr("(packed T [(field x [integer signed 32])])"))));
+  }
+
   private static final class NoPackagesLoader implements JPRAPackageLoaderType
   {
     @Override public PackageContextType evaluate(
@@ -592,4 +720,5 @@ import java.math.BigInteger;
           "No such package"));
     }
   }
+
 }

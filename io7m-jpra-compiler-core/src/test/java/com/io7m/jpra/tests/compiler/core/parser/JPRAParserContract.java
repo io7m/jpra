@@ -35,9 +35,13 @@ import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.statements.StatementPackageImport;
 import com.io7m.jpra.model.statements.StatementType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclPaddingBits;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclType;
+import com.io7m.jpra.model.type_declarations.PackedFieldDeclValue;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclPaddingOctets;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclType;
 import com.io7m.jpra.model.type_declarations.RecordFieldDeclValue;
+import com.io7m.jpra.model.type_declarations.TypeDeclPacked;
 import com.io7m.jpra.model.type_declarations.TypeDeclRecord;
 import com.io7m.jpra.model.type_expressions.TypeExprArray;
 import com.io7m.jpra.model.type_expressions.TypeExprBooleanSet;
@@ -1255,5 +1259,224 @@ import java.util.Optional;
     final TypeReference ref = tn.getReference();
     Assert.assertEquals(new TypeName(Optional.empty(), "T"), ref.getType());
     Assert.assertEquals(Optional.empty(), ref.getPackage());
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  @Test public final void testPacked_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error2()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-2.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_TYPE_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-3.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error4()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-4.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.UNRECOGNIZED_PACKED_FIELD_KEYWORD));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error5()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-5.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_Error6()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-invalid-6.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.DUPLICATE_FIELD_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackedPaddingBits_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr(
+      "t-packed-padding-bits-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPacked_OK0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
+    final TypeDeclPacked<Unresolved, Untyped> d = TypeDeclPacked.class.cast(s);
+
+    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> field_order =
+      d.getFieldsInDeclarationOrder();
+    final ImmutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+      field_names = d.getFieldsByName();
+
+    Assert.assertEquals(1L, (long) field_order.size());
+    Assert.assertEquals(1L, (long) field_names.size());
+
+    final FieldName f_name = new FieldName(Optional.empty(), "f0");
+    final PackedFieldDeclValue<Unresolved, Untyped> f0 =
+      field_names.get(f_name);
+    final PackedFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
+    Assert.assertSame(f0, f1);
+
+    Assert.assertEquals(f_name, f0.getName());
+  }
+
+  @Test public final void testPacked_OK1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
+    final TypeDeclPacked<Unresolved, Untyped> d = TypeDeclPacked.class.cast(s);
+
+    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> field_order =
+      d.getFieldsInDeclarationOrder();
+    final ImmutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+      field_names = d.getFieldsByName();
+
+    Assert.assertEquals(1L, (long) field_order.size());
+    Assert.assertEquals(0L, (long) field_names.size());
+
+    final PackedFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
+    final PackedFieldDeclPaddingBits<Unresolved, Untyped> fp =
+      PackedFieldDeclPaddingBits.class.cast(f1);
+
+    final SizeExprConstant<?, ?> size =
+      SizeExprConstant.class.cast(fp.getSizeExpression());
+    Assert.assertEquals(BigInteger.valueOf(4L), size.getValue());
+  }
+
+
+
+
+
+
+  @Test public final void testPackedField_Error0()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-0.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.SYNTAX_ERROR));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackedField_Error1()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-1.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_FIELD_NAME));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackedField_Error3()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-3.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.BAD_TYPE_REFERENCE));
+    p.parseStatement(e);
+  }
+
+  @Test public final void testPackedField_Error6()
+    throws Exception
+  {
+    final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-6.jpr");
+    final JPRAParserType p = this.newParser();
+
+    this.expected.expect(
+      new JPRACompilerParseExceptionMatcher(
+        JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING));
+    p.parseStatement(e);
   }
 }

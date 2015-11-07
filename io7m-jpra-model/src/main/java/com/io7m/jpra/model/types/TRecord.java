@@ -45,17 +45,7 @@ public final class TRecord implements TType, TypeUserDefinedType
   private final PackageContextType                  package_ctx;
   private final IdentifierType                      identifier;
 
-  /**
-   * Construct a record type.
-   *
-   * @param in_package         The package context
-   * @param in_identifier      The identifier
-   * @param in_ident           The name
-   * @param in_fields_by_name  The fields by name
-   * @param in_fields_by_order The fields in declaration order
-   */
-
-  public TRecord(
+  TRecord(
     final PackageContextType in_package,
     final IdentifierType in_identifier,
     final TypeName in_ident,
@@ -159,6 +149,18 @@ public final class TRecord implements TType, TypeUserDefinedType
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
+  }
+
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[record ");
+    sb.append(this.name);
+    sb.append(" (");
+    for (final FieldType o : this.fields_by_order) {
+      sb.append(o);
+    }
+    sb.append(")]");
+    return sb.toString();
   }
 
   /**
@@ -296,6 +298,16 @@ public final class TRecord implements TType, TypeUserDefinedType
     {
       return this.name.getLexicalInformation();
     }
+
+    @Override public String toString()
+    {
+      final StringBuilder sb = new StringBuilder("[field ");
+      sb.append(this.name);
+      sb.append(" ");
+      sb.append(this.type);
+      sb.append("]");
+      return sb.toString();
+    }
   }
 
   /**
@@ -306,20 +318,22 @@ public final class TRecord implements TType, TypeUserDefinedType
   {
     private final     Size<SizeUnitBitsType>                       size_bits;
     private final     Optional<ImmutableLexicalPositionType<Path>> lex;
+    private final     Size<SizeUnitOctetsType>                     size_octets;
     private @Nullable TRecord                                      owner;
 
     /**
      * Construct a field.
      *
      * @param in_size_octets The size in octets
-     * @param in_lex       Lexical information
+     * @param in_lex         Lexical information
      */
 
     FieldPaddingOctets(
       final Size<SizeUnitOctetsType> in_size_octets,
       final Optional<ImmutableLexicalPositionType<Path>> in_lex)
     {
-      this.size_bits = Size.toBits(NullCheck.notNull(in_size_octets));
+      this.size_octets = NullCheck.notNull(in_size_octets);
+      this.size_bits = Size.toBits(this.size_octets);
       this.lex = NullCheck.notNull(in_lex);
     }
 
@@ -354,6 +368,14 @@ public final class TRecord implements TType, TypeUserDefinedType
     public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
     {
       return this.lex;
+    }
+
+    @Override public String toString()
+    {
+      final StringBuilder sb = new StringBuilder("[padding-octets ");
+      sb.append(this.size_octets.getValue());
+      sb.append("]");
+      return sb.toString();
     }
   }
 }

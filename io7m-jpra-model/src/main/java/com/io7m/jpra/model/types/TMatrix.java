@@ -108,4 +108,16 @@ import java.util.Optional;
   {
     return this.lex;
   }
+
+  @Override public String toString()
+  {
+    final StringBuilder sb = new StringBuilder("[matrix ");
+    sb.append(this.type);
+    sb.append(" ");
+    sb.append(this.size_width.getValue());
+    sb.append(" ");
+    sb.append(this.size_height.getValue());
+    sb.append("]");
+    return sb.toString();
+  }
 }
