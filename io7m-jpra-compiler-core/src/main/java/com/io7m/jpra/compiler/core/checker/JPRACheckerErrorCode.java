@@ -113,10 +113,10 @@ public enum JPRACheckerErrorCode
   PACKED_NON_INTEGER,
 
   /**
-   * The size of a {@code packed} type is not divisible by {@code 8}.
+   * A {@code packed} type size is not supported.
    */
 
-  PACKED_SIZE_NOT_DIVISIBLE_8,
+  PACKED_SIZE_NOT_SUPPORTED,
 
   /**
    * The specified {@code integer} size is not supported when being used as a

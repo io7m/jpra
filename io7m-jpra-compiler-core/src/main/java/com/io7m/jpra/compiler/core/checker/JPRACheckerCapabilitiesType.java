@@ -168,7 +168,7 @@ public interface JPRACheckerCapabilitiesType
   ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported();
 
   /**
-   * @return The set of supported {@code integer} sizes in packed types
+   * @return The set of supported {@code integer} sizes in {@code packed} types
    */
 
   ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported();
@@ -177,8 +177,23 @@ public interface JPRACheckerCapabilitiesType
    * @param size The size in bits
    *
    * @return {@code true} iff {@code integer} types of the given size are
-   * supported in packed types
+   * supported in {@code packed} types
    */
 
   boolean isPackedIntegerSizeBitsSupported(BigInteger size);
+
+  /**
+   * @return The set of supported {@code packed} type sizes
+   */
+
+  ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported();
+
+  /**
+   * @param size The size in bits
+   *
+   * @return {@code true} iff {@code packed} types of the given size are
+   * supported
+   */
+
+  boolean isPackedSizeBitsSupported(BigInteger size);
 }

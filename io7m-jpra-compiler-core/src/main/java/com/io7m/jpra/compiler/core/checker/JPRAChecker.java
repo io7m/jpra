@@ -244,10 +244,9 @@ public final class JPRAChecker implements JPRACheckerType
       k -> Assertive.require(orig_named.containsKey(k)));
 
     final BigInteger sv = b.getCurrentSize().getValue();
-    final BigInteger b8 = BigInteger.valueOf(8L);
-    if (!sv.remainder(b8).equals(BigInteger.ZERO)) {
-      throw JPRACompilerCheckerException.packedSizeNotDivisible8(
-        t.getName(), sv);
+    if (!this.caps.isPackedSizeBitsSupported(sv)) {
+      throw JPRACompilerCheckerException.packedSizeNotSupported(
+        t.getName(), sv, this.caps.getPackedSizeBitsSupported());
     }
 
     final TPacked type = b.build();

@@ -696,30 +696,51 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   }
 
   /**
-   * @param name The type name
-   * @param sv   The type expression
+   * @param name      The type name
+   * @param size      The size in bits
+   * @param supported The supported sizes
    *
    * @return An exception
    *
-   * @see JPRACheckerErrorCode#PACKED_SIZE_NOT_DIVISIBLE_8
+   * @see JPRACheckerErrorCode#PACKED_SIZE_NOT_SUPPORTED
    */
 
-  public static JPRACompilerCheckerException packedSizeNotDivisible8(
+  public static JPRACompilerCheckerException packedSizeNotSupported(
     final TypeName name,
-    final BigInteger sv)
+    final BigInteger size,
+    final ImmutableList<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
-    sb.append("The size in bits of packed types must be divisible by 8.");
+    sb.append("Packed type size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Type name: ");
-    sb.append(name);
+    sb.append("Size: ");
+    sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Current size (bits): ");
-    sb.append(sv);
+    sb.append("Supported sizes (bits): ");
+
+    final int max = supported.size();
+    for (int index = 0; index < max; ++index) {
+      final RangeInclusiveB r = supported.get(index);
+      final BigInteger lo = r.getLower();
+      final BigInteger hi = r.getUpper();
+      if (lo.equals(hi)) {
+        sb.append(lo);
+      } else {
+        sb.append("[");
+        sb.append(lo);
+        sb.append(", ");
+        sb.append(hi);
+        sb.append("]");
+      }
+
+      if (index + 1 < max) {
+        sb.append(", ");
+      }
+    }
 
     return new JPRACompilerCheckerException(
       name.getLexicalInformation(),
-      JPRACheckerErrorCode.PACKED_SIZE_NOT_DIVISIBLE_8,
+      JPRACheckerErrorCode.PACKED_SIZE_NOT_SUPPORTED,
       sb.toString());
   }
 

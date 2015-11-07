@@ -29,7 +29,6 @@ import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
 
-import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -76,13 +75,6 @@ public final class TPacked implements TType, TypeUserDefinedType
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
-
-    final BigInteger sv = this.size_bits.getValue();
-    final BigInteger b8 = BigInteger.valueOf(8L);
-    Assertive.require(
-      sv.remainder(b8).equals(BigInteger.ZERO),
-      "Packed size %s must be divisible by 8",
-      sv);
   }
 
   /**

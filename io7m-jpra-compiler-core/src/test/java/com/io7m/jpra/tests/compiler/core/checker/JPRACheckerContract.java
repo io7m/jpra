@@ -891,7 +891,7 @@ import java.math.BigInteger;
 
     this.expected.expect(
       new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.PACKED_SIZE_NOT_DIVISIBLE_8));
+        JPRACheckerErrorCode.PACKED_SIZE_NOT_SUPPORTED));
     ch.checkTypeDeclaration(
       r.resolveTypeDeclaration(
         (TypeDeclType<Unresolved, Untyped>) p.parseStatement(

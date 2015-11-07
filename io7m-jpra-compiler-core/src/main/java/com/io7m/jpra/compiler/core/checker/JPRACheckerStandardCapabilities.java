@@ -45,6 +45,7 @@ public final class JPRACheckerStandardCapabilities
   private final ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
                                                matrix_sizes;
   private final ImmutableList<RangeInclusiveB> matrix_float_sizes;
+  private final ImmutableList<RangeInclusiveB> packed_sizes;
 
   private JPRACheckerStandardCapabilities()
   {
@@ -123,6 +124,15 @@ public final class JPRACheckerStandardCapabilities
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
       this.matrix_float_sizes = s.toImmutable();
+    }
+
+    {
+      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      s.add(new RangeInclusiveB(b8, b8));
+      s.add(new RangeInclusiveB(b16, b16));
+      s.add(new RangeInclusiveB(b32, b32));
+      s.add(new RangeInclusiveB(b64, b64));
+      this.packed_sizes = s.toImmutable();
     }
   }
 
@@ -249,5 +259,15 @@ public final class JPRACheckerStandardCapabilities
   public boolean isPackedIntegerSizeBitsSupported(final BigInteger size)
   {
     return this.packed_integer_sizes.anySatisfy(r -> r.includesValue(size));
+  }
+
+  @Override public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
+  {
+    return this.packed_sizes;
+  }
+
+  @Override public boolean isPackedSizeBitsSupported(final BigInteger size)
+  {
+    return this.packed_sizes.anySatisfy(r -> r.includesValue(size));
   }
 }

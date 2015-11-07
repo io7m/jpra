@@ -61,6 +61,16 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
         BigInteger.valueOf(32L), BigInteger.valueOf(32L)));
   }
 
+  @Override public boolean isPackedSizeBitsSupported(final BigInteger size)
+  {
+    return this.delegate.isPackedSizeBitsSupported(size);
+  }
+
+  @Override public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
+  {
+    return this.delegate.getPackedSizeBitsSupported();
+  }
+
   @Override
   public ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported()
