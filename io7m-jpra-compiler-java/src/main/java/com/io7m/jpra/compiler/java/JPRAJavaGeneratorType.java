@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.compiler.java;
 
+import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.types.TPacked;
 import com.io7m.jpra.model.types.TRecord;
 
@@ -28,6 +29,42 @@ import java.io.OutputStream;
 
 public interface JPRAJavaGeneratorType
 {
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for a byte-buffered implementation
+   * of {@code t}
+   */
+
+  String getRecordImplementationByteBufferedName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the readable interface of
+   * {@code t}
+   */
+
+  String getRecordInterfaceReadableName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the writable interface of
+   * {@code t}
+   */
+
+  String getRecordInterfaceWritableName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the readable and writable
+   * interface of {@code t}
+   */
+
+  String getRecordInterfaceName(TypeName t);
+
   /**
    * Generate Java source code for the implementation of a {@code record}
    * definition.

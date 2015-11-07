@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.compiler.java;
 
+import com.gs.collections.api.list.ImmutableList;
 import com.io7m.ieee754b16.Binary16;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jnfp.core.NFPSignedDoubleInt;
@@ -90,18 +91,24 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
   private static String getGetterName(final FieldName name)
   {
-    final String text =
-      WordUtils.capitalize(name.toString()).replaceAll("_", "");
+    final String raw = name.toString();
+    final String text = JPRAJavaGenerator.getRecased(raw);
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
     return sb.toString();
   }
 
+  private static String getRecased(final String raw)
+  {
+    final String spaced = raw.replaceAll("_", " ");
+    final String capped = WordUtils.capitalize(spaced);
+    return capped.replaceAll(" ", "");
+  }
+
   private static String getSetterName(final FieldName name)
   {
-    final String text =
-      WordUtils.capitalize(name.toString()).replaceAll("_", "");
+    final String text = JPRAJavaGenerator.getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
@@ -110,8 +117,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
   private static String getNormalizedSetterName(final FieldName name)
   {
-    final String text =
-      WordUtils.capitalize(name.toString()).replaceAll("_", "");
+    final String text = JPRAJavaGenerator.getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
@@ -121,8 +127,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
   private static String getNormalizedGetterName(final FieldName name)
   {
-    final String text =
-      WordUtils.capitalize(name.toString()).replaceAll("_", "");
+    final String text = JPRAJavaGenerator.getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -130,24 +135,55 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     return sb.toString();
   }
 
-  private static String getInterfaceWritableName(final TypeName t)
+  private static String getGetterBooleanSetName(
+    final FieldName base_name,
+    final FieldName field_name)
+  {
+    final String base_text = JPRAJavaGenerator.getRecased(base_name.toString());
+    final String field_text =
+      JPRAJavaGenerator.getRecased(field_name.toString());
+
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("get");
+    sb.append(base_text);
+    sb.append(field_text);
+    return sb.toString();
+  }
+
+  private static String getSetterBooleanSetName(
+    final FieldName base_name,
+    final FieldName field_name)
+  {
+    final String base_text = JPRAJavaGenerator.getRecased(base_name.toString());
+    final String field_text =
+      JPRAJavaGenerator.getRecased(field_name.toString());
+
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("set");
+    sb.append(base_text);
+    sb.append(field_text);
+    return sb.toString();
+  }
+
+  @Override
+  public String getRecordImplementationByteBufferedName(final TypeName t)
+  {
+    return t.getValue() + "ByteBuffered";
+  }
+
+  @Override public String getRecordInterfaceReadableName(final TypeName t)
+  {
+    return t.getValue() + "ReadableType";
+  }
+
+  @Override public String getRecordInterfaceWritableName(final TypeName t)
   {
     return t.getValue() + "WritableType";
   }
 
-  private static String getInterfaceReadableName(final TypeName tn)
+  @Override public String getRecordInterfaceName(final TypeName t)
   {
-    return tn.getValue() + "ReadableType";
-  }
-
-  private static String getInterfaceName(final TypeName t_name)
-  {
-    return t_name.getValue() + "Type";
-  }
-
-  private static String getImplementationByteBufferedName(final TypeName t_name)
-  {
-    return t_name.getValue() + "ByteBuffered";
+    return t.getValue() + "Type";
   }
 
   @Override public void generateRecordImplementation(
@@ -161,17 +197,17 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
-      final String tn =
-        JPRAJavaGenerator.getImplementationByteBufferedName(t_name);
-      final String in = JPRAJavaGenerator.getInterfaceName(t_name);
+      final String tn = this.getRecordImplementationByteBufferedName(t_name);
+      final String in = this.getRecordInterfaceName(t_name);
 
-      final ClassName int_name =
-        ClassName.get(tp.getName().toString(), in);
+      final ClassName int_name = ClassName.get(tp.getName().toString(), in);
       final TypeSpec.Builder jcb = TypeSpec.classBuilder(tn);
       jcb.addSuperinterface(int_name);
       jcb.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
       jcb.addField(
         ByteBuffer.class, "buffer", Modifier.PRIVATE, Modifier.FINAL);
+      jcb.addField(
+        int.class, "base_index", Modifier.PRIVATE, Modifier.FINAL);
 
       {
         final ClassName cno = ClassName.get(Objects.class);
@@ -180,7 +216,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         jmb.addParameter(ByteBuffer.class, "in_buffer", Modifier.FINAL);
         jmb.addParameter(int.class, "in_base_index", Modifier.FINAL);
         jmb.addStatement(
-          "this.$N = $T.requireNotNull($N, $S)",
+          "this.$N = $T.requireNonNull($N, $S)",
           "buffer",
           cno,
           "in_buffer",
@@ -254,7 +290,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName tn = t.getName();
-      final String name = JPRAJavaGenerator.getInterfaceReadableName(tn);
+      final String name = this.getRecordInterfaceReadableName(tn);
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(name);
       jcb.addModifiers(Modifier.PUBLIC);
@@ -299,7 +335,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
-      final String tn = JPRAJavaGenerator.getInterfaceWritableName(t.getName());
+      final String tn = this.getRecordInterfaceWritableName(t.getName());
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
       jcb.addModifiers(Modifier.PUBLIC);
@@ -345,9 +381,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
-      final String wtn = JPRAJavaGenerator.getInterfaceWritableName(t_name);
-      final String rtn = JPRAJavaGenerator.getInterfaceReadableName(t_name);
-      final String tn = JPRAJavaGenerator.getInterfaceName(t_name);
+      final String wtn = this.getRecordInterfaceWritableName(t_name);
+      final String rtn = this.getRecordInterfaceReadableName(t_name);
+      final String tn = this.getRecordInterfaceName(t_name);
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
       jcb.addModifiers(Modifier.PUBLIC);
@@ -440,8 +476,48 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     {
       this.start();
 
-      // TODO: Generated method stub!
-      throw new UnimplementedCodeException();
+      final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
+      for (int index = 0; index < ordered.size(); ++index) {
+        final FieldName f = ordered.get(index);
+
+        final int octet = index / 8;
+        final int bit = index % 8;
+
+        final String getter_name =
+          JPRAJavaGenerator.getGetterBooleanSetName(this.field.getName(), f);
+        final String offset_name = JPRAJavaGenerator.getOffsetConstantName(
+          this.field.getName());
+
+        final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+        getb.addAnnotation(Override.class);
+        getb.addModifiers(Modifier.PUBLIC);
+        getb.returns(boolean.class);
+        getb.addStatement("final int z = 1 << $L", Integer.valueOf(bit));
+        getb.addStatement(
+          "final int i = this.base_index + $N + $L",
+          offset_name,
+          Integer.valueOf(octet));
+        getb.addStatement("final int k = this.buffer.get(i)");
+        getb.addStatement("return (k & z) == z");
+        this.class_builder.addMethod(getb.build());
+
+        final String setter_name =
+          JPRAJavaGenerator.getGetterBooleanSetName(this.field.getName(), f);
+        final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+        setb.addAnnotation(Override.class);
+        setb.addModifiers(Modifier.PUBLIC);
+        setb.addParameter(boolean.class, "x", Modifier.FINAL);
+        setb.addStatement("final int z = 1 << $L", Integer.valueOf(bit));
+        setb.addStatement(
+          "final int i = this.base_index + $N + $L",
+          offset_name,
+          Integer.valueOf(octet));
+        setb.addStatement("final int k = this.buffer.get(i)");
+        setb.addStatement("final int q = k | z");
+        setb.addStatement("this.buffer.put(i, (byte) (q & 0xff));");
+        this.class_builder.addMethod(setb.build());
+      }
+      return Unit.unit();
     }
 
     @Override public Unit matchInteger(
@@ -665,8 +741,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         iget = "getShort";
       } else {
         itype = byte.class;
-        iput = "putByte";
-        iget = "getByte";
+        iput = "put";
+        iget = "get";
       }
 
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
@@ -720,7 +796,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String setter_norm_name =
         JPRAJavaGenerator.getNormalizedSetterName(this.field.getName());
 
-      final Class<?> rtype;
+      final Class<?> r_type;
       final Class<?> nfp_class;
 
       if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
@@ -728,28 +804,28 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       }
 
       if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
-        rtype = long.class;
+        r_type = long.class;
         if (signed) {
           nfp_class = NFPSignedDoubleLong.class;
         } else {
           nfp_class = NFPUnsignedDoubleLong.class;
         }
       } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
-        rtype = int.class;
+        r_type = int.class;
         if (signed) {
           nfp_class = NFPSignedDoubleInt.class;
         } else {
           nfp_class = NFPUnsignedDoubleInt.class;
         }
       } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
-        rtype = short.class;
+        r_type = short.class;
         if (signed) {
           nfp_class = NFPSignedDoubleInt.class;
         } else {
           nfp_class = NFPUnsignedDoubleInt.class;
         }
       } else {
-        rtype = byte.class;
+        r_type = byte.class;
         if (signed) {
           nfp_class = NFPSignedDoubleInt.class;
         } else {
@@ -780,9 +856,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         MethodSpec.methodBuilder(setter_norm_name);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addAnnotation(Override.class);
-      setb.addParameter(rtype, "x", Modifier.FINAL);
+      setb.addParameter(double.class, "x", Modifier.FINAL);
       setb.addStatement(
-        "this.$N(($T) $T.$N($N))", setter_name, rtype, nfp_class, m_to, "x");
+        "this.$N(($T) $T.$N($N))", setter_name, r_type, nfp_class, m_to, "x");
       this.class_builder.addMethod(setb.build());
     }
 
@@ -826,8 +902,27 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     @Override public Unit matchBooleanSet(final TBooleanSet t)
     {
-      // TODO: Generated method stub!
-      throw new UnimplementedCodeException();
+      final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
+      for (final FieldName f : ordered) {
+        if (this.methods.wantGetters()) {
+          final String getter_name =
+            JPRAJavaGenerator.getGetterBooleanSetName(this.field.getName(), f);
+          final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+          getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+          getb.returns(boolean.class);
+          this.class_builder.addMethod(getb.build());
+        }
+
+        if (this.methods.wantSetters()) {
+          final String setter_name =
+            JPRAJavaGenerator.getGetterBooleanSetName(this.field.getName(), f);
+          final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+          setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+          setb.addParameter(boolean.class, "x", Modifier.FINAL);
+          this.class_builder.addMethod(setb.build());
+        }
+      }
+      return Unit.unit();
     }
 
     @Override public Unit matchInteger(final TIntegerType t)
