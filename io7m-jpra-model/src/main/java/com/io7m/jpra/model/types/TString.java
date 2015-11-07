@@ -63,7 +63,7 @@ import java.util.Optional;
     return this.encoding;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }

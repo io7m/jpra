@@ -29,6 +29,7 @@ import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import org.valid4j.Assertive;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -44,6 +45,7 @@ public final class TRecord implements TType, TypeUserDefinedType
   private final ImmutableList<FieldType>            fields_by_order;
   private final PackageContextType                  package_ctx;
   private final IdentifierType                      identifier;
+  private final Size<SizeUnitOctetsType>            size_octets;
 
   TRecord(
     final PackageContextType in_package,
@@ -69,7 +71,16 @@ public final class TRecord implements TType, TypeUserDefinedType
       });
 
     this.size_bits = this.fields_by_order.injectInto(
-      Size.zero(), (s, f) -> s.add(f.getSize()));
+      Size.zero(), (s, f) -> s.add(f.getSizeInBits()));
+
+    final BigInteger b8 = BigInteger.valueOf(8L);
+    final BigInteger br = this.size_bits.getValue().remainder(b8);
+    Assertive.require(
+      br.equals(BigInteger.ZERO),
+      "Size %s must be divisible by 8",
+      this.size_bits);
+
+    this.size_octets = new Size<>(this.size_bits.getValue().divide(b8));
   }
 
   /**
@@ -108,6 +119,15 @@ public final class TRecord implements TType, TypeUserDefinedType
     return this.package_ctx;
   }
 
+  /**
+   * @return The size of the record in octets
+   */
+
+  public Size<SizeUnitOctetsType> getSizeInOctets()
+  {
+    return this.size_octets;
+  }
+
   @Override public <A, E extends Exception> A matchTypeUserDefined(
     final TypeUserDefinedMatcherType<A, E> m)
     throws E
@@ -133,7 +153,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     return this.fields_by_order;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
@@ -179,7 +199,13 @@ public final class TRecord implements TType, TypeUserDefinedType
      * @return The size in bits
      */
 
-    Size<SizeUnitBitsType> getSize();
+    Size<SizeUnitBitsType> getSizeInBits();
+
+    /**
+     * @return The size in octets
+     */
+
+    Size<SizeUnitOctetsType> getSizeInOctets();
 
     /**
      * Accept a matcher.
@@ -240,9 +266,10 @@ public final class TRecord implements TType, TypeUserDefinedType
 
   public static final class FieldValue implements FieldType
   {
-    private final     FieldName name;
-    private final     TType     type;
-    private @Nullable TRecord   owner;
+    private final     FieldName                name;
+    private final     TType                    type;
+    private final     Size<SizeUnitOctetsType> size_octets;
+    private @Nullable TRecord                  owner;
 
     FieldValue(
       final FieldName in_name,
@@ -250,6 +277,14 @@ public final class TRecord implements TType, TypeUserDefinedType
     {
       this.name = NullCheck.notNull(in_name);
       this.type = NullCheck.notNull(in_type);
+
+      final Size<SizeUnitBitsType> bits = this.type.getSizeInBits();
+      final BigInteger b8 = BigInteger.valueOf(8L);
+      final BigInteger br = bits.getValue().remainder(b8);
+      Assertive.require(
+        br.equals(BigInteger.ZERO), "Size %s must be divisible by 8", bits);
+
+      this.size_octets = new Size<>(bits.getValue().divide(b8));
     }
 
     @Override public TRecord getOwner()
@@ -281,9 +316,9 @@ public final class TRecord implements TType, TypeUserDefinedType
       return this.type;
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override public Size<SizeUnitBitsType> getSizeInBits()
     {
-      return this.type.getSize();
+      return this.type.getSizeInBits();
     }
 
     @Override public <A, E extends Exception> A matchField(
@@ -307,6 +342,11 @@ public final class TRecord implements TType, TypeUserDefinedType
       sb.append(this.type);
       sb.append("]");
       return sb.toString();
+    }
+
+    @Override public Size<SizeUnitOctetsType> getSizeInOctets()
+    {
+      return this.size_octets;
     }
   }
 
@@ -352,9 +392,14 @@ public final class TRecord implements TType, TypeUserDefinedType
       this.owner = NullCheck.notNull(in_owner);
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override public Size<SizeUnitBitsType> getSizeInBits()
     {
       return this.size_bits;
+    }
+
+    @Override public Size<SizeUnitOctetsType> getSizeInOctets()
+    {
+      return this.size_octets;
     }
 
     @Override public <A, E extends Exception> A matchField(

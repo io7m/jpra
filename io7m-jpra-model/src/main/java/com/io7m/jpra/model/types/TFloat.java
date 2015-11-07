@@ -51,7 +51,7 @@ import java.util.Optional;
    * @return An expression denoting the size in bits of the type
    */
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size;
   }

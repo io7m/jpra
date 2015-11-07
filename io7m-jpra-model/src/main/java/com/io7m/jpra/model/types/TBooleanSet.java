@@ -64,7 +64,7 @@ import java.util.Optional;
     return this.fields;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }

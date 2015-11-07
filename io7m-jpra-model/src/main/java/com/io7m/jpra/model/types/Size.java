@@ -65,6 +65,20 @@ import java.math.BigInteger;
     return new Size<>(size.getValue().multiply(BigInteger.valueOf(8L)));
   }
 
+  /**
+   * Construct a size value of {@code x} units.
+   *
+   * @param x   The size value
+   * @param <U> The precise unit type
+   *
+   * @return A new size value
+   */
+
+  public static <U extends SizeUnitType> Size<U> valueOf(final long x)
+  {
+    return new Size<>(BigInteger.valueOf(x));
+  }
+
   @Override public boolean equals(final Object o)
   {
     if (this == o) {

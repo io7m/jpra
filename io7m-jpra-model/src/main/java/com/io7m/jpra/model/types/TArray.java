@@ -53,7 +53,7 @@ import java.util.Optional;
     this.element_type = NullCheck.notNull(in_type);
 
     final BigInteger ecv = this.element_count.getValue();
-    final BigInteger etv = this.element_type.getSize().getValue();
+    final BigInteger etv = this.element_type.getSizeInBits().getValue();
     this.size_bits = new Size<>(ecv.multiply(etv));
   }
 
@@ -91,7 +91,7 @@ import java.util.Optional;
     return this.lex;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }

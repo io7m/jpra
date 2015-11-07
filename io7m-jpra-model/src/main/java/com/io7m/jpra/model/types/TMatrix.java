@@ -60,7 +60,7 @@ import java.util.Optional;
 
     final BigInteger sw = this.size_width.getValue();
     final BigInteger sh = this.size_height.getValue();
-    final BigInteger ts = this.type.getSize().getValue();
+    final BigInteger ts = this.type.getSizeInBits().getValue();
     this.size_bits = new Size<>(sw.multiply(sh).multiply(ts));
   }
 
@@ -91,7 +91,7 @@ import java.util.Optional;
     return this.type;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }

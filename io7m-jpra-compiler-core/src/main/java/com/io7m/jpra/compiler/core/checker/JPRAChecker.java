@@ -602,7 +602,7 @@ public final class JPRAChecker implements JPRACheckerType
           final TIntegerType t)
           throws JPRACompilerCheckerException
         {
-          final BigInteger size = t.getSize().getValue();
+          final BigInteger size = t.getSizeInBits().getValue();
           if (!JPRAChecker.this.caps.isMatrixIntegerSizeSupported(size)) {
             throw JPRACompilerCheckerException.matrixIntegerSizeNotSupported(
               t, size, JPRAChecker.this.caps.getMatrixIntegerSizeSupported());
@@ -614,7 +614,7 @@ public final class JPRAChecker implements JPRACheckerType
           final TFloat t)
           throws JPRACompilerCheckerException
         {
-          final BigInteger size = t.getSize().getValue();
+          final BigInteger size = t.getSizeInBits().getValue();
           if (!JPRAChecker.this.caps.isMatrixFloatSizeSupported(size)) {
             throw JPRACompilerCheckerException.matrixFloatSizeNotSupported(
               t, size, JPRAChecker.this.caps.getMatrixFloatSizeSupported());
@@ -656,7 +656,7 @@ public final class JPRAChecker implements JPRACheckerType
           final TIntegerType t)
           throws JPRACompilerCheckerException
         {
-          final BigInteger size = t.getSize().getValue();
+          final BigInteger size = t.getSizeInBits().getValue();
           if (!JPRAChecker.this.caps.isVectorIntegerSizeSupported(size)) {
             throw JPRACompilerCheckerException.vectorIntegerSizeNotSupported(
               t, size, JPRAChecker.this.caps.getVectorIntegerSizeSupported());
@@ -668,7 +668,7 @@ public final class JPRAChecker implements JPRACheckerType
           final TFloat t)
           throws JPRACompilerCheckerException
         {
-          final BigInteger size = t.getSize().getValue();
+          final BigInteger size = t.getSizeInBits().getValue();
           if (!JPRAChecker.this.caps.isVectorFloatSizeSupported(size)) {
             throw JPRACompilerCheckerException.vectorFloatSizeNotSupported(
               t, size, JPRAChecker.this.caps.getVectorFloatSizeSupported());

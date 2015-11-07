@@ -116,7 +116,7 @@ public final class TPacked implements TType, TypeUserDefinedType
     return this.fields_by_order;
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
@@ -287,7 +287,7 @@ public final class TPacked implements TType, TypeUserDefinedType
 
     @Override public Size<SizeUnitBitsType> getSize()
     {
-      return this.type.getSize();
+      return this.type.getSizeInBits();
     }
 
     @Override

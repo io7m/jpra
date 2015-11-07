@@ -105,7 +105,7 @@ import java.math.BigInteger;
     final TypeExprIntegerSigned<IdentifierType, TType> e =
       TypeExprIntegerSigned.class.cast(ch.checkTypeExpression(te));
     final TIntegerSigned ti = TIntegerSigned.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeExprIntegerSignedNormalizedSizeCorrect()
@@ -126,7 +126,7 @@ import java.math.BigInteger;
       TypeExprIntegerSignedNormalized.class.cast(ch.checkTypeExpression(te));
     final TIntegerSignedNormalized ti =
       TIntegerSignedNormalized.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeExprIntegerUnsignedSizeCorrect()
@@ -146,7 +146,7 @@ import java.math.BigInteger;
     final TypeExprIntegerUnsigned<IdentifierType, TType> e =
       TypeExprIntegerUnsigned.class.cast(ch.checkTypeExpression(te));
     final TIntegerUnsigned ti = TIntegerUnsigned.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeExprIntegerUnsignedNormalizedSizeCorrect()
@@ -167,7 +167,7 @@ import java.math.BigInteger;
       TypeExprIntegerUnsignedNormalized.class.cast(ch.checkTypeExpression(te));
     final TIntegerUnsignedNormalized ti =
       TIntegerUnsignedNormalized.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
   @Test public final void testRecordTypeExprFloatSizeSupported()
@@ -187,7 +187,7 @@ import java.math.BigInteger;
     final TypeExprFloat<IdentifierType, TType> e =
       TypeExprFloat.class.cast(ch.checkTypeExpression(te));
     final TFloat ti = TFloat.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
   @Test public final void testRecordTypeExprFloatSizeUnsupported()
@@ -227,7 +227,7 @@ import java.math.BigInteger;
     final TypeExprString<IdentifierType, TType> e =
       TypeExprString.class.cast(ch.checkTypeExpression(te));
     final TString ti = TString.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(256L), ti.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(256L), ti.getSizeInBits().getValue());
     Assert.assertEquals("UTF-8", ti.getEncoding());
   }
 
@@ -268,7 +268,7 @@ import java.math.BigInteger;
     final TypeExprArray<IdentifierType, TType> e =
       TypeExprArray.class.cast(ch.checkTypeExpression(te));
     final TArray ta = TArray.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L * 32L), ta.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(32L * 32L), ta.getSizeInBits().getValue());
     Assert.assertEquals(
       BigInteger.valueOf(32L), ta.getElementCount().getValue());
     Assert.assertEquals(TIntegerSigned.class, ta.getElementType().getClass());
@@ -291,7 +291,7 @@ import java.math.BigInteger;
     final TypeExprBooleanSet<IdentifierType, TType> e =
       TypeExprBooleanSet.class.cast(ch.checkTypeExpression(te));
     final TBooleanSet ta = TBooleanSet.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(8L), ta.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(8L), ta.getSizeInBits().getValue());
   }
 
   @Test public final void testRecordTypeExprBooleanSet_Error0()
@@ -351,7 +351,7 @@ import java.math.BigInteger;
     final TypeExprBooleanSet<IdentifierType, TType> e =
       TypeExprBooleanSet.class.cast(ch.checkTypeExpression(te));
     final TBooleanSet ta = TBooleanSet.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(64L), ta.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(64L), ta.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeExprVectorSizeUnsupported()
@@ -656,7 +656,7 @@ import java.math.BigInteger;
 
     final TRecord.FieldPaddingOctets f = TRecord.FieldPaddingOctets.class.cast(
       tt.getFieldsInDeclarationOrder().get(0));
-    Assert.assertEquals(BigInteger.valueOf(8L * 8L), f.getSize().getValue());
+    Assert.assertEquals(BigInteger.valueOf(8L * 8L), f.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeDeclRecordPaddingOctets_Error0()

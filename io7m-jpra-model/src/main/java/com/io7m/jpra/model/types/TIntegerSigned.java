@@ -47,7 +47,7 @@ import java.util.Optional;
     this.size = NullCheck.notNull(in_size);
   }
 
-  @Override public Size<SizeUnitBitsType> getSize()
+  @Override public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size;
   }
