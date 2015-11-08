@@ -21,6 +21,7 @@
     <module>io7m-jpra-core</module>
     <module>io7m-jpra-documentation</module>
     <module>io7m-jpra-model</module>
+    <module>io7m-jpra-runtime-java</module>
   </modules>
 
   <properties>

@@ -16,6 +16,9 @@
 
 package com.io7m.jpra.tests.compiler.java;
 
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jpra.compiler.java.JPRAJavaGeneratorType;
@@ -40,59 +43,77 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Optional;
 
 public abstract class JPRAJavaGeneratorContract
 {
-  private static void compileRecord(
+  private static void compileRecords(
+    final Path path,
     final JPRAJavaGeneratorType g,
-    final TRecord r)
+    final ImmutableList<TRecord> types)
     throws IOException
   {
-    final TypeName t_name = r.getName();
-
     final JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-    final Path path = Files.createTempDirectory("jpra");
-    final Path c_file =
-      path.resolve(g.getRecordImplementationByteBufferedName(t_name) + ".java");
-    final Path r_file =
-      path.resolve(g.getRecordInterfaceReadableName(t_name) + ".java");
-    final Path w_file =
-      path.resolve(g.getRecordInterfaceWritableName(t_name) + ".java");
-    final Path i_file =
-      path.resolve(g.getRecordInterfaceName(t_name) + ".java");
 
-    try (final OutputStream w = Files.newOutputStream(c_file)) {
-      g.generateRecordImplementation(r, w);
-    }
-    try (final OutputStream w = Files.newOutputStream(r_file)) {
-      g.generateRecordInterfaceReadable(r, w);
-    }
-    try (final OutputStream w = Files.newOutputStream(w_file)) {
-      g.generateRecordInterfaceWritable(r, w);
-    }
-    try (final OutputStream w = Files.newOutputStream(i_file)) {
-      g.generateRecordInterface(r, w);
-    }
+    final StandardJavaFileManager fm =
+      jc.getStandardFileManager(null, null, null);
 
-    final int result = jc.run(
-      null,
-      null,
-      null,
-      "-verbose",
-      "-Werror",
-      "-d",
-      path.toString(),
-      r_file.toString(),
-      w_file.toString(),
-      i_file.toString(),
-      c_file.toString());
-    Assert.assertEquals(0L, (long) result);
+    final MutableList<File> files = Lists.mutable.empty();
+    types.forEach(
+      (Procedure<TRecord>) r -> {
+        try {
+          final TypeName t_name = r.getName();
+
+          final Path c_file = path.resolve(
+            g.getRecordImplementationByteBufferedName(t_name) + ".java");
+          final Path r_file =
+            path.resolve(g.getRecordInterfaceReadableName(t_name) + ".java");
+          final Path w_file =
+            path.resolve(g.getRecordInterfaceWritableName(t_name) + ".java");
+          final Path i_file =
+            path.resolve(g.getRecordInterfaceName(t_name) + ".java");
+
+          try (final OutputStream w = Files.newOutputStream(c_file)) {
+            g.generateRecordImplementation(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(r_file)) {
+            g.generateRecordInterfaceReadable(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(w_file)) {
+            g.generateRecordInterfaceWritable(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(i_file)) {
+            g.generateRecordInterface(r, w);
+          }
+
+          files.add(c_file.toFile());
+          files.add(r_file.toFile());
+          files.add(w_file.toFile());
+          files.add(i_file.toFile());
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+
+    final String[] options = { "-verbose", "-Werror", "-d", path.toString() };
+    final Iterable<? extends JavaFileObject> fm_files =
+      fm.getJavaFileObjectsFromFiles(files);
+
+    final JavaCompiler.CompilationTask task =
+      jc.getTask(null, null, null, Arrays.asList(options), null, fm_files);
+    final Boolean result = task.call();
+    Assert.assertEquals(Boolean.TRUE, result);
+    fm.close();
   }
 
   protected abstract JPRAJavaGeneratorType getJavaGenerator();
@@ -116,7 +137,9 @@ public abstract class JPRAJavaGeneratorContract
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
   @Test public final void testRecordIntegerExhaustive()
@@ -173,7 +196,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
   @Test public final void testRecordFloatExhaustive()
@@ -209,7 +233,8 @@ public abstract class JPRAJavaGeneratorContract
       new TFloat(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
   @Test public final void testRecordIntegerNormalizedExhaustive()
@@ -266,7 +291,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
   @Test public final void testRecordPaddingExhaustive()
@@ -291,7 +317,8 @@ public abstract class JPRAJavaGeneratorContract
     rb.addPaddingOctets(no_lex, Size.valueOf(100L));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
   @Test public final void testRecordBooleanSetExhaustive()
@@ -329,6 +356,39 @@ public abstract class JPRAJavaGeneratorContract
         new FieldName(no_lex, "flag_k")), Size.valueOf(2L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecord(g, r);
+    JPRAJavaGeneratorContract.compileRecords(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testRecordFieldRecord()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+
+    final Path path = Files.createTempDirectory("jpra");
+
+    final TypeName t_name = new TypeName(no_lex, "Empty");
+    final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
+    final TRecord te = teb.build();
+
+    final TypeName tr_name = new TypeName(no_lex, "RecordRecord");
+    final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
+    rb.addField(new FieldName(no_lex, "r"), gc.getFreshIdentifier(), te);
+
+    final TRecord r = rb.build();
+    JPRAJavaGeneratorContract.compileRecords(
+      path, g, Lists.immutable.of(te, r));
   }
 }

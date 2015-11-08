@@ -10,11 +10,11 @@
     <artifactId>io7m-jpra</artifactId>
     <version>0.1.0</version>
   </parent>
-  <artifactId>io7m-jpra-compiler-java</artifactId>
+  <artifactId>io7m-jpra-runtime-java</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jpra-compiler-java</name>
-  <description>Packed record access (Java backend)</description>
+  <name>io7m-jpra-runtime-java</name>
+  <description>Packed record access (Java runtime)</description>
   <url>http://io7m.github.io/jpra/</url>
 
   <scm>
@@ -24,39 +24,6 @@
   </scm>
 
   <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-runtime-java</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.io7m.jnfp</groupId>
-      <artifactId>io7m-jnfp-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.ieee754b16</groupId>
-      <artifactId>io7m-ieee754b16-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup</groupId>
-      <artifactId>javapoet</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

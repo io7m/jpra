@@ -54,6 +54,7 @@ public final class GlobalContexts implements GlobalContextType
     this.packages = Maps.mutable.empty();
     this.loader = NullCheck.notNull(in_loader);
     this.types = Maps.mutable.empty();
+    GlobalContexts.LOG.trace("created");
   }
 
   /**
