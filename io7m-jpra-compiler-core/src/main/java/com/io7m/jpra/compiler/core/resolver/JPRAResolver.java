@@ -151,6 +151,12 @@ public final class JPRAResolver implements JPRAResolverType
       throw JPRACompilerResolverException.nestedPackage(s.getPackageName());
     }
 
+    Assertive.ensure(this.current_types.isEmpty());
+    Assertive.ensure(this.current_record_fields.isEmpty());
+    Assertive.ensure(this.current_packed_fields.isEmpty());
+    Assertive.ensure(this.imports.isEmpty());
+    Assertive.ensure(this.import_names.isEmpty());
+
     final Map<PackageNameQualified, PackageContextType> existing =
       this.context.getPackages();
 
@@ -222,34 +228,44 @@ public final class JPRAResolver implements JPRAResolverType
         expr.getLexicalInformation());
     }
 
-    final TypeDeclType<IdentifierType, Untyped> rv = expr.matchTypeDeclaration(
-      new TypeDeclMatcherType<Unresolved, Untyped,
-        TypeDeclType<IdentifierType, Untyped>, JPRACompilerResolverException>()
-      {
-        @Override public TypeDeclType<IdentifierType, Untyped> matchRecord(
-          final TypeDeclRecord<Unresolved, Untyped> t)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeDeclarationRecord(t);
-        }
+    Assertive.ensure(this.current_packed_fields.isEmpty());
+    Assertive.ensure(this.current_record_fields.isEmpty());
 
-        @Override public TypeDeclType<IdentifierType, Untyped> matchPacked(
-          final TypeDeclPacked<Unresolved, Untyped> t)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeDeclarationPacked(t);
-        }
-      });
+    try {
+      final TypeDeclType<IdentifierType, Untyped> rv =
+        expr.matchTypeDeclaration(
+          new TypeDeclMatcherType<Unresolved, Untyped,
+            TypeDeclType<IdentifierType, Untyped>,
+            JPRACompilerResolverException>()
+          {
+            @Override public TypeDeclType<IdentifierType, Untyped> matchRecord(
+              final TypeDeclRecord<Unresolved, Untyped> t)
+              throws JPRACompilerResolverException
+            {
+              return JPRAResolver.this.resolveTypeDeclarationRecord(t);
+            }
 
-    final TypeName t_name = rv.getName();
-    if (this.current_types.containsKey(t_name)) {
-      final TypeDeclType<IdentifierType, Untyped> o =
-        this.current_types.get(t_name);
-      throw JPRACompilerResolverException.duplicateType(t_name, o.getName());
+            @Override public TypeDeclType<IdentifierType, Untyped> matchPacked(
+              final TypeDeclPacked<Unresolved, Untyped> t)
+              throws JPRACompilerResolverException
+            {
+              return JPRAResolver.this.resolveTypeDeclarationPacked(t);
+            }
+          });
+
+      final TypeName t_name = rv.getName();
+      if (this.current_types.containsKey(t_name)) {
+        final TypeDeclType<IdentifierType, Untyped> o =
+          this.current_types.get(t_name);
+        throw JPRACompilerResolverException.duplicateType(t_name, o.getName());
+      }
+
+      this.current_types.put(t_name, rv);
+      return rv;
+    } finally {
+      this.current_packed_fields.clear();
+      this.current_record_fields.clear();
     }
-
-    this.current_types.put(t_name, rv);
-    return rv;
   }
 
   private TypeDeclType<IdentifierType, Untyped> resolveTypeDeclarationPacked(
