@@ -259,6 +259,33 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     jcb.addMethod(jmb.build());
   }
 
+  private static void generatePackedConstructor(
+    final TPacked t,
+    final ClassName ptr_class,
+    final TypeSpec.Builder jcb)
+  {
+    final ClassName cno = ClassName.get(Objects.class);
+    final MethodSpec.Builder jmb = MethodSpec.constructorBuilder();
+    jmb.addModifiers(Modifier.PRIVATE);
+    jmb.addParameter(ByteBuffer.class, "in_buffer", Modifier.FINAL);
+    jmb.addParameter(ptr_class, "in_pointer", Modifier.FINAL);
+    jmb.addParameter(int.class, "in_base_offset", Modifier.FINAL);
+    jmb.addStatement(
+      "this.$N = $T.requireNonNull($N, $S)",
+      "buffer",
+      cno,
+      "in_buffer",
+      "Buffer");
+    jmb.addStatement(
+      "this.$N = $T.requireNonNull($N, $S)",
+      "pointer",
+      cno,
+      "in_pointer",
+      "Pointer");
+    jmb.addStatement("this.$N = $N", "base_offset", "in_base_offset");
+    jcb.addMethod(jmb.build());
+  }
+
   @Override
   public String getRecordImplementationByteBufferedName(final TypeName t)
   {
@@ -530,37 +557,13 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         offset = offset.add(f.getSize().getValue());
       }
 
+      PackedFieldImplementationProcessor.generatedPackedAllMethodImplementation(
+        jcb, t);
+
       final JavaFile.Builder jfb = JavaFile.builder(pack_name, jcb.build());
       final JavaFile jf = jfb.build();
       jf.writeTo(out);
     }
-  }
-
-  private static void generatePackedConstructor(
-    final TPacked t,
-    final ClassName ptr_class,
-    final TypeSpec.Builder jcb)
-  {
-    final ClassName cno = ClassName.get(Objects.class);
-    final MethodSpec.Builder jmb = MethodSpec.constructorBuilder();
-    jmb.addModifiers(Modifier.PRIVATE);
-    jmb.addParameter(ByteBuffer.class, "in_buffer", Modifier.FINAL);
-    jmb.addParameter(ptr_class, "in_pointer", Modifier.FINAL);
-    jmb.addParameter(int.class, "in_base_offset", Modifier.FINAL);
-    jmb.addStatement(
-      "this.$N = $T.requireNonNull($N, $S)",
-      "buffer",
-      cno,
-      "in_buffer",
-      "Buffer");
-    jmb.addStatement(
-      "this.$N = $T.requireNonNull($N, $S)",
-      "pointer",
-      cno,
-      "in_pointer",
-      "Pointer");
-    jmb.addStatement("this.$N = $N", "base_offset", "in_base_offset");
-    jcb.addMethod(jmb.build());
   }
 
   @Override public void generatePackedInterfaceReadable(
@@ -648,6 +651,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
             }
           });
       }
+
+      PackedFieldInterfaceProcessor.generatedPackedAllMethodInterface(
+        jcb, t.getFieldsInDeclarationOrder());
 
       final TypeSpec jc = jcb.build();
       final JavaFile.Builder jfb = JavaFile.builder(pack_name, jc);

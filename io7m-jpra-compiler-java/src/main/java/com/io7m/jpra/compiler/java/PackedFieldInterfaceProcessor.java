@@ -16,8 +16,10 @@
 
 package com.io7m.jpra.compiler.java;
 
+import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.types.TArray;
 import com.io7m.jpra.model.types.TBooleanSet;
 import com.io7m.jpra.model.types.TFloat;
@@ -61,6 +63,101 @@ public final class PackedFieldInterfaceProcessor
     this.field = NullCheck.notNull(in_field);
     this.class_builder = NullCheck.notNull(in_class_builder);
     this.methods = NullCheck.notNull(in_methods);
+  }
+
+  /**
+   * Retrieve the type that should be used for the interfaces of non-normalized
+   * integers fields in packed types. Generally, this is the smallest integer
+   * size larger than or equal to {@code int} that can hold values of the given
+   * size.
+   *
+   * @param size The size in bits of the integer type
+   *
+   * @return A type
+   */
+
+  public static Class<?> getPackedIntegerTypeForSize(final BigInteger size)
+  {
+    if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
+      throw new UnimplementedCodeException();
+    }
+
+    final Class<?> itype;
+    if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
+      itype = long.class;
+    } else {
+      itype = int.class;
+    }
+    return itype;
+  }
+
+  /**
+   * Generate a {@code set} method that sets all packed fields at once.
+   *
+   * @param class_builder The class builder
+   * @param ordered       The set of fields in the type
+   */
+
+  public static void generatedPackedAllMethodInterface(
+    final TypeSpec.Builder class_builder,
+    final ImmutableList<TPacked.FieldType> ordered)
+  {
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder("set");
+    setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+
+    for (final TPacked.FieldType f : ordered) {
+      f.matchField(
+        new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+        {
+          @Override public Unit matchFieldValue(final TPacked.FieldValue f)
+          {
+            final BigInteger f_size = f.getSize().getValue();
+            final FieldName f_name = f.getName();
+            final Class<?> f_type = f.getType().matchTypeInteger(
+              new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
+              {
+                @Override public Class<?> matchIntegerUnsigned(
+                  final TIntegerUnsigned t)
+                {
+                  return PackedFieldInterfaceProcessor
+                    .getPackedIntegerTypeForSize(
+                      f_size);
+                }
+
+                @Override public Class<?> matchIntegerSigned(
+                  final TIntegerSigned t)
+                {
+                  return PackedFieldInterfaceProcessor
+                    .getPackedIntegerTypeForSize(
+                      f_size);
+                }
+
+                @Override public Class<?> matchIntegerSignedNormalized(
+                  final TIntegerSignedNormalized t)
+                {
+                  return double.class;
+                }
+
+                @Override public Class<?> matchIntegerUnsignedNormalized(
+                  final TIntegerUnsignedNormalized t)
+                {
+                  return double.class;
+                }
+              });
+            setb.addParameter(f_type, f_name.getValue(), Modifier.FINAL);
+            return Unit.unit();
+          }
+
+          @Override
+          public Unit matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+          {
+            return Unit.unit();
+          }
+        });
+    }
+
+    setb.returns(void.class);
+    class_builder.addMethod(setb.build());
   }
 
   @Override public Unit matchArray(final TArray t)
@@ -139,16 +236,8 @@ public final class PackedFieldInterfaceProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
-      throw new UnimplementedCodeException();
-    }
-
-    final Class<?> itype;
-    if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
-      itype = long.class;
-    } else {
-      itype = int.class;
-    }
+    final Class<?> itype =
+      PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(size);
 
     if (this.methods.wantGetters()) {
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
@@ -179,16 +268,9 @@ public final class PackedFieldInterfaceProcessor
     final String setter_norm_raw_name =
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
-    if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
-      throw new UnimplementedCodeException();
-    }
-
-    final Class<?> itype;
-    if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
-      itype = long.class;
-    } else {
-      itype = int.class;
-    }
+    final Class<?> itype =
+      PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
+        size);
 
     if (this.methods.wantGetters()) {
       {

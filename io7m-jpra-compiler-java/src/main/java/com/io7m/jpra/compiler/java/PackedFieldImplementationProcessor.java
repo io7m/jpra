@@ -16,12 +16,15 @@
 
 package com.io7m.jpra.compiler.java;
 
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jnfp.core.NFPSignedDoubleInt;
 import com.io7m.jnfp.core.NFPSignedDoubleLong;
 import com.io7m.jnfp.core.NFPUnsignedDoubleInt;
 import com.io7m.jnfp.core.NFPUnsignedDoubleLong;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.types.Size;
 import com.io7m.jpra.model.types.SizeUnitBitsType;
 import com.io7m.jpra.model.types.TArray;
@@ -77,6 +80,246 @@ public final class PackedFieldImplementationProcessor
     this.field = NullCheck.notNull(in_field);
     this.offset_bits = NullCheck.notNull(in_offset_bits);
     this.class_builder = NullCheck.notNull(in_class_builder);
+  }
+
+  /**
+   * Generate a {@code set} method that sets all packed fields at once.
+   *
+   * @param class_builder The class builder
+   * @param t             The packed type
+   */
+
+  public static void generatedPackedAllMethodImplementation(
+    final TypeSpec.Builder class_builder,
+    final TPacked t)
+  {
+    final ImmutableList<TPacked.FieldType> ordered =
+      t.getFieldsInDeclarationOrder();
+    final BigInteger container_size = t.getSizeInBits().getValue();
+
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder("set");
+    setb.addModifiers(Modifier.PUBLIC);
+    setb.addAnnotation(Override.class);
+
+    final Class<?> arith_type;
+    final Class<?> container_type;
+    final String iput;
+
+    if (container_size.equals(BigInteger.valueOf(64L))) {
+      container_type = long.class;
+      arith_type = long.class;
+      iput = "putLong";
+    } else if (container_size.equals(BigInteger.valueOf(32L))) {
+      container_type = int.class;
+      arith_type = int.class;
+      iput = "putInt";
+    } else if (container_size.equals(BigInteger.valueOf(16L))) {
+      container_type = short.class;
+      arith_type = int.class;
+      iput = "putShort";
+    } else {
+      container_type = byte.class;
+      arith_type = int.class;
+      iput = "put";
+    }
+
+    setb.addStatement("$T r_valu = 0", arith_type);
+
+    ordered.selectInstancesOf(TPacked.FieldValue.class).forEach(
+      (Procedure<TPacked.FieldValue>) fv -> {
+        final BigInteger f_size = fv.getSize().getValue();
+        final FieldName f_name = fv.getName();
+        final TIntegerType f_type = fv.getType();
+
+        final Class<?> f_class = f_type.matchTypeInteger(
+          new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
+          {
+            @Override public Class<?> matchIntegerUnsigned(
+              final TIntegerUnsigned t)
+            {
+              return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
+                f_size);
+            }
+
+            @Override public Class<?> matchIntegerSigned(
+              final TIntegerSigned t)
+            {
+              return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
+                f_size);
+            }
+
+            @Override public Class<?> matchIntegerSignedNormalized(
+              final TIntegerSignedNormalized t)
+            {
+              return double.class;
+            }
+
+            @Override public Class<?> matchIntegerUnsignedNormalized(
+              final TIntegerUnsignedNormalized t)
+            {
+              return double.class;
+            }
+          });
+
+        final String f_name_text = f_name.getValue();
+        setb.addParameter(f_class, f_name_text, Modifier.FINAL);
+        final BigInteger field_size = f_type.getSizeInBits().getValue();
+        final String mask = JPRAMasks.createOneMask(
+          container_size.intValue(), 0, field_size.intValue() - 1);
+        final BigInteger shift = fv.getBitRange().getLower();
+
+        f_type.matchTypeInteger(
+          new TypeIntegerMatcherType<Unit, UnreachableCodeException>()
+          {
+            @Override public Unit matchIntegerUnsigned(
+              final TIntegerUnsigned t)
+            {
+              PackedFieldImplementationProcessor.onInteger(
+                setb, arith_type, f_name_text, mask, shift);
+              return Unit.unit();
+            }
+
+            @Override public Unit matchIntegerSigned(
+              final TIntegerSigned t)
+            {
+              PackedFieldImplementationProcessor.onInteger(
+                setb, arith_type, f_name_text, mask, shift);
+              return Unit.unit();
+            }
+
+            @Override public Unit matchIntegerSignedNormalized(
+              final TIntegerSignedNormalized t)
+            {
+              PackedFieldImplementationProcessor.onNormalized(
+                true, field_size, setb, arith_type, f_name_text, mask, shift);
+              return Unit.unit();
+            }
+
+            @Override public Unit matchIntegerUnsignedNormalized(
+              final TIntegerUnsignedNormalized t)
+            {
+              PackedFieldImplementationProcessor.onNormalized(
+                false, field_size, setb, arith_type, f_name_text, mask, shift);
+              return Unit.unit();
+            }
+          });
+      });
+
+    setb.addStatement(
+      "this.$N.$N(this.getByteOffset(), ($T) r_valu)",
+      "buffer",
+      iput,
+      container_type);
+    setb.returns(void.class);
+    class_builder.addMethod(setb.build());
+  }
+
+  private static void onInteger(
+    final MethodSpec.Builder setb,
+    final Class<?> arith_type,
+    final String f_name_text,
+    final String mask,
+    final BigInteger shift)
+  {
+    setb.addStatement(
+      "final $T $L_mask = $L", arith_type, f_name_text, mask);
+    setb.addStatement(
+      "final $T $L_valu = ($L & $L_mask) << $L",
+      arith_type,
+      f_name_text,
+      f_name_text,
+      f_name_text,
+      shift);
+    setb.addStatement("r_valu |= $L_valu", f_name_text);
+  }
+
+  private static void onNormalized(
+    final boolean signed,
+    final BigInteger field_size,
+    final MethodSpec.Builder setb,
+    final Class<?> arith_type,
+    final String f_name_text,
+    final String mask,
+    final BigInteger shift)
+  {
+    final Class<?> nfp_class =
+      PackedFieldImplementationProcessor.getNFPClassFromFieldSizeAndSign(
+        field_size, signed);
+    final String m_to =
+      PackedFieldImplementationProcessor.getNormalizedToMethod(
+        field_size, signed);
+
+    setb.addStatement(
+      "final $T $L_conv = $T.$N($N)",
+      arith_type,
+      f_name_text,
+      nfp_class,
+      m_to,
+      f_name_text);
+    setb.addStatement(
+      "final $T $L_valu = $L_conv << $L",
+      arith_type,
+      f_name_text,
+      f_name_text,
+      shift);
+    setb.addStatement("r_valu |= $L_valu", f_name_text);
+  }
+
+  private static Class<?> getNFPClassFromFieldSizeAndSign(
+    final BigInteger field_size,
+    final boolean signed)
+  {
+    final Class<?> nfp_class;
+    if (field_size.compareTo(BigInteger.valueOf(64L)) > 0) {
+      throw new UnimplementedCodeException();
+    }
+
+    if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleLong.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleLong.class;
+      }
+    } else if (field_size.compareTo(BigInteger.valueOf(16L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    } else if (field_size.compareTo(BigInteger.valueOf(8L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    } else {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    }
+    return nfp_class;
+  }
+
+  private static String getNormalizedFromMethod(
+    final BigInteger field_size,
+    final boolean signed)
+  {
+    if (signed) {
+      return String.format("fromSignedNormalizedWithZero%s", field_size);
+    }
+    return String.format("fromUnsignedNormalized%s", field_size);
+  }
+
+  private static String getNormalizedToMethod(
+    final BigInteger field_size,
+    final boolean signed)
+  {
+    if (signed) {
+      return String.format("toSignedNormalizedWithZero%s", field_size);
+    }
+    return String.format("toUnsignedNormalized%s", field_size);
   }
 
   @Override public Unit matchIntegerUnsigned(
@@ -245,47 +488,15 @@ public final class PackedFieldImplementationProcessor
     this.integerGetterSetter(
       container_size, field_size, getter_norm_raw_name, setter_norm_raw_name);
 
-    final Class<?> nfp_class;
-
-    if (field_size.compareTo(BigInteger.valueOf(64L)) > 0) {
-      throw new UnimplementedCodeException();
-    }
-
-    if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
-      if (signed) {
-        nfp_class = NFPSignedDoubleLong.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleLong.class;
-      }
-    } else if (field_size.compareTo(BigInteger.valueOf(16L)) > 0) {
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-    } else if (field_size.compareTo(BigInteger.valueOf(8L)) > 0) {
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-    } else {
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-    }
-
-    final String m_to;
-    final String m_of;
-    if (signed) {
-      m_to = String.format("toSignedNormalizedWithZero%s", field_size);
-      m_of = String.format("fromSignedNormalizedWithZero%s", field_size);
-    } else {
-      m_to = String.format("toUnsignedNormalized%s", field_size);
-      m_of = String.format("fromUnsignedNormalized%s", field_size);
-    }
+    final Class<?> nfp_class =
+      PackedFieldImplementationProcessor.getNFPClassFromFieldSizeAndSign(
+        field_size, signed);
+    final String m_to =
+      PackedFieldImplementationProcessor.getNormalizedToMethod(
+        field_size, signed);
+    final String m_of =
+      PackedFieldImplementationProcessor.getNormalizedFromMethod(
+        field_size, signed);
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
     getb.addModifiers(Modifier.PUBLIC);

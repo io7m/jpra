@@ -58,9 +58,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * Contracts to test the generated code for validity. In other words, the
- * output is checked to see if it is valid Java, not necessarily that the
- * code is actually correct.
+ * Contracts to test the generated code for validity. In other words, the output
+ * is checked to see if it is valid Java, not necessarily that the code is
+ * actually correct.
  */
 
 public abstract class JPRAJavaGeneratorContract
@@ -479,6 +479,32 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
     final TPacked r = rb.build();
 
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedAllPadding()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedAllPadding");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addPaddingBits(no_lex, Size.valueOf(64L));
+
+    final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
       Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
@@ -1379,6 +1405,49 @@ public abstract class JPRAJavaGeneratorContract
       new FieldName(no_lex, "w2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+
+  @Test public final void testPackedIntegerU4_S4_UN4_SN4()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name =
+      new TypeName(no_lex, "PackedIntegerU4_S4_UN4_SN4");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "u4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "s4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "un4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "sn4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
