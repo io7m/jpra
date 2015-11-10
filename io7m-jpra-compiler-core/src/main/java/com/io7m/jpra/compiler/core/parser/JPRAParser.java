@@ -669,7 +669,6 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-
   private void parsePackedFields(
     final SExpressionListType fields,
     final MutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
@@ -777,8 +776,6 @@ public final class JPRAParser implements JPRAParserType
       throw new UnreachableCodeException(x);
     }
   }
-
-
 
   private StatementType<Unresolved, Untyped> parseRecord(
     final SExpressionListType le,
@@ -1396,6 +1393,13 @@ public final class JPRAParser implements JPRAParserType
           }
         }
       });
+  }
+
+  @Override public void parseEOF(
+    final Optional<ImmutableLexicalPositionType<Path>> lex)
+    throws JPRACompilerParseException
+  {
+    NullCheck.notNull(lex);
   }
 
   private SizeExprType<Unresolved, Untyped> parseSizeInBits(

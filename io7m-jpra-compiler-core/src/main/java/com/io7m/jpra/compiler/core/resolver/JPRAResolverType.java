@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.IdentifierType;
@@ -29,6 +30,7 @@ import com.io7m.jpra.model.statements.StatementPackageImport;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 
@@ -70,10 +72,12 @@ public interface JPRAResolverType
    *
    * @param s The statement
    *
+   * @return A resolved import statement
+   *
    * @throws JPRACompilerResolverException On resolution errors
    */
 
-  void resolvePackageImport(
+  StatementPackageImport<IdentifierType, Untyped> resolvePackageImport(
     StatementPackageImport<Unresolved, Untyped> s)
     throws JPRACompilerResolverException;
 
@@ -82,10 +86,12 @@ public interface JPRAResolverType
    *
    * @param s The statement
    *
+   * @return A resolved package end statement
+   *
    * @throws JPRACompilerResolverException On resolution errors
    */
 
-  void resolvePackageEnd(
+  StatementPackageEnd<IdentifierType, Untyped> resolvePackageEnd(
     StatementPackageEnd<Unresolved, Untyped> s)
     throws JPRACompilerResolverException;
 
@@ -143,5 +149,17 @@ public interface JPRAResolverType
 
   StatementCommandType<IdentifierType, Untyped> resolveCommandType(
     StatementCommandType<Unresolved, Untyped> s)
+    throws JPRACompilerResolverException;
+
+  /**
+   * EOF has been encountered.
+   *
+   * @param lex Lexical information, if any
+   *
+   * @throws JPRACompilerResolverException On resolution errors
+   */
+
+  void resolveEOF(
+    Optional<ImmutableLexicalPositionType<Path>> lex)
     throws JPRACompilerResolverException;
 }

@@ -71,6 +71,12 @@ public enum JPRAResolverErrorCode
   TYPE_NONEXISTENT,
 
   /**
+   * Unexpected encountered EOF.
+   */
+
+  UNEXPECTED_EOF,
+
+  /**
    * A duplicate package was specified.
    */
 

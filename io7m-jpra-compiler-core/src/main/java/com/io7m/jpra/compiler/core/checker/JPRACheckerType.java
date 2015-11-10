@@ -19,6 +19,7 @@ package com.io7m.jpra.compiler.core.checker;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.IdentifierType;
+import com.io7m.jpra.model.statements.StatementCommandType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
@@ -83,5 +84,19 @@ public interface JPRACheckerType
 
   TypeExprType<IdentifierType, TType> checkTypeExpression(
     TypeExprType<IdentifierType, Untyped> expr)
+    throws JPRACompilerCheckerException;
+
+  /**
+   * Check a {@code :type} command.
+   *
+   * @param s The statement
+   *
+   * @return A type expression
+   *
+   * @throws JPRACompilerCheckerException On type errors
+   */
+
+  StatementCommandType<IdentifierType, TType> checkCommandType(
+    StatementCommandType<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException;
 }

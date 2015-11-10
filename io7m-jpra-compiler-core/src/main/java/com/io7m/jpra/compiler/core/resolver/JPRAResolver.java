@@ -23,6 +23,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
@@ -76,6 +77,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
 
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
 
@@ -166,11 +168,14 @@ public final class JPRAResolver implements JPRAResolverType
       throw JPRACompilerResolverException.duplicatePackage(name, p.getName());
     }
 
-    this.current_package = Optional.of(s.getPackageName());
-    return new StatementPackageBegin<>(s.getPackageName());
+    JPRAResolver.LOG.debug("start package {}", name);
+
+    this.current_package = Optional.of(name);
+    return new StatementPackageBegin<>(name);
   }
 
-  @Override public void resolvePackageImport(
+  @Override
+  public StatementPackageImport<IdentifierType, Untyped> resolvePackageImport(
     final StatementPackageImport<Unresolved, Untyped> s)
     throws JPRACompilerResolverException
   {
@@ -196,6 +201,7 @@ public final class JPRAResolver implements JPRAResolverType
       final PackageContextType p = this.context.getPackage(q_name);
       this.imports.put(q_name, p);
       this.import_names.put(s_new, q_name);
+      return new StatementPackageImport<>(s.getPackageName(), s.getUsing());
     } catch (final JPRAModelLoadingException e) {
       throw new JPRACompilerResolverException(
         s_new.getLexicalInformation(),
@@ -204,7 +210,8 @@ public final class JPRAResolver implements JPRAResolverType
     }
   }
 
-  @Override public void resolvePackageEnd(
+  @Override
+  public StatementPackageEnd<IdentifierType, Untyped> resolvePackageEnd(
     final StatementPackageEnd<Unresolved, Untyped> s)
     throws JPRACompilerResolverException
   {
@@ -213,10 +220,14 @@ public final class JPRAResolver implements JPRAResolverType
         s.getLexicalInformation());
     }
 
+    JPRAResolver.LOG.debug("end package {}", this.current_package.get());
+
     this.imports.clear();
     this.import_names.clear();
     this.current_types.clear();
     this.current_package = Optional.empty();
+
+    return new StatementPackageEnd<>(s.getLexicalInformation());
   }
 
   @Override public TypeDeclType<IdentifierType, Untyped> resolveTypeDeclaration(
@@ -712,6 +723,15 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new StatementCommandType<>(
       this.resolveTypeExpression(s.getExpression()));
+  }
+
+  @Override public void resolveEOF(
+    final Optional<ImmutableLexicalPositionType<Path>> lex)
+    throws JPRACompilerResolverException
+  {
+    if (this.current_package.isPresent()) {
+      throw JPRACompilerResolverException.unexpectedEOF(lex);
+    }
   }
 
   private SizeExprType<IdentifierType, Untyped> resolveSizeExprInBits(

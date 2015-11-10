@@ -37,6 +37,7 @@ import com.io7m.jpra.model.size_expressions.SizeExprInBits;
 import com.io7m.jpra.model.size_expressions.SizeExprInOctets;
 import com.io7m.jpra.model.size_expressions.SizeExprMatcherType;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import com.io7m.jpra.model.statements.StatementCommandType;
 import com.io7m.jpra.model.statements.StatementPackageBegin;
 import com.io7m.jpra.model.statements.StatementPackageEnd;
 import com.io7m.jpra.model.type_declarations.PackedFieldDeclMatcherType;
@@ -559,6 +560,14 @@ public final class JPRAChecker implements JPRACheckerType
           return JPRAChecker.this.checkTypeExprBooleanSet(e);
         }
       });
+  }
+
+  @Override public StatementCommandType<IdentifierType, TType> checkCommandType(
+    final StatementCommandType<IdentifierType, Untyped> s)
+    throws JPRACompilerCheckerException
+  {
+    return new StatementCommandType<>(
+      this.checkTypeExpression(s.getExpression()));
   }
 
   private TypeExprName<IdentifierType, TType> checkTypeExprName(

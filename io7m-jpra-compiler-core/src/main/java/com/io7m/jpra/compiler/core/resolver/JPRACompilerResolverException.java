@@ -296,6 +296,23 @@ public final class JPRACompilerResolverException extends JPRACompilerException
   }
 
   /**
+   * @param lex_opt Lexical information, if any
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#UNEXPECTED_EOF
+   */
+
+  public static JPRACompilerResolverException unexpectedEOF(
+    final Optional<ImmutableLexicalPositionType<Path>> lex_opt)
+  {
+    return new JPRACompilerResolverException(
+      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      JPRAResolverErrorCode.UNEXPECTED_EOF,
+      "Unexpected EOF.");
+  }
+
+  /**
    * @return The error code
    */
 

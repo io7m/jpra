@@ -16,12 +16,16 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
+import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import com.io7m.jpra.model.statements.StatementType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jsx.SExpressionType;
+
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * The type of parsers.
@@ -40,7 +44,7 @@ public interface JPRAParserType
    */
 
   StatementType<Unresolved, Untyped> parseStatement(
-    final SExpressionType expr)
+    SExpressionType expr)
     throws JPRACompilerParseException;
 
   /**
@@ -54,7 +58,7 @@ public interface JPRAParserType
    */
 
   TypeExprType<Unresolved, Untyped> parseTypeExpression(
-    final SExpressionType expr)
+    SExpressionType expr)
     throws JPRACompilerParseException;
 
   /**
@@ -68,6 +72,17 @@ public interface JPRAParserType
    */
 
   SizeExprType<Unresolved, Untyped> parseSizeExpression(
-    final SExpressionType expr)
+    SExpressionType expr)
+    throws JPRACompilerParseException;
+
+  /**
+   * EOF has been encountered.
+   *
+   * @param lex Lexical information, if any
+   * @throws JPRACompilerParseException On parse errors
+   */
+
+  void parseEOF(
+    Optional<ImmutableLexicalPositionType<Path>> lex)
     throws JPRACompilerParseException;
 }
