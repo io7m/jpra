@@ -37,6 +37,8 @@ import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TIntegerSignedNormalized;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
+import com.io7m.jpra.model.types.TPacked;
+import com.io7m.jpra.model.types.TPackedBuilderType;
 import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TRecordBuilderType;
 import org.junit.Assert;
@@ -57,6 +59,65 @@ import java.util.Optional;
 
 public abstract class JPRAJavaGeneratorContract
 {
+  private static void compilePackeds(
+    final Path path,
+    final JPRAJavaGeneratorType g,
+    final ImmutableList<TPacked> types)
+    throws IOException
+  {
+    final JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
+
+    final StandardJavaFileManager fm =
+      jc.getStandardFileManager(null, null, null);
+
+    final MutableList<File> files = Lists.mutable.empty();
+    types.forEach(
+      (Procedure<TPacked>) r -> {
+        try {
+          final TypeName t_name = r.getName();
+
+          final Path c_file = path.resolve(
+            g.getPackedImplementationByteBufferedName(t_name) + ".java");
+          final Path r_file =
+            path.resolve(g.getPackedInterfaceReadableName(t_name) + ".java");
+          final Path w_file =
+            path.resolve(g.getPackedInterfaceWritableName(t_name) + ".java");
+          final Path i_file =
+            path.resolve(g.getPackedInterfaceName(t_name) + ".java");
+
+          try (final OutputStream w = Files.newOutputStream(c_file)) {
+            g.generatePackedImplementation(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(r_file)) {
+            g.generatePackedInterfaceReadable(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(w_file)) {
+            g.generatePackedInterfaceWritable(r, w);
+          }
+          try (final OutputStream w = Files.newOutputStream(i_file)) {
+            g.generatePackedInterface(r, w);
+          }
+
+          files.add(c_file.toFile());
+          files.add(r_file.toFile());
+          files.add(w_file.toFile());
+          files.add(i_file.toFile());
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+
+    final String[] options = { "-verbose", "-Werror", "-d", path.toString() };
+    final Iterable<? extends JavaFileObject> fm_files =
+      fm.getJavaFileObjectsFromFiles(files);
+
+    final JavaCompiler.CompilationTask task =
+      jc.getTask(null, null, null, Arrays.asList(options), null, fm_files);
+    final Boolean result = task.call();
+    Assert.assertEquals(Boolean.TRUE, result);
+    fm.close();
+  }
+
   private static void compileRecords(
     final Path path,
     final JPRAJavaGeneratorType g,
@@ -118,7 +179,7 @@ public abstract class JPRAJavaGeneratorContract
 
   protected abstract JPRAJavaGeneratorType getJavaGenerator();
 
-  @Test public final void testEmptyRecord()
+  @Test public final void testRecordEmpty()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -390,5 +451,477 @@ public abstract class JPRAJavaGeneratorContract
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
       path, g, Lists.immutable.of(te, r));
+  }
+
+  @Test public final void testPackedEmpty()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "Empty");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+    final TPacked r = rb.build();
+
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerU4_U4_U4_U4()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerU4_U4_U4_U4");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "g4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "b4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "a4"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerU8_U8_U8_U8()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerU8_U8_U8_U8");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r8"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "g8"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "b8"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "a8"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerU16_U16_U16_U16()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name =
+      new TypeName(no_lex, "PackedIntegerU16_U16_U16_U16");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r16"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "g16"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "b16"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "a16"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerU2_U2_U2_U2()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerU2_U2_U2_U2");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "g2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "b2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "a2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerU2_U2_U2_U2_U2_U2_U2_U2()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name =
+      new TypeName(no_lex, "PackedIntegerU2_U2_U2_U2_U2_U2_U2_U2");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "g2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "b2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "a2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+
+    rb.addField(
+      new FieldName(no_lex, "x2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "y2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "z2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "w2"),
+      gc.getFreshIdentifier(),
+      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerS4_S4_S4_S4()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerS4_S4_S4_S4");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "g4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "b4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+    rb.addField(
+      new FieldName(no_lex, "a4"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerS8_S8_S8_S8()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerS8_S8_S8_S8");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r8"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "g8"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "b8"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+    rb.addField(
+      new FieldName(no_lex, "a8"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerS16_S16_S16_S16()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name =
+      new TypeName(no_lex, "PackedIntegerS16_S16_S16_S16");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r16"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "g16"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "b16"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+    rb.addField(
+      new FieldName(no_lex, "a16"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerS2_S2_S2_S2()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerS2_S2_S2_S2");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "g2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "b2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "a2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testPackedIntegerS2_S2_S2_S2_S2_S2_S2_S2()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.getPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name =
+      new TypeName(no_lex, "PackedIntegerS2_S2_S2_S2_S2_S2_S2_S2");
+    final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
+
+    rb.addField(
+      new FieldName(no_lex, "r2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "g2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "b2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "a2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+
+    rb.addField(
+      new FieldName(no_lex, "x2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "y2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "z2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+    rb.addField(
+      new FieldName(no_lex, "w2"),
+      gc.getFreshIdentifier(),
+      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+
+    final TPacked r = rb.build();
+    JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 }

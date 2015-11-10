@@ -69,7 +69,6 @@ final class JPRAGeneratedNames
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
-    sb.append("N");
     return sb.toString();
   }
 
@@ -79,7 +78,6 @@ final class JPRAGeneratedNames
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
-    sb.append("N");
     return sb.toString();
   }
 
@@ -159,5 +157,45 @@ final class JPRAGeneratedNames
   static String getFieldName(final FieldName f_name)
   {
     return String.format("field_%s", f_name.getValue());
+  }
+
+  static String getPackedInterfaceWritableName(final TypeName t)
+  {
+    return t.getValue() + "WritableType";
+  }
+
+  static String getPackedInterfaceReadableName(final TypeName t)
+  {
+    return t.getValue() + "ReadableType";
+  }
+
+  static String getPackedInterfaceName(final TypeName t)
+  {
+    return t.getValue() + "Type";
+  }
+
+  static String getPackedImplementationByteBufferedName(final TypeName t)
+  {
+    return t.getValue() + "ByteBuffered";
+  }
+
+  static String getNormalizedRawGetterName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("get");
+    sb.append(text);
+    sb.append("Raw");
+    return sb.toString();
+  }
+
+  static String getNormalizedRawSetterName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("set");
+    sb.append(text);
+    sb.append("Raw");
+    return sb.toString();
   }
 }

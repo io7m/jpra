@@ -102,17 +102,17 @@ final class RecordFieldImplementationIntegerProcessor
       iget = "get";
     }
 
-    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-    getb.addModifiers(Modifier.PUBLIC);
-    getb.addAnnotation(Override.class);
-    getb.returns(itype);
-    getb.addStatement(
-      "return this.$N.$N(this.getByteOffsetFor($N))",
-      "buffer",
-      iget,
-      offset_constant);
-    this.class_builder.addMethod(getb.build());
+    this.integerGetter(offset_constant, getter_name, iget, itype);
+    this.integerSetter(offset_constant, setter_name, iput, itype);
+    return Unit.unit();
+  }
 
+  private void integerSetter(
+    final String offset_constant,
+    final String setter_name,
+    final String iput,
+    final Class<?> itype)
+  {
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
     setb.addModifiers(Modifier.PUBLIC);
     setb.addAnnotation(Override.class);
@@ -125,7 +125,24 @@ final class RecordFieldImplementationIntegerProcessor
       offset_constant,
       "x");
     this.class_builder.addMethod(setb.build());
-    return Unit.unit();
+  }
+
+  private void integerGetter(
+    final String offset_constant,
+    final String getter_name,
+    final String iget,
+    final Class<?> itype)
+  {
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.addAnnotation(Override.class);
+    getb.returns(itype);
+    getb.addStatement(
+      "return this.$N.$N(this.getByteOffsetFor($N))",
+      "buffer",
+      iget,
+      offset_constant);
+    this.class_builder.addMethod(getb.build());
   }
 
   @Override public Unit matchIntegerSignedNormalized(
@@ -140,16 +157,16 @@ final class RecordFieldImplementationIntegerProcessor
     final BigInteger size,
     final boolean signed)
   {
-    this.onInteger(size);
-
-    final String getter_name =
-      JPRAGeneratedNames.getGetterName(this.field.getName());
-    final String setter_name =
-      JPRAGeneratedNames.getSetterName(this.field.getName());
+    final String offset_constant =
+      JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
     final String getter_norm_name =
       JPRAGeneratedNames.getNormalizedGetterName(this.field.getName());
     final String setter_norm_name =
       JPRAGeneratedNames.getNormalizedSetterName(this.field.getName());
+    final String getter_norm_raw_name =
+      JPRAGeneratedNames.getNormalizedRawGetterName(this.field.getName());
+    final String setter_norm_raw_name =
+      JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
     final Class<?> r_type;
     final Class<?> nfp_class;
@@ -158,6 +175,8 @@ final class RecordFieldImplementationIntegerProcessor
       throw new UnimplementedCodeException();
     }
 
+    final String iput;
+    final String iget;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       r_type = long.class;
       if (signed) {
@@ -165,6 +184,8 @@ final class RecordFieldImplementationIntegerProcessor
       } else {
         nfp_class = NFPUnsignedDoubleLong.class;
       }
+      iput = "putLong";
+      iget = "getLong";
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
       r_type = int.class;
       if (signed) {
@@ -172,6 +193,8 @@ final class RecordFieldImplementationIntegerProcessor
       } else {
         nfp_class = NFPUnsignedDoubleInt.class;
       }
+      iput = "putInt";
+      iget = "getInt";
     } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
       r_type = short.class;
       if (signed) {
@@ -179,6 +202,8 @@ final class RecordFieldImplementationIntegerProcessor
       } else {
         nfp_class = NFPUnsignedDoubleInt.class;
       }
+      iput = "putShort";
+      iget = "getShort";
     } else {
       r_type = byte.class;
       if (signed) {
@@ -186,6 +211,8 @@ final class RecordFieldImplementationIntegerProcessor
       } else {
         nfp_class = NFPUnsignedDoubleInt.class;
       }
+      iput = "put";
+      iget = "get";
     }
 
     final String m_to;
@@ -198,12 +225,15 @@ final class RecordFieldImplementationIntegerProcessor
       m_of = String.format("fromUnsignedNormalized%s", size);
     }
 
+    this.integerGetter(offset_constant, getter_norm_raw_name, iget, r_type);
+    this.integerSetter(offset_constant, setter_norm_raw_name, iput, r_type);
+
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
     getb.addModifiers(Modifier.PUBLIC);
     getb.addAnnotation(Override.class);
     getb.returns(double.class);
     getb.addStatement(
-      "return $T.$N(this.$N())", nfp_class, m_of, getter_name);
+      "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
     this.class_builder.addMethod(getb.build());
 
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);
@@ -211,7 +241,12 @@ final class RecordFieldImplementationIntegerProcessor
     setb.addAnnotation(Override.class);
     setb.addParameter(double.class, "x", Modifier.FINAL);
     setb.addStatement(
-      "this.$N(($T) $T.$N($N))", setter_name, r_type, nfp_class, m_to, "x");
+      "this.$N(($T) $T.$N($N))",
+      setter_norm_raw_name,
+      r_type,
+      nfp_class,
+      m_to,
+      "x");
     this.class_builder.addMethod(setb.build());
   }
 

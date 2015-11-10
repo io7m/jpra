@@ -18,12 +18,21 @@ package com.io7m.jpra.compiler.java;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.types.TArray;
+import com.io7m.jpra.model.types.TBooleanSet;
+import com.io7m.jpra.model.types.TFloat;
 import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TIntegerSignedNormalized;
+import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
+import com.io7m.jpra.model.types.TMatrix;
+import com.io7m.jpra.model.types.TPacked;
 import com.io7m.jpra.model.types.TRecord;
+import com.io7m.jpra.model.types.TString;
+import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeIntegerMatcherType;
+import com.io7m.jpra.model.types.TypeMatcherType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.MethodSpec;
@@ -33,19 +42,19 @@ import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
 
 /**
- * A type matcher that produces interface methods for a given integer type
- * record fields.
+ * A type matcher that produces interface methods for packed fields.
  */
 
-final class RecordFieldInterfaceIntegerProcessor
-  implements TypeIntegerMatcherType<Unit, UnreachableCodeException>
+public final class PackedFieldInterfaceProcessor
+  implements TypeMatcherType<Unit, UnreachableCodeException>,
+  TypeIntegerMatcherType<Unit, UnreachableCodeException>
 {
-  private final TRecord.FieldValue field;
+  private final TPacked.FieldValue field;
   private final TypeSpec.Builder   class_builder;
   private final MethodSelection    methods;
 
-  RecordFieldInterfaceIntegerProcessor(
-    final TRecord.FieldValue in_field,
+  PackedFieldInterfaceProcessor(
+    final TPacked.FieldValue in_field,
     final TypeSpec.Builder in_class_builder,
     final MethodSelection in_methods)
   {
@@ -54,12 +63,59 @@ final class RecordFieldInterfaceIntegerProcessor
     this.methods = NullCheck.notNull(in_methods);
   }
 
-  @Override public Unit matchIntegerUnsigned(final TIntegerUnsigned t)
+  @Override public Unit matchArray(final TArray t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchString(final TString t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchBooleanSet(final TBooleanSet t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchInteger(final TIntegerType t)
+  {
+    return t.matchTypeInteger(this);
+  }
+
+  @Override public Unit matchFloat(final TFloat t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchVector(final TVector t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchMatrix(final TMatrix t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchRecord(final TRecord t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchPacked(final TPacked t)
+  {
+    throw new UnreachableCodeException();
+  }
+
+  @Override public Unit matchIntegerUnsigned(
+    final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSigned(final TIntegerSigned t)
+  @Override public Unit matchIntegerSigned(
+    final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
@@ -83,20 +139,15 @@ final class RecordFieldInterfaceIntegerProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    final Class<?> itype;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
+    final Class<?> itype;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
-    } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
-      itype = int.class;
-    } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
-      itype = short.class;
     } else {
-      itype = byte.class;
+      itype = int.class;
     }
 
     if (this.methods.wantGetters()) {
@@ -128,20 +179,15 @@ final class RecordFieldInterfaceIntegerProcessor
     final String setter_norm_raw_name =
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
-    final Class<?> itype;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
+    final Class<?> itype;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
-    } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
-      itype = int.class;
-    } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
-      itype = short.class;
     } else {
-      itype = byte.class;
+      itype = int.class;
     }
 
     if (this.methods.wantGetters()) {

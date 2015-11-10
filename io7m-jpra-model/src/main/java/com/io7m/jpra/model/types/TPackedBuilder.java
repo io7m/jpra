@@ -29,14 +29,25 @@ import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jranges.RangeInclusiveB;
 import com.io7m.junreachable.UnreachableCodeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class TPackedBuilder implements TPackedBuilderType
 {
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(TPackedBuilder.class);
+  }
+
   private final MutableList<TPacked.FieldType>            type_fields_ordered;
   private final MutableMap<FieldName, TPacked.FieldValue> type_fields_named;
   private final PackageContextType                        package_context;
@@ -106,6 +117,10 @@ final class TPackedBuilder implements TPackedBuilderType
       this.type_fields_named.toImmutable(),
       this.type_fields_ordered.toImmutable());
 
+    final BigInteger size = tr.getSizeInBits().getValue();
+    final AtomicReference<BigInteger> msb =
+      new AtomicReference<>(size.subtract(BigInteger.ONE));
+
     for (final TPacked.FieldType f : this.type_fields_ordered) {
       f.matchField(
         new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
@@ -114,6 +129,14 @@ final class TPackedBuilder implements TPackedBuilderType
             final TPacked.FieldValue f)
           {
             f.setOwner(tr);
+            final BigInteger size = f.getSize().getValue();
+            final BigInteger current_msb = msb.get();
+            final BigInteger lsb =
+              current_msb.subtract(size).add(BigInteger.ONE);
+
+            TPackedBuilder.LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+            f.setRange(new RangeInclusiveB(lsb, current_msb));
+            msb.set(lsb.subtract(BigInteger.ONE));
             return Unit.unit();
           }
 
@@ -121,6 +144,14 @@ final class TPackedBuilder implements TPackedBuilderType
             final TPacked.FieldPaddingBits f)
           {
             f.setOwner(tr);
+            final BigInteger size = f.getSize().getValue();
+            final BigInteger current_msb = msb.get();
+            final BigInteger lsb =
+              current_msb.subtract(size).add(BigInteger.ONE);
+
+            TPackedBuilder.LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+            f.setRange(new RangeInclusiveB(lsb, current_msb));
+            msb.set(lsb.subtract(BigInteger.ONE));
             return Unit.unit();
           }
         });

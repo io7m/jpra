@@ -66,6 +66,42 @@ public interface JPRAJavaGeneratorType
   String getRecordInterfaceName(TypeName t);
 
   /**
+   * @param t The type name
+   *
+   * @return The class name that will result for a byte-buffered implementation
+   * of {@code t}
+   */
+
+  String getPackedImplementationByteBufferedName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the readable interface of
+   * {@code t}
+   */
+
+  String getPackedInterfaceReadableName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the writable interface of
+   * {@code t}
+   */
+
+  String getPackedInterfaceWritableName(TypeName t);
+
+  /**
+   * @param t The type name
+   *
+   * @return The class name that will result for the readable and writable
+   * interface of {@code t}
+   */
+
+  String getPackedInterfaceName(TypeName t);
+
+  /**
    * Generate Java source code for the implementation of a {@code record}
    * definition.
    *
@@ -126,7 +162,8 @@ public interface JPRAJavaGeneratorType
     throws IOException;
 
   /**
-   * Generate Java source code for a {@code packed} definition.
+   * Generate Java source code for the implementation of a {@code packed}
+   * definition.
    *
    * @param t  The type
    * @param os The output stream
@@ -134,7 +171,52 @@ public interface JPRAJavaGeneratorType
    * @throws IOException On I/O errors
    */
 
-  void generatePacked(
+  void generatePackedImplementation(
+    TPacked t,
+    OutputStream os)
+    throws IOException;
+
+  /**
+   * Generate Java source code for the readable interface of a {@code packed}
+   * definition.
+   *
+   * @param t  The type
+   * @param os The output stream
+   *
+   * @throws IOException On I/O errors
+   */
+
+  void generatePackedInterfaceReadable(
+    TPacked t,
+    OutputStream os)
+    throws IOException;
+
+  /**
+   * Generate Java source code for the writable interface of a {@code packed}
+   * definition.
+   *
+   * @param t  The type
+   * @param os The output stream
+   *
+   * @throws IOException On I/O errors
+   */
+
+  void generatePackedInterfaceWritable(
+    TPacked t,
+    OutputStream os)
+    throws IOException;
+
+  /**
+   * Generate Java source code for the readable and writable interface of a
+   * {@code packed} definition.
+   *
+   * @param t  The type
+   * @param os The output stream
+   *
+   * @throws IOException On I/O errors
+   */
+
+  void generatePackedInterface(
     TPacked t,
     OutputStream os)
     throws IOException;

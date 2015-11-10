@@ -27,8 +27,10 @@ import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jranges.RangeInclusiveB;
 import org.valid4j.Assertive;
 
+import java.math.BigInteger;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -44,6 +46,7 @@ public final class TPacked implements TType, TypeUserDefinedType
   private final ImmutableList<FieldType>            fields_by_order;
   private final PackageContextType                  package_ctx;
   private final IdentifierType                      identifier;
+  private final Size<SizeUnitOctetsType>            size_octets;
 
   TPacked(
     final PackageContextType in_package,
@@ -75,6 +78,14 @@ public final class TPacked implements TType, TypeUserDefinedType
 
     this.size_bits = this.fields_by_order.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
+
+    final BigInteger sv = this.size_bits.getValue();
+    final BigInteger b8 = BigInteger.valueOf(8L);
+    Assertive.ensure(
+      sv.remainder(b8).equals(BigInteger.ZERO),
+      "Size %s must be divisible by 8",
+      sv);
+    this.size_octets = new Size<>(sv.divide(b8));
   }
 
   /**
@@ -169,11 +180,26 @@ public final class TPacked implements TType, TypeUserDefinedType
   }
 
   /**
+   * @return The size in octets of the packed type
+   */
+
+  public Size<SizeUnitOctetsType> getSizeInOctets()
+  {
+    return this.size_octets;
+  }
+
+  /**
    * The type of packed fields.
    */
 
   public interface FieldType extends ModelElementType
   {
+    /**
+     * @return The inclusive range of bits that this field spans
+     */
+
+    RangeInclusiveB getBitRange();
+
     /**
      * @return The owning type
      */
@@ -245,9 +271,10 @@ public final class TPacked implements TType, TypeUserDefinedType
 
   public static final class FieldValue implements FieldType
   {
-    private final     FieldName    name;
-    private final     TIntegerType type;
-    private @Nullable TPacked      owner;
+    private final     FieldName       name;
+    private final     TIntegerType    type;
+    private @Nullable TPacked         owner;
+    private @Nullable RangeInclusiveB range;
 
     FieldValue(
       final FieldName in_identifier,
@@ -255,6 +282,11 @@ public final class TPacked implements TType, TypeUserDefinedType
     {
       this.name = NullCheck.notNull(in_identifier);
       this.type = NullCheck.notNull(in_type);
+    }
+
+    @Override public RangeInclusiveB getBitRange()
+    {
+      return NullCheck.notNull(this.range);
     }
 
     @Override public TPacked getOwner()
@@ -265,6 +297,11 @@ public final class TPacked implements TType, TypeUserDefinedType
     void setOwner(final TPacked in_owner)
     {
       this.owner = NullCheck.notNull(in_owner);
+    }
+
+    void setRange(final RangeInclusiveB in_range)
+    {
+      this.range = NullCheck.notNull(in_range);
     }
 
     /**
@@ -323,6 +360,7 @@ public final class TPacked implements TType, TypeUserDefinedType
     private final     Size<SizeUnitBitsType>                       size_bits;
     private final     Optional<ImmutableLexicalPositionType<Path>> lex;
     private @Nullable TPacked                                      owner;
+    private @Nullable RangeInclusiveB                              range;
 
     FieldPaddingBits(
       final Size<SizeUnitBitsType> in_size_bits,
@@ -340,6 +378,16 @@ public final class TPacked implements TType, TypeUserDefinedType
     void setOwner(final TPacked in_owner)
     {
       this.owner = NullCheck.notNull(in_owner);
+    }
+
+    @Override public RangeInclusiveB getBitRange()
+    {
+      return NullCheck.notNull(this.range);
+    }
+
+    void setRange(final RangeInclusiveB in_range)
+    {
+      this.range = NullCheck.notNull(in_range);
     }
 
     @Override public Size<SizeUnitBitsType> getSize()
