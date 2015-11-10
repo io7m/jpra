@@ -17,6 +17,10 @@
 package com.io7m.jpra.compiler.java;
 
 import com.io7m.jfunctional.Unit;
+import com.io7m.jnfp.core.NFPSignedDoubleInt;
+import com.io7m.jnfp.core.NFPSignedDoubleLong;
+import com.io7m.jnfp.core.NFPUnsignedDoubleInt;
+import com.io7m.jnfp.core.NFPUnsignedDoubleLong;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.types.Size;
 import com.io7m.jpra.model.types.SizeUnitBitsType;
@@ -92,6 +96,16 @@ public final class PackedFieldImplementationProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
+    return this.integerGetterSetter(
+      container_size, field_size, getter_name, setter_name);
+  }
+
+  private Unit integerGetterSetter(
+    final BigInteger container_size,
+    final BigInteger field_size,
+    final String getter_name,
+    final String setter_name)
+  {
     if (field_size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
@@ -209,15 +223,92 @@ public final class PackedFieldImplementationProcessor
   @Override public Unit matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    return this.onIntegerNormalized(t.getSizeInBits().getValue(), true);
+  }
+
+  private Unit onIntegerNormalized(
+    final BigInteger field_size,
+    final boolean signed)
+  {
+    final BigInteger container_size =
+      this.field.getOwner().getSizeInBits().getValue();
+
+    final String getter_norm_name =
+      JPRAGeneratedNames.getNormalizedGetterName(this.field.getName());
+    final String setter_norm_name =
+      JPRAGeneratedNames.getNormalizedSetterName(this.field.getName());
+    final String getter_norm_raw_name =
+      JPRAGeneratedNames.getNormalizedRawGetterName(this.field.getName());
+    final String setter_norm_raw_name =
+      JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
+
+    this.integerGetterSetter(
+      container_size, field_size, getter_norm_raw_name, setter_norm_raw_name);
+
+    final Class<?> nfp_class;
+
+    if (field_size.compareTo(BigInteger.valueOf(64L)) > 0) {
+      throw new UnimplementedCodeException();
+    }
+
+    if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleLong.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleLong.class;
+      }
+    } else if (field_size.compareTo(BigInteger.valueOf(16L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    } else if (field_size.compareTo(BigInteger.valueOf(8L)) > 0) {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    } else {
+      if (signed) {
+        nfp_class = NFPSignedDoubleInt.class;
+      } else {
+        nfp_class = NFPUnsignedDoubleInt.class;
+      }
+    }
+
+    final String m_to;
+    final String m_of;
+    if (signed) {
+      m_to = String.format("toSignedNormalizedWithZero%s", field_size);
+      m_of = String.format("fromSignedNormalizedWithZero%s", field_size);
+    } else {
+      m_to = String.format("toUnsignedNormalized%s", field_size);
+      m_of = String.format("fromUnsignedNormalized%s", field_size);
+    }
+
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.addAnnotation(Override.class);
+    getb.returns(double.class);
+    getb.addStatement(
+      "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
+    this.class_builder.addMethod(getb.build());
+
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);
+    setb.addModifiers(Modifier.PUBLIC);
+    setb.addAnnotation(Override.class);
+    setb.addParameter(double.class, "x", Modifier.FINAL);
+    setb.addStatement(
+      "this.$N($T.$N($N))", setter_norm_raw_name, nfp_class, m_to, "x");
+    this.class_builder.addMethod(setb.build());
+    return Unit.unit();
   }
 
   @Override public Unit matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    return this.onIntegerNormalized(t.getSizeInBits().getValue(), false);
   }
 
   @Override public Unit matchArray(final TArray t)
