@@ -77,6 +77,18 @@ public enum JPRAResolverErrorCode
   UNEXPECTED_EOF,
 
   /**
+   * An unexpected package was specified.
+   */
+
+  UNEXPECTED_PACKAGE,
+
+  /**
+   * A package was expected but not provided before EOF.
+   */
+
+  EXPECTED_PACKAGE,
+
+  /**
    * A duplicate package was specified.
    */
 

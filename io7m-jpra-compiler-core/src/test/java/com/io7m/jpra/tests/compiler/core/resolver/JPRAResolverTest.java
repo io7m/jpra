@@ -24,6 +24,7 @@ import com.io7m.jpra.compiler.core.parser.JPRAReferenceParser;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolver;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
+import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jsx.SExpressionType;
 import com.io7m.jsx.lexer.JSXLexer;
 import com.io7m.jsx.lexer.JSXLexerConfiguration;
@@ -42,6 +43,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 public final class JPRAResolverTest extends JPRAResolverContract
 {
@@ -72,7 +74,14 @@ public final class JPRAResolverTest extends JPRAResolverContract
 
   @Override protected JPRAResolverType newResolver(final GlobalContextType c)
   {
-    return JPRAResolver.newResolver(c);
+    return JPRAResolver.newResolver(c, Optional.empty());
+  }
+
+  @Override protected JPRAResolverType newResolverForPackage(
+    final GlobalContextType c,
+    final PackageNameQualified p)
+  {
+    return JPRAResolver.newResolver(c, Optional.of(p));
   }
 
   @Override protected SExpressionType newStringSExpr(final String expr)

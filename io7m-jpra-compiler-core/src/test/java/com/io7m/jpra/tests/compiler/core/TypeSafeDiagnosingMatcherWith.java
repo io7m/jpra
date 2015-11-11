@@ -14,25 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.tests.compiler.core;
 
-import com.io7m.jpra.core.JPRAException;
+import com.io7m.jnull.NullCheck;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-/**
- * The type of model loading exceptions.
- */
-
-public final class JPRAModelLoadingException extends JPRAException
+public final class TypeSafeDiagnosingMatcherWith<T extends Throwable>
+  extends TypeSafeDiagnosingMatcher<T>
 {
-  /**
-   * Construct a model loading exception.
-   *
-   * @param message The error message
-   */
+  private final Runnable after;
 
-  public JPRAModelLoadingException(
-    final String message)
+  public TypeSafeDiagnosingMatcherWith(
+    final Runnable in_after)
   {
-    super(message);
+    this.after = NullCheck.notNull(in_after);
+  }
+
+  @Override protected boolean matchesSafely(
+    final T item,
+    final Description mismatch)
+  {
+    this.after.run();
+    return true;
+  }
+
+  @Override public void describeTo(final Description description)
+  {
+
   }
 }

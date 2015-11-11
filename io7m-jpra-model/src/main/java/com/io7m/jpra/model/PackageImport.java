@@ -19,7 +19,6 @@ package com.io7m.jpra.model;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.PackageNameQualified;
-import com.io7m.jpra.model.names.PackageNameUnqualified;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -33,24 +32,20 @@ import java.util.Optional;
 {
   private final PackageNameQualified   from;
   private final PackageNameQualified   to;
-  private final PackageNameUnqualified using;
 
   /**
    * Construct a package import declaration.
    *
    * @param in_from  The importing package
    * @param in_to    The imported package
-   * @param in_using The unqualified name used to refer to {@code in_to}
    */
 
   public PackageImport(
     final PackageNameQualified in_from,
-    final PackageNameQualified in_to,
-    final PackageNameUnqualified in_using)
+    final PackageNameQualified in_to)
   {
     this.from = NullCheck.notNull(in_from);
     this.to = NullCheck.notNull(in_to);
-    this.using = NullCheck.notNull(in_using);
   }
 
   /**
@@ -71,15 +66,6 @@ import java.util.Optional;
     return this.to;
   }
 
-  /**
-   * @return The unqualified name used to refer to the imported package
-   */
-
-  public PackageNameUnqualified getUsing()
-  {
-    return this.using;
-  }
-
   @Override public boolean equals(final Object o)
   {
     if (this == o) {
@@ -91,21 +77,19 @@ import java.util.Optional;
 
     final PackageImport that = (PackageImport) o;
     return this.from.equals(that.from)
-           && this.to.equals(that.to)
-           && this.using.equals(that.using);
+           && this.to.equals(that.to);
   }
 
   @Override public int hashCode()
   {
     int result = this.from.hashCode();
     result = 31 * result + this.to.hashCode();
-    result = 31 * result + this.using.hashCode();
     return result;
   }
 
   @Override
   public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
   {
-    return this.using.getLexicalInformation();
+    return this.from.getLexicalInformation();
   }
 }

@@ -18,4 +18,4 @@
  * Core types.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra;
+@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.core;

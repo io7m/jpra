@@ -18,6 +18,7 @@ package com.io7m.jpra.compiler.core.pipeline;
 
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
+import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jsx.SExpressionType;
 
 import java.nio.file.Path;
@@ -25,6 +26,8 @@ import java.util.Optional;
 
 /**
  * A pipeline that attaches together a parser, resolver, and type-checker.
+ *
+ * Typically, one pipeline is instantiated per compiled file.
  */
 
 public interface JPRAPipelineType
@@ -34,10 +37,12 @@ public interface JPRAPipelineType
    *
    * @param e The expression
    *
+   * @return A completed package, if the expression resulted in one
+   *
    * @throws JPRACompilerException If any of the stages raise an exception
    */
 
-  void onExpression(SExpressionType e)
+  Optional<PackageContextType> onExpression(SExpressionType e)
     throws JPRACompilerException;
 
   /**

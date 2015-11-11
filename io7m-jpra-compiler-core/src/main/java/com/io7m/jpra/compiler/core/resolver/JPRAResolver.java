@@ -93,25 +93,32 @@ public final class JPRAResolver implements JPRAResolverType
     LOG = LoggerFactory.getLogger(JPRAResolver.class);
   }
 
-  private final GlobalContextType                                    context;
+  private final GlobalContextType context;
+
   private final MutableBiMap<PackageNameUnqualified, PackageNameQualified>
                                                                      import_names;
   private final MutableMap<PackageNameQualified, PackageContextType> imports;
+
   private final MutableMap<TypeName, TypeDeclType<IdentifierType, Untyped>>
-                                                                     current_types;
+    current_types;
   private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType,
     Untyped>>
-                                                                     current_record_fields;
+    current_record_fields;
   private final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType,
     Untyped>>
-                                                                     current_packed_fields;
-  private       Optional<PackageNameQualified>
-                                                                     current_package;
+    current_packed_fields;
+
+  private final Optional<PackageNameQualified> expected_package;
+  private       boolean                        expected_received;
+  private       Optional<PackageNameQualified> current_package;
 
   private JPRAResolver(
-    final GlobalContextType c)
+    final GlobalContextType c,
+    final Optional<PackageNameQualified> in_expected_package)
   {
     this.context = NullCheck.notNull(c);
+    this.expected_package = NullCheck.notNull(in_expected_package);
+    this.expected_received = false;
     this.current_package = Optional.empty();
     this.current_record_fields = Maps.mutable.empty();
     this.current_packed_fields = Maps.mutable.empty();
@@ -121,15 +128,20 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   /**
-   * @param c A global context
+   * Create a new resolver. The resolver may optionally raise errors if the
+   * package it resolves turns out not to be {@code in_expected_package}.
+   *
+   * @param c                   A global context
+   * @param in_expected_package The expected package, if any
    *
    * @return A new resolver
    */
 
   public static JPRAResolverType newResolver(
-    final GlobalContextType c)
+    final GlobalContextType c,
+    final Optional<PackageNameQualified> in_expected_package)
   {
-    return new JPRAResolver(c);
+    return new JPRAResolver(c, in_expected_package);
   }
 
   @Override public Optional<PackageNameQualified> resolveGetCurrentPackage()
@@ -158,6 +170,15 @@ public final class JPRAResolver implements JPRAResolverType
     Assertive.ensure(this.current_packed_fields.isEmpty());
     Assertive.ensure(this.imports.isEmpty());
     Assertive.ensure(this.import_names.isEmpty());
+
+    if (this.expected_package.isPresent()) {
+      final PackageNameQualified got = s.getPackageName();
+      final PackageNameQualified expected = this.expected_package.get();
+      if (!got.equals(expected)) {
+        throw JPRACompilerResolverException.unexpectedPackage(expected, got);
+      }
+      this.expected_received = true;
+    }
 
     final Map<PackageNameQualified, PackageContextType> existing =
       this.context.getPackages();
@@ -198,7 +219,10 @@ public final class JPRAResolver implements JPRAResolverType
     }
 
     try {
-      final PackageContextType p = this.context.getPackage(q_name);
+      JPRAResolver.LOG.debug(
+        "package {} imports {}", this.current_package.get(), q_name);
+
+      final PackageContextType p = this.context.loadPackage(q_name);
       this.imports.put(q_name, p);
       this.import_names.put(s_new, q_name);
       return new StatementPackageImport<>(s.getPackageName(), s.getUsing());
@@ -206,7 +230,7 @@ public final class JPRAResolver implements JPRAResolverType
       throw new JPRACompilerResolverException(
         s_new.getLexicalInformation(),
         JPRAResolverErrorCode.PACKAGE_LOADING_ERROR,
-        e);
+        "Error loading package");
     }
   }
 
@@ -731,6 +755,13 @@ public final class JPRAResolver implements JPRAResolverType
   {
     if (this.current_package.isPresent()) {
       throw JPRACompilerResolverException.unexpectedEOF(lex);
+    }
+
+    if (this.expected_package.isPresent()) {
+      if (!this.expected_received) {
+        throw JPRACompilerResolverException.expectedPackage(
+          this.expected_package.get());
+      }
     }
   }
 

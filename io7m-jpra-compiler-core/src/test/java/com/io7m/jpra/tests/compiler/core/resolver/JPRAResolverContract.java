@@ -52,10 +52,10 @@ import com.io7m.jsx.SExpressionType;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.internal.matchers.ThrowableCauseMatcher;
 import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 @SuppressWarnings("unchecked") public abstract class JPRAResolverContract
 {
@@ -73,6 +73,10 @@ import java.math.BigInteger;
   protected abstract JPRAParserType newParser();
 
   protected abstract JPRAResolverType newResolver(final GlobalContextType c);
+
+  protected abstract JPRAResolverType newResolverForPackage(
+    GlobalContextType c,
+    PackageNameQualified p);
 
   protected abstract SExpressionType newStringSExpr(
     final String expr);
@@ -94,6 +98,46 @@ import java.math.BigInteger;
     r.resolvePackageBegin(
       StatementPackageBegin.class.cast(
         p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+  }
+
+  @Test public final void testPackageUnexpected()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+
+    final JPRAResolverType r = this.newResolverForPackage(
+      c, PackageNameQualified.of(
+        PackageNameUnqualified.of("x"),
+        PackageNameUnqualified.of("y"),
+        PackageNameUnqualified.of("z")));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.UNEXPECTED_PACKAGE));
+    r.resolvePackageBegin(
+      StatementPackageBegin.class.cast(
+        p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
+  }
+
+  @Test public final void testPackageExpected()
+    throws Exception
+  {
+    final JPRAParserType p = this.newParser();
+    final GlobalContextType c =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+
+    final JPRAResolverType r = this.newResolverForPackage(
+      c, PackageNameQualified.of(
+        PackageNameUnqualified.of("x"),
+        PackageNameUnqualified.of("y"),
+        PackageNameUnqualified.of("z")));
+
+    this.expected.expect(
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.EXPECTED_PACKAGE));
+    r.resolveEOF(Optional.empty());
   }
 
   @Test public final void testPackageBegin()
@@ -122,7 +166,7 @@ import java.math.BigInteger;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    c.getPackage(
+    c.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"),
@@ -177,11 +221,11 @@ import java.math.BigInteger;
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final JPRAResolverType r = this.newResolver(c);
 
-    c.getPackage(
+    c.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"), PackageNameUnqualified.of("a"))));
-    c.getPackage(
+    c.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"), PackageNameUnqualified.of("b"))));
@@ -214,11 +258,8 @@ import java.math.BigInteger;
         p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
 
     this.expected.expect(
-      new ThrowableCauseMatcher<>(
-        new ThrowableCauseMatcher<>(
-          new JPRACompilerResolverExceptionMatcher(
-            JPRAResolverErrorCode.PACKAGE_NONEXISTENT))));
-
+      new JPRACompilerResolverExceptionMatcher(
+        JPRAResolverErrorCode.PACKAGE_LOADING_ERROR));
     r.resolvePackageImport(
       StatementPackageImport.class.cast(
         p.parseStatement(this.newStringSExpr("(import x.a as q)"))));
@@ -713,11 +754,13 @@ import java.math.BigInteger;
       final PackageNameQualified p)
       throws JPRAModelLoadingException
     {
-      throw new JPRAModelLoadingException(
-        new JPRACompilerResolverException(
-          p.getLexicalInformation(),
-          JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
-          "No such package"));
+      final JPRACompilerResolverException e = new JPRACompilerResolverException(
+        p.getLexicalInformation(),
+        JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
+        "No such package");
+
+      c.getErrorQueue().add(e);
+      throw new JPRAModelLoadingException("Error loading package");
     }
   }
 

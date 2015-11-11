@@ -14,25 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.core;
 
-import com.io7m.jpra.core.JPRAException;
+import java.io.IOException;
 
 /**
- * The type of model loading exceptions.
+ * Wrapper exception for I/O exceptions.
  */
 
-public final class JPRAModelLoadingException extends JPRAException
+public class JPRAIOException extends JPRAException
 {
   /**
-   * Construct a model loading exception.
+   * Construct an exception.
    *
-   * @param message The error message
+   * @param e The cause
    */
 
-  public JPRAModelLoadingException(
-    final String message)
+  public JPRAIOException(final IOException e)
   {
-    super(message);
+    super(e);
   }
 }

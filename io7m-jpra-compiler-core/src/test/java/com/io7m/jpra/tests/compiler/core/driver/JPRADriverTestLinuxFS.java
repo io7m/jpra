@@ -14,25 +14,29 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.tests.compiler.core.driver;
 
-import com.io7m.jpra.core.JPRAException;
+import com.github.marschall.memoryfilesystem.MemoryFileSystemBuilder;
+import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
+import com.io7m.jpra.compiler.core.driver.JPRADriver;
+import com.io7m.jpra.compiler.core.driver.JPRADriverType;
 
-/**
- * The type of model loading exceptions.
- */
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Path;
 
-public final class JPRAModelLoadingException extends JPRAException
+public final class JPRADriverTestLinuxFS extends JPRADriverContract
 {
-  /**
-   * Construct a model loading exception.
-   *
-   * @param message The error message
-   */
-
-  public JPRAModelLoadingException(
-    final String message)
+  @Override protected JPRADriverType getDriver(
+    final Path base,
+    final JPRACheckerCapabilitiesType caps)
   {
-    super(message);
+    return JPRADriver.newDriver(base, caps);
+  }
+
+  @Override protected FileSystem getFilesystem()
+    throws IOException
+  {
+    return MemoryFileSystemBuilder.newLinux().build("test");
   }
 }

@@ -14,25 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.compiler.core;
 
-import com.io7m.jpra.core.JPRAException;
+import com.io7m.jsx.parser.JSXParserException;
+
+import java.util.Optional;
 
 /**
- * The type of model loading exceptions.
+ * The type of lexer exceptions.
  */
 
-public final class JPRAModelLoadingException extends JPRAException
+public class JPRACompilerLexerException extends JPRACompilerException
 {
   /**
-   * Construct a model loading exception.
+   * Construct an exception.
    *
-   * @param message The error message
+   * @param e The cause
    */
 
-  public JPRAModelLoadingException(
-    final String message)
+  public JPRACompilerLexerException(
+    final JSXParserException e)
   {
-    super(message);
+    super(Optional.of(e.getLexicalInformation()), e);
   }
 }

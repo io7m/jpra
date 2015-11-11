@@ -14,47 +14,42 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra;
+package com.io7m.jpra.model.loading;
+
+import com.gs.collections.api.list.ImmutableList;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.core.JPRAException;
+import com.io7m.jpra.model.PackageImport;
 
 /**
- * The root type of exceptions.
+ * An exception encountered due to a circular import.
  */
 
-public abstract class JPRAException extends Exception
+public final class JPRAModelCircularImportException extends JPRAException
 {
+  private final ImmutableList<PackageImport> imports;
+
   /**
-   * Construct an exception.
+   * Construct a model loading exception.
    *
-   * @param message The message
+   * @param message    The error message
+   * @param in_imports The imports
    */
 
-  public JPRAException(final String message)
+  public JPRAModelCircularImportException(
+    final String message,
+    final ImmutableList<PackageImport> in_imports)
   {
     super(message);
+    this.imports = NullCheck.notNull(in_imports);
   }
 
   /**
-   * Construct an exception.
-   *
-   * @param cause The cause
+   * @return The circular import path
    */
 
-  public JPRAException(final Throwable cause)
+  public ImmutableList<PackageImport> getImports()
   {
-    super(cause);
-  }
-
-  /**
-   * Construct an exception.
-   *
-   * @param message The message
-   * @param cause   The cause
-   */
-
-  public JPRAException(
-    final String message,
-    final Throwable cause)
-  {
-    super(message, cause);
+    return this.imports;
   }
 }

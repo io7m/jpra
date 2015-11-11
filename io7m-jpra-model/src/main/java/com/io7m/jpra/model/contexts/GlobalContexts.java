@@ -17,19 +17,29 @@
 package com.io7m.jpra.model.contexts;
 
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.core.JPRAException;
+import com.io7m.jpra.model.PackageImport;
+import com.io7m.jpra.model.loading.JPRAModelCircularImportException;
 import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
+import org.jgrapht.alg.DijkstraShortestPath;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
 
 import java.math.BigInteger;
+import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
 
 /**
  * Access to global contexts.
@@ -43,10 +53,15 @@ public final class GlobalContexts implements GlobalContextType
     LOG = LoggerFactory.getLogger(GlobalContexts.class);
   }
 
+  private final DirectedAcyclicGraph<PackageNameQualified, PackageImport> graph;
+
   private final MutableMap<PackageNameQualified, PackageContextType> packages;
   private final JPRAPackageLoaderType                                loader;
   private final MutableMap<IdentifierType, TypeUserDefinedType>      types;
-  private       BigInteger                                           id_pool;
+
+  private final Queue<JPRAException>           error_queue;
+  private       BigInteger                     id_pool;
+  private       Optional<PackageNameQualified> loading;
 
   GlobalContexts(final JPRAPackageLoaderType in_loader)
   {
@@ -54,6 +69,10 @@ public final class GlobalContexts implements GlobalContextType
     this.packages = Maps.mutable.empty();
     this.loader = NullCheck.notNull(in_loader);
     this.types = Maps.mutable.empty();
+    this.loading = Optional.empty();
+    this.error_queue = new ArrayDeque<>(128);
+
+    this.graph = new DirectedAcyclicGraph<>(PackageImport::new);
     GlobalContexts.LOG.trace("created");
   }
 
@@ -69,6 +88,11 @@ public final class GlobalContexts implements GlobalContextType
     return new GlobalContexts(in_loader);
   }
 
+  @Override public Queue<JPRAException> getErrorQueue()
+  {
+    return this.error_queue;
+  }
+
   @Override public IdentifierType getFreshIdentifier()
   {
     this.id_pool = this.id_pool.add(BigInteger.ONE);
@@ -81,7 +105,7 @@ public final class GlobalContexts implements GlobalContextType
     return this.packages.asUnmodifiable();
   }
 
-  @Override public PackageContextType getPackage(
+  @Override public PackageContextType loadPackage(
     final PackageNameQualified p)
     throws JPRAModelLoadingException
   {
@@ -89,15 +113,58 @@ public final class GlobalContexts implements GlobalContextType
 
     GlobalContexts.LOG.debug("get package: {}", p);
 
-    if (this.packages.containsKey(p)) {
-      GlobalContexts.LOG.debug("returning loaded package: {}", p);
-      return this.packages.get(p);
-    }
+    final Optional<PackageNameQualified> previous_opt = this.loading;
+    try {
+      this.checkCircularLoad(previous_opt, p);
 
-    GlobalContexts.LOG.debug("loading package: {}", p);
-    final PackageContextType r = this.loader.evaluate(this, p);
-    this.packages.put(p, r);
-    return r;
+      this.loading = Optional.of(p);
+      if (this.packages.containsKey(p)) {
+        GlobalContexts.LOG.debug("returning loaded package: {}", p);
+        return this.packages.get(p);
+      }
+
+      GlobalContexts.LOG.debug("loading package: {}", p);
+      final PackageContextType r = this.loader.evaluate(this, p);
+      this.packages.put(p, r);
+      return r;
+    } finally {
+      this.loading = previous_opt;
+    }
+  }
+
+  private void checkCircularLoad(
+    final Optional<PackageNameQualified> previous_opt,
+    final PackageNameQualified current)
+    throws JPRAModelLoadingException
+  {
+    if (previous_opt.isPresent()) {
+      final PackageNameQualified previous = previous_opt.get();
+
+      try {
+        this.graph.addVertex(previous);
+        this.graph.addVertex(current);
+        this.graph.addDagEdge(previous, current);
+      } catch (final DirectedAcyclicGraph.CycleFoundException e) {
+
+        /**
+         * Because a cycle as occurred on an insertion of edge A → B, then
+         * there must be some path B → A already in the graph. Use a
+         * shortest path algorithm to determine that path.
+         */
+
+        final DijkstraShortestPath<PackageNameQualified, PackageImport> djp =
+          new DijkstraShortestPath<>(this.graph, current, previous);
+        final List<PackageImport> path = djp.getPathEdgeList();
+
+        final JPRAModelCircularImportException ex =
+          new JPRAModelCircularImportException(
+            "Circular import detected.", Lists.immutable.ofAll(path));
+
+        this.error_queue.add(ex);
+        throw new JPRAModelLoadingException(
+          String.format("Failed to load package %s", current));
+      }
+    }
   }
 
   @Override public void putType(final TypeUserDefinedType t)

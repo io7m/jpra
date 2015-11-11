@@ -14,25 +14,35 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.loading;
+package com.io7m.jpra.compiler.core.driver;
 
-import com.io7m.jpra.core.JPRAException;
+import com.io7m.jpra.model.contexts.GlobalContextType;
+import com.io7m.jpra.model.contexts.PackageContextType;
+import com.io7m.jpra.model.loading.JPRAModelLoadingException;
+import com.io7m.jpra.model.names.PackageNameQualified;
 
 /**
- * The type of model loading exceptions.
+ * The type of non-interactive compiler drivers.
  */
 
-public final class JPRAModelLoadingException extends JPRAException
+public interface JPRADriverType
 {
   /**
-   * Construct a model loading exception.
+   * Compile a package.
    *
-   * @param message The error message
+   * @param p The package name
+   *
+   * @return The compiled package
+   *
+   * @throws JPRAModelLoadingException On compilation errors
    */
 
-  public JPRAModelLoadingException(
-    final String message)
-  {
-    super(message);
-  }
+  PackageContextType compilePackage(PackageNameQualified p)
+    throws JPRAModelLoadingException;
+
+  /**
+   * @return The global context
+   */
+
+  GlobalContextType getGlobalContext();
 }

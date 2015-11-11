@@ -16,12 +16,14 @@
 
 package com.io7m.jpra.model.contexts;
 
+import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
 
 import java.util.Map;
+import java.util.Queue;
 
 /**
  * The global context.
@@ -29,6 +31,12 @@ import java.util.Map;
 
 public interface GlobalContextType
 {
+  /**
+   * @return The global error queue
+   */
+
+  Queue<JPRAException> getErrorQueue();
+
   /**
    * @return A fresh identifier that has not been returned before
    */
@@ -51,7 +59,7 @@ public interface GlobalContextType
    * @throws JPRAModelLoadingException Iff the package cannot be loaded
    */
 
-  PackageContextType getPackage(PackageNameQualified p)
+  PackageContextType loadPackage(PackageNameQualified p)
     throws JPRAModelLoadingException;
 
   /**

@@ -110,7 +110,8 @@ public final class JPRAPipelineDemo
     final JSXSerializerType serial = JSXSerializerTrivial.newSerializer();
     final JPRAReferenceParserType ref = JPRAReferenceParser.newParser(serial);
     final JPRAParserType parser = JPRAParser.newParser(serial, ref);
-    final JPRAResolverType resolver = JPRAResolver.newResolver(c);
+    final JPRAResolverType resolver = JPRAResolver.newResolver(
+      c, Optional.empty());
     final JPRACheckerCapabilitiesType caps =
       JPRACheckerStandardCapabilities.newCapabilities();
     final JPRACheckerType checker = JPRAChecker.newChecker(c, caps);

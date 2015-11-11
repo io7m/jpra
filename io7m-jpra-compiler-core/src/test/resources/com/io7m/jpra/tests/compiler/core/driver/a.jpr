@@ -1,0 +1,3 @@
+(package-begin x.y.a)
+(import x.y.b as z)
+(package-end)

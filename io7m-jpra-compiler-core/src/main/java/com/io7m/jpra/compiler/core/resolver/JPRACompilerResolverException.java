@@ -313,11 +313,62 @@ public final class JPRACompilerResolverException extends JPRACompilerException
   }
 
   /**
+   * @param expected The expected package
+   * @param got      The received package
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#UNEXPECTED_PACKAGE
+   */
+
+  public static JPRACompilerResolverException unexpectedPackage(
+    final PackageNameQualified expected,
+    final PackageNameQualified got)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("Received an unexpected package.");
+    sb.append(System.lineSeparator());
+    sb.append("Expected: ");
+    sb.append(expected);
+    sb.append(System.lineSeparator());
+    sb.append("Got: ");
+    sb.append(got);
+
+    return new JPRACompilerResolverException(
+      expected.getLexicalInformation(),
+      JPRAResolverErrorCode.UNEXPECTED_PACKAGE,
+      sb.toString());
+  }
+
+  /**
    * @return The error code
    */
 
   public JPRAResolverErrorCode getErrorCode()
   {
     return this.code;
+  }
+
+  /**
+   * @param p The expected package
+   *
+   * @return An exception
+   *
+   * @see JPRAResolverErrorCode#EXPECTED_PACKAGE
+   */
+
+  public static JPRACompilerResolverException expectedPackage(
+    final PackageNameQualified p)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("Expected a package but one was not provided before EOF.");
+    sb.append(System.lineSeparator());
+    sb.append("Expected: ");
+    sb.append(p);
+
+    return new JPRACompilerResolverException(
+      p.getLexicalInformation(),
+      JPRAResolverErrorCode.EXPECTED_PACKAGE,
+      sb.toString());
   }
 }

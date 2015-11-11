@@ -45,6 +45,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 public final class JPRACheckerTest extends JPRACheckerContract
 {
@@ -75,7 +76,7 @@ public final class JPRACheckerTest extends JPRACheckerContract
 
   @Override protected JPRAResolverType newResolver(final GlobalContextType c)
   {
-    return JPRAResolver.newResolver(c);
+    return JPRAResolver.newResolver(c, Optional.empty());
   }
 
   @Override protected JPRACheckerType newChecker(

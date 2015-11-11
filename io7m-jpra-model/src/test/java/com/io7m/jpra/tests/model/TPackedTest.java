@@ -47,7 +47,7 @@ public final class TPackedTest
 
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final PackageContextType pc = gc.getPackage(
+    final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"),
@@ -68,7 +68,7 @@ public final class TPackedTest
 
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final PackageContextType pc = gc.getPackage(
+    final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"),
@@ -139,7 +139,7 @@ public final class TPackedTest
 
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final PackageContextType pc = gc.getPackage(
+    final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         Lists.immutable.of(
           PackageNameUnqualified.of("x"),

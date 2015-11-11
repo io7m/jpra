@@ -17,6 +17,7 @@
 package com.io7m.jpra.model.names;
 
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.factory.Lists;
 import com.io7m.jlexing.core.ImmutableLexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
@@ -61,6 +62,19 @@ import java.util.Optional;
     this.image = sb.toString();
   }
 
+  /**
+   * Construct a name from the given segments.
+   *
+   * @param p The segments
+   *
+   * @return A new name
+   */
+
+  public static PackageNameQualified of(final PackageNameUnqualified... p)
+  {
+    return new PackageNameQualified(Lists.immutable.of(p));
+  }
+
   @Override public String toString()
   {
     return this.image;
@@ -85,12 +99,12 @@ import java.util.Optional;
     }
 
     final PackageNameQualified that = (PackageNameQualified) o;
-    return this.value.equals(that.value);
+    return this.image.equals(that.image);
   }
 
   @Override public int hashCode()
   {
-    return this.value.hashCode();
+    return this.image.hashCode();
   }
 
   @Override
