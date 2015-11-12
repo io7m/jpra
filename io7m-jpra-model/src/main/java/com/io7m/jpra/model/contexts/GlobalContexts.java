@@ -155,6 +155,7 @@ public final class GlobalContexts implements GlobalContextType
         final DijkstraShortestPath<PackageNameQualified, PackageImport> djp =
           new DijkstraShortestPath<>(this.graph, current, previous);
         final List<PackageImport> path = djp.getPathEdgeList();
+        path.add(new PackageImport(previous, current));
 
         final JPRAModelCircularImportException ex =
           new JPRAModelCircularImportException(

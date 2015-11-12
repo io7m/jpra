@@ -684,6 +684,7 @@ public final class JPRAResolver implements JPRAResolverType
     if (pack_opt.isPresent()) {
       final PackageNameUnqualified p_name = pack_opt.get();
       if (!this.import_names.containsKey(p_name)) {
+        LOG.debug("nonexistent package reference: {}", p_name);
         throw JPRACompilerResolverException.nonexistentPackageReference(p_name);
       }
 
@@ -694,6 +695,7 @@ public final class JPRAResolver implements JPRAResolverType
       final Map<TypeName, TypeUserDefinedType> pt = p.getTypes();
 
       if (!pt.containsKey(t_name)) {
+        LOG.debug("nonexistent type: {}", t_name);
         throw JPRACompilerResolverException.nonexistentType(
           Optional.of(q_name), t_name);
       }
@@ -702,6 +704,7 @@ public final class JPRAResolver implements JPRAResolverType
     }
 
     if (!this.current_types.containsKey(t_name)) {
+      LOG.debug("nonexistent type: {}", t_name);
       throw JPRACompilerResolverException.nonexistentType(
         this.current_package, t_name);
     }

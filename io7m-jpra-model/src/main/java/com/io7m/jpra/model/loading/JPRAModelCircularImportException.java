@@ -20,6 +20,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
+import org.valid4j.Assertive;
 
 /**
  * An exception encountered due to a circular import.
@@ -42,6 +43,7 @@ public final class JPRAModelCircularImportException extends JPRAException
   {
     super(message);
     this.imports = NullCheck.notNull(in_imports);
+    Assertive.require(!this.imports.isEmpty());
   }
 
   /**

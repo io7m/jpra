@@ -236,7 +236,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(se.getText());
       sb.append("'");
       sb.append(System.lineSeparator());
-      sb.append("Expected one of: ");
+      sb.append("  Expected one of: ");
       sb.append(JPRAParser.KEYWORDS);
       sb.append(System.lineSeparator());
       throw JPRACompilerParseException.unrecognizedKeyword(se, sb.toString());
@@ -252,7 +252,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(se.getText());
       sb.append("'");
       sb.append(System.lineSeparator());
-      sb.append("Expected one of: ");
+      sb.append("  Expected one of: ");
       sb.append(JPRAParser.TYPES);
       sb.append(System.lineSeparator());
       throw JPRACompilerParseException.unrecognizedTypeKeyword(
@@ -276,7 +276,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(se.getText());
       sb.append("'");
       sb.append(System.lineSeparator());
-      sb.append("Expected one of: ");
+      sb.append("  Expected one of: ");
       sb.append(JPRAParser.INTEGER_TYPES);
       sb.append(System.lineSeparator());
       throw JPRACompilerParseException.unrecognizedIntegerTypeKeyword(
@@ -293,7 +293,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(se.getText());
       sb.append("'");
       sb.append(System.lineSeparator());
-      sb.append("Expected one of: ");
+      sb.append("  Expected one of: ");
       sb.append(JPRAParser.SIZE_FUNCTIONS);
       sb.append(System.lineSeparator());
       throw JPRACompilerParseException.unrecognizedSizeFunction(
@@ -334,10 +334,10 @@ public final class JPRAParser implements JPRAParserType
               final StringBuilder sb = new StringBuilder(128);
               sb.append("Duplicate field name.");
               sb.append(System.lineSeparator());
-              sb.append("Name: ");
+              sb.append("  Name: ");
               sb.append(name);
               sb.append(System.lineSeparator());
-              sb.append("Fields: ");
+              sb.append("  Fields: ");
               sb.append(names.keySet());
               throw JPRACompilerParseException.duplicateFieldName(
                 si, sb.toString());
@@ -469,7 +469,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(se.getText());
       sb.append("'");
       sb.append(System.lineSeparator());
-      sb.append("Expected one of: ");
+      sb.append("  Expected one of: ");
       sb.append(JPRAParser.PACKED_FIELD_KEYWORDS);
       sb.append(System.lineSeparator());
       throw JPRACompilerParseException.unrecognizedPackedFieldKeyword(
@@ -522,7 +522,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
       sb.append(
-        "Expected: (import <package-name-qualified> as "
+        "  Expected: (import <package-name-qualified> as "
         + "<package-name-unqualified)");
       sb.append(System.lineSeparator());
       sb.append("Got: ");
@@ -584,9 +584,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (:type <type-expression>)");
+      sb.append("  Expected: (:type <type-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -610,9 +610,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (:size <size-expression>)");
+      sb.append("  Expected: (:size <size-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -659,9 +659,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (packed <type-name> (<field> ... <field>))");
+      sb.append("  Expected: (packed <type-name> (<field> ... <field>))");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -697,7 +697,7 @@ public final class JPRAParser implements JPRAParserType
             final StringBuilder sb = new StringBuilder(128);
             sb.append("Duplicate field name.");
             sb.append(System.lineSeparator());
-            sb.append("Name: ");
+            sb.append("  Name: ");
             sb.append(f_name.getValue());
             throw JPRACompilerParseException.duplicateFieldName(
               k, sb.toString());
@@ -738,9 +738,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (padding-bits <size-expression>)");
+      sb.append("  Expected: (padding-bits <size-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
     } catch (final IOException x) {
@@ -767,9 +767,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (field <field-name> <type-expression>)");
+      sb.append("  Expected: (field <field-name> <type-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
     } catch (final IOException x) {
@@ -816,9 +816,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (record <type-name> (<field> ... <field>))");
+      sb.append("  Expected: (record <type-name> (<field> ... <field>))");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -854,7 +854,7 @@ public final class JPRAParser implements JPRAParserType
             final StringBuilder sb = new StringBuilder(128);
             sb.append("Duplicate field name.");
             sb.append(System.lineSeparator());
-            sb.append("Name: ");
+            sb.append("  Name: ");
             sb.append(f_name.getValue());
             throw JPRACompilerParseException.duplicateFieldName(
               k, sb.toString());
@@ -895,9 +895,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (padding-octets <size-expression>)");
+      sb.append("  Expected: (padding-octets <size-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
     } catch (final IOException x) {
@@ -924,9 +924,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (field <field-name> <type-expression>)");
+      sb.append("  Expected: (field <field-name> <type-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(l_expr, sb.toString());
     } catch (final IOException x) {
@@ -950,9 +950,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (package-end)");
+      sb.append("  Expected: (package-end)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -982,9 +982,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (package-begin <package-name-qualified>)");
+      sb.append("  Expected: (package-begin <package-name-qualified>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -1092,9 +1092,9 @@ public final class JPRAParser implements JPRAParserType
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
       sb.append(
-        "Expected: (boolean-set <size-expression> (<field> ... <field>))");
+        "  Expected: (boolean-set <size-expression> (<field> ... <field>))");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
@@ -1132,9 +1132,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (string <size-expression> \"<encoding>\")");
+      sb.append("  Expected: (string <size-expression> \"<encoding>\")");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
@@ -1167,9 +1167,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (array <type-expression> <size-expression>)");
+      sb.append("  Expected: (array <type-expression> <size-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
@@ -1210,9 +1210,10 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (matrix <scalar-type-expression> <width> <height>)");
+      sb.append(
+        "  Expected: (matrix <scalar-type-expression> <width> <height>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
@@ -1245,9 +1246,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (vector <type-expression> <size-expression>)");
+      sb.append("  Expected: (vector <type-expression> <size-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(se, sb.toString());
     } catch (final IOException x) {
@@ -1275,9 +1276,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (float <size-in-bits>)");
+      sb.append("  Expected: (float <size-in-bits>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -1331,9 +1332,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (integer <integer-type> <size-in-bits>)");
+      sb.append("  Expected: (integer <integer-type> <size-in-bits>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -1418,9 +1419,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (size-in-bits <type-expression>)");
+      sb.append("  Expected: (size-in-bits <type-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {
@@ -1444,9 +1445,9 @@ public final class JPRAParser implements JPRAParserType
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
       sb.append(System.lineSeparator());
-      sb.append("Expected: (size-in-octets <type-expression>)");
+      sb.append("  Expected: (size-in-octets <type-expression>)");
       sb.append(System.lineSeparator());
-      sb.append("Got: ");
+      sb.append("  Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
       throw JPRACompilerParseException.syntaxError(le, sb.toString());
     } catch (final IOException e) {

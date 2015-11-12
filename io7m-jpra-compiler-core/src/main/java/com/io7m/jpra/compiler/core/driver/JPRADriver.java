@@ -33,6 +33,7 @@ import com.io7m.jpra.compiler.core.parser.JPRAReferenceParser;
 import com.io7m.jpra.compiler.core.parser.JPRAReferenceParserType;
 import com.io7m.jpra.compiler.core.pipeline.JPRAPipeline;
 import com.io7m.jpra.compiler.core.pipeline.JPRAPipelineType;
+import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolver;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
 import com.io7m.jpra.core.JPRAException;
@@ -64,6 +65,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Queue;
@@ -89,7 +91,9 @@ public final class JPRADriver implements JPRADriverType
     this.global = GlobalContexts.newContext(new Loader(in_base, in_caps));
   }
 
-  private static JSXParserType newJSXParser(final InputStream s)
+  private static JSXParserType newJSXParser(
+    final InputStream s,
+    final Path file)
   {
     final InputStreamReader ir = new InputStreamReader(s);
     final UnicodeCharacterReaderPushBackType r =
@@ -99,8 +103,10 @@ public final class JPRADriver implements JPRADriverType
       JSXLexerConfiguration.newBuilder();
     lc.setNewlinesInQuotedStrings(false);
     lc.setSquareBrackets(true);
+    lc.setFile(Optional.of(file));
 
     final JSXLexerType lex = JSXLexer.newLexer(lc.build(), r);
+
     final JSXParserConfigurationBuilderType pc =
       JSXParserConfiguration.newBuilder();
     pc.preserveLexicalInformation(true);
@@ -117,7 +123,7 @@ public final class JPRADriver implements JPRADriverType
    * @return A new driver
    */
 
-  public static JPRADriver newDriver(
+  public static JPRADriverType newDriver(
     final Path in_base,
     final JPRACheckerCapabilitiesType in_caps)
   {
@@ -181,7 +187,7 @@ public final class JPRADriver implements JPRADriverType
 
       boolean error = false;
       try (final InputStream is = Files.newInputStream(file)) {
-        final JSXParserType sxp = JPRADriver.newJSXParser(is);
+        final JSXParserType sxp = JPRADriver.newJSXParser(is, file);
 
         Optional<ImmutableLexicalPositionType<Path>> lex = Optional.empty();
         boolean done = false;
@@ -220,6 +226,9 @@ public final class JPRADriver implements JPRADriverType
             error = true;
           }
         }
+      } catch (final NoSuchFileException e) {
+        error_queue.add(JPRACompilerResolverException.nonexistentPackage(p));
+        error = true;
       } catch (final IOException e) {
         error_queue.add(new JPRAIOException(e));
         error = true;

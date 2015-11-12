@@ -85,7 +85,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Duplicate package.");
     sb.append(System.lineSeparator());
-    sb.append("Name: ");
+    sb.append("  Name: ");
     sb.append(name);
 
     final Optional<ImmutableLexicalPositionType<Path>> curr_lex_opt =
@@ -95,10 +95,10 @@ public final class JPRACompilerResolverException extends JPRACompilerException
 
     if (curr_lex_opt.isPresent() && orig_lex_opt.isPresent()) {
       sb.append(System.lineSeparator());
-      sb.append("Current: At ");
+      sb.append("  Current: At ");
       sb.append(curr_lex_opt.get());
       sb.append(System.lineSeparator());
-      sb.append("Original: At ");
+      sb.append("  Original: At ");
       sb.append(orig_lex_opt.get());
       sb.append(System.lineSeparator());
     }
@@ -158,7 +158,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Package import conflict.");
     sb.append(System.lineSeparator());
-    sb.append("Original: Name ");
+    sb.append("  Original: Name ");
     sb.append(existing_name);
 
     final Optional<ImmutableLexicalPositionType<Path>> lex_orig_opt =
@@ -190,7 +190,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Type name conflict.");
     sb.append(System.lineSeparator());
-    sb.append("Original: Name ");
+    sb.append("  Original: Name ");
     sb.append(original);
 
     final Optional<ImmutableLexicalPositionType<Path>> lex_orig_opt =
@@ -220,7 +220,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     return new JPRACompilerResolverException(
       name.getLexicalInformation(),
       JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
-      "Nonexistent package");
+      String.format("Nonexistent package '%s'", name));
   }
 
   /**
@@ -237,7 +237,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("No package imported via the given name.");
     sb.append(System.lineSeparator());
-    sb.append("Error: ");
+    sb.append("  Error: ");
     sb.append(name);
 
     final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
@@ -273,12 +273,12 @@ public final class JPRACompilerResolverException extends JPRACompilerException
 
     q_name.ifPresent(
       q -> {
-        sb.append("Target package: ");
+        sb.append("  Target package: ");
         sb.append(q);
         sb.append(System.lineSeparator());
       });
 
-    sb.append("Type: ");
+    sb.append("  Type: ");
     sb.append(t_name);
 
     final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
@@ -328,25 +328,16 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Received an unexpected package.");
     sb.append(System.lineSeparator());
-    sb.append("Expected: ");
+    sb.append("  Expected: ");
     sb.append(expected);
     sb.append(System.lineSeparator());
-    sb.append("Got: ");
+    sb.append("  Got: ");
     sb.append(got);
 
     return new JPRACompilerResolverException(
-      expected.getLexicalInformation(),
+      got.getLexicalInformation(),
       JPRAResolverErrorCode.UNEXPECTED_PACKAGE,
       sb.toString());
-  }
-
-  /**
-   * @return The error code
-   */
-
-  public JPRAResolverErrorCode getErrorCode()
-  {
-    return this.code;
   }
 
   /**
@@ -363,12 +354,21 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Expected a package but one was not provided before EOF.");
     sb.append(System.lineSeparator());
-    sb.append("Expected: ");
+    sb.append("  Expected: ");
     sb.append(p);
 
     return new JPRACompilerResolverException(
       p.getLexicalInformation(),
       JPRAResolverErrorCode.EXPECTED_PACKAGE,
       sb.toString());
+  }
+
+  /**
+   * @return The error code
+   */
+
+  public JPRAResolverErrorCode getErrorCode()
+  {
+    return this.code;
   }
 }

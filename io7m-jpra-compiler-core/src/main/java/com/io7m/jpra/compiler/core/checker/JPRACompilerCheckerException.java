@@ -106,10 +106,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Integer size not supported for record fields.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size.getValue());
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = sizes.size();
     for (int index = 0; index < max; ++index) {
@@ -155,10 +155,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Float size not supported for record fields.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size.getValue());
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = sizes.size();
     for (int index = 0; index < max; ++index) {
@@ -204,10 +204,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("String encoding not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Encoding: ");
+    sb.append("  Encoding: ");
     sb.append(encoding);
     sb.append(System.lineSeparator());
-    sb.append("Supported encodings: ");
+    sb.append("  Supported encodings: ");
 
     for (final String en : encodings) {
       sb.append(en);
@@ -238,10 +238,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Invalid boolean set size.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(value);
     sb.append(System.lineSeparator());
-    sb.append("Valid sizes: [");
+    sb.append("  Valid sizes: [");
     sb.append(range.getLower());
     sb.append(", ");
     sb.append(range.getUpper());
@@ -271,10 +271,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Not enough space allocated for boolean set.");
     sb.append(System.lineSeparator());
-    sb.append("Required size (bits): ");
+    sb.append("  Required size (bits): ");
     sb.append(required);
     sb.append(System.lineSeparator());
-    sb.append("Specified size (bits): ");
+    sb.append("  Specified size (bits): ");
     sb.append(value);
 
     return new JPRACompilerCheckerException(
@@ -301,10 +301,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (elements): ");
+    sb.append("  Supported sizes (elements): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -370,10 +370,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector integer element size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -419,10 +419,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector float element size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -470,12 +470,12 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(tw);
     sb.append(" x ");
     sb.append(th);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes: ");
+    sb.append("  Supported sizes: ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -562,10 +562,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix float element size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -611,10 +611,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix integer element size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
@@ -660,7 +660,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Padding size must be positive.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(value);
 
     return new JPRACompilerCheckerException(
@@ -683,10 +683,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Packed types may only contain integer fields.");
     sb.append(System.lineSeparator());
-    sb.append("Field name: ");
+    sb.append("  Field name: ");
     sb.append(r.getName());
     sb.append(System.lineSeparator());
-    sb.append("Field type: ");
+    sb.append("  Field type: ");
     sb.append(rvt.getType());
 
     return new JPRACompilerCheckerException(
@@ -713,10 +713,10 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Packed type size not supported.");
     sb.append(System.lineSeparator());
-    sb.append("Size: ");
+    sb.append("  Size: ");
     sb.append(size);
     sb.append(System.lineSeparator());
-    sb.append("Supported sizes (bits): ");
+    sb.append("  Supported sizes (bits): ");
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {

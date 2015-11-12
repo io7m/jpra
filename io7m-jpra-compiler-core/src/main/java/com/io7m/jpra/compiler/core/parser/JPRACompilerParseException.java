@@ -58,9 +58,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionQuotedStringType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A list");
+    mb.append("  Expected: A list");
     mb.append(System.lineSeparator());
-    mb.append("Got: A quoted string '");
+    mb.append("  Got: A quoted string '");
     mb.append(e.getText());
     mb.append("'");
     final String m = NullCheck.notNull(mb.toString());
@@ -82,9 +82,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionSymbolType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A list");
+    mb.append("  Expected: A list");
     mb.append(System.lineSeparator());
-    mb.append("Got: A symbol '");
+    mb.append("  Got: A symbol '");
     mb.append(e.getText());
     mb.append("'");
     final String m = NullCheck.notNull(mb.toString());
@@ -106,9 +106,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionListType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A symbol");
+    mb.append("  Expected: A symbol");
     mb.append(System.lineSeparator());
-    mb.append("Got: A list");
+    mb.append("  Got: A list");
     final String m = NullCheck.notNull(mb.toString());
     return new JPRACompilerParseException(
       e.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
@@ -128,9 +128,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionQuotedStringType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A symbol");
+    mb.append("  Expected: A symbol");
     mb.append(System.lineSeparator());
-    mb.append("Got: A quoted string '");
+    mb.append("  Got: A quoted string '");
     mb.append(e.getText());
     mb.append("'");
     final String m = NullCheck.notNull(mb.toString());
@@ -173,9 +173,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     Assertive.require(e.isEmpty());
 
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A non-empty list");
+    mb.append("  Expected: A non-empty list");
     mb.append(System.lineSeparator());
-    mb.append("Got: An empty list");
+    mb.append("  Got: An empty list");
     final String m = NullCheck.notNull(mb.toString());
     return new JPRACompilerParseException(
       e.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
@@ -271,9 +271,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionQuotedStringType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: A list or a symbol");
+    mb.append("  Expected: A list or a symbol");
     mb.append(System.lineSeparator());
-    mb.append("Got: A quoted string '");
+    mb.append("  Got: A quoted string '");
     mb.append(e.getText());
     mb.append("'");
     final String m = NullCheck.notNull(mb.toString());
@@ -295,9 +295,9 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final SExpressionSymbolType e)
   {
     final StringBuilder mb = new StringBuilder(256);
-    mb.append("Expected: An integer constant");
+    mb.append("  Expected: An integer constant");
     mb.append(System.lineSeparator());
-    mb.append("Got: A symbol '");
+    mb.append("  Got: A symbol '");
     mb.append(e.getText());
     mb.append("'");
     final String m = NullCheck.notNull(mb.toString());
