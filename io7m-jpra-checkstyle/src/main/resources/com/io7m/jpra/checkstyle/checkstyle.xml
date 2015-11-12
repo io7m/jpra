@@ -209,7 +209,9 @@
     </module>
 
     <module name="TypecastParenPad"/>
-    <module name="UncommentedMain"/>
+    <module name="UncommentedMain">
+      <property name="excludedClasses" value="Main$"/>
+    </module>
     <module name="UnusedImports"/>
     <module name="UpperEll"/>
     <module name="VisibilityModifier"/>

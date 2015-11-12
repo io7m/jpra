@@ -107,9 +107,22 @@ public final class Main
     }
   }
 
+  /**
+   * A check command.
+   */
+
   @Command(name = "check", description = "Check a list of packages")
   public static final class CommandCheck extends CommandType
   {
+    /**
+     * Construct a command.
+     */
+
+    public CommandCheck()
+    {
+
+    }
+
     @Option(
       arity = 1,
       description = "Source directory",
