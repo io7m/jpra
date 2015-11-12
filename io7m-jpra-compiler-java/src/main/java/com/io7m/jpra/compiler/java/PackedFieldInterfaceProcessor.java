@@ -241,6 +241,8 @@ public final class PackedFieldInterfaceProcessor
 
     if (this.methods.wantGetters()) {
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return The value of the {@code $L} field", this.field.getName());
       getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       getb.returns(itype);
       this.class_builder.addMethod(getb.build());
@@ -248,6 +250,9 @@ public final class PackedFieldInterfaceProcessor
 
     if (this.methods.wantSetters()) {
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+      setb.addJavadoc(
+        "Set the value of the {@code $L} field\n", this.field.getName());
+      setb.addJavadoc("@param x The new value");
       setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       setb.addParameter(itype, "x", Modifier.FINAL);
       setb.returns(void.class);
@@ -276,6 +281,8 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(double.class);
         this.class_builder.addMethod(getb.build());
@@ -284,6 +291,8 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_raw_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(itype);
         this.class_builder.addMethod(getb.build());
@@ -294,6 +303,9 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(double.class, "x", Modifier.FINAL);
         this.class_builder.addMethod(setb.build());
@@ -302,6 +314,9 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_raw_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(itype, "x", Modifier.FINAL);
         setb.returns(void.class);

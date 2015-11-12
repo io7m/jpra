@@ -1,0 +1,35 @@
+(package-begin com.io7m.jpra.compiler.tests.java.generation.code)
+
+(record IntegersUnsigned [
+  (field u8  [integer unsigned 8])
+  (padding-octets 1)
+  (field u16 [integer unsigned 16])
+  (field u32 [integer unsigned 32])
+  (field u64 [integer unsigned 64])
+])
+
+(record IntegersSigned [
+  (field s8  [integer signed 8])
+  (padding-octets 1)
+  (field s16 [integer signed 16])
+  (field s32 [integer signed 32])
+  (field s64 [integer signed 64])
+])
+
+(record IntegersUnsignedNormalized [
+  (field un8  [integer unsigned-normalized 8])
+  (padding-octets 1)
+  (field un16 [integer unsigned-normalized 16])
+  (field un32 [integer unsigned-normalized 32])
+  (field un64 [integer unsigned-normalized 64])
+])
+
+(record IntegersSignedNormalized [
+  (field sn8  [integer signed-normalized 8])
+  (padding-octets 1)
+  (field sn16 [integer signed-normalized 16])
+  (field sn32 [integer signed-normalized 32])
+  (field sn64 [integer signed-normalized 64])
+])
+
+(package-end)

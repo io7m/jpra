@@ -18,9 +18,11 @@
     <module>io7m-jpra-checkstyle</module>
     <module>io7m-jpra-compiler-core</module>
     <module>io7m-jpra-compiler-frontend</module>
+    <module>io7m-jpra-compiler-java-tests</module>
     <module>io7m-jpra-compiler-java</module>
     <module>io7m-jpra-core</module>
     <module>io7m-jpra-documentation</module>
+    <module>io7m-jpra-maven-plugin</module>
     <module>io7m-jpra-model</module>
     <module>io7m-jpra-runtime-java</module>
   </modules>
@@ -299,6 +301,16 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>truezip-maven-plugin</artifactId>
           <version>1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.4.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.9.1</version>
         </plugin>
 
         <!-- Require JDK >= 1.8 -->

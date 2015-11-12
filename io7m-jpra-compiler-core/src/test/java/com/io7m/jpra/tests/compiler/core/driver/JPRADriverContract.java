@@ -24,7 +24,6 @@ import com.io7m.jpra.compiler.core.driver.JPRADriverType;
 import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
 import com.io7m.jpra.core.JPRAException;
-import com.io7m.jpra.core.JPRAIOException;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.loading.JPRAModelCircularImportException;
@@ -46,7 +45,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Queue;
@@ -118,9 +116,10 @@ public abstract class JPRADriverContract
             Assert.assertEquals(1L, (long) q.size());
 
             {
-              final JPRAIOException e = (JPRAIOException) q.poll();
+              final JPRACompilerResolverException e =
+                (JPRACompilerResolverException) q.poll();
               Assert.assertEquals(
-                NoSuchFileException.class, e.getCause().getClass());
+                JPRAResolverErrorCode.PACKAGE_NONEXISTENT, e.getErrorCode());
             }
 
             Assert.assertEquals(0L, (long) q.size());

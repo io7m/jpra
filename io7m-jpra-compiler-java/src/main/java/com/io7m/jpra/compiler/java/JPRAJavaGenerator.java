@@ -95,7 +95,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final MethodSpec.Builder jmb = MethodSpec.methodBuilder("getByteOffsetFor");
     jmb.addModifiers(Modifier.PRIVATE);
     jmb.returns(int.class);
-    jmb.addParameter(int.class, "field_offset");
+    jmb.addParameter(int.class, "field_offset", Modifier.FINAL);
     jmb.addStatement(
       "final int b = (int) this.$N.getByteOffset()", "pointer");
     jmb.addStatement(
@@ -145,6 +145,11 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     {
       final MethodSpec.Builder jmb =
         MethodSpec.methodBuilder("newValueWithOffset");
+      jmb.addJavadoc("Construct a view of a type.\n");
+      jmb.addJavadoc("@param in_buffer A byte buffer\n");
+      jmb.addJavadoc("@param in_pointer A cursor\n");
+      jmb.addJavadoc("@param in_base_offset The base offset from the cursor\n");
+      jmb.addJavadoc("@return A view of a type\n");
       jmb.addModifiers(Modifier.PUBLIC);
       jmb.addModifiers(Modifier.STATIC);
       jmb.returns(int_name);
@@ -162,6 +167,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     {
       final MethodSpec.Builder jmb = MethodSpec.methodBuilder("newValue");
+      jmb.addJavadoc("Construct a view of a type.\n");
+      jmb.addJavadoc("@param in_buffer A byte buffer\n");
+      jmb.addJavadoc("@param in_pointer A cursor\n");
+      jmb.addJavadoc("@return A view of a type\n");
       jmb.addModifiers(Modifier.PUBLIC);
       jmb.addModifiers(Modifier.STATIC);
       jmb.returns(int_name);
@@ -182,6 +191,11 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     {
       final MethodSpec.Builder jmb =
         MethodSpec.methodBuilder("newValueWithOffset");
+      jmb.addJavadoc("Construct a view of a type.\n");
+      jmb.addJavadoc("@param in_buffer A byte buffer\n");
+      jmb.addJavadoc("@param in_pointer A cursor\n");
+      jmb.addJavadoc("@param in_base_offset The base offset from the cursor\n");
+      jmb.addJavadoc("@return A view of a type\n");
       jmb.addModifiers(Modifier.PUBLIC);
       jmb.addModifiers(Modifier.STATIC);
       jmb.returns(int_name);
@@ -199,6 +213,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     {
       final MethodSpec.Builder jmb = MethodSpec.methodBuilder("newValue");
+      jmb.addJavadoc("Construct a view of a type.\n");
+      jmb.addJavadoc("@param in_buffer A byte buffer\n");
+      jmb.addJavadoc("@param in_pointer A cursor\n");
+      jmb.addJavadoc("@return A view of a type\n");
       jmb.addModifiers(Modifier.PUBLIC);
       jmb.addModifiers(Modifier.STATIC);
       jmb.returns(int_name);
@@ -350,6 +368,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         ClassName.get(JPRACursorByteReadableType.class);
 
       final TypeSpec.Builder jcb = TypeSpec.classBuilder(tn);
+      jcb.addJavadoc(
+        "A {@code ByteBuffer} based implementation of the {@code $L} record type.",
+        t_name);
       jcb.addSuperinterface(int_name);
       jcb.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
@@ -387,6 +408,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String pack_name = tp.getName().toString();
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(name);
+      jcb.addJavadoc(
+        "The readable interface to values of the {@code $L} record type.",
+        tn);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(JPRAValueType.class);
 
@@ -432,6 +456,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String tn = this.getRecordInterfaceWritableName(t.getName());
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
+      jcb.addJavadoc(
+        "The writable interface to values of the {@code $L} record type.",
+        tn);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(JPRAValueType.class);
 
@@ -485,6 +512,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String tn = JPRAGeneratedNames.getRecordInterfaceName(t_name);
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
+      jcb.addJavadoc(
+        "The interface to values of the {@code $L} record type.", t_name);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(ClassName.get(pack_name, wtn));
       jcb.addSuperinterface(ClassName.get(pack_name, rtn));
@@ -519,6 +548,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         ClassName.get(JPRACursorByteReadableType.class);
 
       final TypeSpec.Builder jcb = TypeSpec.classBuilder(tn);
+      jcb.addJavadoc(
+        "A {@code ByteBuffer} based implementation of the {@code $L} packed type.",
+        t_name);
       jcb.addSuperinterface(int_name);
       jcb.addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
@@ -581,6 +613,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String pack_name = tp.getName().toString();
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(name);
+      jcb.addJavadoc(
+        "The readable interface to values of the {@code $L} packed type.",
+        tn);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(JPRAValueType.class);
 
@@ -627,6 +662,9 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String pack_name = tp.getName().toString();
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
+      jcb.addJavadoc(
+        "The writable interface to values of the {@code $L} packed type.",
+        tn);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(JPRAValueType.class);
 
@@ -682,6 +720,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       final String tn = JPRAGeneratedNames.getPackedInterfaceName(t_name);
 
       final TypeSpec.Builder jcb = TypeSpec.interfaceBuilder(tn);
+      jcb.addJavadoc(
+        "The interface to values of the {@code $L} packed type.", t_name);
       jcb.addModifiers(Modifier.PUBLIC);
       jcb.addSuperinterface(ClassName.get(pack_name, wtn));
       jcb.addSuperinterface(ClassName.get(pack_name, rtn));

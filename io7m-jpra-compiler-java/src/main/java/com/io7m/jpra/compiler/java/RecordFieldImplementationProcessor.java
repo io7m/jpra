@@ -68,7 +68,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchArray(
     final TArray t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
   }
@@ -76,7 +76,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchString(
     final TString t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
 
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
@@ -85,7 +85,11 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchBooleanSet(
     final TBooleanSet t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
+
+    /**
+     * Generate a get and set method for each field of the boolean set.
+     */
 
     final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
     for (int index = 0; index < ordered.size(); ++index) {
@@ -104,6 +108,7 @@ final class RecordFieldImplementationProcessor
           .replace(" ", "0");
 
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc("@return The value of the {@code $L} field", f);
       getb.addAnnotation(Override.class);
       getb.addModifiers(Modifier.PUBLIC);
       getb.returns(boolean.class);
@@ -118,6 +123,8 @@ final class RecordFieldImplementationProcessor
       final String setter_name =
         JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+      setb.addJavadoc("Set the value of the {@code $L} field\n", f);
+      setb.addJavadoc("@param x The new value");
       setb.addAnnotation(Override.class);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addParameter(boolean.class, "x", Modifier.FINAL);
@@ -141,7 +148,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchInteger(
     final TIntegerType t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
     final RecordFieldImplementationIntegerProcessor p =
       new RecordFieldImplementationIntegerProcessor(
         this.field, this.class_builder);
@@ -151,7 +158,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchFloat(
     final TFloat t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
 
     final BigInteger size = t.getSizeInBits().getValue();
 
@@ -174,6 +181,11 @@ final class RecordFieldImplementationProcessor
       throw new UnimplementedCodeException();
     }
 
+    /**
+     * Determine the type and methods used to put/get values to/from the
+     * underlying byte buffer.
+     */
+
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = double.class;
       iput = "putDouble";
@@ -191,10 +203,22 @@ final class RecordFieldImplementationProcessor
       pack = true;
     }
 
+    /**
+     * Some floating point sizes require packing into integers, as they
+     * have no direct representation in Java.
+     */
+
     if (pack) {
+
+      /**
+       * Generate a method to unpack values from the byte buffer.
+       */
+
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addModifiers(Modifier.PUBLIC);
       getb.addAnnotation(Override.class);
+      getb.addJavadoc(
+        "@return The value of the {@code $L} field", this.field.getName());
       getb.returns(double.class);
       getb.addStatement(
         "return $T.unpackDouble($N.$N(this.getByteOffsetFor($N)))",
@@ -204,9 +228,16 @@ final class RecordFieldImplementationProcessor
         offset_constant);
       this.class_builder.addMethod(getb.build());
 
+      /**
+       * Generate a method to pack values into the byte buffer.
+       */
+
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addAnnotation(Override.class);
+      setb.addJavadoc(
+        "Set the value of the {@code $L} field\n", this.field.getName());
+      setb.addJavadoc("@param x The new value");
       setb.addParameter(double.class, "x", Modifier.FINAL);
       setb.returns(void.class);
       setb.addStatement(
@@ -218,9 +249,17 @@ final class RecordFieldImplementationProcessor
         "x");
       this.class_builder.addMethod(setb.build());
     } else {
+
+      /**
+       * Generate a method to retrieve floating point values from the byte
+       * buffer.
+       */
+
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addModifiers(Modifier.PUBLIC);
       getb.addAnnotation(Override.class);
+      getb.addJavadoc(
+        "@return The value of the {@code $L} field", this.field.getName());
       getb.returns(itype);
       getb.addStatement(
         "return this.$N.$N(this.getByteOffsetFor($N))",
@@ -229,9 +268,17 @@ final class RecordFieldImplementationProcessor
         offset_constant);
       this.class_builder.addMethod(getb.build());
 
+      /**
+       * Generate a method to insert floating point values into the byte
+       * buffer.
+       */
+
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addAnnotation(Override.class);
+      setb.addJavadoc(
+        "Set the value of the {@code $L} field\n", this.field.getName());
+      setb.addJavadoc("@param x The new value");
       setb.addParameter(itype, "x", Modifier.FINAL);
       setb.returns(void.class);
       setb.addStatement(
@@ -249,7 +296,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchVector(
     final TVector t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
 
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
@@ -258,7 +305,7 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchMatrix(
     final TMatrix t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
 
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
@@ -267,10 +314,18 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchRecord(
     final TRecord t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
     return Unit.unit();
   }
+
+  /**
+   * Generate methods that return a readable or writable reference to a given
+   * field of type {@code packed} or {@code record}.
+   *
+   * @param t_name The name of the field type
+   * @param tp_ctx The target package context
+   */
 
   private void recordOrPackedMethods(
     final TypeName t_name,
@@ -311,12 +366,17 @@ final class RecordFieldImplementationProcessor
   @Override public Unit matchPacked(
     final TPacked t)
   {
-    this.start();
+    this.generateFieldOffsetConstant();
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
     return Unit.unit();
   }
 
-  private void start()
+  /**
+   * Generate a static constant indicating the offset in octets of the field
+   * from the start of the type.
+   */
+
+  private void generateFieldOffsetConstant()
   {
     final FieldSpec.Builder fb = FieldSpec.builder(
       int.class,

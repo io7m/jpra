@@ -67,6 +67,12 @@ final class RecordFieldImplementationIntegerProcessor
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
+  /**
+   * Generate a set of methods for setting and retrieving integer values.
+   *
+   * @param size The size of the integer
+   */
+
   private Unit onInteger(final BigInteger size)
   {
     final String offset_constant =
@@ -83,6 +89,11 @@ final class RecordFieldImplementationIntegerProcessor
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
+
+    /**
+     * Determine the type and methods used to put/get values to/from the
+     * underlying byte buffer.
+     */
 
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
@@ -107,6 +118,16 @@ final class RecordFieldImplementationIntegerProcessor
     return Unit.unit();
   }
 
+  /**
+   * Generate a method that sets the raw integer value of a field.
+   *
+   * @param offset_constant The offset constant
+   * @param setter_name     The name of the resulting method
+   * @param iput            The method that will be called on the underlying
+   *                        byte buffer
+   * @param itype           The input type
+   */
+
   private void integerSetter(
     final String offset_constant,
     final String setter_name,
@@ -126,6 +147,16 @@ final class RecordFieldImplementationIntegerProcessor
       "x");
     this.class_builder.addMethod(setb.build());
   }
+
+  /**
+   * Generate a method that retrieved the raw integer value of a field.
+   *
+   * @param offset_constant The offset constant
+   * @param getter_name     The name of the resulting method
+   * @param iget            The method that will be called on the underlying
+   *                        byte buffer
+   * @param itype           The output type
+   */
 
   private void integerGetter(
     final String offset_constant,
@@ -153,6 +184,14 @@ final class RecordFieldImplementationIntegerProcessor
     return Unit.unit();
   }
 
+  /**
+   * Generate a set of methods for setting and retrieving normalized integer
+   * values.
+   *
+   * @param size   The size of the integer
+   * @param signed {@code true} iff the integer type is signed
+   */
+
   private void onIntegerNormalized(
     final BigInteger size,
     final boolean signed)
@@ -174,6 +213,11 @@ final class RecordFieldImplementationIntegerProcessor
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
+
+    /**
+     * Determine the type and methods used to put/get values to/from the
+     * underlying byte buffer.
+     */
 
     final String iput;
     final String iget;
@@ -215,6 +259,11 @@ final class RecordFieldImplementationIntegerProcessor
       iget = "get";
     }
 
+    /**
+     * Construct names of the methods used to convert values to/from
+     * normalized fixed-point form.
+     */
+
     final String m_to;
     final String m_of;
     if (signed) {
@@ -225,8 +274,16 @@ final class RecordFieldImplementationIntegerProcessor
       m_of = String.format("fromUnsignedNormalized%s", size);
     }
 
+    /**
+     * Generate raw getters and setters.
+     */
+
     this.integerGetter(offset_constant, getter_norm_raw_name, iget, r_type);
     this.integerSetter(offset_constant, setter_norm_raw_name, iput, r_type);
+
+    /**
+     * Generate a method to return a value in normalized floating point form.
+     */
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
     getb.addModifiers(Modifier.PUBLIC);
@@ -235,6 +292,10 @@ final class RecordFieldImplementationIntegerProcessor
     getb.addStatement(
       "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
     this.class_builder.addMethod(getb.build());
+
+    /**
+     * Generate a method to set a value in normalized floating point form.
+     */
 
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);
     setb.addModifiers(Modifier.PUBLIC);

@@ -89,6 +89,10 @@ final class RecordFieldInterfaceIntegerProcessor
       throw new UnimplementedCodeException();
     }
 
+    /**
+     * Determine the types used for values in the interface.
+     */
+
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
@@ -101,6 +105,8 @@ final class RecordFieldInterfaceIntegerProcessor
 
     if (this.methods.wantGetters()) {
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return The value of the {@code $L} field", this.field.getName());
       getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       getb.returns(itype);
       this.class_builder.addMethod(getb.build());
@@ -108,6 +114,9 @@ final class RecordFieldInterfaceIntegerProcessor
 
     if (this.methods.wantSetters()) {
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+      setb.addJavadoc(
+        "Set the value of the {@code $L} field\n", this.field.getName());
+      setb.addJavadoc("@param x The new value");
       setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       setb.addParameter(itype, "x", Modifier.FINAL);
       setb.returns(void.class);
@@ -134,6 +143,11 @@ final class RecordFieldInterfaceIntegerProcessor
       throw new UnimplementedCodeException();
     }
 
+    /**
+     * Determine the types used for values in the interface. These types
+     * are used to set the raw integer values of normalized fields.
+     */
+
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
@@ -148,6 +162,8 @@ final class RecordFieldInterfaceIntegerProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(double.class);
         this.class_builder.addMethod(getb.build());
@@ -156,6 +172,8 @@ final class RecordFieldInterfaceIntegerProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_raw_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(itype);
         this.class_builder.addMethod(getb.build());
@@ -166,6 +184,9 @@ final class RecordFieldInterfaceIntegerProcessor
       {
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(double.class, "x", Modifier.FINAL);
         this.class_builder.addMethod(setb.build());
@@ -174,6 +195,9 @@ final class RecordFieldInterfaceIntegerProcessor
       {
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_raw_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(itype, "x", Modifier.FINAL);
         setb.returns(void.class);

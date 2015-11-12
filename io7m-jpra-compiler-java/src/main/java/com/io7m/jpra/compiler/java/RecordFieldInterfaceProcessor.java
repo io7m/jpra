@@ -82,6 +82,10 @@ final class RecordFieldInterfaceProcessor
         final String getter_name =
           JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
         final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+        getb.addJavadoc(
+          "@return The value of field {@code $L} of the boolean set $L",
+          f.getValue(),
+          this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(boolean.class);
         this.class_builder.addMethod(getb.build());
@@ -91,6 +95,11 @@ final class RecordFieldInterfaceProcessor
         final String setter_name =
           JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
         final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+        setb.addJavadoc(
+          "Set the value of field {@code $L} of the boolean set $L\n",
+          f.getValue(),
+          this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(boolean.class, "x", Modifier.FINAL);
         this.class_builder.addMethod(setb.build());
@@ -126,6 +135,10 @@ final class RecordFieldInterfaceProcessor
       throw new UnimplementedCodeException();
     }
 
+    /**
+     * Determine the types used for values in the interface.
+     */
+
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = double.class;
       pack = false;
@@ -133,6 +146,11 @@ final class RecordFieldInterfaceProcessor
       itype = float.class;
       pack = false;
     } else {
+
+      /**
+       * 16-bit floating point types use a raw unsigned integer value.
+       */
+
       itype = char.class;
       pack = true;
     }
@@ -140,12 +158,17 @@ final class RecordFieldInterfaceProcessor
     if (pack) {
       if (this.methods.wantGetters()) {
         final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(double.class);
         this.class_builder.addMethod(getb.build());
       }
       if (this.methods.wantSetters()) {
         final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(double.class, "x", Modifier.FINAL);
         setb.returns(void.class);
@@ -154,12 +177,17 @@ final class RecordFieldInterfaceProcessor
     } else {
       if (this.methods.wantGetters()) {
         final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+        getb.addJavadoc(
+          "@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(itype);
         this.class_builder.addMethod(getb.build());
       }
       if (this.methods.wantSetters()) {
         final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+        setb.addJavadoc(
+          "Set the value of the {@code $L} field\n", this.field.getName());
+        setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(itype, "x", Modifier.FINAL);
         setb.returns(void.class);
@@ -187,6 +215,14 @@ final class RecordFieldInterfaceProcessor
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
     return Unit.unit();
   }
+
+  /**
+   * Generate methods that return a readable or writable reference to a given
+   * field of type {@code packed} or {@code record}.
+   *
+   * @param t_name  The name of the field type
+   * @param pkg_ctx The target package context
+   */
 
   private void recordOrPackedMethods(
     final TypeName t_name,
