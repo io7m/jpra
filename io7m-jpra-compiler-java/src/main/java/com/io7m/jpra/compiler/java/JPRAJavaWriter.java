@@ -91,10 +91,12 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     final TypeUserDefinedType t)
     throws IOException
   {
+    NullCheck.notNull(path);
+    NullCheck.notNull(t);
+
     final TypeName t_name = t.getName();
     final PackageNameQualified p_name = t.getPackageContext().getName();
-    JPRAJavaWriter.LOG.debug(
-      "exporting {}.{}", p_name, t_name);
+    JPRAJavaWriter.LOG.debug("exporting {}.{}", p_name, t_name);
 
     final Path pkg_path = JPRAJavaWriter.getPathForPackage(path, p_name);
     Files.createDirectories(pkg_path);
@@ -138,7 +140,6 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
         @Override public Unit matchPacked(final TPacked r)
           throws IOException
         {
-
           final Path c_file = pkg_path.resolve(
             g.getPackedImplementationByteBufferedName(t_name) + ".java");
           final Path r_file = pkg_path.resolve(
@@ -164,6 +165,7 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
           try (final OutputStream w = Files.newOutputStream(i_file)) {
             g.generatePackedInterface(r, w);
           }
+
           return Unit.unit();
         }
       });
