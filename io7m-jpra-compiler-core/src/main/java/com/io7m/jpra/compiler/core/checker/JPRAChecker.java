@@ -114,7 +114,7 @@ public final class JPRAChecker implements JPRACheckerType
 
   private final GlobalContextType              context;
   private final JPRACheckerCapabilitiesType    caps;
-  private       PackageContextType             package_ctx;
+  private       PackageContext                 package_ctx;
   private       Optional<PackageNameQualified> current_package;
   private       TypeExpressionContext          type_context;
 
@@ -189,6 +189,7 @@ public final class JPRAChecker implements JPRACheckerType
       final TType tt = rv.getType();
       Assertive.require(tt instanceof TypeUserDefinedType);
       this.context.putType((TypeUserDefinedType) tt);
+      this.package_ctx.putType((TypeUserDefinedType) tt);
       return rv;
     } finally {
       this.type_context = TypeExpressionContext.NONE;
@@ -977,6 +978,12 @@ public final class JPRAChecker implements JPRACheckerType
       this.types = Maps.mutable.empty();
       this.types_view = this.types.asUnmodifiable();
       this.name = NullCheck.notNull(in_name);
+    }
+
+    void putType(final TypeUserDefinedType t)
+    {
+      Assertive.require(!this.types.contains(t.getName()));
+      this.types.put(t.getName(), t);
     }
 
     @Override public GlobalContextType getGlobalContext()
