@@ -459,6 +459,39 @@ public abstract class JPRAJavaGeneratorContract
       path, g, Lists.immutable.of(te, r));
   }
 
+  @Test public final void testRecordFieldRecordTwice()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.loadPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+
+    final Path path = Files.createTempDirectory("jpra");
+
+    final TypeName t_name = new TypeName(no_lex, "Empty");
+    final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
+    final TRecord te = teb.build();
+
+    final TypeName tr_name = new TypeName(no_lex, "RecordRecordTwice");
+    final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
+    rb.addField(new FieldName(no_lex, "r0"), gc.getFreshIdentifier(), te);
+    rb.addField(new FieldName(no_lex, "r1"), gc.getFreshIdentifier(), te);
+
+    final TRecord r = rb.build();
+    JPRAJavaGeneratorContract.compileRecords(
+      path, g, Lists.immutable.of(te, r));
+  }
+
   @Test public final void testPackedEmpty()
     throws Exception
   {

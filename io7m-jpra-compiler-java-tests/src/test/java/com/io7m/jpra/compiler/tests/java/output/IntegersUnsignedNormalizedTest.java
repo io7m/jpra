@@ -59,21 +59,7 @@ public final class IntegersUnsignedNormalizedTest
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       Assert.assertEquals((long) (index + 1), (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 1, offset + 15);
       offset += 16;
     }
 
@@ -93,6 +79,14 @@ public final class IntegersUnsignedNormalizedTest
 
     v.setUn8Raw((byte) 0b11111111);
     Assert.assertEquals(0b11111111L, Byte.toUnsignedLong(v.getUn8Raw()));
+
+    v.setUn8(0.0);
+    Assert.assertEquals(0L, v.getUn8Raw());
+    Assert.assertEquals(0.0, v.getUn8(), 0.0);
+
+    v.setUn8(1.0);
+    Assert.assertEquals(0b11111111, Byte.toUnsignedLong(v.getUn8Raw()));
+    Assert.assertEquals(1.0, v.getUn8(), 0.0);
   }
 
   @Test public void testSetU16()
@@ -112,22 +106,9 @@ public final class IntegersUnsignedNormalizedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 0, offset + 1);
       Assert.assertEquals((long) (index + 1), (long) buf.getShort(offset + 2));
-
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 4, offset + 15);
       offset += 16;
     }
 
@@ -147,8 +128,16 @@ public final class IntegersUnsignedNormalizedTest
 
     v.setUn16Raw((short) 0b11111111_11111111);
     Assert.assertEquals(
-      0b11111111_11111111L,
-      Short.toUnsignedLong(v.getUn16Raw()));
+      0b11111111_11111111L, Short.toUnsignedLong(v.getUn16Raw()));
+
+    v.setUn16(0.0);
+    Assert.assertEquals(0L, v.getUn16Raw());
+    Assert.assertEquals(0.0, v.getUn16(), 0.0);
+
+    v.setUn16(1.0);
+    Assert.assertEquals(
+      0b11111111_11111111, Short.toUnsignedLong(v.getUn16Raw()));
+    Assert.assertEquals(1.0, v.getUn16(), 0.0);
   }
 
   @Test public void testSetU32()
@@ -168,20 +157,9 @@ public final class IntegersUnsignedNormalizedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 0, offset + 3);
       Assert.assertEquals(index + 1L, (long) buf.getInt(offset + 4));
-
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 8, offset + 15);
       offset += 16;
     }
 
@@ -203,6 +181,16 @@ public final class IntegersUnsignedNormalizedTest
     Assert.assertEquals(
       0b11111111_11111111_11111111_11111111L,
       Integer.toUnsignedLong(v.getUn32Raw()));
+
+    v.setUn32(0.0);
+    Assert.assertEquals(0L, v.getUn32Raw());
+    Assert.assertEquals(0.0, v.getUn32(), 0.0);
+
+    v.setUn32(1.0);
+    Assert.assertEquals(
+      0b11111111_11111111_11111111_11111111L,
+      Integer.toUnsignedLong(v.getUn32Raw()));
+    Assert.assertEquals(1.0, v.getUn32(), 0.0);
   }
 
   @Test public void testSetU64()
@@ -222,14 +210,7 @@ public final class IntegersUnsignedNormalizedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 0, offset + 7);
       Assert.assertEquals(index + 1L, buf.getLong(offset + 8));
       offset += 16;
     }
@@ -253,5 +234,15 @@ public final class IntegersUnsignedNormalizedTest
     Assert.assertEquals(
       0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L,
       v.getUn64Raw());
+
+    v.setUn64(0.0);
+    Assert.assertEquals(0L, v.getUn64Raw());
+    Assert.assertEquals(0.0, v.getUn64(), 0.0);
+
+    v.setUn64(1.0);
+    Assert.assertEquals(
+      0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L,
+      v.getUn64Raw());
+    Assert.assertEquals(1.0, v.getUn64(), 0.0);
   }
 }

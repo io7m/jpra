@@ -35,6 +35,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces implementation methods for a given integer type
@@ -207,7 +208,9 @@ final class RecordFieldImplementationIntegerProcessor
     final String setter_norm_raw_name =
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
+    final Class<?> i_type;
     final Class<?> r_type;
+    final Class<?> r_class;
     final Class<?> nfp_class;
 
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
@@ -216,13 +219,19 @@ final class RecordFieldImplementationIntegerProcessor
 
     /**
      * Determine the type and methods used to put/get values to/from the
-     * underlying byte buffer.
+     * underlying byte buffer. Additionally, a reference to the corresponding
+     * boxed type is necessary to allow for access to functions to convert
+     * values to/from unsigned types.
      */
 
     final String iput;
     final String iget;
+    final String conv;
+
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       r_type = long.class;
+      i_type = long.class;
+      r_class = Long.class;
       if (signed) {
         nfp_class = NFPSignedDoubleLong.class;
       } else {
@@ -230,8 +239,11 @@ final class RecordFieldImplementationIntegerProcessor
       }
       iput = "putLong";
       iget = "getLong";
+      conv = "toUnsignedLong";
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
       r_type = int.class;
+      i_type = int.class;
+      r_class = Integer.class;
       if (signed) {
         nfp_class = NFPSignedDoubleInt.class;
       } else {
@@ -239,8 +251,11 @@ final class RecordFieldImplementationIntegerProcessor
       }
       iput = "putInt";
       iget = "getInt";
+      conv = "toUnsignedInt";
     } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
       r_type = short.class;
+      i_type = int.class;
+      r_class = Short.class;
       if (signed) {
         nfp_class = NFPSignedDoubleInt.class;
       } else {
@@ -248,8 +263,11 @@ final class RecordFieldImplementationIntegerProcessor
       }
       iput = "putShort";
       iget = "getShort";
+      conv = "toUnsignedInt";
     } else {
       r_type = byte.class;
+      i_type = int.class;
+      r_class = Byte.class;
       if (signed) {
         nfp_class = NFPSignedDoubleInt.class;
       } else {
@@ -257,6 +275,7 @@ final class RecordFieldImplementationIntegerProcessor
       }
       iput = "put";
       iget = "get";
+      conv = "toUnsignedInt";
     }
 
     /**
@@ -289,8 +308,29 @@ final class RecordFieldImplementationIntegerProcessor
     getb.addModifiers(Modifier.PUBLIC);
     getb.addAnnotation(Override.class);
     getb.returns(double.class);
-    getb.addStatement(
-      "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
+
+    if (signed) {
+      getb.addStatement(
+        "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
+    } else {
+
+      /**
+       * Types of different sizes require explicit unsigned conversions.
+       */
+
+      getb.addStatement(
+        "final $T x = this.$N()", r_type, getter_norm_raw_name);
+      if (!Objects.equals(i_type, r_type)) {
+        getb.addStatement(
+          "final $T y = $T.$N(x)", i_type, r_class, conv);
+        getb.addStatement(
+          "return $T.$N(y)", nfp_class, m_of);
+      } else {
+        getb.addStatement(
+          "return $T.$N(x)", nfp_class, m_of);
+      }
+    }
+
     this.class_builder.addMethod(getb.build());
 
     /**

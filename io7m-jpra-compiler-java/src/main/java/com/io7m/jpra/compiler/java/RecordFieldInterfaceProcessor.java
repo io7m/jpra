@@ -230,7 +230,7 @@ final class RecordFieldInterfaceProcessor
   {
     if (this.methods.wantGetters()) {
       final String getter_name =
-        JPRAGeneratedNames.getGetterRecordReadableName(t_name);
+        JPRAGeneratedNames.getGetterRecordReadableName(this.field.getName());
 
       final String target_pack = pkg_ctx.getName().toString();
       final String target_class =
@@ -245,7 +245,7 @@ final class RecordFieldInterfaceProcessor
 
     if (this.methods.wantSetters()) {
       final String setter_name =
-        JPRAGeneratedNames.getGetterRecordWritableName(t_name);
+        JPRAGeneratedNames.getGetterRecordWritableName(this.field.getName());
 
       final String target_pack = pkg_ctx.getName().toString();
       final String target_class =

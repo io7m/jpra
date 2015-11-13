@@ -32,4 +32,17 @@
   (field sn64 [integer signed-normalized 64])
 ])
 
+(record Floats [
+  (field f16 [float 16])
+  (field f32 [float 32])
+  (field f64 [float 64])
+  (padding-octets 2)
+])
+
+(record References [
+  (field r0 IntegersUnsigned)
+  (field r1 IntegersUnsigned)
+  (field r2 IntegersUnsigned)
+])
+
 (package-end)

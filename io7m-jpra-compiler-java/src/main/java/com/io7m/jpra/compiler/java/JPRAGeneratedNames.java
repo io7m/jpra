@@ -113,7 +113,7 @@ final class JPRAGeneratedNames
     return sb.toString();
   }
 
-  static String getGetterRecordReadableName(final TypeName name)
+  static String getGetterRecordReadableName(final FieldName name)
   {
     final String text = JPRAGeneratedNames.getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
@@ -123,7 +123,7 @@ final class JPRAGeneratedNames
     return sb.toString();
   }
 
-  static String getGetterRecordWritableName(final TypeName name)
+  static String getGetterRecordWritableName(final FieldName name)
   {
     final String text = JPRAGeneratedNames.getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);

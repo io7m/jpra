@@ -332,9 +332,9 @@ final class RecordFieldImplementationProcessor
     final PackageContextType tp_ctx)
   {
     final String reader_name =
-      JPRAGeneratedNames.getGetterRecordReadableName(t_name);
+      JPRAGeneratedNames.getGetterRecordReadableName(this.field.getName());
     final String writer_name =
-      JPRAGeneratedNames.getGetterRecordWritableName(t_name);
+      JPRAGeneratedNames.getGetterRecordWritableName(this.field.getName());
 
     final String target_pack = tp_ctx.getName().toString();
     final String target_class_read =

@@ -58,21 +58,7 @@ public final class IntegersSignedTest
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       Assert.assertEquals((long) (index + 1), (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, offset + 1, offset + 15);
       offset += 16;
     }
 
@@ -111,22 +97,9 @@ public final class IntegersSignedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
+      BufferChecks.checkRangeInclusiveIsZero(buf, 0, 1);
       Assert.assertEquals((long) (index + 1), (long) buf.getShort(offset + 2));
-
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, 4, 15);
       offset += 16;
     }
 
@@ -165,20 +138,9 @@ public final class IntegersSignedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
+      BufferChecks.checkRangeInclusiveIsZero(buf, 0, 3);
       Assert.assertEquals(index + 1L, (long) buf.getInt(offset + 4));
-
-      Assert.assertEquals(0L, (long) buf.get(offset + 8));
-      Assert.assertEquals(0L, (long) buf.get(offset + 9));
-      Assert.assertEquals(0L, (long) buf.get(offset + 10));
-      Assert.assertEquals(0L, (long) buf.get(offset + 11));
-      Assert.assertEquals(0L, (long) buf.get(offset + 12));
-      Assert.assertEquals(0L, (long) buf.get(offset + 13));
-      Assert.assertEquals(0L, (long) buf.get(offset + 14));
-      Assert.assertEquals(0L, (long) buf.get(offset + 15));
+      BufferChecks.checkRangeInclusiveIsZero(buf, 8, 15);
       offset += 16;
     }
 
@@ -217,14 +179,7 @@ public final class IntegersSignedTest
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
-      Assert.assertEquals(0L, (long) buf.get(offset + 0));
-      Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(0L, (long) buf.get(offset + 2));
-      Assert.assertEquals(0L, (long) buf.get(offset + 3));
-      Assert.assertEquals(0L, (long) buf.get(offset + 4));
-      Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(0L, (long) buf.get(offset + 6));
-      Assert.assertEquals(0L, (long) buf.get(offset + 7));
+      BufferChecks.checkRangeInclusiveIsZero(buf, 0, 7);
       Assert.assertEquals(index + 1L, buf.getLong(offset + 8));
       offset += 16;
     }
