@@ -251,7 +251,10 @@ public final class PackedFieldInterfaceProcessor
     if (this.methods.wantSetters()) {
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addJavadoc(
-        "Set the value of the {@code $L} field\n", this.field.getName());
+        "Set the value of the {@code $L} field.\n", this.field.getName());
+      setb.addJavadoc(
+        "The $L least significant bits of {@code x} will be used.\n",
+        this.field.getSize().getValue());
       setb.addJavadoc("@param x The new value");
       setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       setb.addParameter(itype, "x", Modifier.FINAL);
@@ -304,7 +307,10 @@ public final class PackedFieldInterfaceProcessor
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_name);
         setb.addJavadoc(
-          "Set the value of the {@code $L} field\n", this.field.getName());
+          "Set the value of the {@code $L} field.\n", this.field.getName());
+        setb.addJavadoc(
+          "The $L least significant bits of {@code x} will be used.\n",
+          this.field.getSize().getValue());
         setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(double.class, "x", Modifier.FINAL);
@@ -315,7 +321,10 @@ public final class PackedFieldInterfaceProcessor
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_raw_name);
         setb.addJavadoc(
-          "Set the value of the {@code $L} field\n", this.field.getName());
+          "Set the value of the {@code $L} field.\n", this.field.getName());
+        setb.addJavadoc(
+          "The $L least significant bits of {@code x} will be used.\n",
+          this.field.getSize().getValue());
         setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(itype, "x", Modifier.FINAL);

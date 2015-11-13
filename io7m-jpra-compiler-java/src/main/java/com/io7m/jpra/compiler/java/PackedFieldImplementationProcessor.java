@@ -123,7 +123,7 @@ public final class PackedFieldImplementationProcessor
       iput = "put";
     }
 
-    setb.addStatement("$T r_valu = 0", arith_type);
+    setb.addStatement("$T result = 0", arith_type);
 
     ordered.selectInstancesOf(TPacked.FieldValue.class).forEach(
       (Procedure<TPacked.FieldValue>) fv -> {
@@ -206,7 +206,7 @@ public final class PackedFieldImplementationProcessor
       });
 
     setb.addStatement(
-      "this.$N.$N(this.getByteOffset(), ($T) r_valu)",
+      "this.$N.$N(this.getByteOffset(), ($T) result)",
       "buffer",
       iput,
       container_type);
@@ -230,7 +230,7 @@ public final class PackedFieldImplementationProcessor
       f_name_text,
       f_name_text,
       shift);
-    setb.addStatement("r_valu |= $L_valu", f_name_text);
+    setb.addStatement("result |= $L_valu", f_name_text);
   }
 
   private static void onNormalized(
@@ -262,7 +262,7 @@ public final class PackedFieldImplementationProcessor
       f_name_text,
       f_name_text,
       shift);
-    setb.addStatement("r_valu |= $L_valu", f_name_text);
+    setb.addStatement("result |= $L_valu", f_name_text);
   }
 
   private static Class<?> getNFPClassFromFieldSizeAndSign(
@@ -436,7 +436,7 @@ public final class PackedFieldImplementationProcessor
     setb.addAnnotation(Override.class);
     setb.returns(void.class);
     setb.addStatement(
-      "final $T r_valu = this.$N.$N(this.getByteOffset())",
+      "final $T result = this.$N.$N(this.getByteOffset())",
       container_type,
       "buffer",
       iget);
@@ -447,7 +447,7 @@ public final class PackedFieldImplementationProcessor
     setb.addStatement(
       "final $T x_valu = (x & x_mask) << $L", arith_type, shift);
     setb.addStatement(
-      "final $T w_valu = (r_valu & r_mask) | x_valu", arith_type);
+      "final $T w_valu = (result & r_mask) | x_valu", arith_type);
     setb.addStatement(
       "this.$N.$N(this.getByteOffset(), ($T) w_valu)",
       "buffer",

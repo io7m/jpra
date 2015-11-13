@@ -51,4 +51,24 @@
      b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15)])
 ])
 
+(packed OpenGL565 [
+  (field r [integer unsigned-normalized 5])
+  (field g [integer unsigned-normalized 6])
+  (field b [integer unsigned-normalized 5])
+])
+
+(packed OpenGL4444 [
+  (field r [integer unsigned-normalized 4])
+  (field g [integer unsigned-normalized 4])
+  (field b [integer unsigned-normalized 4])
+  (field a [integer unsigned-normalized 4])
+])
+
+(packed OpenGL101010A2 [
+  (field r [integer unsigned-normalized 10])
+  (field g [integer unsigned-normalized 10])
+  (field b [integer unsigned-normalized 10])
+  (field a [integer unsigned-normalized 2])
+])
+
 (package-end)
