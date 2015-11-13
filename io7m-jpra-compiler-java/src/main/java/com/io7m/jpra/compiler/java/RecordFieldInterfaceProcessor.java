@@ -93,7 +93,7 @@ final class RecordFieldInterfaceProcessor
 
       if (this.methods.wantSetters()) {
         final String setter_name =
-          JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
+          JPRAGeneratedNames.getSetterBooleanSetName(this.field.getName(), f);
         final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
         setb.addJavadoc(
           "Set the value of field {@code $L} of the boolean set $L\n",

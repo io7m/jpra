@@ -96,7 +96,7 @@ final class RecordFieldImplementationProcessor
       final FieldName f = ordered.get(index);
 
       final int octet = index / 8;
-      final int bit = index % 8;
+      final int bit = 7 - (index % 8);
 
       final String getter_name =
         JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
@@ -121,7 +121,7 @@ final class RecordFieldImplementationProcessor
       this.class_builder.addMethod(getb.build());
 
       final String setter_name =
-        JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
+        JPRAGeneratedNames.getSetterBooleanSetName(this.field.getName(), f);
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addJavadoc("Set the value of the {@code $L} field\n", f);
       setb.addJavadoc("@param x The new value");

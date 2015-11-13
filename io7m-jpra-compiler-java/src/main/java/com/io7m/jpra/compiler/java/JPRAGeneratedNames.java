@@ -97,7 +97,7 @@ final class JPRAGeneratedNames
     return sb.toString();
   }
 
-  private static String getSetterBooleanSetName(
+  static String getSetterBooleanSetName(
     final FieldName base_name,
     final FieldName field_name)
   {
