@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.maven;
 
+import com.gs.collections.impl.factory.Lists;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatter;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatterType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -66,14 +67,14 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
    * The directory that will contain generated Java files.
    */
 
-  @Parameter(defaultValue = "${project.build.directory}/generated-test-sources")
+  @Parameter(defaultValue = "${project.build.directory}/generated-sources")
   private File targetDirectory;
 
   /**
    * The list of packages that will be exported to Java source code.
    */
 
-  @Parameter private List<String> packages;
+  @Parameter private final List<String> packages = Lists.mutable.empty();
 
   /**
    * Construct a plugin.
@@ -102,6 +103,10 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
       JPRACheckerStandardCapabilities.newCapabilities());
     final GlobalContextType gc = driver.getGlobalContext();
 
+    /**
+     * Check all listed packages, printing all errors for each.
+     */
+
     boolean failed = false;
     for (final PackageNameQualified pack_name : pack_names) {
       logger.debug("checking " + pack_name);
@@ -121,6 +126,10 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
         failed = true;
       }
     }
+
+    /**
+     * Generate code if all of the packages above compiled correctly.
+     */
 
     if (!failed) {
       logger.debug("generating code");
@@ -143,6 +152,10 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
         }
       }
     }
+
+    /**
+     * Fail the build on errors.
+     */
 
     if (failed) {
       throw new MojoFailureException("Plugin failed due to one or more errors");

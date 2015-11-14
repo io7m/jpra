@@ -41,6 +41,14 @@
       <artifactId>maven-plugin-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
       <scope>provided</scope>
@@ -51,8 +59,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven.plugin-testing</groupId>
-      <artifactId>maven-plugin-testing-harness</artifactId>
+      <groupId>io.takari.maven.plugins</groupId>
+      <artifactId>takari-plugin-testing</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -67,7 +75,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.4</version>
         <executions>
           <execution>
             <id>default-descriptor</id>
@@ -77,6 +84,21 @@
             <id>help-goal</id>
             <goals>
               <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>io.takari.maven.plugins</groupId>
+        <artifactId>takari-lifecycle-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>testProperties</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>testProperties</goal>
             </goals>
           </execution>
         </executions>

@@ -1,0 +1,5 @@
+(package-begin com.io7m.correct)
+(record T [
+  (field f [integer signed 32])
+])
+(package-end)

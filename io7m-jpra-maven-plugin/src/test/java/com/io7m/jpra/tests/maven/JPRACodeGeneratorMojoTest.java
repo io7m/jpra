@@ -16,10 +16,10 @@
 
 package com.io7m.jpra.tests.maven;
 
-import com.io7m.jpra.maven.JPRACodeGeneratorMojo;
-import org.apache.maven.plugin.testing.MojoRule;
-import org.junit.Assert;
-import org.junit.Ignore;
+import io.takari.maven.testing.TestMavenRuntime;
+import io.takari.maven.testing.TestResources;
+import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -27,32 +27,47 @@ import java.io.File;
 
 public final class JPRACodeGeneratorMojoTest
 {
-  @Rule public MojoRule rule = new MojoRule()
-  {
-    @Override protected void before()
-      throws Throwable
-    {
+  @Rule public final TestResources resources = new TestResources();
 
-    }
+  @Rule public final TestMavenRuntime maven = new TestMavenRuntime();
 
-    @Override protected void after()
-    {
-
-    }
-  };
-
-  @Ignore(value = "Test harness currently broken") @Test
-  public void testSomething()
+  @Test public void testEmpty()
     throws Exception
   {
-    final File pom = new File(
-      "src/test/resources/com/io7m/jpra/tests/maven/project0/pom.xml");
-    Assert.assertNotNull(pom);
-    Assert.assertTrue(pom.exists());
+    final File basedir = this.resources.getBasedir("empty");
+    this.maven.executeMojo(basedir, "generate-java");
+  }
 
-    final JPRACodeGeneratorMojo mojo =
-      (JPRACodeGeneratorMojo) this.rule.lookupMojo("generate-java", pom);
-    Assert.assertNotNull(mojo);
-    mojo.execute();
+  @Test(expected = MojoFailureException.class) public void testCompileFailure()
+    throws Exception
+  {
+    final File basedir = this.resources.getBasedir("compile-failure");
+
+    final Xpp3Dom p = new Xpp3Dom("param");
+    p.setValue("com.io7m.bad");
+    final Xpp3Dom ps = new Xpp3Dom("packages");
+    ps.addChild(p);
+    this.maven.executeMojo(basedir, "generate-java", ps);
+  }
+
+  @Test public void testCorrect0()
+    throws Exception
+  {
+    final File basedir = this.resources.getBasedir("correct-0");
+
+    final Xpp3Dom p = new Xpp3Dom("param");
+    p.setValue("com.io7m.correct");
+    final Xpp3Dom ps = new Xpp3Dom("packages");
+    ps.addChild(p);
+    this.maven.executeMojo(basedir, "generate-java", ps);
+
+    TestResources.assertFilesPresent(
+      basedir, "target/generated-sources/com/io7m/correct/TType.java");
+    TestResources.assertFilesPresent(
+      basedir, "target/generated-sources/com/io7m/correct/TByteBuffered.java");
+    TestResources.assertFilesPresent(
+      basedir, "target/generated-sources/com/io7m/correct/TReadableType.java");
+    TestResources.assertFilesPresent(
+      basedir, "target/generated-sources/com/io7m/correct/TWritableType.java");
   }
 }
