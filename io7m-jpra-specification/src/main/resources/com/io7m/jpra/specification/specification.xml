@@ -19,12 +19,16 @@
 <s:document
   xmlns:s="http://schemas.io7m.com/structural/2.1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
-  <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
+  <s:document-title>${project.parent.name} ${project.version} Language Specification</s:document-title>
   <s:document-style>documentation.css</s:document-style>
   <s:document-contents/>
 
-  <xi:include href="p-package.xml"/>
-  <xi:include href="p-tools.xml"/>
-  <xi:include href="p-api.xml"/>
+  <xi:include href="notation.xml"/>
+  <xi:include href="concepts.xml"/>
+  <xi:include href="stmt_packages.xml"/>
+  <xi:include href="stmt_type.xml"/>
+  <xi:include href="expr_type.xml"/>
+  <xi:include href="expr_size.xml"/>
+  <xi:include href="encoding.xml"/>
 
 </s:document>

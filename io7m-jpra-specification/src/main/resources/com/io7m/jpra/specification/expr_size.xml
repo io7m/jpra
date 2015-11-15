@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="expr.size">
+  <s:part-title>Expressions - Sizes</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:paragraph>
+      This section describes the syntax and semantics of
+      <s:term s:type="package">jpra</s:term> language
+      <s:term s:type="term">size expressions</s:term>.
+    </s:paragraph>
+    <s:paragraph>
+      A <s:term s:type="term">size expression</s:term> is an
+      <s:term s:type="term">expression</s:term> that, when evaluated,
+      yields a <s:term s:type="term">size</s:term>. Size expressions
+      are used to define, for example, the maximum number of elements
+      in a vector type, or the number of bits of precision in an integer
+      type.
+    </s:paragraph>
+  </s:section>
+
+</s:part>

@@ -22,6 +22,7 @@
     <module>io7m-jpra-compiler-java</module>
     <module>io7m-jpra-core</module>
     <module>io7m-jpra-documentation</module>
+    <module>io7m-jpra-specification</module>
     <module>io7m-jpra-maven-plugin</module>
     <module>io7m-jpra-model</module>
     <module>io7m-jpra-runtime-java</module>
@@ -30,8 +31,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <com.io7m.siteReposDirectory>/com/io7m/jpra</com.io7m.siteReposDirectory>
-    <com.io7m.siteDocumentationDirectory>/com/io7m/jpra/io7m-jpra-documentation</com.io7m.siteDocumentationDirectory>
+    <siteReposDirectory>/com/io7m/jpra</siteReposDirectory>
+    <siteDocumentationDirectory>/com/io7m/jpra/io7m-jpra-documentation</siteDocumentationDirectory>
   </properties>
 
   <licenses>

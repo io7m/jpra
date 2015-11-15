@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="expr.type">
+  <s:part-title>Expressions - Types</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:paragraph>
+      This section describes the syntax and semantics of
+      <s:term s:type="package">jpra</s:term> language
+      <s:term s:type="term">type expressions</s:term>.
+    </s:paragraph>
+    <s:paragraph>
+      A <s:term s:type="term">type expression</s:term> is an
+      <s:term s:type="term">expression</s:term> that, when evaluated,
+      yields a <s:term s:type="term">type</s:term>. Primarily,
+      type-checking in the <s:term s:type="package">jpra</s:term> language
+      is concerned with evaluating <s:term s:type="term">type</s:term>
+      and <s:link s:target="expr.size">size</s:link> expressions
+      to yield base types that can then be used to generate code. All
+      types have a size that is known statically, and the documentation
+      for each type of expression indicates how this is calculated.
+    </s:paragraph>
+    <s:paragraph>
+      As an example, the type expression
+      <s:term s:type="expression">[integer signed 32]</s:term> evaluates
+      to a signed integer type with <s:term s:type="constant">32</s:term>
+      bits of precision. The type expression
+      <s:term s:type="expression">[float (size-in-octets T)]</s:term>
+      evaluates to a floating-point type with
+      <s:term s:type="expression">n</s:term> bits of precision, where
+      <s:term s:type="expression">n</s:term> is equal to the size in
+      octets of the type <s:term s:type="expression">T</s:term>.
+    </s:paragraph>
+  </s:section>
+
+  <s:section xml:id="expr.type.integer">
+    <s:section-title>integer</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>integer Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+format_expression =
+  "signed" | "unsigned" | "signed-normalized" | "unsigned-normalized" ;
+
+integer_expression =
+  (integer s:<format_expression> t:<size_expression>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        An <s:term s:type="expression">integer</s:term> type expression
+        describes a fixed-size machine integer.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[integer s t]</s:term>
+        describes an integer with <s:term s:type="expression">t</s:term>
+        bits of precision of format <s:term s:type="expression">s</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s</s:term> is
+        <s:term s:type="expression">signed</s:term>, then the type
+        may hold values in the range
+        <s:term s:type="expression">[-pow(2, t), pow(2, t) - 1]</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s</s:term> is
+        <s:term s:type="expression">unsigned</s:term>, then the type
+        may hold values in the range
+        <s:term s:type="expression">[0, pow(2, 32) - 1]</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s</s:term> is
+        <s:term s:type="expression">signed-normalized</s:term>,
+        then the type is considered to hold
+        <s:term s:type="term">signed normalized fixed-point</s:term>
+        values. A <s:term s:type="term">signed normalized fixed-point</s:term>
+        type maps real numbers in the range
+        <s:term s:type="expression">[-1, 1]</s:term> such that
+        <s:term s:type="expression">-1</s:term> maps to
+        <s:term s:type="expression">-(pow(2, b - 1)) + 1</s:term>, and
+        <s:term s:type="expression">1</s:term> maps to
+        <s:term s:type="expression">pow(2, t - 1) - 1</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s</s:term> is
+        <s:term s:type="expression">unsigned-normalized</s:term>,
+        then the type is considered to hold
+        <s:term s:type="term">unsigned normalized fixed-point</s:term>
+        values. A <s:term s:type="term">unsigned normalized fixed-point</s:term>
+        type maps real numbers in the range
+        <s:term s:type="expression">[0, 1]</s:term> such that
+        <s:term s:type="expression">0</s:term> maps to
+        <s:term s:type="expression">0</s:term>, and
+        <s:term s:type="expression">1</s:term> maps to
+        <s:term s:type="expression">pow(2, t) - 1</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        The <s:term s:type="expression">integer</s:term> type is considered
+        to be a <s:term s:type="term">scalar</s:term> type when considered
+        as an element of a <s:term s:type="expression">vector</s:term> or
+        <s:term s:type="expression">matrix</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[integer s t]</s:term> is
+        <s:term s:type="expression">s</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        When specified as the type of a
+        <s:link s:target="stmt.type.record">record</s:link> field,
+        the size of a given <s:term s:type="expression">integer</s:term>
+        expression must be divisible exactly by
+        <s:term s:type="expression">8</s:term>. That is, the size must
+        be exactly expressible in terms of octets.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        When specified as the type of a
+        <s:link s:target="stmt.type.record">record</s:link> field,
+        implementations are not required to support
+        <s:term s:type="expression">integers</s:term> of all formats
+        of at least the sizes <s:term s:type="expression">{8, 16, 32, 64}</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        When specified as the type of a
+        <s:link s:target="stmt.type.packed">packed</s:link> field,
+        implementations are required to support
+        <s:term s:type="expression">integers</s:term> of all formats
+        of at least the sizes <s:term s:type="expression">[2, 64]</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.float">
+    <s:section-title>float</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>float Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+float_expression =
+  (float t:<size_expression>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        An <s:term s:type="expression">float</s:term> type expression
+        describes an IEEE754
+        <s:footnote>
+          <s:link-external s:target="http://ieeexplore.ieee.org/servlet/opac?punumber=4610933">754-2008 - IEEE Standard for Floating-Point Arithmetic </s:link-external>
+        </s:footnote>
+        floating point type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[float t]</s:term>
+        describes an IEEE754 floating point type with
+        <s:term s:type="expression">t</s:term>
+        bits of precision.
+      </s:paragraph>
+      <s:paragraph>
+        The IEEE754 standard, as of the most recent revision, defines
+        <s:term s:type="type">binary16</s:term>,
+        <s:term s:type="type">binary32</s:term>,
+        <s:term s:type="type">binary64</s:term>,
+        <s:term s:type="type">binary128</s:term>,
+        <s:term s:type="type">decimal32</s:term>,
+        <s:term s:type="type">decimal64</s:term>, and
+        <s:term s:type="type">decimal128</s:term> types.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">t == 16</s:term>, the expression
+        <s:term s:type="expression">[float t]</s:term> denotes the
+        <s:term s:type="expression">binary16</s:term> type.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">t == 32</s:term>, the expression
+        <s:term s:type="expression">[float t]</s:term> denotes the
+        <s:term s:type="expression">binary32</s:term> type.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">t == 64</s:term>, the expression
+        <s:term s:type="expression">[float t]</s:term> denotes the
+        <s:term s:type="expression">binary64</s:term> type.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        The <s:term s:type="expression">float</s:term> type is considered
+        to be a <s:term s:type="term">scalar</s:term> type when considered
+        as an element of a <s:term s:type="expression">vector</s:term> or
+        <s:term s:type="expression">matrix</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[float s]</s:term> is
+        <s:term s:type="expression">s</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        When specified as the type of a
+        <s:link s:target="stmt.type.record">record</s:link> field,
+        the size of a given <s:term s:type="expression">float</s:term>
+        expression must be divisible exactly by
+        <s:term s:type="expression">8</s:term>. That is, the size must
+        be exactly expressible in terms of octets.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        When specified as the type of a
+        <s:link s:target="stmt.type.record">record</s:link> field,
+        implementations are required to support
+        <s:term s:type="expression">float</s:term> types of
+        at least the sizes <s:term s:type="expression">{16, 32, 64}</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.boolean-set">
+    <s:section-title>boolean-set</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>boolean-set Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+boolean_set_expression =
+  (boolean-set s:<size_expression> f:(<field-name> ...))
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="expression">boolean-set</s:term> type expression
+        describes a packed <s:term s:type="term">bit field</s:term> type
+        that allows for named boolean flags to be packed into a series
+        of octets. Individual bits can be queried and set by name in the
+        resulting generated code, and more space may be allocated than
+        required for the list of fields to allow for the addition of later
+        fields without changing the layout of the resulting type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[boolean-set s (f₀ ... fₙ)]</s:term>
+        describes an array of named boolean values. The expression
+        <s:term s:type="expression">s</s:term> indicates how many
+        octets will be used to store the values of the fields.
+      </s:paragraph>
+      <s:paragraph>
+        If the number of fields in <s:term s:type="expression">f</s:term>
+        exceeds <s:term s:type="expression">s * 8</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[boolean-set s f]</s:term> is
+        <s:term s:type="expression">s * 8</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for the <s:term s:type="expression">boolean-set</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        There are no minimum requirements placed on implementations
+        for the <s:term s:type="expression">boolean-set</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.vector">
+    <s:section-title>vector</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>vector Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+vector_expression =
+  (vector t:<type_expression> s:<size_expression>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="expression">vector</s:term> type expression
+        describes a mathematical vector type of scalar elements.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[vector t s]</s:term>
+        describes a vector of <s:term s:type="expression">s</s:term>
+        elements of type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">t</s:term> is not of a
+        <s:term s:type="term">scalar</s:term> type, the type expression
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[vector t s]</s:term> is
+        <s:term s:type="expression">s * m</s:term>, where
+        <s:term s:type="expression">m</s:term> is the size in bits
+        of the type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for the <s:term s:type="expression">vector</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        Implementations are required to support
+        <s:term s:type="expression">vector</s:term> types with
+        elements of type <s:term s:type="expression">[float 32]</s:term>,
+        <s:term s:type="expression">[float 64]</s:term>,
+        <s:term s:type="expression">[integer signed 32]</s:term>, and
+        <s:term s:type="expression">[integer signed 64]</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Implementations are required to support
+        <s:term s:type="expression">vector</s:term> types with
+        element counts in the range <s:term s:type="expression">[2, 4]</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.matrix">
+    <s:section-title>matrix</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>matrix Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+matrix_expression =
+  (matrix t:<type_expression> w:<size_expression> h:<size_expression>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="expression">matrix</s:term> type expression
+        describes a mathematical matrix type of scalar elements.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[matrix t w h]</s:term>
+        describes a matrix of <s:term s:type="expression">w</s:term>
+        columns and <s:term s:type="expression">h</s:term> rows of
+        elements of type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">t</s:term> is not of a
+        <s:term s:type="term">scalar</s:term> type, the type expression
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">w &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">h &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[matrix t w h]</s:term> is
+        <s:term s:type="expression">w * h * m</s:term>, where
+        <s:term s:type="expression">m</s:term> is the size in bits
+        of the type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for the <s:term s:type="expression">matrix</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        Implementations are required to support
+        <s:term s:type="expression">matrix</s:term> types with
+        elements of type <s:term s:type="expression">[float 32]</s:term>,
+        and <s:term s:type="expression">[float 64]</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Implementations are required to support
+        <s:term s:type="term">square</s:term>
+        <s:term s:type="expression">matrix</s:term> types with
+        element counts in the range <s:term s:type="expression">[3, 4]</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.array">
+    <s:section-title>array</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>array Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+array_expression =
+  (array t:<type_expression> s:<size_expression>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        An <s:term s:type="expression">array</s:term> type expression
+        describes a bounded array.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[array t s]</s:term>
+        describes an array of <s:term s:type="expression">s</s:term>
+        elements of type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[array t e]</s:term> is
+        <s:term s:type="expression">e * m</s:term>, where
+        <s:term s:type="expression">m</s:term> is the size in bits
+        of the type <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        Implementations are permitted to forbid
+        <s:term s:type="expression">array</s:term> types as elements
+        of <s:term s:type="expression">array</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        There are no minimum requirements placed on implementations
+        for the <s:term s:type="expression">array</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.string">
+    <s:section-title>string</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>string Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+string_expression =
+  (string s:<size_expression> e:<quoted_string>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="expression">string</s:term> type expression
+        describes a bounded string.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[string s e]</s:term>
+        describes a string that may contain at most
+        <s:term s:type="expression">s</s:term> characters. The string
+        is encoded using encoding <s:term s:type="expression">e</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If <s:term s:type="expression">s &lt;= 0</s:term>, the type
+        is rejected as invalid.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of an expression
+        <s:term s:type="expression">[string s e]</s:term> is
+        <s:term s:type="expression">4 + (s * 8)</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for the <s:term s:type="expression">string</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        Implementations are required to support the
+        <s:term s:type="expression">"UTF-8"</s:term> encoding.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="expr.type.reference">
+    <s:section-title>Reference</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>Reference Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+type_reference_qualified =
+  package_name_unqualified , ":" , type_name ;
+
+type_reference =
+  type_name | type_reference_qualified ;
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A type expression may refer to an existing type declaration by name.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">t</s:term>
+        specifies the (optionally-qualified) name of a type.
+      </s:paragraph>
+      <s:paragraph>
+        An unqualified type name <s:term s:type="expression">n</s:term>
+        refers to the type with name <s:term s:type="expression">n</s:term>
+        in the <s:link s:target="spec.stmt.package-begin">current package</s:link>,
+        if any.
+      </s:paragraph>
+      <s:paragraph>
+        A qualified type name <s:term s:type="expression">p:n</s:term>
+        refers to the type with name <s:term s:type="expression">n</s:term>
+        in the package that has been
+        <s:link s:target="spec.stmt.import">imported</s:link>, using
+        the name <s:term s:type="expression">p</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+</s:part>
