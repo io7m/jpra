@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification: 7.3. Encoding Records</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">7.2. Encoding Rules</td><td class="st200_navbar_up_title_cell">7. Encoding</td><td class="st200_navbar_next_title_cell"/></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p7s2.xhtml#st200_p7s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p7.xhtml#st200_p7">Up</a></td><td class="st200_navbar_next_file_cell"/></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p7s3" href="#st200_p7s3">7.3</a></div><div class="st200_section_title">Encoding Records</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss1" href="#st200_p7s3ss1">7.3.1</a></div><div class="st200_subsection_title">Fields</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss1pg1" href="#st200_p7s3ss1pg1">1</a></div><div class="st200_paragraph">
+        The fields of a given record type
+        <span class="st200_term expression">T</span> of size
+        <span class="st200_term expression">s</span> (octets) are placed
+        into storage in declaration order. That is, for an element at index
+        <span class="st200_term expression">e</span>, the first octet of the first
+        declared field <span class="st200_term expression">f0</span>
+        of <span class="st200_term expression">T</span> is placed into the
+        octet at <span class="st200_term expression">e * s</span>. The next
+        octet of the field of the field is placed into the octet at
+        <span class="st200_term expression">(e * s) + 1</span>. The first
+        octet of the next field of <span class="st200_term expression">T</span>
+        is placed into the octet at
+        <span class="st200_term expression">(e * s) + m</span>, where
+        <span class="st200_term expression">m</span> is the size in octets of
+        <span class="st200_term expression">f0</span>, and so on.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss1pg2" href="#st200_p7s3ss1pg2">2</a></div><div class="st200_paragraph">
+        The basic types in the <span class="st200_term package">jpra</span>
+        may impose further rules on encoding, and these are detailed
+        in the following sections. The rules are specified in terms of
+        octets within a given field, so if a rule states that some piece
+        of data is placed at octet <span class="st200_term expression">0</span>,
+        then it is actually referring to the start of the field within
+        the record type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss2" href="#st200_p7s3ss2">7.3.2</a></div><div class="st200_subsection_title">integer</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss2pg1" href="#st200_p7s3ss2pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">integer</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss3" href="#st200_p7s3ss3">7.3.3</a></div><div class="st200_subsection_title">float</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss3pg1" href="#st200_p7s3ss3pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">float</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss4" href="#st200_p7s3ss4">7.3.4</a></div><div class="st200_subsection_title">boolean-set</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss4pg1" href="#st200_p7s3ss4pg1">1</a></div><div class="st200_paragraph">
+        The values of the fields of a
+        <span class="st200_term expression">[boolean-set s (f₀ ... fₙ)]</span>
+        expression are assigned sequentially to each bit in the array of
+        octets, starting at the most significant bit of octet 0. For example,
+        <span class="st200_term expression">f₀</span> will be assigned to
+        the most significant bit of octet 0,
+        <span class="st200_term expression">f₁</span> will be assigned to the
+        next most significant bit of octet 0,
+        <span class="st200_term expression">f₇</span> will be assigned to the
+        least significant bit of octet 0, and
+        <span class="st200_term expression">f₈</span> will be assigned to the
+        most significant bit of octet 1. In effect, for a given octet,
+        a <span class="st200_term expression">true</span> value for
+        the field <span class="st200_term expression">n</span> will be encoded
+        as <span class="st200_term expression">1 &lt;&lt; n</span>
+        or <span class="st200_term expression">pow(2, n)</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss4pg2" href="#st200_p7s3ss4pg2">2</a></div><div class="st200_paragraph">
+        Formally, the field at <span class="st200_term expression">n</span>
+        will be assigned to octet <span class="st200_term expression">n / 8</span>,
+        bit <span class="st200_term expression">7 - (n mod 8)</span>, where
+        <span class="st200_term expression">0</span> is the index of the least
+        significant bit and <span class="st200_term expression">7</span> is the
+        index of the most significant bit.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss5" href="#st200_p7s3ss5">7.3.5</a></div><div class="st200_subsection_title">vector</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss5pg1" href="#st200_p7s3ss5pg1">1</a></div><div class="st200_paragraph">
+        For a type <span class="st200_term expression">t</span>, where
+        <span class="st200_term expression">t</span> is of
+        size <span class="st200_term expression">s</span> (octets),
+        the <span class="st200_term expression">n</span> elements of a
+        an expression <span class="st200_term expression">[vector t n]</span>,
+        are stored such that the first octet of the first element is
+        stored at octet <span class="st200_term expression">0</span>, the
+        second element at
+        <span class="st200_term expression">s</span>, and the
+        <span class="st200_term expression">(n - 1)th</span> at
+        <span class="st200_term expression">(n - 1) * s</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss6" href="#st200_p7s3ss6">7.3.6</a></div><div class="st200_subsection_title">matrix</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg1" href="#st200_p7s3ss6pg1">1</a></div><div class="st200_paragraph">
+        Matrix data is stored in column-major format
+        <span class="st200_footnote_reference"><a id="st200_fn_3_ref" href="#st200_fn_3">[3]</a></span>. For an <span class="st200_term variable">m x m</span>
+        square matrix, assuming that each element of the matrix uses
+        <span class="st200_term variable">n</span> bytes, the first octet of the element at
+        row <span class="st200_term variable">r</span> and column <span class="st200_term variable">c</span>
+        (assuming <span class="st200_term function">0 &lt;= r &lt; m</span> and
+        <span class="st200_term function">0 &lt;= c &lt; m</span>)
+        can be found by <span class="st200_term function">(c * m * n) + (r * n)</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg2" href="#st200_p7s3ss6pg2">2</a></div><div class="st200_paragraph">
+        As an example, a 4x4 matrix with <span class="st200_term constant">4</span>
+        octet elements would be stored in memory as shown in the following
+        diagram:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p7s3ss6fo1" href="#st200_p7s3ss6fo1">7.3.6.1. Column-major storage memory layout</a></div><img class="st200_image" alt="Column-major storage memory layout" src="memory.png"/></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg3" href="#st200_p7s3ss6pg3">3</a></div><div class="st200_paragraph">
+        So, the element at row <span class="st200_term constant">0</span>,
+        column <span class="st200_term constant">0</span> would be stored in
+        octets <span class="st200_term constant">[0 .. 3]</span>. The
+        element at row <span class="st200_term constant">1</span>, column
+        <span class="st200_term constant">0</span> would be stored in octets
+        <span class="st200_term constant">[4 .. 7]</span>. The
+        element at row <span class="st200_term constant">0</span>, column
+        <span class="st200_term constant">1</span> would be stored in octets
+        <span class="st200_term constant">[16 .. 19]</span>, and so on.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss7" href="#st200_p7s3ss7">7.3.7</a></div><div class="st200_subsection_title">array</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss7pg1" href="#st200_p7s3ss7pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">array</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss8" href="#st200_p7s3ss8">7.3.8</a></div><div class="st200_subsection_title">string</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss8pg1" href="#st200_p7s3ss8pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[string s e]</span>
+        is encoded such that the current length of the string is
+        stored as an <span class="st200_term expression">[integer unsigned 32]</span>,
+        and this is followed by the <span class="st200_term expression">s</span>
+        octets that make up the string data.
+      </div></div></div></div><div class="st200_footnotes"><hr/><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_3" href="#st200_fn_3_ref">3</a>]</div><div class="st200_footnote_body">
+          The convention used by most programs using the <a class="st200_link_external" href="http://opengl.org">OpenGL</a> API.
+        </div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p7s2.xhtml#st200_p7s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p7.xhtml#st200_p7">Up</a></td><td class="st200_navbar_next_file_cell"/></tr><tr><td class="st200_navbar_prev_title_cell">7.2. Encoding Rules</td><td class="st200_navbar_up_title_cell">7. Encoding</td><td class="st200_navbar_next_title_cell"/></tr></table></div></div></body></html>

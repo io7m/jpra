@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_document_title">io7m-jpra 0.1.0 Language Specification</div><ul class="st200_contents st200_document_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p1">1. Notational Conventions</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s1">1.1. Unicode</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s2">1.2. EBNF</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s3">1.3. S-Expressions</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s4">1.4. Sets</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p1s5">1.5. Terminology</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p2">2. Concepts</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p2s1">2.1. Concepts</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p3">3. Statements - Packages</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p3s1">3.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p3s2">3.2. package-begin</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p3s3">3.3. import</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p3s4">3.4. package-end</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p4">4. Statements - Types</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p4s1">4.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p4s2">4.2. record</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p4s3">4.3. packed</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p5">5. Expressions - Types</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s1">5.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s2">5.2. integer</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s3">5.3. float</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s4">5.4. boolean-set</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s5">5.5. vector</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s6">5.6. matrix</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s7">5.7. array</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s8">5.8. string</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p5s9">5.9. Reference</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p6">6. Expressions - Sizes</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p6s1">6.1. Overview</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_part"><a href="#st200_p7">7. Encoding</a><ul class="st200_contents st200_part_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p7s1">7.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p7s2">7.2. Encoding Rules</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_section"><a href="#st200_p7s3">7.3. Encoding Records</a></li></ul></li></ul><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p1" href="#st200_p1">1</a></div><div class="st200_part_title">Notational Conventions</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s1">1.1. Unicode</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s2">1.2. EBNF</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s3">1.3. S-Expressions</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s4">1.4. Sets</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p1s5">1.5. Terminology</a></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s1" href="#st200_p1s1">1.1</a></div><div class="st200_section_title">Unicode</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s1pg1" href="#st200_p1s1pg1">1</a></div><div class="st200_paragraph">
+      The specification makes reference to the
+      <a class="st200_link_external" href="http://unicode.org">Unicode</a>
+      character set which, at the time of writing, is at version
+      <span class="st200_term constant">8.0</span>. The specification
+      often references specific Unicode characters, and does so using
+      the standard notation <span class="st200_term expression">U+NNNN</span>,
+      where <span class="st200_term variable">N</span> represents a hexadecimal
+      digit. For example, <span class="st200_term constant">U+03BB</span>
+      corresponds to the lowercase lambda symbol <span class="st200_term constant">λ</span>.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s2" href="#st200_p1s2">1.2</a></div><div class="st200_section_title">EBNF</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s2pg1" href="#st200_p1s2pg1">1</a></div><div class="st200_paragraph">
+      The specification gives grammar definitions in
+      <span class="st200_term package">ISO/IEC 14977:1996</span> Extended Backus-Naur
+      form.
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s2pg2" href="#st200_p1s2pg2">2</a></div><div class="st200_paragraph">
+      Because EBNF was designed prior to the existence of Unicode, it
+      is necessary to extend the syntax to be able to refer to Unicode
+      characters in grammar definitions. This specification makes use of
+      the standard unicode <span class="st200_term expression">U+NNNN</span>
+      syntax in grammar definitions, to refer to specific Unicode characters.
+      It also makes use of the syntax <span class="st200_term expression">\p{t}</span>
+      which should be understood to represent any Unicode character with
+      the property <span class="st200_term expression">t</span>. For example,
+      <span class="st200_term expression">\p{Lowercase_Letter}</span> describes
+      the set of characters that are both letters and are lowercase. The
+      syntax <span class="st200_term expression">\P{t}</span> should be understood
+      as the negation of <span class="st200_term expression">\p{t}</span>;
+      it describes the set of characters without the property
+      <span class="st200_term expression">t</span>.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s3" href="#st200_p1s3">1.3</a></div><div class="st200_section_title">S-Expressions</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s3pg1" href="#st200_p1s3pg1">1</a></div><div class="st200_paragraph">
+      The <span class="st200_term package">jpra</span> language uses
+      <span class="st200_term term">s-expressions</span> as the base for
+      all syntax. An <span class="st200_term term">s-expression</span>
+      is described by the following EBNF grammar:
+    </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p1s3fo1" href="#st200_p1s3fo1">1.3.1. S-Expression EBNF</a></div><pre class="st200_verbatim">symbol_character =
+  ? not (")" | "(" | "[" | "]" | U+0022 | \p{Separator}) ? ;
+
+symbol =
+  symbol_character , { symbol_character } ;
+
+quoted_character =
+  ? not U+0022 ? ;
+
+quoted_string =
+  (quoted_character | escape) , { (quoted_character | escape) } ;
+
+escape =
+    escape_carriage
+  | escape_newline
+  | escape_tab
+  | escape_quote
+  | escape_unicode4
+  | escape_unicode8 ;
+
+escape_carriage =
+  "\r" ;
+
+escape_newline =
+  "\n" ;
+
+escape_quote =
+  "\" , U+0022 ;
+
+escape_tab =
+  "\t" ;
+
+escape_unicode4 =
+  "\u" ,
+  hex_digit , hex_digit , hex_digit , hex_digit ;
+
+escape_unicode8 =
+  "\u" ,
+  hex_digit , hex_digit , hex_digit , hex_digit ,
+  hex_digit , hex_digit , hex_digit , hex_digit ;
+
+hex_digit =
+  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" |
+  "a" | "A" | "b" | "B" | "c" | "C" | "d" | "D" | "e" | "E" | "f" | "F" ;
+
+expression =
+    symbol
+  | quoted_string
+  | "[" , { expression } , "]"
+  | "(" , { expression } , ")" ;
+</pre></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s3pg2" href="#st200_p1s3pg2">2</a></div><div class="st200_paragraph">
+      As shown, the <span class="st200_term package">jpra</span> language
+      uses an extension of basic <span class="st200_term term">s-expressions</span>
+      that allow for the optional use of either
+      square brackets or parentheses to increase the readability of large
+      nested expressions. These should be treated as interchangeable,
+      but must be correctly balanced as shown by the grammar. For example, the
+      expression <span class="st200_term type">[]</span> is semantically
+      equivalent to <span class="st200_term type">()</span>, but the expression
+      <span class="st200_term type">[)</span> is invalid.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s4" href="#st200_p1s4">1.4</a></div><div class="st200_section_title">Sets</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s4pg1" href="#st200_p1s4pg1">1</a></div><div class="st200_paragraph">
+      Where the specification refers to <span class="st200_term term">sets</span>, it
+      is referring to sets as defined in ZFC<span class="st200_footnote_reference"><a id="st200_fn_0_ref" href="#st200_fn_0">[0]</a></span>.
+    </div></div><div class="st200_formal_item notations"><div class="st200_formal_item_title notations"><a id="st200_p1s4fo1" href="#st200_p1s4fo1">1.4.1. Set notations</a></div><table class="st200_table" summary="Set notations"><thead class="st200_table_head"><tr><th class="st200_table_column_name">Notation</th><th class="st200_table_column_name">Description</th></tr></thead><tbody class="st200_table_body"><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">e ∈ A</span></td><td class="st200_table_cell"><span class="st200_term expression">e</span> is an element of the set <span class="st200_term expression">A</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">e ∉ A</span></td><td class="st200_table_cell"><span class="st200_term expression">e</span> is not an element of the set <span class="st200_term expression">A</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">{ x₀, x₁, ... xₙ }</span></td><td class="st200_table_cell">A set consisting of values from <span class="st200_term expression">x₀</span> to <span class="st200_term expression">xₙ</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">{ e ∈ A | p(e) }</span></td><td class="st200_table_cell">A set consisting of the elements of <span class="st200_term expression">A</span> for which the proposition <span class="st200_term expression">p</span> holds</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">|A|</span></td><td class="st200_table_cell">The cardinality of the set <span class="st200_term expression">A</span>; a measure of the number of elements in <span class="st200_term expression">A</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">∅</span></td><td class="st200_table_cell">The empty set</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">𝔹</span></td><td class="st200_table_cell">The booleans</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">ℕ</span></td><td class="st200_table_cell">The natural numbers</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">ℝ</span></td><td class="st200_table_cell">The real numbers</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">ℤ</span></td><td class="st200_table_cell">The integers</td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">[a, b]</span></td><td class="st200_table_cell">A closed interval in a set (given separately or implicit from the types of <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span>), from <span class="st200_term expression">a</span> to <span class="st200_term expression">b</span>, including <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">(a, b]</span></td><td class="st200_table_cell">A closed interval in a set (given separately or implicit from the types of <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span>), from <span class="st200_term expression">a</span> to <span class="st200_term expression">b</span>, excluding <span class="st200_term expression">a</span> but including <span class="st200_term expression">b</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">[a, b)</span></td><td class="st200_table_cell">A closed interval in a set (given separately or implicit from the types of <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span>), from <span class="st200_term expression">a</span> to <span class="st200_term expression">b</span>, including <span class="st200_term expression">a</span> but excluding <span class="st200_term expression">b</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">(a, b)</span></td><td class="st200_table_cell">A closed interval in a set (given separately or implicit from the types of <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span>), from <span class="st200_term expression">a</span> to <span class="st200_term expression">b</span>, excluding <span class="st200_term expression">a</span> and <span class="st200_term expression">b</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">A ⊂ B</span></td><td class="st200_table_cell"><span class="st200_term expression">A</span> is a subset of, and is not equal to, <span class="st200_term expression">B</span></td></tr><tr class="st200_table_row"><td class="st200_table_cell"><span class="st200_term expression">A ⊆ B</span></td><td class="st200_table_cell"><span class="st200_term expression">A</span> is a subset of, or is equal to, <span class="st200_term expression">B</span></td></tr></tbody></table></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p1s5" href="#st200_p1s5">1.5</a></div><div class="st200_section_title">Terminology</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p1s5pg1" href="#st200_p1s5pg1">1</a></div><div class="st200_paragraph">
+      Most computer programming languages describe
+      <span class="st200_term term">programs</span> that will be executed. The
+      languages contain elements that describe the static components of
+      programs - the <span class="st200_term term">types</span> - and the dynamic
+      components of programs - the <span class="st200_term term">terms</span>.
+      The <span class="st200_term package">jpra</span> language is a language
+      for describing fixed-size <a class="st200_link" href="#st200_p2s1ss4">types</a>
+      and therefore has no dynamic components. Therefore,
+      <span class="st200_term term">programs</span> written in the
+      <span class="st200_term package">jpra</span> language are more appropriately
+      described as <span class="st200_term term">schemas</span>, and this is the
+      term that will be used to refer to them throughout this specification.
+    </div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p2" href="#st200_p2">2</a></div><div class="st200_part_title">Concepts</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p2s1">2.1. Concepts</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss1">2.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss2">2.1.2. Statements</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss3">2.1.3. Packages</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p2s1ss4">2.1.4. Types</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p2s1" href="#st200_p2s1">2.1</a></div><div class="st200_section_title">Concepts</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p2s1ss1">2.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p2s1ss2">2.1.2. Statements</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p2s1ss3">2.1.3. Packages</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p2s1ss4">2.1.4. Types</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss1" href="#st200_p2s1ss1">2.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss1pg1" href="#st200_p2s1ss1pg1">1</a></div><div class="st200_paragraph">
+        Schemas written in the <span class="st200_term package">jpra</span>
+        language consist of a set of
+        <a class="st200_link" href="#st200_p2s1ss3">packages</a>, each containing
+        a set of zero or more <a class="st200_link" href="#st200_p2s1ss4">types</a>.
+        A <span class="st200_term package">jpra</span> schema is described by
+        a series of
+        <a class="st200_link" href="#st200_p2s1ss2">statements</a> that
+        successively describe changes to the schema (such as introducing
+        a new type, introducing a new package, importing a package into
+        the current scope, etc).
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss2" href="#st200_p2s1ss2">2.1.2</a></div><div class="st200_subsection_title">Statements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss2pg1" href="#st200_p2s1ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term term">statement</span> in the
+        <span class="st200_term package">jpra</span> language can be
+        seen as an instruction that performs some action on the current
+        schema context, yielding a new context that may be changed
+        in some manner. For example, the
+        <a class="st200_link" href="#st200_p3s4">package-end</a>
+        statement adds a new
+        <a class="st200_link" href="#st200_p2s1ss3">package</a> to
+        the current schema context.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss3" href="#st200_p2s1ss3">2.1.3</a></div><div class="st200_subsection_title">Packages</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss3pg1" href="#st200_p2s1ss3pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term term">package</span> in the
+        <span class="st200_term package">jpra</span> language is the top level
+        organizational unit for schema objects. A package has a unique
+        fully-qualified name of the form:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p2s1ss3fo1" href="#st200_p2s1ss3fo1">2.1.3.1. Package name EBNF</a></div><pre class="st200_verbatim">package_name_unqualified =
+  \p{Lowercase_Letter} , { \p{Lowercase_Letter} | '_' | \p{Digit} } ;
+
+package_name_qualified =
+  package_name_unqualified , { "." , package_name_unqualified } ;
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p2s1ss4" href="#st200_p2s1ss4">2.1.4</a></div><div class="st200_subsection_title">Types</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p2s1ss4pg1" href="#st200_p2s1ss4pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term term">type</span> in the
+        <span class="st200_term package">jpra</span> language is a
+        basic description of the structure of a value. A type has
+        a unique name within a package, and the format of valid type
+        names is as follows:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p2s1ss4fo1" href="#st200_p2s1ss4fo1">2.1.4.1. Type name EBNF</a></div><pre class="st200_verbatim">type_name =
+  \p{Letter_Uppercase} , { \p{Letter} | \p{Digit} | '_' } ;
+</pre></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p3" href="#st200_p3">3</a></div><div class="st200_part_title">Statements - Packages</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p3s1">3.1. Overview</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s1ss1">3.1.1. Overview</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s1ss2">3.1.2. Scope</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p3s2">3.2. package-begin</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s2ss1">3.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s2ss2">3.2.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s2ss3">3.2.3. Semantics</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p3s3">3.3. import</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s3ss1">3.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s3ss2">3.3.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s3ss3">3.3.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s3ss4">3.3.4. Circular Imports</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p3s4">3.4. package-end</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s4ss1">3.4.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s4ss2">3.4.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p3s4ss3">3.4.3. Semantics</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s1" href="#st200_p3s1">3.1</a></div><div class="st200_section_title">Overview</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s1ss1" href="#st200_p3s1ss1">3.1.1</a></div><div class="st200_subsection_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s1ss1pg1" href="#st200_p3s1ss1pg1">1</a></div><div class="st200_paragraph">
+        This section describes the syntax and semantics of the
+        <span class="st200_term package">jpra</span> language statements that
+        involve <span class="st200_term term">packages</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s1ss2" href="#st200_p3s1ss2">3.1.2</a></div><div class="st200_subsection_title">Scope</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s1ss2pg1" href="#st200_p3s1ss2pg1">1</a></div><div class="st200_paragraph">
+        Statements inside packages have lexical scope. The evaluation
+        in package <span class="st200_term package">p</span>
+        of a statement <span class="st200_term statement">s</span> that binds
+        a declaration to a name <span class="st200_term statement">n</span>
+        makes that declaration accessible by name
+        <span class="st200_term statement">n</span> to all successive statements
+        preceding the end of package <span class="st200_term package">p</span>.
+        Outside of <span class="st200_term package">p</span>, a declaration
+        with name <span class="st200_term statement">n</span> in
+        <span class="st200_term package">p</span> must referred to
+        using a qualified reference of the form
+        <span class="st200_term expression">p:n</span>. See the
+        <a class="st200_link" href="#st200_p3s3">import</a> statement
+        for details.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s2" href="#st200_p3s2">3.2</a></div><div class="st200_section_title">package-begin</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s2ss1">3.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s2ss2">3.2.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s2ss3">3.2.3. Semantics</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s2ss1" href="#st200_p3s2ss1">3.2.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s2ss1fo1" href="#st200_p3s2ss1fo1">3.2.1.1. package-begin Syntax</a></div><pre class="st200_verbatim">
+package_begin =
+  (package-begin p:&lt;package_name_qualified&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s2ss2" href="#st200_p3s2ss2">3.2.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s2ss2pg1" href="#st200_p3s2ss2pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term statement">package-begin</span> statement
+        begins the definition of a new package.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s2ss3" href="#st200_p3s2ss3">3.2.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s2ss3pg1" href="#st200_p3s2ss3pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term statement">package-begin</span> statement
+        that names a package <span class="st200_term package">p</span>
+        sets the <span class="st200_term term">current package</span> of the
+        schema context to <span class="st200_term package">p</span>. There can be
+        at most one <span class="st200_term term">current package</span> in
+        the schema context at any given time.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s2ss3pg2" href="#st200_p3s2ss3pg2">2</a></div><div class="st200_paragraph">
+        If the <span class="st200_term statement">package-begin</span> statement
+        is evaluated when the schema context already has a
+        <span class="st200_term term">current package</span>, the statement is
+        rejected with an error.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s2ss3pg3" href="#st200_p3s2ss3pg3">3</a></div><div class="st200_paragraph">
+        If the <span class="st200_term statement">package-begin</span> statement
+        is evaluated with package name <span class="st200_term package">r</span>,
+        where <span class="st200_term package">r</span> is already defined within
+        the schema context, the statement is rejected with an error.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s3" href="#st200_p3s3">3.3</a></div><div class="st200_section_title">import</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s3ss1">3.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s3ss2">3.3.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s3ss3">3.3.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s3ss4">3.3.4. Circular Imports</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss1" href="#st200_p3s3ss1">3.3.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s3ss1fo1" href="#st200_p3s3ss1fo1">3.3.1.1. import Syntax</a></div><pre class="st200_verbatim">
+package_import =
+  (import q:&lt;package_name_qualified&gt; as r:package_name_unqualified)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss2" href="#st200_p3s3ss2">3.3.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss2pg1" href="#st200_p3s3ss2pg1">1</a></div><div class="st200_paragraph">
+        A package may <span class="st200_term term">import</span> any number
+        of packages via <span class="st200_term statement">import</span> statements.
+        An <span class="st200_term statement">import</span> statement, given in
+        the package <span class="st200_term package">p</span>, specifies the
+        fully qualified name of a package <span class="st200_term package">q</span>
+        and an unqualified name <span class="st200_term package">r</span>, and
+        allows definitions given inside <span class="st200_term package">p</span>
+        to refer to definitions in <span class="st200_term package">q</span> by
+        qualifying their names with <span class="st200_term package">r</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss2pg2" href="#st200_p3s3ss2pg2">2</a></div><div class="st200_paragraph">
+        As an example, consider a package <span class="st200_term package">q</span>
+        that contains a type declaration <span class="st200_term type">T</span>.
+        If package <span class="st200_term package">p</span> imports
+        <span class="st200_term package">q</span> using the
+        unqualified name <span class="st200_term package">r</span>, then
+        definitions inside <span class="st200_term package">p</span> may refer
+        to <span class="st200_term type">T</span> using the syntax
+        <span class="st200_term expression">r:T</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss3" href="#st200_p3s3ss3">3.3.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg1" href="#st200_p3s3ss3pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term statement">import</span> statement
+        makes the declarations of the package
+        <span class="st200_term package">p</span> accessible in the
+        <span class="st200_term term">current package</span> via the name
+        <span class="st200_term package">q</span>, where
+        <span class="st200_term package">q</span> is an unqualified package
+        name that has not been used in any preceding
+        <span class="st200_term statement">import</span> statement.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg2" href="#st200_p3s3ss3pg2">2</a></div><div class="st200_paragraph">
+        If an <span class="st200_term statement">import</span> statement
+        <span class="st200_term statement">i</span>
+        is evaluated with package name <span class="st200_term package">p</span>,
+        where <span class="st200_term package">p</span> is not defined within
+        the schema context, then <span class="st200_term statement">i</span> is
+        rejected with an error.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg3" href="#st200_p3s3ss3pg3">3</a></div><div class="st200_paragraph">
+        If the unqualified name <span class="st200_term package">r</span>
+        specified in an <span class="st200_term statement">import</span>
+        statement <span class="st200_term statement">i</span> has been
+        used in a preceding <span class="st200_term statement">import</span>
+        statement, then <span class="st200_term statement">i</span> is
+        rejected with an error.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss4" href="#st200_p3s3ss4">3.3.4</a></div><div class="st200_subsection_title">Circular Imports</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss4pg1" href="#st200_p3s3ss4pg1">1</a></div><div class="st200_paragraph">
+        Circular imports are not allowed.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss4pg2" href="#st200_p3s3ss4pg2">2</a></div><div class="st200_paragraph">
+        An import statement <span class="st200_term statement">i</span>
+        occurring in package <span class="st200_term package">p</span> is
+        considered <span class="st200_term term">circular</span> iff:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s3ss4fo1" href="#st200_p3s3ss4fo1">3.3.4.1. Circular Import Rules</a></div><ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term statement">i</span> imports
+            <span class="st200_term package">p</span>.
+          </li><li class="st200_list_item">
+            There is a sequence of packages
+            <span class="st200_term expression">q₀, q₁, ..., qₙ</span>
+            such that <span class="st200_term variable">p</span> imports
+            <span class="st200_term variable">q₀</span>, and
+            for all <span class="st200_term variable">m</span> where
+            <span class="st200_term expression">0 &lt;= m &lt; n</span>,
+            <span class="st200_term variable">qₘ</span> imports
+            <span class="st200_term expression">q₍ₘ₊₁₎</span>, and
+            <span class="st200_term variable">qₙ</span> imports
+            <span class="st200_term variable">p</span>.
+          </li></ul></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s4" href="#st200_p3s4">3.4</a></div><div class="st200_section_title">package-end</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s4ss1">3.4.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s4ss2">3.4.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p3s4ss3">3.4.3. Semantics</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s4ss1" href="#st200_p3s4ss1">3.4.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s4ss1fo1" href="#st200_p3s4ss1fo1">3.4.1.1. package-end Syntax</a></div><pre class="st200_verbatim">
+package_end =
+  (package-end)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s4ss2" href="#st200_p3s4ss2">3.4.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s4ss2pg1" href="#st200_p3s4ss2pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term statement">package-end</span> statement
+        completes the definition of a package.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s4ss3" href="#st200_p3s4ss3">3.4.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s4ss3pg1" href="#st200_p3s4ss3pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term statement">package-end</span> statement
+        completes the definition of the
+        <span class="st200_term term">current package</span> and adds it
+        to the schema context. The statement unsets the
+        <span class="st200_term term">current package</span> in the schema
+        context.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s4ss3pg2" href="#st200_p3s4ss3pg2">2</a></div><div class="st200_paragraph">
+        If a <span class="st200_term statement">package-end</span> statement
+        <span class="st200_term statement">i</span> is evaluated when no
+        <span class="st200_term term">current package</span> is set, then
+        <span class="st200_term statement">i</span> is
+        rejected with an error.
+      </div></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p4" href="#st200_p4">4</a></div><div class="st200_part_title">Statements - Types</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p4s1">4.1. Overview</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p4s2">4.2. record</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss1">4.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss2">4.2.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss3">4.2.3. Scope</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss4">4.2.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss5">4.2.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s2ss6">4.2.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p4s3">4.3. packed</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss1">4.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss2">4.3.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss3">4.3.3. Scope</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss4">4.3.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss5">4.3.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p4s3ss6">4.3.6. Implementation Requirements</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p4s1" href="#st200_p4s1">4.1</a></div><div class="st200_section_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s1pg1" href="#st200_p4s1pg1">1</a></div><div class="st200_paragraph">
+      This section describes the syntax and semantics of the
+      <span class="st200_term package">jpra</span> language statements that
+      involve <span class="st200_term term">types</span>.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p4s2" href="#st200_p4s2">4.2</a></div><div class="st200_section_title">record</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss1">4.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss2">4.2.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss3">4.2.3. Scope</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss4">4.2.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss5">4.2.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s2ss6">4.2.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss1" href="#st200_p4s2ss1">4.2.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p4s2ss1fo1" href="#st200_p4s2ss1fo1">4.2.1.1. string Syntax</a></div><pre class="st200_verbatim">
+record_field_padding_declaration =
+  (padding-octets &lt;size_expression&gt;)
+
+record_field_value_declaration =
+  (field &lt;field_name&gt; &lt;type_expression&gt;)
+
+record_field_declaration =
+  record_field_padding_declaration | record_field_value_declaration
+
+record_declaration =
+  (record t:&lt;type_name&gt; f:(&lt;record_field_declaration&gt; ...))
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss2" href="#st200_p4s2ss2">4.2.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss2pg1" href="#st200_p4s2ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term keyword">record</span> statement
+        creates a new record type. Records can contain fields that can
+        take one of two forms: A <span class="st200_term keyword">field</span>
+        form, or a <span class="st200_term keyword">padding-octets</span> form.
+        The <span class="st200_term keyword">field</span> form binds a name to
+        a type expression, and the
+        <span class="st200_term keyword">padding-octets</span> form
+        inserts explicit padding octets into the record.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss3" href="#st200_p4s2ss3">4.2.3</a></div><div class="st200_subsection_title">Scope</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss3pg1" href="#st200_p4s2ss3pg1">1</a></div><div class="st200_paragraph">
+        Fields of a <span class="st200_term keyword">record</span> type must be
+        uniquely named within a single type declaration. The declaration
+        of a field named <span class="st200_term expression">f</span> makes that
+        field accessible by name <span class="st200_term keyword">f</span> to
+        all successive fields preceding the end of the
+        <span class="st200_term keyword">record</span> declaration.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss4" href="#st200_p4s2ss4">4.2.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss4pg1" href="#st200_p4s2ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(field n t)</span>
+        is equal to size in bits of the type
+        <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss4pg2" href="#st200_p4s2ss4pg2">2</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(padding-octets n)</span>
+        is <span class="st200_term expression">n * 8</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss4pg3" href="#st200_p4s2ss4pg3">3</a></div><div class="st200_paragraph">
+        The storage size in bits of a given record
+        <span class="st200_term expression">t</span> is the sum of the
+        sizes of all of the fields of <span class="st200_term keyword">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss5" href="#st200_p4s2ss5">4.2.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss5pg1" href="#st200_p4s2ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for <span class="st200_term expression">record</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s2ss6" href="#st200_p4s2ss6">4.2.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s2ss6pg1" href="#st200_p4s2ss6pg1">1</a></div><div class="st200_paragraph">
+        There are no minimum requirements placed on implementations
+        for <span class="st200_term expression">record</span> types.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p4s3" href="#st200_p4s3">4.3</a></div><div class="st200_section_title">packed</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss1">4.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss2">4.3.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss3">4.3.3. Scope</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss4">4.3.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss5">4.3.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p4s3ss6">4.3.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss1" href="#st200_p4s3ss1">4.3.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p4s3ss1fo1" href="#st200_p4s3ss1fo1">4.3.1.1. packed Syntax</a></div><pre class="st200_verbatim">
+packed_field_padding_declaration =
+  (padding-bits &lt;size_expression&gt;)
+
+packed_field_value_declaration =
+  (field &lt;field_name&gt; &lt;type_expression&gt;)
+
+packed_field_declaration =
+  packed_field_padding_declaration | packed_field_value_declaration
+
+packed_declaration =
+  (packed t:&lt;type_name&gt; f:(&lt;packed_field_declaration&gt; ...))
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss2" href="#st200_p4s3ss2">4.3.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss2pg1" href="#st200_p4s3ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term keyword">packed</span> statement
+        creates a new packed type. A packed
+        type is analogous to a
+        <a class="st200_link" href="#st200_p4s2">record</a> type with
+        the distinction that fields of a packed type may be smaller than
+        a single octet, may cross octet boundaries, and the sum of the sizes
+        of all fields typically adds up to
+        <span class="st200_term expression">64</span> bits or less. Additionally,
+        fields of packed types may only be of type
+        <a class="st200_link" href="#st200_p5s2">integer</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss2pg2" href="#st200_p4s3ss2pg2">2</a></div><div class="st200_paragraph">
+        Packed types can contain fields that can
+        take one of two forms: A <span class="st200_term keyword">field</span>
+        form, or a <span class="st200_term keyword">padding-bits</span> form.
+        The <span class="st200_term keyword">field</span> form binds a name to
+        a type expression, and the
+        <span class="st200_term keyword">padding-bits</span> form
+        inserts explicit padding bits into the record.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss3" href="#st200_p4s3ss3">4.3.3</a></div><div class="st200_subsection_title">Scope</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss3pg1" href="#st200_p4s3ss3pg1">1</a></div><div class="st200_paragraph">
+        Fields of a <span class="st200_term keyword">packed</span> type must be
+        uniquely named within a single type declaration. The declaration
+        of a field named <span class="st200_term expression">f</span> makes that
+        field accessible by name <span class="st200_term keyword">f</span> to
+        all successive fields preceding the end of the
+        <span class="st200_term keyword">packed</span> declaration.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss4" href="#st200_p4s3ss4">4.3.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg1" href="#st200_p4s3ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(field n t)</span>
+        is equal to size in bits of the type
+        <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg2" href="#st200_p4s3ss4pg2">2</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(padding-bits n)</span>
+        is <span class="st200_term expression">n</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg3" href="#st200_p4s3ss4pg3">3</a></div><div class="st200_paragraph">
+        The storage size in bits of a given packed type
+        <span class="st200_term expression">t</span> is the sum of the
+        sizes of all of the fields of <span class="st200_term keyword">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss5" href="#st200_p4s3ss5">4.3.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss5pg1" href="#st200_p4s3ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">packed</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss6" href="#st200_p4s3ss6">4.3.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss6pg1" href="#st200_p4s3ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are only required to support
+        <span class="st200_term keyword">packed</span> types that have
+        sizes in bits exactly divisible by
+        <span class="st200_term expression">8</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss6pg2" href="#st200_p4s3ss6pg2">2</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term keyword">packed</span> types of at
+        least the sizes in bits
+        <span class="st200_term expression">{8, 16, 32, 64}</span>.
+      </div></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p5" href="#st200_p5">5</a></div><div class="st200_part_title">Expressions - Types</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s1">5.1. Overview</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s2">5.2. integer</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss1">5.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss2">5.2.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss3">5.2.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss4">5.2.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss5">5.2.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s2ss6">5.2.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s3">5.3. float</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss1">5.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss2">5.3.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss3">5.3.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss4">5.3.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss5">5.3.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s3ss6">5.3.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s4">5.4. boolean-set</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss1">5.4.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss2">5.4.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss3">5.4.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss4">5.4.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss5">5.4.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s4ss6">5.4.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s5">5.5. vector</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss1">5.5.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss2">5.5.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss3">5.5.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss4">5.5.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss5">5.5.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s5ss6">5.5.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s6">5.6. matrix</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss1">5.6.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss2">5.6.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss3">5.6.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss4">5.6.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss5">5.6.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s6ss6">5.6.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s7">5.7. array</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss1">5.7.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss2">5.7.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss3">5.7.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss4">5.7.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss5">5.7.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s7ss6">5.7.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s8">5.8. string</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss1">5.8.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss2">5.8.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss3">5.8.3. Semantics</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss4">5.8.4. Size</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss5">5.8.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s8ss6">5.8.6. Implementation Requirements</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p5s9">5.9. Reference</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss1">5.9.1. Syntax</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss2">5.9.2. Description</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p5s9ss3">5.9.3. Semantics</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s1" href="#st200_p5s1">5.1</a></div><div class="st200_section_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1pg1" href="#st200_p5s1pg1">1</a></div><div class="st200_paragraph">
+      This section describes the syntax and semantics of
+      <span class="st200_term package">jpra</span> language
+      <span class="st200_term term">type expressions</span>.
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1pg2" href="#st200_p5s1pg2">2</a></div><div class="st200_paragraph">
+      A <span class="st200_term term">type expression</span> is an
+      <span class="st200_term term">expression</span> that, when evaluated,
+      yields a <span class="st200_term term">type</span>. Primarily,
+      type-checking in the <span class="st200_term package">jpra</span> language
+      is concerned with evaluating <span class="st200_term term">type</span>
+      and <a class="st200_link" href="#st200_p6">size</a> expressions
+      to yield base types that can then be used to generate code. All
+      types have a size that is known statically, and the documentation
+      for each type of expression indicates how this is calculated.
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s1pg3" href="#st200_p5s1pg3">3</a></div><div class="st200_paragraph">
+      As an example, the type expression
+      <span class="st200_term expression">[integer signed 32]</span> evaluates
+      to a signed integer type with <span class="st200_term constant">32</span>
+      bits of precision. The type expression
+      <span class="st200_term expression">[float (size-in-octets T)]</span>
+      evaluates to a floating-point type with
+      <span class="st200_term expression">n</span> bits of precision, where
+      <span class="st200_term expression">n</span> is equal to the size in
+      octets of the type <span class="st200_term expression">T</span>.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s2" href="#st200_p5s2">5.2</a></div><div class="st200_section_title">integer</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss1">5.2.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss2">5.2.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss3">5.2.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss4">5.2.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss5">5.2.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s2ss6">5.2.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss1" href="#st200_p5s2ss1">5.2.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s2ss1fo1" href="#st200_p5s2ss1fo1">5.2.1.1. integer Syntax</a></div><pre class="st200_verbatim">
+format_expression =
+  "signed" | "unsigned" | "signed-normalized" | "unsigned-normalized" ;
+
+integer_expression =
+  (integer s:&lt;format_expression&gt; t:&lt;size_expression&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss2" href="#st200_p5s2ss2">5.2.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss2pg1" href="#st200_p5s2ss2pg1">1</a></div><div class="st200_paragraph">
+        An <span class="st200_term expression">integer</span> type expression
+        describes a fixed-size machine integer.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss3" href="#st200_p5s2ss3">5.2.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg1" href="#st200_p5s2ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[integer s t]</span>
+        describes an integer with <span class="st200_term expression">t</span>
+        bits of precision of format <span class="st200_term expression">s</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg2" href="#st200_p5s2ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s</span> is
+        <span class="st200_term expression">signed</span>, then the type
+        may hold values in the range
+        <span class="st200_term expression">[-pow(2, t), pow(2, t) - 1]</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg3" href="#st200_p5s2ss3pg3">3</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s</span> is
+        <span class="st200_term expression">unsigned</span>, then the type
+        may hold values in the range
+        <span class="st200_term expression">[0, pow(2, 32) - 1]</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg4" href="#st200_p5s2ss3pg4">4</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s</span> is
+        <span class="st200_term expression">signed-normalized</span>,
+        then the type is considered to hold
+        <span class="st200_term term">signed normalized fixed-point</span>
+        values. A <span class="st200_term term">signed normalized fixed-point</span>
+        type maps real numbers in the range
+        <span class="st200_term expression">[-1, 1]</span> such that
+        <span class="st200_term expression">-1</span> maps to
+        <span class="st200_term expression">-(pow(2, b - 1)) + 1</span>, and
+        <span class="st200_term expression">1</span> maps to
+        <span class="st200_term expression">pow(2, t - 1) - 1</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg5" href="#st200_p5s2ss3pg5">5</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s</span> is
+        <span class="st200_term expression">unsigned-normalized</span>,
+        then the type is considered to hold
+        <span class="st200_term term">unsigned normalized fixed-point</span>
+        values. A <span class="st200_term term">unsigned normalized fixed-point</span>
+        type maps real numbers in the range
+        <span class="st200_term expression">[0, 1]</span> such that
+        <span class="st200_term expression">0</span> maps to
+        <span class="st200_term expression">0</span>, and
+        <span class="st200_term expression">1</span> maps to
+        <span class="st200_term expression">pow(2, t) - 1</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg6" href="#st200_p5s2ss3pg6">6</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss3pg7" href="#st200_p5s2ss3pg7">7</a></div><div class="st200_paragraph">
+        The <span class="st200_term expression">integer</span> type is considered
+        to be a <span class="st200_term term">scalar</span> type when considered
+        as an element of a <span class="st200_term expression">vector</span> or
+        <span class="st200_term expression">matrix</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss4" href="#st200_p5s2ss4">5.2.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss4pg1" href="#st200_p5s2ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[integer s t]</span> is
+        <span class="st200_term expression">s</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss5" href="#st200_p5s2ss5">5.2.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss5pg1" href="#st200_p5s2ss5pg1">1</a></div><div class="st200_paragraph">
+        When specified as the type of a
+        <a class="st200_link" href="#st200_p4s2">record</a> field,
+        the size of a given <span class="st200_term expression">integer</span>
+        expression must be divisible exactly by
+        <span class="st200_term expression">8</span>. That is, the size must
+        be exactly expressible in terms of octets.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s2ss6" href="#st200_p5s2ss6">5.2.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss6pg1" href="#st200_p5s2ss6pg1">1</a></div><div class="st200_paragraph">
+        When specified as the type of a
+        <a class="st200_link" href="#st200_p4s2">record</a> field,
+        implementations are not required to support
+        <span class="st200_term expression">integers</span> of all formats
+        of at least the sizes <span class="st200_term expression">{8, 16, 32, 64}</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s2ss6pg2" href="#st200_p5s2ss6pg2">2</a></div><div class="st200_paragraph">
+        When specified as the type of a
+        <a class="st200_link" href="#st200_p4s3">packed</a> field,
+        implementations are required to support
+        <span class="st200_term expression">integers</span> of all formats
+        of at least the sizes <span class="st200_term expression">[2, 64]</span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s3" href="#st200_p5s3">5.3</a></div><div class="st200_section_title">float</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss1">5.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss2">5.3.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss3">5.3.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss4">5.3.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss5">5.3.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s3ss6">5.3.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss1" href="#st200_p5s3ss1">5.3.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s3ss1fo1" href="#st200_p5s3ss1fo1">5.3.1.1. float Syntax</a></div><pre class="st200_verbatim">
+float_expression =
+  (float t:&lt;size_expression&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss2" href="#st200_p5s3ss2">5.3.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss2pg1" href="#st200_p5s3ss2pg1">1</a></div><div class="st200_paragraph">
+        An <span class="st200_term expression">float</span> type expression
+        describes an IEEE754
+        <span class="st200_footnote_reference"><a id="st200_fn_1_ref" href="#st200_fn_1">[1]</a></span>
+        floating point type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss3" href="#st200_p5s3ss3">5.3.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg1" href="#st200_p5s3ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[float t]</span>
+        describes an IEEE754 floating point type with
+        <span class="st200_term expression">t</span>
+        bits of precision.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg2" href="#st200_p5s3ss3pg2">2</a></div><div class="st200_paragraph">
+        The IEEE754 standard, as of the most recent revision, defines
+        <span class="st200_term type">binary16</span>,
+        <span class="st200_term type">binary32</span>,
+        <span class="st200_term type">binary64</span>,
+        <span class="st200_term type">binary128</span>,
+        <span class="st200_term type">decimal32</span>,
+        <span class="st200_term type">decimal64</span>, and
+        <span class="st200_term type">decimal128</span> types.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg3" href="#st200_p5s3ss3pg3">3</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">t == 16</span>, the expression
+        <span class="st200_term expression">[float t]</span> denotes the
+        <span class="st200_term expression">binary16</span> type.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg4" href="#st200_p5s3ss3pg4">4</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">t == 32</span>, the expression
+        <span class="st200_term expression">[float t]</span> denotes the
+        <span class="st200_term expression">binary32</span> type.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg5" href="#st200_p5s3ss3pg5">5</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">t == 64</span>, the expression
+        <span class="st200_term expression">[float t]</span> denotes the
+        <span class="st200_term expression">binary64</span> type.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg6" href="#st200_p5s3ss3pg6">6</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss3pg7" href="#st200_p5s3ss3pg7">7</a></div><div class="st200_paragraph">
+        The <span class="st200_term expression">float</span> type is considered
+        to be a <span class="st200_term term">scalar</span> type when considered
+        as an element of a <span class="st200_term expression">vector</span> or
+        <span class="st200_term expression">matrix</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss4" href="#st200_p5s3ss4">5.3.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss4pg1" href="#st200_p5s3ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[float s]</span> is
+        <span class="st200_term expression">s</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss5" href="#st200_p5s3ss5">5.3.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss5pg1" href="#st200_p5s3ss5pg1">1</a></div><div class="st200_paragraph">
+        When specified as the type of a
+        <a class="st200_link" href="#st200_p4s2">record</a> field,
+        the size of a given <span class="st200_term expression">float</span>
+        expression must be divisible exactly by
+        <span class="st200_term expression">8</span>. That is, the size must
+        be exactly expressible in terms of octets.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s3ss6" href="#st200_p5s3ss6">5.3.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s3ss6pg1" href="#st200_p5s3ss6pg1">1</a></div><div class="st200_paragraph">
+        When specified as the type of a
+        <a class="st200_link" href="#st200_p4s2">record</a> field,
+        implementations are required to support
+        <span class="st200_term expression">float</span> types of
+        at least the sizes <span class="st200_term expression">{16, 32, 64}</span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s4" href="#st200_p5s4">5.4</a></div><div class="st200_section_title">boolean-set</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss1">5.4.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss2">5.4.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss3">5.4.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss4">5.4.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss5">5.4.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s4ss6">5.4.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss1" href="#st200_p5s4ss1">5.4.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s4ss1fo1" href="#st200_p5s4ss1fo1">5.4.1.1. boolean-set Syntax</a></div><pre class="st200_verbatim">
+boolean_set_expression =
+  (boolean-set s:&lt;size_expression&gt; f:(&lt;field-name&gt; ...))
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss2" href="#st200_p5s4ss2">5.4.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss2pg1" href="#st200_p5s4ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term expression">boolean-set</span> type expression
+        describes a packed <span class="st200_term term">bit field</span> type
+        that allows for named boolean flags to be packed into a series
+        of octets. Individual bits can be queried and set by name in the
+        resulting generated code, and more space may be allocated than
+        required for the list of fields to allow for the addition of later
+        fields without changing the layout of the resulting type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss3" href="#st200_p5s4ss3">5.4.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss3pg1" href="#st200_p5s4ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[boolean-set s (f₀ ... fₙ)]</span>
+        describes an array of named boolean values. The expression
+        <span class="st200_term expression">s</span> indicates how many
+        octets will be used to store the values of the fields.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss3pg2" href="#st200_p5s4ss3pg2">2</a></div><div class="st200_paragraph">
+        If the number of fields in <span class="st200_term expression">f</span>
+        exceeds <span class="st200_term expression">s * 8</span>, the type
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss3pg3" href="#st200_p5s4ss3pg3">3</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss4" href="#st200_p5s4ss4">5.4.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss4pg1" href="#st200_p5s4ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[boolean-set s f]</span> is
+        <span class="st200_term expression">s * 8</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss5" href="#st200_p5s4ss5">5.4.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss5pg1" href="#st200_p5s4ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">boolean-set</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s4ss6" href="#st200_p5s4ss6">5.4.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s4ss6pg1" href="#st200_p5s4ss6pg1">1</a></div><div class="st200_paragraph">
+        There are no minimum requirements placed on implementations
+        for the <span class="st200_term expression">boolean-set</span> type.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s5" href="#st200_p5s5">5.5</a></div><div class="st200_section_title">vector</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss1">5.5.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss2">5.5.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss3">5.5.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss4">5.5.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss5">5.5.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s5ss6">5.5.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss1" href="#st200_p5s5ss1">5.5.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s5ss1fo1" href="#st200_p5s5ss1fo1">5.5.1.1. vector Syntax</a></div><pre class="st200_verbatim">
+vector_expression =
+  (vector t:&lt;type_expression&gt; s:&lt;size_expression&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss2" href="#st200_p5s5ss2">5.5.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss2pg1" href="#st200_p5s5ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term expression">vector</span> type expression
+        describes a mathematical vector type of scalar elements.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss3" href="#st200_p5s5ss3">5.5.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss3pg1" href="#st200_p5s5ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[vector t s]</span>
+        describes a vector of <span class="st200_term expression">s</span>
+        elements of type <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss3pg2" href="#st200_p5s5ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">t</span> is not of a
+        <span class="st200_term term">scalar</span> type, the type expression
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss3pg3" href="#st200_p5s5ss3pg3">3</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss4" href="#st200_p5s5ss4">5.5.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss4pg1" href="#st200_p5s5ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[vector t s]</span> is
+        <span class="st200_term expression">s * m</span>, where
+        <span class="st200_term expression">m</span> is the size in bits
+        of the type <span class="st200_term expression">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss5" href="#st200_p5s5ss5">5.5.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss5pg1" href="#st200_p5s5ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">vector</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s5ss6" href="#st200_p5s5ss6">5.5.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss6pg1" href="#st200_p5s5ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term expression">vector</span> types with
+        elements of type <span class="st200_term expression">[float 32]</span>,
+        <span class="st200_term expression">[float 64]</span>,
+        <span class="st200_term expression">[integer signed 32]</span>, and
+        <span class="st200_term expression">[integer signed 64]</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s5ss6pg2" href="#st200_p5s5ss6pg2">2</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term expression">vector</span> types with
+        element counts in the range <span class="st200_term expression">[2, 4]</span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s6" href="#st200_p5s6">5.6</a></div><div class="st200_section_title">matrix</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss1">5.6.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss2">5.6.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss3">5.6.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss4">5.6.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss5">5.6.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s6ss6">5.6.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss1" href="#st200_p5s6ss1">5.6.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s6ss1fo1" href="#st200_p5s6ss1fo1">5.6.1.1. matrix Syntax</a></div><pre class="st200_verbatim">
+matrix_expression =
+  (matrix t:&lt;type_expression&gt; w:&lt;size_expression&gt; h:&lt;size_expression&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss2" href="#st200_p5s6ss2">5.6.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss2pg1" href="#st200_p5s6ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term expression">matrix</span> type expression
+        describes a mathematical matrix type of scalar elements.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss3" href="#st200_p5s6ss3">5.6.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss3pg1" href="#st200_p5s6ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[matrix t w h]</span>
+        describes a matrix of <span class="st200_term expression">w</span>
+        columns and <span class="st200_term expression">h</span> rows of
+        elements of type <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss3pg2" href="#st200_p5s6ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">t</span> is not of a
+        <span class="st200_term term">scalar</span> type, the type expression
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss3pg3" href="#st200_p5s6ss3pg3">3</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">w &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss3pg4" href="#st200_p5s6ss3pg4">4</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">h &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss4" href="#st200_p5s6ss4">5.6.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss4pg1" href="#st200_p5s6ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[matrix t w h]</span> is
+        <span class="st200_term expression">w * h * m</span>, where
+        <span class="st200_term expression">m</span> is the size in bits
+        of the type <span class="st200_term expression">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss5" href="#st200_p5s6ss5">5.6.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss5pg1" href="#st200_p5s6ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">matrix</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s6ss6" href="#st200_p5s6ss6">5.6.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss6pg1" href="#st200_p5s6ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term expression">matrix</span> types with
+        elements of type <span class="st200_term expression">[float 32]</span>,
+        and <span class="st200_term expression">[float 64]</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s6ss6pg2" href="#st200_p5s6ss6pg2">2</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term term">square</span>
+        <span class="st200_term expression">matrix</span> types with
+        element counts in the range <span class="st200_term expression">[3, 4]</span>.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s7" href="#st200_p5s7">5.7</a></div><div class="st200_section_title">array</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss1">5.7.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss2">5.7.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss3">5.7.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss4">5.7.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss5">5.7.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s7ss6">5.7.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss1" href="#st200_p5s7ss1">5.7.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s7ss1fo1" href="#st200_p5s7ss1fo1">5.7.1.1. array Syntax</a></div><pre class="st200_verbatim">
+array_expression =
+  (array t:&lt;type_expression&gt; s:&lt;size_expression&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss2" href="#st200_p5s7ss2">5.7.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss2pg1" href="#st200_p5s7ss2pg1">1</a></div><div class="st200_paragraph">
+        An <span class="st200_term expression">array</span> type expression
+        describes a bounded array.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss3" href="#st200_p5s7ss3">5.7.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss3pg1" href="#st200_p5s7ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[array t s]</span>
+        describes an array of <span class="st200_term expression">s</span>
+        elements of type <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss3pg2" href="#st200_p5s7ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss4" href="#st200_p5s7ss4">5.7.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss4pg1" href="#st200_p5s7ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[array t e]</span> is
+        <span class="st200_term expression">e * m</span>, where
+        <span class="st200_term expression">m</span> is the size in bits
+        of the type <span class="st200_term expression">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss5" href="#st200_p5s7ss5">5.7.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss5pg1" href="#st200_p5s7ss5pg1">1</a></div><div class="st200_paragraph">
+        Implementations are permitted to forbid
+        <span class="st200_term expression">array</span> types as elements
+        of <span class="st200_term expression">array</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s7ss6" href="#st200_p5s7ss6">5.7.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s7ss6pg1" href="#st200_p5s7ss6pg1">1</a></div><div class="st200_paragraph">
+        There are no minimum requirements placed on implementations
+        for the <span class="st200_term expression">array</span> type.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s8" href="#st200_p5s8">5.8</a></div><div class="st200_section_title">string</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss1">5.8.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss2">5.8.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss3">5.8.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss4">5.8.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss5">5.8.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s8ss6">5.8.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss1" href="#st200_p5s8ss1">5.8.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s8ss1fo1" href="#st200_p5s8ss1fo1">5.8.1.1. string Syntax</a></div><pre class="st200_verbatim">
+string_expression =
+  (string s:&lt;size_expression&gt; e:&lt;quoted_string&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss2" href="#st200_p5s8ss2">5.8.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss2pg1" href="#st200_p5s8ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term expression">string</span> type expression
+        describes a bounded string.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss3" href="#st200_p5s8ss3">5.8.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss3pg1" href="#st200_p5s8ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[string s e]</span>
+        describes a string that may contain at most
+        <span class="st200_term expression">s</span> characters. The string
+        is encoded using encoding <span class="st200_term expression">e</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss3pg2" href="#st200_p5s8ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss4" href="#st200_p5s8ss4">5.8.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss4pg1" href="#st200_p5s8ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[string s e]</span> is
+        <span class="st200_term expression">4 + (s * 8)</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss5" href="#st200_p5s8ss5">5.8.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss5pg1" href="#st200_p5s8ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">string</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss6" href="#st200_p5s8ss6">5.8.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss6pg1" href="#st200_p5s8ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are required to support the
+        <span class="st200_term expression">"UTF-8"</span> encoding.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s9" href="#st200_p5s9">5.9</a></div><div class="st200_section_title">Reference</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s9ss1">5.9.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s9ss2">5.9.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="#st200_p5s9ss3">5.9.3. Semantics</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss1" href="#st200_p5s9ss1">5.9.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s9ss1fo1" href="#st200_p5s9ss1fo1">5.9.1.1. Reference Syntax</a></div><pre class="st200_verbatim">
+type_reference_qualified =
+  package_name_unqualified , ":" , type_name ;
+
+type_reference =
+  type_name | type_reference_qualified ;
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss2" href="#st200_p5s9ss2">5.9.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss2pg1" href="#st200_p5s9ss2pg1">1</a></div><div class="st200_paragraph">
+        A type expression may refer to an existing type declaration by name.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s9ss3" href="#st200_p5s9ss3">5.9.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss3pg1" href="#st200_p5s9ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">t</span>
+        specifies the (optionally-qualified) name of a type.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss3pg2" href="#st200_p5s9ss3pg2">2</a></div><div class="st200_paragraph">
+        An unqualified type name <span class="st200_term expression">n</span>
+        refers to the type with name <span class="st200_term expression">n</span>
+        in the <a class="st200_link" href="#st200_p3s2">current package</a>,
+        if any.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s9ss3pg3" href="#st200_p5s9ss3pg3">3</a></div><div class="st200_paragraph">
+        A qualified type name <span class="st200_term expression">p:n</span>
+        refers to the type with name <span class="st200_term expression">n</span>
+        in the package that has been
+        <a class="st200_link" href="#st200_p3s3">imported</a>, using
+        the name <span class="st200_term expression">p</span>.
+      </div></div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p6" href="#st200_p6">6</a></div><div class="st200_part_title">Expressions - Sizes</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p6s1">6.1. Overview</a></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p6s1" href="#st200_p6s1">6.1</a></div><div class="st200_section_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p6s1pg1" href="#st200_p6s1pg1">1</a></div><div class="st200_paragraph">
+      This section describes the syntax and semantics of
+      <span class="st200_term package">jpra</span> language
+      <span class="st200_term term">size expressions</span>.
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p6s1pg2" href="#st200_p6s1pg2">2</a></div><div class="st200_paragraph">
+      A <span class="st200_term term">size expression</span> is an
+      <span class="st200_term term">expression</span> that, when evaluated,
+      yields a <span class="st200_term term">size</span>. Size expressions
+      are used to define, for example, the maximum number of elements
+      in a vector type, or the number of bits of precision in an integer
+      type.
+    </div></div></div></div><div class="st200_part_container"><div class="st200_part_title_number"><a id="st200_p7" href="#st200_p7">7</a></div><div class="st200_part_title">Encoding</div><ul class="st200_contents st200_part_contents_outer st200_part_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p7s1">7.1. Overview</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p7s2">7.2. Encoding Rules</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s2ss1">7.2.1. Storage Model</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s2ss2">7.2.2. Endianness</a></li></ul></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_section"><a href="#st200_p7s3">7.3. Encoding Records</a><ul class="st200_contents st200_section_contents"><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss1">7.3.1. Fields</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss2">7.3.2. integer</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss3">7.3.3. float</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss4">7.3.4. boolean-set</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss5">7.3.5. vector</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss6">7.3.6. matrix</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss7">7.3.7. array</a></li><li class="st200_contents_item st200_contents_item2 st200_contents_item_subsection"><a href="#st200_p7s3ss8">7.3.8. string</a></li></ul></li></ul><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p7s1" href="#st200_p7s1">7.1</a></div><div class="st200_section_title">Overview</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s1pg1" href="#st200_p7s1pg1">1</a></div><div class="st200_paragraph">
+      As stated, the intention of the <span class="st200_term package">jpra</span>
+      language is describe flat data structures that will be encoded into
+      untyped storage regions. This section defines the rules that are used
+      to map type declarations to individual octets.
+    </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s1pg2" href="#st200_p7s1pg2">2</a></div><div class="st200_paragraph">
+      Informally, the rules can be considered as analogous to the storage
+      rules for C-language family <span class="st200_term keyword">struct</span>
+      values but with explicit field padding and no implicit alignment
+      <span class="st200_footnote_reference"><a id="st200_fn_2_ref" href="#st200_fn_2">[2]</a></span>.
+    </div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p7s2" href="#st200_p7s2">7.2</a></div><div class="st200_section_title">Encoding Rules</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s2ss1" href="#st200_p7s2ss1">7.2.1</a></div><div class="st200_subsection_title">Storage Model</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss1pg1" href="#st200_p7s2ss1pg1">1</a></div><div class="st200_paragraph">
+        The encoding rules described here attempt to describe how an
+        array of <span class="st200_term expression">n</span> elements of
+        a given type <span class="st200_term expression">T</span>
+        of size <span class="st200_term expression">s</span> is mapped
+        to a flat and untyped storage array of
+        <span class="st200_term expression">k</span> octets.
+        The "first" octet in the array is at octet index
+        <span class="st200_term constant">0</span> and the "last" octet in the
+        array is at octet index <span class="st200_term expression">n - 1</span>.
+        As a consequence of the above, it can be assumed that
+        <span class="st200_term expression">k &lt;= n * s</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss1pg2" href="#st200_p7s2ss1pg2">2</a></div><div class="st200_paragraph">
+        Values are tightly packed; The first octet of the first element
+        of type <span class="st200_term expression">T</span> in the array is
+        at octet index <span class="st200_term constant">0</span>, and the
+        first octet of the second element of type
+        <span class="st200_term expression">T</span> is at octet index
+        <span class="st200_term expression">s</span>.
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p7s2ss1fo1" href="#st200_p7s2ss1fo1">7.2.1.1. Encoding Diagram</a></div><img class="st200_image" alt="Encoding Diagram" src="encoding.png"/></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s2ss2" href="#st200_p7s2ss2">7.2.2</a></div><div class="st200_subsection_title">Endianness</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss2pg1" href="#st200_p7s2ss2pg1">1</a></div><div class="st200_paragraph">
+        For data elements larger than a single octet, the
+        <span class="st200_term term">endianness</span> is left undefined and is
+        at the discretion of individual code generators. The encoding rules
+        described here are written in a
+        <span class="st200_term term">endianness-agnostic</span> manner.
+      </div></div></div></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p7s3" href="#st200_p7s3">7.3</a></div><div class="st200_section_title">Encoding Records</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss1" href="#st200_p7s3ss1">7.3.1</a></div><div class="st200_subsection_title">Fields</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss1pg1" href="#st200_p7s3ss1pg1">1</a></div><div class="st200_paragraph">
+        The fields of a given record type
+        <span class="st200_term expression">T</span> of size
+        <span class="st200_term expression">s</span> (octets) are placed
+        into storage in declaration order. That is, for an element at index
+        <span class="st200_term expression">e</span>, the first octet of the first
+        declared field <span class="st200_term expression">f0</span>
+        of <span class="st200_term expression">T</span> is placed into the
+        octet at <span class="st200_term expression">e * s</span>. The next
+        octet of the field of the field is placed into the octet at
+        <span class="st200_term expression">(e * s) + 1</span>. The first
+        octet of the next field of <span class="st200_term expression">T</span>
+        is placed into the octet at
+        <span class="st200_term expression">(e * s) + m</span>, where
+        <span class="st200_term expression">m</span> is the size in octets of
+        <span class="st200_term expression">f0</span>, and so on.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss1pg2" href="#st200_p7s3ss1pg2">2</a></div><div class="st200_paragraph">
+        The basic types in the <span class="st200_term package">jpra</span>
+        may impose further rules on encoding, and these are detailed
+        in the following sections. The rules are specified in terms of
+        octets within a given field, so if a rule states that some piece
+        of data is placed at octet <span class="st200_term expression">0</span>,
+        then it is actually referring to the start of the field within
+        the record type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss2" href="#st200_p7s3ss2">7.3.2</a></div><div class="st200_subsection_title">integer</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss2pg1" href="#st200_p7s3ss2pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">integer</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss3" href="#st200_p7s3ss3">7.3.3</a></div><div class="st200_subsection_title">float</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss3pg1" href="#st200_p7s3ss3pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">float</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss4" href="#st200_p7s3ss4">7.3.4</a></div><div class="st200_subsection_title">boolean-set</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss4pg1" href="#st200_p7s3ss4pg1">1</a></div><div class="st200_paragraph">
+        The values of the fields of a
+        <span class="st200_term expression">[boolean-set s (f₀ ... fₙ)]</span>
+        expression are assigned sequentially to each bit in the array of
+        octets, starting at the most significant bit of octet 0. For example,
+        <span class="st200_term expression">f₀</span> will be assigned to
+        the most significant bit of octet 0,
+        <span class="st200_term expression">f₁</span> will be assigned to the
+        next most significant bit of octet 0,
+        <span class="st200_term expression">f₇</span> will be assigned to the
+        least significant bit of octet 0, and
+        <span class="st200_term expression">f₈</span> will be assigned to the
+        most significant bit of octet 1. In effect, for a given octet,
+        a <span class="st200_term expression">true</span> value for
+        the field <span class="st200_term expression">n</span> will be encoded
+        as <span class="st200_term expression">1 &lt;&lt; n</span>
+        or <span class="st200_term expression">pow(2, n)</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss4pg2" href="#st200_p7s3ss4pg2">2</a></div><div class="st200_paragraph">
+        Formally, the field at <span class="st200_term expression">n</span>
+        will be assigned to octet <span class="st200_term expression">n / 8</span>,
+        bit <span class="st200_term expression">7 - (n mod 8)</span>, where
+        <span class="st200_term expression">0</span> is the index of the least
+        significant bit and <span class="st200_term expression">7</span> is the
+        index of the most significant bit.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss5" href="#st200_p7s3ss5">7.3.5</a></div><div class="st200_subsection_title">vector</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss5pg1" href="#st200_p7s3ss5pg1">1</a></div><div class="st200_paragraph">
+        For a type <span class="st200_term expression">t</span>, where
+        <span class="st200_term expression">t</span> is of
+        size <span class="st200_term expression">s</span> (octets),
+        the <span class="st200_term expression">n</span> elements of a
+        an expression <span class="st200_term expression">[vector t n]</span>,
+        are stored such that the first octet of the first element is
+        stored at octet <span class="st200_term expression">0</span>, the
+        second element at
+        <span class="st200_term expression">s</span>, and the
+        <span class="st200_term expression">(n - 1)th</span> at
+        <span class="st200_term expression">(n - 1) * s</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss6" href="#st200_p7s3ss6">7.3.6</a></div><div class="st200_subsection_title">matrix</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg1" href="#st200_p7s3ss6pg1">1</a></div><div class="st200_paragraph">
+        Matrix data is stored in column-major format
+        <span class="st200_footnote_reference"><a id="st200_fn_3_ref" href="#st200_fn_3">[3]</a></span>. For an <span class="st200_term variable">m x m</span>
+        square matrix, assuming that each element of the matrix uses
+        <span class="st200_term variable">n</span> bytes, the first octet of the element at
+        row <span class="st200_term variable">r</span> and column <span class="st200_term variable">c</span>
+        (assuming <span class="st200_term function">0 &lt;= r &lt; m</span> and
+        <span class="st200_term function">0 &lt;= c &lt; m</span>)
+        can be found by <span class="st200_term function">(c * m * n) + (r * n)</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg2" href="#st200_p7s3ss6pg2">2</a></div><div class="st200_paragraph">
+        As an example, a 4x4 matrix with <span class="st200_term constant">4</span>
+        octet elements would be stored in memory as shown in the following
+        diagram:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p7s3ss6fo1" href="#st200_p7s3ss6fo1">7.3.6.1. Column-major storage memory layout</a></div><img class="st200_image" alt="Column-major storage memory layout" src="memory.png"/></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss6pg3" href="#st200_p7s3ss6pg3">3</a></div><div class="st200_paragraph">
+        So, the element at row <span class="st200_term constant">0</span>,
+        column <span class="st200_term constant">0</span> would be stored in
+        octets <span class="st200_term constant">[0 .. 3]</span>. The
+        element at row <span class="st200_term constant">1</span>, column
+        <span class="st200_term constant">0</span> would be stored in octets
+        <span class="st200_term constant">[4 .. 7]</span>. The
+        element at row <span class="st200_term constant">0</span>, column
+        <span class="st200_term constant">1</span> would be stored in octets
+        <span class="st200_term constant">[16 .. 19]</span>, and so on.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss7" href="#st200_p7s3ss7">7.3.7</a></div><div class="st200_subsection_title">array</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss7pg1" href="#st200_p7s3ss7pg1">1</a></div><div class="st200_paragraph">
+        No extra encoding rules are specified for
+        <span class="st200_term expression">array</span> types.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s3ss8" href="#st200_p7s3ss8">7.3.8</a></div><div class="st200_subsection_title">string</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s3ss8pg1" href="#st200_p7s3ss8pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[string s e]</span>
+        is encoded such that the current length of the string is
+        stored as an <span class="st200_term expression">[integer unsigned 32]</span>,
+        and this is followed by the <span class="st200_term expression">s</span>
+        octets that make up the string data.
+      </div></div></div></div></div><div class="st200_footnotes"><hr/><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_0" href="#st200_fn_0_ref">0</a>]</div><div class="st200_footnote_body">
+        <a class="st200_link_external" href="http://en.wikipedia.org/wiki/Zermelo-Fraenkel_set_theory">http://en.wikipedia.org/wiki/Zermelo-Fraenkel_set_theory</a>
+      </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_1" href="#st200_fn_1_ref">1</a>]</div><div class="st200_footnote_body">
+          <a class="st200_link_external" href="http://ieeexplore.ieee.org/servlet/opac?punumber=4610933">754-2008 - IEEE Standard for Floating-Point Arithmetic </a>
+        </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_2" href="#st200_fn_2_ref">2</a>]</div><div class="st200_footnote_body">
+        Most C compilers will insert padding octets to ensure that fields
+        within a <span class="st200_term keyword">struct</span> have the correct
+        alignment for the hardware.
+      </div></div><div class="st200_footnote_container"><div class="st200_footnote_number">[<a id="st200_fn_3" href="#st200_fn_3_ref">3</a>]</div><div class="st200_footnote_body">
+          The convention used by most programs using the <a class="st200_link_external" href="http://opengl.org">OpenGL</a> API.
+        </div></div></div></div></body></html>

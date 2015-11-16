@@ -1,0 +1,80 @@
+
+/*
+ * Main 3-column structure.
+ * Auto generated, DO NOT EDIT.
+ */
+
+body
+{
+  margin: 0em;
+}
+
+.page_column_container
+{
+  /* Fix IE7 overflow hidden bug. */
+  position: relative;
+  clear:    both;
+  float:    left;
+  /* Page width. */
+  width:    100%;
+  /* Remove overhanging div. */
+  overflow: hidden;
+}
+
+.page_column_right
+{
+
+}
+
+.page_column_center
+{
+  float:       left;
+  width:       200%;
+  margin-left: -8.125000em;
+  position:    relative;
+  right:       100%;
+}
+
+.page_column_left
+{
+  float:       left;
+  width:       100%;
+  margin-left: -50%;
+  position:    relative;
+  left:        19.125000em;
+}
+
+.page_column_center_content_wrapper
+{
+  float:    left;
+  width:    50%;
+  position: relative;
+  right:    11.000000em;
+}
+
+.page_column_center_content
+{
+  margin-left:  12.000000em;
+  margin-right: 9.125000em;
+  position:     relative;
+  left:         200%;
+  overflow:     hidden;
+}
+
+.page_column_left_content
+{
+  float:    right;
+  position: relative;
+  right:    1.000000em;
+  width:    9.000000em
+}
+
+.page_column_right_content
+{
+  float:        right;
+  width:        6.125000em
+  margin-right: 3.000000em
+  position:     relative;
+  left:         50%;
+}
+

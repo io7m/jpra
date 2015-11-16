@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="spec.concept">
+  <s:part-title>Concepts</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Concepts</s:section-title>
+    <s:section-contents/>
+
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        Schemas written in the <s:term s:type="package">jpra</s:term>
+        language consist of a set of
+        <s:link s:target="spec.concept.package">packages</s:link>, each containing
+        a set of zero or more <s:link s:target="spec.concept.type">types</s:link>.
+        A <s:term s:type="package">jpra</s:term> schema is described by
+        a series of
+        <s:link s:target="spec.concept.statement">statements</s:link> that
+        successively describe changes to the schema (such as introducing
+        a new type, introducing a new package, importing a package into
+        the current scope, etc).
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection xml:id="spec.concept.statement">
+      <s:subsection-title>Statements</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="term">statement</s:term> in the
+        <s:term s:type="package">jpra</s:term> language can be
+        seen as an instruction that performs some action on the current
+        schema context, yielding a new context that may be changed
+        in some manner. For example, the
+        <s:link s:target="spec.stmt.package-end">package-end</s:link>
+        statement adds a new
+        <s:link s:target="spec.concept.package">package</s:link> to
+        the current schema context.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection xml:id="spec.concept.package">
+      <s:subsection-title>Packages</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="term">package</s:term> in the
+        <s:term s:type="package">jpra</s:term> language is the top level
+        organizational unit for schema objects. A package has a unique
+        fully-qualified name of the form:
+      </s:paragraph>
+      <s:formal-item s:kind="specification">
+        <s:formal-item-title>Package name EBNF</s:formal-item-title>
+        <s:verbatim><xi:include href="package-name-ebnf.txt" parse="text"/></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+
+    <s:subsection xml:id="spec.concept.type">
+      <s:subsection-title>Types</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="term">type</s:term> in the
+        <s:term s:type="package">jpra</s:term> language is a
+        basic description of the structure of a value. A type has
+        a unique name within a package, and the format of valid type
+        names is as follows:
+      </s:paragraph>
+      <s:formal-item s:kind="specification">
+        <s:formal-item-title>Type name EBNF</s:formal-item-title>
+        <s:verbatim><xi:include href="type-name-ebnf.txt" parse="text"/></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+  </s:section>
+
+</s:part>

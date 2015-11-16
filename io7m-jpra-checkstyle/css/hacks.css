@@ -1,0 +1,60 @@
+/* I only had a hammer. */
+
+.page_section_main_content
+{
+  padding-top: 0em !important;
+}
+
+td, th
+{
+  border:        1px solid #ddd !important;
+  padding-left:  1em !important;
+  padding-right: 1em !important;
+}
+
+.page_column_left_content ul
+{
+  padding-left: 0em;
+}
+
+.page_column_left_content li
+{
+  padding-left:    0.25em;
+  list-style-type: square;
+}
+
+.project_links
+{
+  padding-top: 1.2em;
+}
+
+.page_section ul
+{
+  padding-left: 0em;
+}
+
+.page_section li
+{
+  padding-left:    0.25em;
+  list-style-type: square;
+}
+
+.software_releases td:nth-child(1) { width: 6.5em !important; }
+.software_releases td:nth-child(2) { width: 4em !important; }
+.software_releases td:nth-child(3) { width: 2em !important; }
+
+.documentation_releases td:nth-child(1) { width: 5em !important; }
+.documentation_releases td:nth-child(2) { width: 3em !important; }
+.documentation_releases td:nth-child(3) { width: 2em !important; }
+
+.changelog         td:nth-child(1) { width: 6em !important; }
+
+.documentation_releases td { border: none !important; }
+.documentation_releases th { border: none !important; }
+.software_releases      td { border: none !important; }
+.software_releases      th { border: none !important; }
+.changelog td              { border: none !important; }
+
+.section p     { text-align: justify !important; }
+.section table { }
+

@@ -1,0 +1,5 @@
+package_name_unqualified =
+  \p{Lowercase_Letter} , { \p{Lowercase_Letter} | '_' | \p{Digit} } ;
+
+package_name_qualified =
+  package_name_unqualified , { "." , package_name_unqualified } ;

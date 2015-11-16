@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part xmlns:s="http://schemas.io7m.com/structural/2.1.0">
+  <s:part-title>Tools Reference</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>jpra</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:formal-item s:kind="specification">
+        <s:formal-item-title>Options</s:formal-item-title>
+        <s:verbatim><![CDATA[
+usage: jpra <command> [<args>]
+
+The most commonly used jpra commands are:
+    check           Check a list of packages
+    generate-java   Generate Java code
+    help            Display help information
+
+See 'jpra help <command>' for more information on a specific command.
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The <s:term s:type="command">jpra</s:term> command checks source code
+        for errors and exports class definitions in the Java language.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Checking</s:subsection-title>
+      <s:paragraph>
+        To check source code for errors, without generating Java sources,
+        use the <s:term s:type="command">check</s:term> subcommand:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Checking sources</s:formal-item-title>
+        <s:verbatim><![CDATA[
+$ java -jar jpra.jar check --source-directory p com.io7m.example
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The above command will check package <s:term s:type="package">com.io7m.example</s:term>
+        in the directory <s:term s:type="file">p</s:term>. The package is assumed
+        to be in the file <s:term s:type="file">p/com/io7m/example.jpr</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If checking succeeds, the command says nothing. Otherwise,
+        errors are printed to standard error and the program exits with a
+        non-zero exit code.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>Code Generation</s:subsection-title>
+      <s:paragraph>
+        To generate Java sources,
+        use the <s:term s:type="command">generate-java</s:term> subcommand:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Checking sources</s:formal-item-title>
+        <s:verbatim><![CDATA[
+$ java -jar jpra.jar generate-java --source-directory p --target-directory t com.io7m.example
+]]></s:verbatim>
+      </s:formal-item>
+      <s:paragraph>
+        The above command will check package <s:term s:type="package">com.io7m.example</s:term>
+        in the directory <s:term s:type="file">p</s:term>. The package is assumed
+        to be in the file <s:term s:type="file">p/com/io7m/example.jpr</s:term>.
+        If no errors were detected, it will then generate Java source code
+        in the directory <s:term s:type="file">t</s:term>, generating one Java
+        class per type definition, and placing each class in
+        <s:term s:type="file">t/com/io7m/example/</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        If checking succeeds, the command says nothing. Otherwise,
+        errors are printed to standard error and the program exits with a
+        non-zero exit code.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+</s:part>

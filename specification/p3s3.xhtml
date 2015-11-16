@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification: 3.3. import</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">3.2. package-begin</td><td class="st200_navbar_up_title_cell">3. Statements - Packages</td><td class="st200_navbar_next_title_cell">3.4. package-end</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p3s2.xhtml#st200_p3s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p3.xhtml#st200_p3">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p3s4.xhtml#st200_p3s4">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p3s3" href="#st200_p3s3">3.3</a></div><div class="st200_section_title">import</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p3s3.xhtml#st200_p3s3ss1">3.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p3s3.xhtml#st200_p3s3ss2">3.3.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p3s3.xhtml#st200_p3s3ss3">3.3.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p3s3.xhtml#st200_p3s3ss4">3.3.4. Circular Imports</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss1" href="#st200_p3s3ss1">3.3.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s3ss1fo1" href="#st200_p3s3ss1fo1">3.3.1.1. import Syntax</a></div><pre class="st200_verbatim">
+package_import =
+  (import q:&lt;package_name_qualified&gt; as r:package_name_unqualified)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss2" href="#st200_p3s3ss2">3.3.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss2pg1" href="#st200_p3s3ss2pg1">1</a></div><div class="st200_paragraph">
+        A package may <span class="st200_term term">import</span> any number
+        of packages via <span class="st200_term statement">import</span> statements.
+        An <span class="st200_term statement">import</span> statement, given in
+        the package <span class="st200_term package">p</span>, specifies the
+        fully qualified name of a package <span class="st200_term package">q</span>
+        and an unqualified name <span class="st200_term package">r</span>, and
+        allows definitions given inside <span class="st200_term package">p</span>
+        to refer to definitions in <span class="st200_term package">q</span> by
+        qualifying their names with <span class="st200_term package">r</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss2pg2" href="#st200_p3s3ss2pg2">2</a></div><div class="st200_paragraph">
+        As an example, consider a package <span class="st200_term package">q</span>
+        that contains a type declaration <span class="st200_term type">T</span>.
+        If package <span class="st200_term package">p</span> imports
+        <span class="st200_term package">q</span> using the
+        unqualified name <span class="st200_term package">r</span>, then
+        definitions inside <span class="st200_term package">p</span> may refer
+        to <span class="st200_term type">T</span> using the syntax
+        <span class="st200_term expression">r:T</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss3" href="#st200_p3s3ss3">3.3.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg1" href="#st200_p3s3ss3pg1">1</a></div><div class="st200_paragraph">
+        The <span class="st200_term statement">import</span> statement
+        makes the declarations of the package
+        <span class="st200_term package">p</span> accessible in the
+        <span class="st200_term term">current package</span> via the name
+        <span class="st200_term package">q</span>, where
+        <span class="st200_term package">q</span> is an unqualified package
+        name that has not been used in any preceding
+        <span class="st200_term statement">import</span> statement.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg2" href="#st200_p3s3ss3pg2">2</a></div><div class="st200_paragraph">
+        If an <span class="st200_term statement">import</span> statement
+        <span class="st200_term statement">i</span>
+        is evaluated with package name <span class="st200_term package">p</span>,
+        where <span class="st200_term package">p</span> is not defined within
+        the schema context, then <span class="st200_term statement">i</span> is
+        rejected with an error.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss3pg3" href="#st200_p3s3ss3pg3">3</a></div><div class="st200_paragraph">
+        If the unqualified name <span class="st200_term package">r</span>
+        specified in an <span class="st200_term statement">import</span>
+        statement <span class="st200_term statement">i</span> has been
+        used in a preceding <span class="st200_term statement">import</span>
+        statement, then <span class="st200_term statement">i</span> is
+        rejected with an error.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p3s3ss4" href="#st200_p3s3ss4">3.3.4</a></div><div class="st200_subsection_title">Circular Imports</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss4pg1" href="#st200_p3s3ss4pg1">1</a></div><div class="st200_paragraph">
+        Circular imports are not allowed.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p3s3ss4pg2" href="#st200_p3s3ss4pg2">2</a></div><div class="st200_paragraph">
+        An import statement <span class="st200_term statement">i</span>
+        occurring in package <span class="st200_term package">p</span> is
+        considered <span class="st200_term term">circular</span> iff:
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p3s3ss4fo1" href="#st200_p3s3ss4fo1">3.3.4.1. Circular Import Rules</a></div><ul class="st200_list_unordered"><li class="st200_list_item">
+            <span class="st200_term statement">i</span> imports
+            <span class="st200_term package">p</span>.
+          </li><li class="st200_list_item">
+            There is a sequence of packages
+            <span class="st200_term expression">q₀, q₁, ..., qₙ</span>
+            such that <span class="st200_term variable">p</span> imports
+            <span class="st200_term variable">q₀</span>, and
+            for all <span class="st200_term variable">m</span> where
+            <span class="st200_term expression">0 &lt;= m &lt; n</span>,
+            <span class="st200_term variable">qₘ</span> imports
+            <span class="st200_term expression">q₍ₘ₊₁₎</span>, and
+            <span class="st200_term variable">qₙ</span> imports
+            <span class="st200_term variable">p</span>.
+          </li></ul></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p3s2.xhtml#st200_p3s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p3.xhtml#st200_p3">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p3s4.xhtml#st200_p3s4">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">3.2. package-begin</td><td class="st200_navbar_up_title_cell">3. Statements - Packages</td><td class="st200_navbar_next_title_cell">3.4. package-end</td></tr></table></div></div></body></html>

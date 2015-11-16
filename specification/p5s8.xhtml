@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification: 5.8. string</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">5.7. array</td><td class="st200_navbar_up_title_cell">5. Expressions - Types</td><td class="st200_navbar_next_title_cell">5.9. Reference</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p5s7.xhtml#st200_p5s7">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s9.xhtml#st200_p5s9">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p5s8" href="#st200_p5s8">5.8</a></div><div class="st200_section_title">string</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss1">5.8.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss2">5.8.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss3">5.8.3. Semantics</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss4">5.8.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss5">5.8.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p5s8.xhtml#st200_p5s8ss6">5.8.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss1" href="#st200_p5s8ss1">5.8.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p5s8ss1fo1" href="#st200_p5s8ss1fo1">5.8.1.1. string Syntax</a></div><pre class="st200_verbatim">
+string_expression =
+  (string s:&lt;size_expression&gt; e:&lt;quoted_string&gt;)
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss2" href="#st200_p5s8ss2">5.8.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss2pg1" href="#st200_p5s8ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term expression">string</span> type expression
+        describes a bounded string.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss3" href="#st200_p5s8ss3">5.8.3</a></div><div class="st200_subsection_title">Semantics</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss3pg1" href="#st200_p5s8ss3pg1">1</a></div><div class="st200_paragraph">
+        An expression <span class="st200_term expression">[string s e]</span>
+        describes a string that may contain at most
+        <span class="st200_term expression">s</span> characters. The string
+        is encoded using encoding <span class="st200_term expression">e</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss3pg2" href="#st200_p5s8ss3pg2">2</a></div><div class="st200_paragraph">
+        If <span class="st200_term expression">s &lt;= 0</span>, the type
+        is rejected as invalid.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss4" href="#st200_p5s8ss4">5.8.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss4pg1" href="#st200_p5s8ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of an expression
+        <span class="st200_term expression">[string s e]</span> is
+        <span class="st200_term expression">4 + (s * 8)</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss5" href="#st200_p5s8ss5">5.8.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss5pg1" href="#st200_p5s8ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">string</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p5s8ss6" href="#st200_p5s8ss6">5.8.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p5s8ss6pg1" href="#st200_p5s8ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are required to support the
+        <span class="st200_term expression">"UTF-8"</span> encoding.
+      </div></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p5s7.xhtml#st200_p5s7">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p5.xhtml#st200_p5">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5s9.xhtml#st200_p5s9">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">5.7. array</td><td class="st200_navbar_up_title_cell">5. Expressions - Types</td><td class="st200_navbar_next_title_cell">5.9. Reference</td></tr></table></div></div></body></html>

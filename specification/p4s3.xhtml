@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification: 4.3. packed</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">4.2. record</td><td class="st200_navbar_up_title_cell">4. Statements - Types</td><td class="st200_navbar_next_title_cell">5. Expressions - Types</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p4s2.xhtml#st200_p4s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p4.xhtml#st200_p4">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5.xhtml#st200_p5">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p4s3" href="#st200_p4s3">4.3</a></div><div class="st200_section_title">packed</div><ul class="st200_contents st200_section_contents_outer st200_section_contents"><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss1">4.3.1. Syntax</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss2">4.3.2. Description</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss3">4.3.3. Scope</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss4">4.3.4. Size</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss5">4.3.5. Implementation Constraints</a></li><li class="st200_contents_item st200_contents_item1 st200_contents_item_subsection"><a href="p4s3.xhtml#st200_p4s3ss6">4.3.6. Implementation Requirements</a></li></ul><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss1" href="#st200_p4s3ss1">4.3.1</a></div><div class="st200_subsection_title">Syntax</div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p4s3ss1fo1" href="#st200_p4s3ss1fo1">4.3.1.1. packed Syntax</a></div><pre class="st200_verbatim">
+packed_field_padding_declaration =
+  (padding-bits &lt;size_expression&gt;)
+
+packed_field_value_declaration =
+  (field &lt;field_name&gt; &lt;type_expression&gt;)
+
+packed_field_declaration =
+  packed_field_padding_declaration | packed_field_value_declaration
+
+packed_declaration =
+  (packed t:&lt;type_name&gt; f:(&lt;packed_field_declaration&gt; ...))
+</pre></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss2" href="#st200_p4s3ss2">4.3.2</a></div><div class="st200_subsection_title">Description</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss2pg1" href="#st200_p4s3ss2pg1">1</a></div><div class="st200_paragraph">
+        A <span class="st200_term keyword">packed</span> statement
+        creates a new packed type. A packed
+        type is analogous to a
+        <a class="st200_link" href="p4s2.xhtml#st200_p4s2">record</a> type with
+        the distinction that fields of a packed type may be smaller than
+        a single octet, may cross octet boundaries, and the sum of the sizes
+        of all fields typically adds up to
+        <span class="st200_term expression">64</span> bits or less. Additionally,
+        fields of packed types may only be of type
+        <a class="st200_link" href="p5s2.xhtml#st200_p5s2">integer</a>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss2pg2" href="#st200_p4s3ss2pg2">2</a></div><div class="st200_paragraph">
+        Packed types can contain fields that can
+        take one of two forms: A <span class="st200_term keyword">field</span>
+        form, or a <span class="st200_term keyword">padding-bits</span> form.
+        The <span class="st200_term keyword">field</span> form binds a name to
+        a type expression, and the
+        <span class="st200_term keyword">padding-bits</span> form
+        inserts explicit padding bits into the record.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss3" href="#st200_p4s3ss3">4.3.3</a></div><div class="st200_subsection_title">Scope</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss3pg1" href="#st200_p4s3ss3pg1">1</a></div><div class="st200_paragraph">
+        Fields of a <span class="st200_term keyword">packed</span> type must be
+        uniquely named within a single type declaration. The declaration
+        of a field named <span class="st200_term expression">f</span> makes that
+        field accessible by name <span class="st200_term keyword">f</span> to
+        all successive fields preceding the end of the
+        <span class="st200_term keyword">packed</span> declaration.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss4" href="#st200_p4s3ss4">4.3.4</a></div><div class="st200_subsection_title">Size</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg1" href="#st200_p4s3ss4pg1">1</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(field n t)</span>
+        is equal to size in bits of the type
+        <span class="st200_term expression">t</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg2" href="#st200_p4s3ss4pg2">2</a></div><div class="st200_paragraph">
+        The storage size in bits of a declaration
+        <span class="st200_term expression">(padding-bits n)</span>
+        is <span class="st200_term expression">n</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss4pg3" href="#st200_p4s3ss4pg3">3</a></div><div class="st200_paragraph">
+        The storage size in bits of a given packed type
+        <span class="st200_term expression">t</span> is the sum of the
+        sizes of all of the fields of <span class="st200_term keyword">t</span>.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss5" href="#st200_p4s3ss5">4.3.5</a></div><div class="st200_subsection_title">Implementation Constraints</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss5pg1" href="#st200_p4s3ss5pg1">1</a></div><div class="st200_paragraph">
+        There are no constraints placed on implementations
+        for the <span class="st200_term expression">packed</span> type.
+      </div></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p4s3ss6" href="#st200_p4s3ss6">4.3.6</a></div><div class="st200_subsection_title">Implementation Requirements</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss6pg1" href="#st200_p4s3ss6pg1">1</a></div><div class="st200_paragraph">
+        Implementations are only required to support
+        <span class="st200_term keyword">packed</span> types that have
+        sizes in bits exactly divisible by
+        <span class="st200_term expression">8</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p4s3ss6pg2" href="#st200_p4s3ss6pg2">2</a></div><div class="st200_paragraph">
+        Implementations are required to support
+        <span class="st200_term keyword">packed</span> types of at
+        least the sizes in bits
+        <span class="st200_term expression">{8, 16, 32, 64}</span>.
+      </div></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p4s2.xhtml#st200_p4s2">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p4.xhtml#st200_p4">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p5.xhtml#st200_p5">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">4.2. record</td><td class="st200_navbar_up_title_cell">4. Statements - Types</td><td class="st200_navbar_next_title_cell">5. Expressions - Types</td></tr></table></div></div></body></html>

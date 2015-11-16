@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="encoding">
+  <s:part-title>Encoding</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:paragraph>
+      As stated, the intention of the <s:term s:type="package">jpra</s:term>
+      language is describe flat data structures that will be encoded into
+      untyped storage regions. This section defines the rules that are used
+      to map type declarations to individual octets.
+    </s:paragraph>
+    <s:paragraph>
+      Informally, the rules can be considered as analogous to the storage
+      rules for C-language family <s:term s:type="keyword">struct</s:term>
+      values but with explicit field padding and no implicit alignment
+      <s:footnote>
+        Most C compilers will insert padding octets to ensure that fields
+        within a <s:term s:type="keyword">struct</s:term> have the correct
+        alignment for the hardware.
+      </s:footnote>.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Encoding Rules</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Storage Model</s:subsection-title>
+      <s:paragraph>
+        The encoding rules described here attempt to describe how an
+        array of <s:term s:type="expression">n</s:term> elements of
+        a given type <s:term s:type="expression">T</s:term>
+        of size <s:term s:type="expression">s</s:term> is mapped
+        to a flat and untyped storage array of
+        <s:term s:type="expression">k</s:term> octets.
+        The "first" octet in the array is at octet index
+        <s:term s:type="constant">0</s:term> and the "last" octet in the
+        array is at octet index <s:term s:type="expression">n - 1</s:term>.
+        As a consequence of the above, it can be assumed that
+        <s:term s:type="expression"><![CDATA[k <= n * s]]></s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Values are tightly packed; The first octet of the first element
+        of type <s:term s:type="expression">T</s:term> in the array is
+        at octet index <s:term s:type="constant">0</s:term>, and the
+        first octet of the second element of type
+        <s:term s:type="expression">T</s:term> is at octet index
+        <s:term s:type="expression">s</s:term>.
+      </s:paragraph>
+      <s:formal-item s:kind="diagrams">
+        <s:formal-item-title>Encoding Diagram</s:formal-item-title>
+        <s:image s:source="encoding.png">Encoding Diagram</s:image>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Endianness</s:subsection-title>
+      <s:paragraph>
+        For data elements larger than a single octet, the
+        <s:term s:type="term">endianness</s:term> is left undefined and is
+        at the discretion of individual code generators. The encoding rules
+        described here are written in a
+        <s:term s:type="term">endianness-agnostic</s:term> manner.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Encoding Records</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Fields</s:subsection-title>
+      <s:paragraph>
+        The fields of a given record type
+        <s:term s:type="expression">T</s:term> of size
+        <s:term s:type="expression">s</s:term> (octets) are placed
+        into storage in declaration order. That is, for an element at index
+        <s:term s:type="expression">e</s:term>, the first octet of the first
+        declared field <s:term s:type="expression">f0</s:term>
+        of <s:term s:type="expression">T</s:term> is placed into the
+        octet at <s:term s:type="expression">e * s</s:term>. The next
+        octet of the field of the field is placed into the octet at
+        <s:term s:type="expression">(e * s) + 1</s:term>. The first
+        octet of the next field of <s:term s:type="expression">T</s:term>
+        is placed into the octet at
+        <s:term s:type="expression">(e * s) + m</s:term>, where
+        <s:term s:type="expression">m</s:term> is the size in octets of
+        <s:term s:type="expression">f0</s:term>, and so on.
+      </s:paragraph>
+      <s:paragraph>
+        The basic types in the <s:term s:type="package">jpra</s:term>
+        may impose further rules on encoding, and these are detailed
+        in the following sections. The rules are specified in terms of
+        octets within a given field, so if a rule states that some piece
+        of data is placed at octet <s:term s:type="expression">0</s:term>,
+        then it is actually referring to the start of the field within
+        the record type.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>integer</s:subsection-title>
+      <s:paragraph>
+        No extra encoding rules are specified for
+        <s:term s:type="expression">integer</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>float</s:subsection-title>
+      <s:paragraph>
+        No extra encoding rules are specified for
+        <s:term s:type="expression">float</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>boolean-set</s:subsection-title>
+      <s:paragraph>
+        The values of the fields of a
+        <s:term s:type="expression">[boolean-set s (f₀ ... fₙ)]</s:term>
+        expression are assigned sequentially to each bit in the array of
+        octets, starting at the most significant bit of octet 0. For example,
+        <s:term s:type="expression">f₀</s:term> will be assigned to
+        the most significant bit of octet 0,
+        <s:term s:type="expression">f₁</s:term> will be assigned to the
+        next most significant bit of octet 0,
+        <s:term s:type="expression">f₇</s:term> will be assigned to the
+        least significant bit of octet 0, and
+        <s:term s:type="expression">f₈</s:term> will be assigned to the
+        most significant bit of octet 1. In effect, for a given octet,
+        a <s:term s:type="expression">true</s:term> value for
+        the field <s:term s:type="expression">n</s:term> will be encoded
+        as <s:term s:type="expression"><![CDATA[1 << n]]></s:term>
+        or <s:term s:type="expression"><![CDATA[pow(2, n)]]></s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Formally, the field at <s:term s:type="expression">n</s:term>
+        will be assigned to octet <s:term s:type="expression">n / 8</s:term>,
+        bit <s:term s:type="expression">7 - (n mod 8)</s:term>, where
+        <s:term s:type="expression">0</s:term> is the index of the least
+        significant bit and <s:term s:type="expression">7</s:term> is the
+        index of the most significant bit.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>vector</s:subsection-title>
+      <s:paragraph>
+        For a type <s:term s:type="expression">t</s:term>, where
+        <s:term s:type="expression">t</s:term> is of
+        size <s:term s:type="expression">s</s:term> (octets),
+        the <s:term s:type="expression">n</s:term> elements of a
+        an expression <s:term s:type="expression">[vector t n]</s:term>,
+        are stored such that the first octet of the first element is
+        stored at octet <s:term s:type="expression">0</s:term>, the
+        second element at
+        <s:term s:type="expression">s</s:term>, and the
+        <s:term s:type="expression">(n - 1)th</s:term> at
+        <s:term s:type="expression">(n - 1) * s</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>matrix</s:subsection-title>
+      <s:paragraph>
+        Matrix data is stored in column-major format
+        <s:footnote>
+          The convention used by most programs using the <s:link-external s:target="http://opengl.org">OpenGL</s:link-external> API.
+        </s:footnote>. For an <s:term s:type="variable">m x m</s:term>
+        square matrix, assuming that each element of the matrix uses
+        <s:term s:type="variable">n</s:term> bytes, the first octet of the element at
+        row <s:term s:type="variable">r</s:term> and column <s:term s:type="variable">c</s:term>
+        (assuming <s:term s:type="function">0 &lt;= r &lt; m</s:term> and
+        <s:term s:type="function">0 &lt;= c &lt; m</s:term>)
+        can be found by <s:term s:type="function">(c * m * n) + (r * n)</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        As an example, a 4x4 matrix with <s:term s:type="constant">4</s:term>
+        octet elements would be stored in memory as shown in the following
+        diagram:
+      </s:paragraph>
+      <s:formal-item s:kind="example">
+        <s:formal-item-title>Column-major storage memory layout</s:formal-item-title>
+        <s:image s:source="memory.png">Column-major storage memory layout</s:image>
+      </s:formal-item>
+      <s:paragraph>
+        So, the element at row <s:term s:type="constant">0</s:term>,
+        column <s:term s:type="constant">0</s:term> would be stored in
+        octets <s:term s:type="constant">[0 .. 3]</s:term>. The
+        element at row <s:term s:type="constant">1</s:term>, column
+        <s:term s:type="constant">0</s:term> would be stored in octets
+        <s:term s:type="constant">[4 .. 7]</s:term>. The
+        element at row <s:term s:type="constant">0</s:term>, column
+        <s:term s:type="constant">1</s:term> would be stored in octets
+        <s:term s:type="constant">[16 .. 19]</s:term>, and so on.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>array</s:subsection-title>
+      <s:paragraph>
+        No extra encoding rules are specified for
+        <s:term s:type="expression">array</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+
+    <s:subsection>
+      <s:subsection-title>string</s:subsection-title>
+      <s:paragraph>
+        An expression <s:term s:type="expression">[string s e]</s:term>
+        is encoded such that the current length of the string is
+        stored as an <s:term s:type="expression">[integer unsigned 32]</s:term>,
+        and this is followed by the <s:term s:type="expression">s</s:term>
+        octets that make up the string data.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+</s:part>

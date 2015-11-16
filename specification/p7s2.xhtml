@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>io7m-jpra 0.1.0 Language Specification: 7.2. Encoding Rules</title><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-layout.css"/><link rel="stylesheet" type="text/css" href="jstructural-2.0.0-colour.css"/><link rel="stylesheet" type="text/css" href="documentation.css"/></head><body><div class="st200_body"><div class="brand">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://github.com/io7m/jpra">io7m-jpra</a> 0.1.0
+  </div>
+</div><div class="st200_navbar st200_navbar_top"><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_title_cell">7.1. Overview</td><td class="st200_navbar_up_title_cell">7. Encoding</td><td class="st200_navbar_next_title_cell">7.3. Encoding Records</td></tr><tr><td class="st200_navbar_prev_file_cell"><a href="p7s1.xhtml#st200_p7s1">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p7.xhtml#st200_p7">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p7s3.xhtml#st200_p7s3">Next</a></td></tr></table><hr class="st200_hr"/></div><div class="st200_section_container"><div class="st200_section_title_number"><a id="st200_p7s2" href="#st200_p7s2">7.2</a></div><div class="st200_section_title">Encoding Rules</div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s2ss1" href="#st200_p7s2ss1">7.2.1</a></div><div class="st200_subsection_title">Storage Model</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss1pg1" href="#st200_p7s2ss1pg1">1</a></div><div class="st200_paragraph">
+        The encoding rules described here attempt to describe how an
+        array of <span class="st200_term expression">n</span> elements of
+        a given type <span class="st200_term expression">T</span>
+        of size <span class="st200_term expression">s</span> is mapped
+        to a flat and untyped storage array of
+        <span class="st200_term expression">k</span> octets.
+        The "first" octet in the array is at octet index
+        <span class="st200_term constant">0</span> and the "last" octet in the
+        array is at octet index <span class="st200_term expression">n - 1</span>.
+        As a consequence of the above, it can be assumed that
+        <span class="st200_term expression">k &lt;= n * s</span>.
+      </div></div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss1pg2" href="#st200_p7s2ss1pg2">2</a></div><div class="st200_paragraph">
+        Values are tightly packed; The first octet of the first element
+        of type <span class="st200_term expression">T</span> in the array is
+        at octet index <span class="st200_term constant">0</span>, and the
+        first octet of the second element of type
+        <span class="st200_term expression">T</span> is at octet index
+        <span class="st200_term expression">s</span>.
+      </div></div><div class="st200_formal_item"><div class="st200_formal_item_title"><a id="st200_p7s2ss1fo1" href="#st200_p7s2ss1fo1">7.2.1.1. Encoding Diagram</a></div><img class="st200_image" alt="Encoding Diagram" src="encoding.png"/></div></div><div class="st200_subsection_container"><div class="st200_subsection_title_number"><a id="st200_p7s2ss2" href="#st200_p7s2ss2">7.2.2</a></div><div class="st200_subsection_title">Endianness</div><div class="st200_paragraph_container"><div class="st200_paragraph_number"><a id="st200_p7s2ss2pg1" href="#st200_p7s2ss2pg1">1</a></div><div class="st200_paragraph">
+        For data elements larger than a single octet, the
+        <span class="st200_term term">endianness</span> is left undefined and is
+        at the discretion of individual code generators. The encoding rules
+        described here are written in a
+        <span class="st200_term term">endianness-agnostic</span> manner.
+      </div></div></div></div><div class="st200_navbar st200_navbar_bottom"><hr class="st200_hr"/><table class="st200_navbar_table" summary="Navigation bar"><tr><td class="st200_navbar_prev_file_cell"><a href="p7s1.xhtml#st200_p7s1">Previous</a></td><td class="st200_navbar_up_file_cell"><a href="p7.xhtml#st200_p7">Up</a></td><td class="st200_navbar_next_file_cell"><a href="p7s3.xhtml#st200_p7s3">Next</a></td></tr><tr><td class="st200_navbar_prev_title_cell">7.1. Overview</td><td class="st200_navbar_up_title_cell">7. Encoding</td><td class="st200_navbar_next_title_cell">7.3. Encoding Records</td></tr></table></div></div></body></html>

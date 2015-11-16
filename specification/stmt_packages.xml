@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="stmt.package">
+  <s:part-title>Statements - Packages</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:subsection>
+      <s:subsection-title>Overview</s:subsection-title>
+      <s:paragraph>
+        This section describes the syntax and semantics of the
+        <s:term s:type="package">jpra</s:term> language statements that
+        involve <s:term s:type="term">packages</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Scope</s:subsection-title>
+      <s:paragraph>
+        Statements inside packages have lexical scope. The evaluation
+        in package <s:term s:type="package">p</s:term>
+        of a statement <s:term s:type="statement">s</s:term> that binds
+        a declaration to a name <s:term s:type="statement">n</s:term>
+        makes that declaration accessible by name
+        <s:term s:type="statement">n</s:term> to all successive statements
+        preceding the end of package <s:term s:type="package">p</s:term>.
+        Outside of <s:term s:type="package">p</s:term>, a declaration
+        with name <s:term s:type="statement">n</s:term> in
+        <s:term s:type="package">p</s:term> must referred to
+        using a qualified reference of the form
+        <s:term s:type="expression">p:n</s:term>. See the
+        <s:link s:target="spec.stmt.import">import</s:link> statement
+        for details.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="spec.stmt.package-begin">
+    <s:section-title>package-begin</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>package-begin Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+package_begin =
+  (package-begin p:<package_name_qualified>)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="statement">package-begin</s:term> statement
+        begins the definition of a new package.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="statement">package-begin</s:term> statement
+        that names a package <s:term s:type="package">p</s:term>
+        sets the <s:term s:type="term">current package</s:term> of the
+        schema context to <s:term s:type="package">p</s:term>. There can be
+        at most one <s:term s:type="term">current package</s:term> in
+        the schema context at any given time.
+      </s:paragraph>
+      <s:paragraph>
+        If the <s:term s:type="statement">package-begin</s:term> statement
+        is evaluated when the schema context already has a
+        <s:term s:type="term">current package</s:term>, the statement is
+        rejected with an error.
+      </s:paragraph>
+      <s:paragraph>
+        If the <s:term s:type="statement">package-begin</s:term> statement
+        is evaluated with package name <s:term s:type="package">r</s:term>,
+        where <s:term s:type="package">r</s:term> is already defined within
+        the schema context, the statement is rejected with an error.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="spec.stmt.import">
+    <s:section-title>import</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>import Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+package_import =
+  (import q:<package_name_qualified> as r:package_name_unqualified)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A package may <s:term s:type="term">import</s:term> any number
+        of packages via <s:term s:type="statement">import</s:term> statements.
+        An <s:term s:type="statement">import</s:term> statement, given in
+        the package <s:term s:type="package">p</s:term>, specifies the
+        fully qualified name of a package <s:term s:type="package">q</s:term>
+        and an unqualified name <s:term s:type="package">r</s:term>, and
+        allows definitions given inside <s:term s:type="package">p</s:term>
+        to refer to definitions in <s:term s:type="package">q</s:term> by
+        qualifying their names with <s:term s:type="package">r</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        As an example, consider a package <s:term s:type="package">q</s:term>
+        that contains a type declaration <s:term s:type="type">T</s:term>.
+        If package <s:term s:type="package">p</s:term> imports
+        <s:term s:type="package">q</s:term> using the
+        unqualified name <s:term s:type="package">r</s:term>, then
+        definitions inside <s:term s:type="package">p</s:term> may refer
+        to <s:term s:type="type">T</s:term> using the syntax
+        <s:term s:type="expression">r:T</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="statement">import</s:term> statement
+        makes the declarations of the package
+        <s:term s:type="package">p</s:term> accessible in the
+        <s:term s:type="term">current package</s:term> via the name
+        <s:term s:type="package">q</s:term>, where
+        <s:term s:type="package">q</s:term> is an unqualified package
+        name that has not been used in any preceding
+        <s:term s:type="statement">import</s:term> statement.
+      </s:paragraph>
+      <s:paragraph>
+        If an <s:term s:type="statement">import</s:term> statement
+        <s:term s:type="statement">i</s:term>
+        is evaluated with package name <s:term s:type="package">p</s:term>,
+        where <s:term s:type="package">p</s:term> is not defined within
+        the schema context, then <s:term s:type="statement">i</s:term> is
+        rejected with an error.
+      </s:paragraph>
+      <s:paragraph>
+        If the unqualified name <s:term s:type="package">r</s:term>
+        specified in an <s:term s:type="statement">import</s:term>
+        statement <s:term s:type="statement">i</s:term> has been
+        used in a preceding <s:term s:type="statement">import</s:term>
+        statement, then <s:term s:type="statement">i</s:term> is
+        rejected with an error.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Circular Imports</s:subsection-title>
+      <s:paragraph>
+        Circular imports are not allowed.
+      </s:paragraph>
+      <s:paragraph>
+        An import statement <s:term s:type="statement">i</s:term>
+        occurring in package <s:term s:type="package">p</s:term> is
+        considered <s:term s:type="term">circular</s:term> iff:
+      </s:paragraph>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>Circular Import Rules</s:formal-item-title>
+        <s:list-unordered>
+          <s:list-item>
+            <s:term s:type="statement">i</s:term> imports
+            <s:term s:type="package">p</s:term>.
+          </s:list-item>
+          <s:list-item>
+            There is a sequence of packages
+            <s:term s:type="expression">q₀, q₁, ..., qₙ</s:term>
+            such that <s:term s:type="variable">p</s:term> imports
+            <s:term s:type="variable">q₀</s:term>, and
+            for all <s:term s:type="variable">m</s:term> where
+            <s:term s:type="expression">0 &lt;= m &lt; n</s:term>,
+            <s:term s:type="variable">qₘ</s:term> imports
+            <s:term s:type="expression">q₍ₘ₊₁₎</s:term>, and
+            <s:term s:type="variable">qₙ</s:term> imports
+            <s:term s:type="variable">p</s:term>.
+          </s:list-item>
+        </s:list-unordered>
+      </s:formal-item>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="spec.stmt.package-end">
+    <s:section-title>package-end</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>package-end Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+package_end =
+  (package-end)
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="statement">package-end</s:term> statement
+        completes the definition of a package.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Semantics</s:subsection-title>
+      <s:paragraph>
+        The <s:term s:type="statement">package-end</s:term> statement
+        completes the definition of the
+        <s:term s:type="term">current package</s:term> and adds it
+        to the schema context. The statement unsets the
+        <s:term s:type="term">current package</s:term> in the schema
+        context.
+      </s:paragraph>
+      <s:paragraph>
+        If a <s:term s:type="statement">package-end</s:term> statement
+        <s:term s:type="statement">i</s:term> is evaluated when no
+        <s:term s:type="term">current package</s:term> is set, then
+        <s:term s:type="statement">i</s:term> is
+        rejected with an error.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+</s:part>

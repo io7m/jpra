@@ -1,0 +1,198 @@
+/*
+ * Non structure-critical layout.
+ */
+
+#page_header
+{
+  padding-top: 1.1em;
+}
+
+#page_main
+{
+  max-width: 80em;
+}
+
+#page_footer
+{
+  padding-top: 1.1em;
+}
+
+.page_column_left
+{
+
+}
+.page_column_left_content
+{
+
+}
+
+.page_column_right
+{
+
+}
+.page_column_right_content
+{
+
+}
+
+.page_column_center
+{
+
+}
+.page_column_center_content
+{
+
+}
+
+.page_para
+{
+  margin-top: 1em;
+}
+
+#page_main .page_column_center_content
+{
+
+}
+
+.page_location
+{
+
+}
+
+.site_logo
+{
+  padding-left: 0.25em;
+}
+
+.site_links
+{
+  padding-left: 1.25em;
+}
+
+.site_links a
+{
+  padding-right: 0.5em;
+}
+
+.page_section
+{
+  margin-top:     1.125em;
+
+  padding-left:   1.125em;
+  padding-top:    1.25em;
+  padding-right:  1.2em;
+  padding-bottom: 1.25em;
+}
+.page_section ul
+{
+
+}
+.page_section_title
+{
+
+}
+
+.page_anchors
+{
+
+}
+.page_anchors ul
+{
+
+}
+.page_anchors li
+{
+
+}
+
+.page_table
+{
+  margin-top:     1.0em;
+  padding-top:    0.0em;
+  padding-bottom: 0.0em;
+  padding-left:   0.0em;
+  padding-right:  0.0em;
+}
+.page_table_column
+{
+  padding-top:    0.125em;
+  padding-bottom: 0.0em;
+  padding-left:   0.0em;
+  padding-right:  1.0em;
+}
+.page_table_column_name
+{
+  padding-top:    0.0em;
+  padding-bottom: 0.0em;
+  padding-left:   0.0em;
+}
+.page_table_row
+{
+  padding-top:    0.0em;
+  padding-bottom: 0.0em;
+  padding-left:   0.0em;
+  padding-right:  0.0em;
+}
+
+.page_unordered_list
+{
+  padding-left: 0.25em;
+}
+.page_unordered_list li
+{
+  padding-left:    0.25em;
+  list-style-type: square;
+}
+
+.software_description
+{
+
+}
+.software_license p
+{
+
+}
+
+.software_releases
+{
+  width: 100%;
+}
+.software_releases table
+{
+
+}
+.software_releases td
+{
+
+}
+
+.software_projects table
+{
+
+}
+.software_projects td
+{
+  padding-right: 3em;
+}
+
+.news_date
+{
+  padding-left: 1em;
+}
+.news_subject
+{
+  padding-left: 1em;
+}
+
+/*
+ * Align tables in software list.
+ */
+
+.software_projects       td:nth-child(1) { width: 10em; }
+.software_projects       td:nth-child(2) { width: 24em; }
+.software_status_key     td:nth-child(1) { width: 10em; vertical-align: top; }
+.software_dependency_key td:nth-child(1) { width: 10em; vertical-align: top; }
+
+.documents td:nth-child(1) { width: 10em; }
+.documents td:nth-child(2) { width: 24em; }
+
