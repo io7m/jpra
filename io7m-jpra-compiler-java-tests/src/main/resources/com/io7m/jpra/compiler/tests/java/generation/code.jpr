@@ -1,0 +1,74 @@
+(package-begin com.io7m.jpra.compiler.tests.java.generation.code)
+
+(record IntegersUnsigned [
+  (field u8  [integer unsigned 8])
+  (padding-octets 1)
+  (field u16 [integer unsigned 16])
+  (field u32 [integer unsigned 32])
+  (field u64 [integer unsigned 64])
+])
+
+(record IntegersSigned [
+  (field s8  [integer signed 8])
+  (padding-octets 1)
+  (field s16 [integer signed 16])
+  (field s32 [integer signed 32])
+  (field s64 [integer signed 64])
+])
+
+(record IntegersUnsignedNormalized [
+  (field un8  [integer unsigned-normalized 8])
+  (padding-octets 1)
+  (field un16 [integer unsigned-normalized 16])
+  (field un32 [integer unsigned-normalized 32])
+  (field un64 [integer unsigned-normalized 64])
+])
+
+(record IntegersSignedNormalized [
+  (field sn8  [integer signed-normalized 8])
+  (padding-octets 1)
+  (field sn16 [integer signed-normalized 16])
+  (field sn32 [integer signed-normalized 32])
+  (field sn64 [integer signed-normalized 64])
+])
+
+(record Floats [
+  (field f16 [float 16])
+  (field f32 [float 32])
+  (field f64 [float 64])
+  (padding-octets 2)
+])
+
+(record References [
+  (field r0 IntegersUnsigned)
+  (field r1 IntegersUnsigned)
+  (field r2 IntegersUnsigned)
+])
+
+(record BooleanSets [
+  (field b0 [boolean-set 4
+    (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15
+     b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15)])
+])
+
+(packed OpenGL565 [
+  (field r [integer unsigned-normalized 5])
+  (field g [integer unsigned-normalized 6])
+  (field b [integer unsigned-normalized 5])
+])
+
+(packed OpenGL4444 [
+  (field r [integer unsigned-normalized 4])
+  (field g [integer unsigned-normalized 4])
+  (field b [integer unsigned-normalized 4])
+  (field a [integer unsigned-normalized 4])
+])
+
+(packed OpenGL101010A2 [
+  (field r [integer unsigned-normalized 10])
+  (field g [integer unsigned-normalized 10])
+  (field b [integer unsigned-normalized 10])
+  (field a [integer unsigned-normalized 2])
+])
+
+(package-end)

@@ -1,0 +1,2 @@
+type_name =
+  \p{Letter_Uppercase} , { \p{Letter} | \p{Digit} | '_' } ;

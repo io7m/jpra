@@ -1,0 +1,3 @@
+(package-begin com.io7m.bad)
+(nonsense)
+(package-end)

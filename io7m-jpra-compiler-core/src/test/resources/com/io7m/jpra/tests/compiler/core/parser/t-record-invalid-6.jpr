@@ -1,0 +1,3 @@
+(record T
+  [(field f0 T0)
+   (field f0 T0)])

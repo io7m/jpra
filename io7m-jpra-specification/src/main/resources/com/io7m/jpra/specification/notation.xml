@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="spec.notation">
+  <s:part-title>Notational Conventions</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Unicode</s:section-title>
+    <s:paragraph>
+      The specification makes reference to the
+      <s:link-external s:target="http://unicode.org">Unicode</s:link-external>
+      character set which, at the time of writing, is at version
+      <s:term s:type="constant">8.0</s:term>. The specification
+      often references specific Unicode characters, and does so using
+      the standard notation <s:term s:type="expression">U+NNNN</s:term>,
+      where <s:term s:type="variable">N</s:term> represents a hexadecimal
+      digit. For example, <s:term s:type="constant">U+03BB</s:term>
+      corresponds to the lowercase lambda symbol <s:term s:type="constant">λ</s:term>.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>EBNF</s:section-title>
+    <s:paragraph>
+      The specification gives grammar definitions in
+      <s:term s:type="package">ISO/IEC 14977:1996</s:term> Extended Backus-Naur
+      form.
+    </s:paragraph>
+    <s:paragraph>
+      Because EBNF was designed prior to the existence of Unicode, it
+      is necessary to extend the syntax to be able to refer to Unicode
+      characters in grammar definitions. This specification makes use of
+      the standard unicode <s:term s:type="expression">U+NNNN</s:term>
+      syntax in grammar definitions, to refer to specific Unicode characters.
+      It also makes use of the syntax <s:term s:type="expression">\p{t}</s:term>
+      which should be understood to represent any Unicode character with
+      the property <s:term s:type="expression">t</s:term>. For example,
+      <s:term s:type="expression">\p{Lowercase_Letter}</s:term> describes
+      the set of characters that are both letters and are lowercase. The
+      syntax <s:term s:type="expression">\P{t}</s:term> should be understood
+      as the negation of <s:term s:type="expression">\p{t}</s:term>;
+      it describes the set of characters without the property
+      <s:term s:type="expression">t</s:term>.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>S-Expressions</s:section-title>
+    <s:paragraph>
+      The <s:term s:type="package">jpra</s:term> language uses
+      <s:term s:type="term">s-expressions</s:term> as the base for
+      all syntax. An <s:term s:type="term">s-expression</s:term>
+      is described by the following EBNF grammar:
+    </s:paragraph>
+    <s:formal-item s:kind="specification">
+      <s:formal-item-title>S-Expression EBNF</s:formal-item-title>
+      <s:verbatim><xi:include href="sexpr-ebnf.txt" parse="text"/></s:verbatim>
+    </s:formal-item>
+    <s:paragraph>
+      As shown, the <s:term s:type="package">jpra</s:term> language
+      uses an extension of basic <s:term s:type="term">s-expressions</s:term>
+      that allow for the optional use of either
+      square brackets or parentheses to increase the readability of large
+      nested expressions. These should be treated as interchangeable,
+      but must be correctly balanced as shown by the grammar. For example, the
+      expression <s:term s:type="type">[]</s:term> is semantically
+      equivalent to <s:term s:type="type">()</s:term>, but the expression
+      <s:term s:type="type">[)</s:term> is invalid.
+    </s:paragraph>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Sets</s:section-title>
+    <s:paragraph>
+      Where the specification refers to <s:term s:type="term">sets</s:term>, it
+      is referring to sets as defined in ZFC<s:footnote>
+        <s:link-external s:target="http://en.wikipedia.org/wiki/Zermelo-Fraenkel_set_theory">http://en.wikipedia.org/wiki/Zermelo-Fraenkel_set_theory</s:link-external>
+      </s:footnote>.
+    </s:paragraph>
+    <s:formal-item s:kind="notations" s:type="notations">
+      <s:formal-item-title>Set notations</s:formal-item-title>
+      <s:table>
+        <s:table-summary>Set notations</s:table-summary>
+        <s:table-head>
+          <s:table-column-name>Notation</s:table-column-name>
+          <s:table-column-name>Description</s:table-column-name>
+        </s:table-head>
+        <s:table-body>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">e ∈ A</s:term></s:table-cell>
+            <s:table-cell><s:term s:type="expression">e</s:term> is an element of the set <s:term s:type="expression">A</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">e ∉ A</s:term></s:table-cell>
+            <s:table-cell><s:term s:type="expression">e</s:term> is not an element of the set <s:term s:type="expression">A</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">{ x₀, x₁, ... xₙ }</s:term></s:table-cell>
+            <s:table-cell>A set consisting of values from <s:term s:type="expression">x₀</s:term> to <s:term s:type="expression">xₙ</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">{ e ∈ A | p(e) }</s:term></s:table-cell>
+            <s:table-cell>A set consisting of the elements of <s:term s:type="expression">A</s:term> for which the proposition <s:term s:type="expression">p</s:term> holds</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">|A|</s:term></s:table-cell>
+            <s:table-cell>The cardinality of the set <s:term s:type="expression">A</s:term>; a measure of the number of elements in <s:term s:type="expression">A</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">∅</s:term></s:table-cell>
+            <s:table-cell>The empty set</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">𝔹</s:term></s:table-cell>
+            <s:table-cell>The booleans</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">ℕ</s:term></s:table-cell>
+            <s:table-cell>The natural numbers</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">ℝ</s:term></s:table-cell>
+            <s:table-cell>The real numbers</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">ℤ</s:term></s:table-cell>
+            <s:table-cell>The integers</s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">[a, b]</s:term></s:table-cell>
+            <s:table-cell>A closed interval in a set (given separately or implicit from the types of <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term>), from <s:term s:type="expression">a</s:term> to <s:term s:type="expression">b</s:term>, including <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">(a, b]</s:term></s:table-cell>
+            <s:table-cell>A closed interval in a set (given separately or implicit from the types of <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term>), from <s:term s:type="expression">a</s:term> to <s:term s:type="expression">b</s:term>, excluding <s:term s:type="expression">a</s:term> but including <s:term s:type="expression">b</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">[a, b)</s:term></s:table-cell>
+            <s:table-cell>A closed interval in a set (given separately or implicit from the types of <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term>), from <s:term s:type="expression">a</s:term> to <s:term s:type="expression">b</s:term>, including <s:term s:type="expression">a</s:term> but excluding <s:term s:type="expression">b</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">(a, b)</s:term></s:table-cell>
+            <s:table-cell>A closed interval in a set (given separately or implicit from the types of <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term>), from <s:term s:type="expression">a</s:term> to <s:term s:type="expression">b</s:term>, excluding <s:term s:type="expression">a</s:term> and <s:term s:type="expression">b</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">A ⊂ B</s:term></s:table-cell>
+            <s:table-cell><s:term s:type="expression">A</s:term> is a subset of, and is not equal to, <s:term s:type="expression">B</s:term></s:table-cell>
+          </s:table-row>
+          <s:table-row>
+            <s:table-cell><s:term s:type="expression">A ⊆ B</s:term></s:table-cell>
+            <s:table-cell><s:term s:type="expression">A</s:term> is a subset of, or is equal to, <s:term s:type="expression">B</s:term></s:table-cell>
+          </s:table-row>
+        </s:table-body>
+      </s:table>
+    </s:formal-item>
+  </s:section>
+
+  <s:section>
+    <s:section-title>Terminology</s:section-title>
+    <s:paragraph>
+      Most computer programming languages describe
+      <s:term s:type="term">programs</s:term> that will be executed. The
+      languages contain elements that describe the static components of
+      programs - the <s:term s:type="term">types</s:term> - and the dynamic
+      components of programs - the <s:term s:type="term">terms</s:term>.
+      The <s:term s:type="package">jpra</s:term> language is a language
+      for describing fixed-size <s:link s:target="spec.concept.type">types</s:link>
+      and therefore has no dynamic components. Therefore,
+      <s:term s:type="term">programs</s:term> written in the
+      <s:term s:type="package">jpra</s:term> language are more appropriately
+      described as <s:term s:type="term">schemas</s:term>, and this is the
+      term that will be used to refer to them throughout this specification.
+    </s:paragraph>
+  </s:section>
+
+</s:part>

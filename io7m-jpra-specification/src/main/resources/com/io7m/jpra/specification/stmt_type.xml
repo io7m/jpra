@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:part
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  xml:id="stmt.type">
+  <s:part-title>Statements - Types</s:part-title>
+  <s:part-contents/>
+
+  <s:section>
+    <s:section-title>Overview</s:section-title>
+    <s:paragraph>
+      This section describes the syntax and semantics of the
+      <s:term s:type="package">jpra</s:term> language statements that
+      involve <s:term s:type="term">types</s:term>.
+    </s:paragraph>
+  </s:section>
+
+  <s:section xml:id="stmt.type.record">
+    <s:section-title>record</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>string Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+record_field_padding_declaration =
+  (padding-octets <size_expression>)
+
+record_field_value_declaration =
+  (field <field_name> <type_expression>)
+
+record_field_declaration =
+  record_field_padding_declaration | record_field_value_declaration
+
+record_declaration =
+  (record t:<type_name> f:(<record_field_declaration> ...))
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="keyword">record</s:term> statement
+        creates a new record type. Records can contain fields that can
+        take one of two forms: A <s:term s:type="keyword">field</s:term>
+        form, or a <s:term s:type="keyword">padding-octets</s:term> form.
+        The <s:term s:type="keyword">field</s:term> form binds a name to
+        a type expression, and the
+        <s:term s:type="keyword">padding-octets</s:term> form
+        inserts explicit padding octets into the record.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Scope</s:subsection-title>
+      <s:paragraph>
+        Fields of a <s:term s:type="keyword">record</s:term> type must be
+        uniquely named within a single type declaration. The declaration
+        of a field named <s:term s:type="expression">f</s:term> makes that
+        field accessible by name <s:term s:type="keyword">f</s:term> to
+        all successive fields preceding the end of the
+        <s:term s:type="keyword">record</s:term> declaration.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of a declaration
+        <s:term s:type="expression">(field n t)</s:term>
+        is equal to size in bits of the type
+        <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The storage size in bits of a declaration
+        <s:term s:type="expression">(padding-octets n)</s:term>
+        is <s:term s:type="expression">n * 8</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The storage size in bits of a given record
+        <s:term s:type="expression">t</s:term> is the sum of the
+        sizes of all of the fields of <s:term s:type="keyword">t</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for <s:term s:type="expression">record</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        There are no minimum requirements placed on implementations
+        for <s:term s:type="expression">record</s:term> types.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+  <s:section xml:id="stmt.type.packed">
+    <s:section-title>packed</s:section-title>
+    <s:section-contents/>
+    <s:subsection>
+      <s:subsection-title>Syntax</s:subsection-title>
+      <s:formal-item s:kind="specifications">
+        <s:formal-item-title>packed Syntax</s:formal-item-title>
+        <s:verbatim><![CDATA[
+packed_field_padding_declaration =
+  (padding-bits <size_expression>)
+
+packed_field_value_declaration =
+  (field <field_name> <type_expression>)
+
+packed_field_declaration =
+  packed_field_padding_declaration | packed_field_value_declaration
+
+packed_declaration =
+  (packed t:<type_name> f:(<packed_field_declaration> ...))
+]]></s:verbatim>
+      </s:formal-item>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Description</s:subsection-title>
+      <s:paragraph>
+        A <s:term s:type="keyword">packed</s:term> statement
+        creates a new packed type. A packed
+        type is analogous to a
+        <s:link s:target="stmt.type.record">record</s:link> type with
+        the distinction that fields of a packed type may be smaller than
+        a single octet, may cross octet boundaries, and the sum of the sizes
+        of all fields typically adds up to
+        <s:term s:type="expression">64</s:term> bits or less. Additionally,
+        fields of packed types may only be of type
+        <s:link s:target="expr.type.integer">integer</s:link>.
+      </s:paragraph>
+      <s:paragraph>
+        Packed types can contain fields that can
+        take one of two forms: A <s:term s:type="keyword">field</s:term>
+        form, or a <s:term s:type="keyword">padding-bits</s:term> form.
+        The <s:term s:type="keyword">field</s:term> form binds a name to
+        a type expression, and the
+        <s:term s:type="keyword">padding-bits</s:term> form
+        inserts explicit padding bits into the record.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Scope</s:subsection-title>
+      <s:paragraph>
+        Fields of a <s:term s:type="keyword">packed</s:term> type must be
+        uniquely named within a single type declaration. The declaration
+        of a field named <s:term s:type="expression">f</s:term> makes that
+        field accessible by name <s:term s:type="keyword">f</s:term> to
+        all successive fields preceding the end of the
+        <s:term s:type="keyword">packed</s:term> declaration.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Size</s:subsection-title>
+      <s:paragraph>
+        The storage size in bits of a declaration
+        <s:term s:type="expression">(field n t)</s:term>
+        is equal to size in bits of the type
+        <s:term s:type="expression">t</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The storage size in bits of a declaration
+        <s:term s:type="expression">(padding-bits n)</s:term>
+        is <s:term s:type="expression">n</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        The storage size in bits of a given packed type
+        <s:term s:type="expression">t</s:term> is the sum of the
+        sizes of all of the fields of <s:term s:type="keyword">t</s:term>.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Constraints</s:subsection-title>
+      <s:paragraph>
+        There are no constraints placed on implementations
+        for the <s:term s:type="expression">packed</s:term> type.
+      </s:paragraph>
+    </s:subsection>
+    <s:subsection>
+      <s:subsection-title>Implementation Requirements</s:subsection-title>
+      <s:paragraph>
+        Implementations are only required to support
+        <s:term s:type="keyword">packed</s:term> types that have
+        sizes in bits exactly divisible by
+        <s:term s:type="expression">8</s:term>.
+      </s:paragraph>
+      <s:paragraph>
+        Implementations are required to support
+        <s:term s:type="keyword">packed</s:term> types of at
+        least the sizes in bits
+        <s:term s:type="expression">{8, 16, 32, 64}</s:term>.
+      </s:paragraph>
+    </s:subsection>
+  </s:section>
+
+</s:part>

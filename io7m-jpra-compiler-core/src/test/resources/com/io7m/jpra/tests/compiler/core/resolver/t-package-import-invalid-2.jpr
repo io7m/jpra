@@ -1,0 +1,6 @@
+(package-begin a.b)
+(package-end)
+
+(package-begin c.d)
+(import a.b as p0)
+(import b.c as p0)
