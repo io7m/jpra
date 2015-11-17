@@ -29,6 +29,14 @@
   (field g [integer unsigned-normalized 6])
   (field b [integer unsigned-normalized 5])
 ])
+
+(record Vertex [
+  (field position [vector [float 32] 3])
+  (field normal   [vector [float 16] 3])
+  (field uv       [vector [float 16] 2])
+  (field tangent  [vector [float 16] 4])
+  (padding-octets 2)
+])
       </pre>
     </subsection>
     <subsection name="Features">
