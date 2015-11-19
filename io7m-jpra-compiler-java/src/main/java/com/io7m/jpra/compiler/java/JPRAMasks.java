@@ -62,9 +62,8 @@ public final class JPRAMasks
       Integer.valueOf(msb));
 
     final BigInteger b2 = BigInteger.valueOf(2L);
-    final BigInteger base = b2.pow(size).subtract(BigInteger.ONE);
 
-    BigInteger v = base;
+    BigInteger v = b2.pow(size).subtract(BigInteger.ONE);
     for (int index = lsb; index <= msb; ++index) {
       v = v.clearBit(index);
     }
