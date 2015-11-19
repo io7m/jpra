@@ -43,6 +43,18 @@
       <groupId>com.io7m.ieee754b16</groupId>
       <artifactId>io7m-ieee754b16-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-bytebuffered</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-ieee754b16</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>

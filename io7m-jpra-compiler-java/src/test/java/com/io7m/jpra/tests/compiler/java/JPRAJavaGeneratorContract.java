@@ -41,6 +41,7 @@ import com.io7m.jpra.model.types.TPacked;
 import com.io7m.jpra.model.types.TPackedBuilderType;
 import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TRecordBuilderType;
+import com.io7m.jpra.model.types.TVector;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -1444,7 +1445,6 @@ public abstract class JPRAJavaGeneratorContract
       Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 
-
   @Test public final void testPackedIntegerU4_S4_UN4_SN4()
     throws Exception
   {
@@ -1461,8 +1461,7 @@ public abstract class JPRAJavaGeneratorContract
     final IdentifierType id = gc.getFreshIdentifier();
     final Optional<ImmutableLexicalPositionType<Path>> no_lex =
       Optional.empty();
-    final TypeName t_name =
-      new TypeName(no_lex, "PackedIntegerU4_S4_UN4_SN4");
+    final TypeName t_name = new TypeName(no_lex, "PackedIntegerU4_S4_UN4_SN4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
@@ -1484,6 +1483,79 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
+      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+  }
+
+  @Test public final void testRecordVectorExhaustive()
+    throws Exception
+  {
+    final JPRAJavaGeneratorType g = this.getJavaGenerator();
+    final GlobalContextType gc =
+      GlobalContexts.newContext(new AlwaysEmptyLoader());
+    final PackageContextType pc = gc.loadPackage(
+      new PackageNameQualified(
+        Lists.immutable.of(
+          PackageNameUnqualified.of("x"),
+          PackageNameUnqualified.of("y"),
+          PackageNameUnqualified.of("z"))));
+
+    final IdentifierType id = gc.getFreshIdentifier();
+    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+      Optional.empty();
+    final TypeName t_name = new TypeName(no_lex, "RecordVector");
+    final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
+
+    final TIntegerSigned t_int =
+      new TIntegerSigned(no_lex, Size.valueOf(32L));
+    final TIntegerSigned t_long =
+      new TIntegerSigned(no_lex, Size.valueOf(64L));
+    final TFloat t_float =
+      new TFloat(no_lex, Size.valueOf(32L));
+    final TFloat t_double =
+      new TFloat(no_lex, Size.valueOf(64L));
+
+    rb.addField(
+      new FieldName(no_lex, "v2i"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(2L), t_int));
+    rb.addField(
+      new FieldName(no_lex, "v3i"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(3L), t_int));
+    rb.addField(
+      new FieldName(no_lex, "v4i"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(4L), t_int));
+
+    rb.addField(
+      new FieldName(no_lex, "v2l"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(2L), t_long));
+    rb.addField(
+      new FieldName(no_lex, "v3l"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(3L), t_long));
+    rb.addField(
+      new FieldName(no_lex, "v4l"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(4L), t_long));
+
+    rb.addField(
+      new FieldName(no_lex, "v2f"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(2L), t_float));
+    rb.addField(
+      new FieldName(no_lex, "v3f"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(3L), t_float));
+    rb.addField(
+      new FieldName(no_lex, "v4f"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(4L), t_float));
+
+    rb.addField(
+      new FieldName(no_lex, "v2d"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(2L), t_double));
+    rb.addField(
+      new FieldName(no_lex, "v3d"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(3L), t_double));
+    rb.addField(
+      new FieldName(no_lex, "v4d"), gc.getFreshIdentifier(),
+      new TVector(no_lex, Size.valueOf(4L), t_double));
+
+    final TRecord r = rb.build();
+    JPRAJavaGeneratorContract.compileRecords(
       Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
   }
 }

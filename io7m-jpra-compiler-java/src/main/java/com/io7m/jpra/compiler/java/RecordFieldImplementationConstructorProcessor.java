@@ -88,6 +88,23 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchVector(final TVector t)
   {
+    final JPRAClasses.VectorsClasses c = JPRAClasses.getClassesFor(t);
+
+    final FieldName f_name = this.field.getName();
+    final String field_name = JPRAGeneratedNames.getFieldName(f_name);
+    final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.newVectorFromByteBufferAndBase($N, $N, $N + $N)",
+      field_name,
+      c.getBufferedConstructors(),
+      "in_buffer",
+      "in_pointer.getByteOffsetObservable()",
+      "in_base_offset",
+      offset_name);
+
+    this.class_builder.addField(
+      c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
+
     return Unit.unit();
   }
 

@@ -414,26 +414,6 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprVectorFloatUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(vector [float 16] 4)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.VECTOR_SIZE_FLOAT_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
   @Test public final void testTypeExprVector_0()
     throws Exception
   {

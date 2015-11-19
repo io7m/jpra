@@ -65,7 +65,7 @@ public final class JPRACursor1DByteBufferedCheckedTest
     final JPRACursor1DType<JPRAValueType> c =
       JPRACursor1DByteBufferedChecked.newCursor(buf, cons);
     Assert.assertEquals(0L, (long) c.getElementIndex());
-    Assert.assertEquals(0L, c.getByteOffset());
+    Assert.assertEquals(0L, c.getByteOffsetObservable().get());
     Assert.assertEquals(v, c.getElementView());
     Assert.assertEquals("[Cursor 0/99]", c.toString());
   }
@@ -82,7 +82,7 @@ public final class JPRACursor1DByteBufferedCheckedTest
     for (int index = 0; index < 100; ++index) {
       c.setElementIndex(index);
       Assert.assertEquals((long) index, (long) c.getElementIndex());
-      Assert.assertEquals((long) (index * 2), c.getByteOffset());
+      Assert.assertEquals((long) (index * 2), c.getByteOffsetObservable().get());
       Assert.assertEquals("[Cursor " + index + "/99]", c.toString());
     }
   }

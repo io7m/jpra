@@ -94,6 +94,7 @@ public final class JPRACheckerStandardCapabilities
 
     {
       final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      s.add(new RangeInclusiveB(b16, b16));
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
       this.vector_float_sizes = s.toImmutable();

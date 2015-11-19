@@ -51,6 +51,24 @@
      b0 b1 b2 b3 b4 b5 b6 b7 b8 b9 b10 b11 b12 b13 b14 b15)])
 ])
 
+(record Vectors [
+  (field v2i [vector [integer signed 32] 2])
+  (field v3i [vector [integer signed 32] 3])
+  (field v4i [vector [integer signed 32] 4])
+  (field v2l [vector [integer signed 64] 2])
+  (field v3l [vector [integer signed 64] 3])
+  (field v4l [vector [integer signed 64] 4])
+  (field v2h [vector [float 16] 2])
+  (field v3h [vector [float 16] 3])
+  (field v4h [vector [float 16] 4])
+  (field v2f [vector [float 32] 2])
+  (field v3f [vector [float 32] 3])
+  (field v4f [vector [float 32] 4])
+  (field v2d [vector [float 64] 2])
+  (field v3d [vector [float 64] 3])
+  (field v4d [vector [float 64] 4])
+])
+
 (packed OpenGL565 [
   (field r [integer unsigned-normalized 5])
   (field g [integer unsigned-normalized 6])
@@ -69,6 +87,14 @@
   (field g [integer unsigned-normalized 10])
   (field b [integer unsigned-normalized 10])
   (field a [integer unsigned-normalized 2])
+])
+
+(record Vertex [
+  (field position [vector [float 32] 3])
+  (field normal   [vector [float 16] 3])
+  (field uv       [vector [float 16] 2])
+  (field tangent  [vector [float 16] 4])
+  (padding-octets 2)
 ])
 
 (package-end)

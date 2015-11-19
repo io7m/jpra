@@ -298,8 +298,30 @@ final class RecordFieldImplementationProcessor
   {
     this.generateFieldOffsetConstant();
 
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    final JPRAClasses.VectorsClasses c = JPRAClasses.getClassesFor(t);
+
+    final String reader_name =
+      JPRAGeneratedNames.getGetterVectorReadableName(this.field.getName());
+    final String writer_name =
+      JPRAGeneratedNames.getGetterVectorWritableName(this.field.getName());
+
+    final String f_name = JPRAGeneratedNames.getFieldName(this.field.getName());
+
+    final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
+    read_b.addModifiers(Modifier.PUBLIC);
+    read_b.addAnnotation(Override.class);
+    read_b.returns(c.getBaseReadable());
+    read_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(read_b.build());
+
+    final MethodSpec.Builder write_b = MethodSpec.methodBuilder(writer_name);
+    write_b.addModifiers(Modifier.PUBLIC);
+    write_b.addAnnotation(Override.class);
+    write_b.returns(c.getBaseInterface());
+    write_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(write_b.build());
+
+    return Unit.unit();
   }
 
   @Override public Unit matchMatrix(

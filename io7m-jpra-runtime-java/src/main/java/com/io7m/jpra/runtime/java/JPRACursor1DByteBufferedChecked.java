@@ -18,6 +18,7 @@ package com.io7m.jpra.runtime.java;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A 1D cursor implementation that addresses values within a {@link ByteBuffer}
@@ -29,17 +30,18 @@ import java.util.Objects;
 public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
   implements JPRACursor1DType<T>
 {
-  private final T    instance;
-  private final int  element_size;
-  private final int  index_max;
-  private       int  index;
-  private       long byte_offset;
+  private final T          instance;
+  private final int        element_size;
+  private final int        index_max;
+  private final AtomicLong byte_offset;
+  private       int        index;
 
   private JPRACursor1DByteBufferedChecked(
     final ByteBuffer in_buffer,
     final JPRAValueByteBufferedConstructorType<T> in_cons)
   {
     Objects.requireNonNull(in_buffer, "Buffer");
+    this.byte_offset = new AtomicLong(0L);
     this.instance = Objects.requireNonNull(
       Objects.requireNonNull(in_cons, "Constructor").create(in_buffer, this, 0),
       "Constructed value");
@@ -101,7 +103,7 @@ public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
   {
     if (new_index <= this.index_max && new_index >= 0) {
       this.index = new_index;
-      this.byte_offset = (long) (this.index * this.element_size);
+      this.byte_offset.set(this.index * this.element_size);
     } else {
       throw new IndexOutOfBoundsException(
         String.format(
@@ -116,7 +118,7 @@ public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
     return this.instance;
   }
 
-  @Override public long getByteOffset()
+  @Override public AtomicLong getByteOffsetObservable()
   {
     return this.byte_offset;
   }
