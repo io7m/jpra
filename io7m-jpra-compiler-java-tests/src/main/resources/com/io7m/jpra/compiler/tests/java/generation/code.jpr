@@ -69,6 +69,15 @@
   (field v4d [vector [float 64] 4])
 ])
 
+(record Matrices [
+  (field m2f [matrix [float 32] 2 2])
+  (field m2d [matrix [float 64] 2 2])
+  (field m3f [matrix [float 32] 3 3])
+  (field m3d [matrix [float 64] 3 3])
+  (field m4f [matrix [float 32] 4 4])
+  (field m4d [matrix [float 64] 4 4])
+])
+
 (packed OpenGL565 [
   (field r [integer unsigned-normalized 5])
   (field g [integer unsigned-normalized 6])

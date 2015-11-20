@@ -23,10 +23,23 @@ import com.io7m.jpra.model.types.TIntegerSignedNormalized;
 import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
+import com.io7m.jpra.model.types.TMatrix;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeIntegerMatcherType;
 import com.io7m.jpra.model.types.TypeScalarMatcherType;
 import com.io7m.jpra.model.types.TypeScalarType;
+import com.io7m.jtensors.Matrix2x2DType;
+import com.io7m.jtensors.Matrix2x2FType;
+import com.io7m.jtensors.Matrix3x3DType;
+import com.io7m.jtensors.Matrix3x3FType;
+import com.io7m.jtensors.Matrix4x4DType;
+import com.io7m.jtensors.Matrix4x4FType;
+import com.io7m.jtensors.MatrixReadable2x2DType;
+import com.io7m.jtensors.MatrixReadable2x2FType;
+import com.io7m.jtensors.MatrixReadable3x3DType;
+import com.io7m.jtensors.MatrixReadable3x3FType;
+import com.io7m.jtensors.MatrixReadable4x4DType;
+import com.io7m.jtensors.MatrixReadable4x4FType;
 import com.io7m.jtensors.Vector2DType;
 import com.io7m.jtensors.Vector2FType;
 import com.io7m.jtensors.Vector2IType;
@@ -51,6 +64,18 @@ import com.io7m.jtensors.VectorReadable4DType;
 import com.io7m.jtensors.VectorReadable4FType;
 import com.io7m.jtensors.VectorReadable4IType;
 import com.io7m.jtensors.VectorReadable4LType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered2x2DType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered2x2FType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered3x3DType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered3x3FType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered4x4DType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBuffered4x4FType;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM2x2D;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM2x2F;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM3x3D;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM3x3F;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM4x4D;
+import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM4x4F;
 import com.io7m.jtensors.bytebuffered.VectorByteBuffered2DType;
 import com.io7m.jtensors.bytebuffered.VectorByteBuffered2FType;
 import com.io7m.jtensors.bytebuffered.VectorByteBuffered2IType;
@@ -100,14 +125,21 @@ final class JPRAClasses
     throw new UnreachableCodeException();
   }
 
-  static VectorsClasses getClassesFor(
+  static VectorsClasses getVectorClassesFor(
     final TVector v)
   {
     NullCheck.notNull(v);
     final TypeScalarType e_type = v.getElementType();
     final int e_count = v.getElementCount().getValue().intValue();
-    return e_type.matchTypeScalar(
-      new VectorClassMatcher(e_count));
+    return e_type.matchTypeScalar(new VectorClassMatcher(e_count));
+  }
+
+  public static MatrixClasses getMatrixClassesFor(final TMatrix t)
+  {
+    NullCheck.notNull(t);
+    final TypeScalarType e_type = t.getElementType();
+    final int e_width = t.getWidth().getValue().intValue();
+    return e_type.matchTypeScalar(new MatrixClassMatcher(e_width, e_width));
   }
 
   static final class VectorsClasses
@@ -150,6 +182,127 @@ final class JPRAClasses
     }
   }
 
+  static final class MatrixClasses
+  {
+    private final Class<?> base_interface;
+    private final Class<?> base_readable;
+    private final Class<?> buffered_constructors;
+    private final Class<?> buffered_interface;
+
+    MatrixClasses(
+      final Class<?> in_base,
+      final Class<?> in_readable,
+      final Class<?> in_buffered_cons,
+      final Class<?> in_buffered)
+    {
+      this.base_interface = NullCheck.notNull(in_base);
+      this.base_readable = NullCheck.notNull(in_readable);
+      this.buffered_constructors = NullCheck.notNull(in_buffered_cons);
+      this.buffered_interface = NullCheck.notNull(in_buffered);
+    }
+
+    public Class<?> getBaseInterface()
+    {
+      return this.base_interface;
+    }
+
+    public Class<?> getBaseReadable()
+    {
+      return this.base_readable;
+    }
+
+    public Class<?> getBufferedConstructors()
+    {
+      return this.buffered_constructors;
+    }
+
+    public Class<?> getBufferedInterface()
+    {
+      return this.buffered_interface;
+    }
+  }
+
+  private static final class MatrixClassMatcher
+    implements TypeScalarMatcherType<MatrixClasses, RuntimeException>
+  {
+    private final int width;
+    private final int height;
+
+    MatrixClassMatcher(
+      final int in_width,
+      final int in_height)
+    {
+      this.width = in_width;
+      this.height = in_height;
+    }
+
+    @Override public MatrixClasses matchScalarInteger(
+      final TIntegerType t)
+    {
+      throw new UnsupportedOperationException(
+        "Integer matrices are not supported");
+    }
+
+    @Override public MatrixClasses matchScalarFloat(
+      final TFloat t)
+    {
+      final int e_size = t.getSizeInBits().getValue().intValue();
+      switch (e_size) {
+        case 32: {
+          switch (this.width) {
+            case 2:
+              return new MatrixClasses(
+                Matrix2x2FType.class,
+                MatrixReadable2x2FType.class,
+                MatrixByteBufferedM2x2F.class,
+                MatrixByteBuffered2x2FType.class);
+            case 3:
+              return new MatrixClasses(
+                Matrix3x3FType.class,
+                MatrixReadable3x3FType.class,
+                MatrixByteBufferedM3x3F.class,
+                MatrixByteBuffered3x3FType.class);
+            case 4:
+              return new MatrixClasses(
+                Matrix4x4FType.class,
+                MatrixReadable4x4FType.class,
+                MatrixByteBufferedM4x4F.class,
+                MatrixByteBuffered4x4FType.class);
+          }
+
+          throw new UnsupportedOperationException("Unsupported matrix size");
+        }
+        case 64: {
+          switch (this.width) {
+            case 2:
+              return new MatrixClasses(
+                Matrix2x2DType.class,
+                MatrixReadable2x2DType.class,
+                MatrixByteBufferedM2x2D.class,
+                MatrixByteBuffered2x2DType.class);
+            case 3:
+              return new MatrixClasses(
+                Matrix3x3DType.class,
+                MatrixReadable3x3DType.class,
+                MatrixByteBufferedM3x3D.class,
+                MatrixByteBuffered3x3DType.class);
+            case 4:
+              return new MatrixClasses(
+                Matrix4x4DType.class,
+                MatrixReadable4x4DType.class,
+                MatrixByteBufferedM4x4D.class,
+                MatrixByteBuffered4x4DType.class);
+          }
+
+          throw new UnsupportedOperationException("Unsupported matrix size");
+        }
+      }
+
+      throw new UnsupportedOperationException(
+        "Unsupported matrix element size");
+    }
+  }
+
   private static final class VectorClassMatcher
     implements TypeScalarMatcherType<VectorsClasses, RuntimeException>
   {
@@ -163,97 +316,97 @@ final class JPRAClasses
     @Override public VectorsClasses matchScalarInteger(
       final TIntegerType t)
     {
-      return t.matchTypeInteger(
-        new TypeIntegerMatcherType<VectorsClasses, RuntimeException>()
+      return t.matchTypeInteger(new TypeIntegerMatcherType<VectorsClasses,
+        RuntimeException>()
+      {
+        @Override public VectorsClasses matchIntegerUnsigned(
+          final TIntegerUnsigned t)
         {
-          @Override public VectorsClasses matchIntegerUnsigned(
-            final TIntegerUnsigned t)
-          {
-            throw new UnsupportedOperationException(
-              "Unsigned integer vectors are not supported");
-          }
+          throw new UnsupportedOperationException(
+            "Unsigned integer vectors are not supported");
+        }
 
-          @Override public VectorsClasses matchIntegerSigned(
-            final TIntegerSigned t)
-          {
-            final int e_size = t.getSizeInBits().getValue().intValue();
-            switch (e_size) {
-              case 32: {
-                switch (VectorClassMatcher.this.e_count) {
-                  case 2: {
-                    return new VectorsClasses(
-                      Vector2IType.class,
-                      VectorReadable2IType.class,
-                      VectorByteBufferedM2I.class,
-                      VectorByteBuffered2IType.class);
-                  }
-                  case 3: {
-                    return new VectorsClasses(
-                      Vector3IType.class,
-                      VectorReadable3IType.class,
-                      VectorByteBufferedM3I.class,
-                      VectorByteBuffered3IType.class);
-                  }
-                  case 4: {
-                    return new VectorsClasses(
-                      Vector4IType.class,
-                      VectorReadable4IType.class,
-                      VectorByteBufferedM4I.class,
-                      VectorByteBuffered4IType.class);
-                  }
+        @Override public VectorsClasses matchIntegerSigned(
+          final TIntegerSigned t)
+        {
+          final int e_size = t.getSizeInBits().getValue().intValue();
+          switch (e_size) {
+            case 32: {
+              switch (VectorClassMatcher.this.e_count) {
+                case 2: {
+                  return new VectorsClasses(
+                    Vector2IType.class,
+                    VectorReadable2IType.class,
+                    VectorByteBufferedM2I.class,
+                    VectorByteBuffered2IType.class);
                 }
-
-                throw new UnsupportedOperationException(
-                  "Unsupported integer vector size");
-              }
-              case 64: {
-                switch (VectorClassMatcher.this.e_count) {
-                  case 2: {
-                    return new VectorsClasses(
-                      Vector2LType.class,
-                      VectorReadable2LType.class,
-                      VectorByteBufferedM2L.class,
-                      VectorByteBuffered2LType.class);
-                  }
-                  case 3: {
-                    return new VectorsClasses(
-                      Vector3LType.class,
-                      VectorReadable3LType.class,
-                      VectorByteBufferedM3L.class,
-                      VectorByteBuffered3LType.class);
-                  }
-                  case 4: {
-                    return new VectorsClasses(
-                      Vector4LType.class,
-                      VectorReadable4LType.class,
-                      VectorByteBufferedM4L.class,
-                      VectorByteBuffered4LType.class);
-                  }
+                case 3: {
+                  return new VectorsClasses(
+                    Vector3IType.class,
+                    VectorReadable3IType.class,
+                    VectorByteBufferedM3I.class,
+                    VectorByteBuffered3IType.class);
                 }
-
-                throw new UnsupportedOperationException(
-                  "Unsupported integer vector size");
+                case 4: {
+                  return new VectorsClasses(
+                    Vector4IType.class,
+                    VectorReadable4IType.class,
+                    VectorByteBufferedM4I.class,
+                    VectorByteBuffered4IType.class);
+                }
               }
+
+              throw new UnsupportedOperationException(
+                "Unsupported integer vector size");
             }
+            case 64: {
+              switch (VectorClassMatcher.this.e_count) {
+                case 2: {
+                  return new VectorsClasses(
+                    Vector2LType.class,
+                    VectorReadable2LType.class,
+                    VectorByteBufferedM2L.class,
+                    VectorByteBuffered2LType.class);
+                }
+                case 3: {
+                  return new VectorsClasses(
+                    Vector3LType.class,
+                    VectorReadable3LType.class,
+                    VectorByteBufferedM3L.class,
+                    VectorByteBuffered3LType.class);
+                }
+                case 4: {
+                  return new VectorsClasses(
+                    Vector4LType.class,
+                    VectorReadable4LType.class,
+                    VectorByteBufferedM4L.class,
+                    VectorByteBuffered4LType.class);
+                }
+              }
 
-            throw new UnsupportedOperationException(
-              "Unsupported integer element size");
+              throw new UnsupportedOperationException(
+                "Unsupported integer vector size");
+            }
           }
 
-          @Override public VectorsClasses matchIntegerSignedNormalized(
-            final TIntegerSignedNormalized t)
-          {
-            throw new UnsupportedOperationException(
-              "Signed normalized integer vectors are not supported");
-          }
+          throw new UnsupportedOperationException(
+            "Unsupported integer element size");
+        }
 
-          @Override public VectorsClasses matchIntegerUnsignedNormalized(
-            final TIntegerUnsignedNormalized t)
-          {
-            throw new UnsupportedOperationException(
-              "Unsigned normalized integer vectors are not supported");
-          }
-        });
+        @Override public VectorsClasses matchIntegerSignedNormalized(
+          final TIntegerSignedNormalized t)
+        {
+          throw new UnsupportedOperationException(
+            "Signed normalized integer vectors are not supported");
+        }
+
+        @Override public VectorsClasses matchIntegerUnsignedNormalized(
+          final TIntegerUnsignedNormalized t)
+        {
+          throw new UnsupportedOperationException(
+            "Unsigned normalized integer vectors are not supported");
+        }
+      });
     }
 
     @Override public VectorsClasses matchScalarFloat(
