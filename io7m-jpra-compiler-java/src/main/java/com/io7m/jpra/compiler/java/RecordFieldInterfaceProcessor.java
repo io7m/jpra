@@ -32,6 +32,8 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
+import com.io7m.jpra.runtime.java.JPRAStringReadableType;
+import com.io7m.jpra.runtime.java.JPRAStringType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
@@ -70,8 +72,33 @@ final class RecordFieldInterfaceProcessor
 
   @Override public Unit matchString(final TString t)
   {
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    if (this.methods.wantGetters()) {
+      final String getter_name =
+        JPRAGeneratedNames.getGetterStringReadableName(this.field.getName());
+
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return Read-only access to the {@code $L} field",
+        this.field.getName());
+      getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+      getb.returns(JPRAStringReadableType.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    if (this.methods.wantSetters()) {
+      final String setter_name =
+        JPRAGeneratedNames.getGetterStringWritableName(this.field.getName());
+
+      final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+      setb.addJavadoc(
+        "@return Writable access to the {@code $L} field",
+        this.field.getName());
+      setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+      setb.returns(JPRAStringType.class);
+      this.class_builder.addMethod(setb.build());
+    }
+
+    return Unit.unit();
   }
 
   @Override public Unit matchBooleanSet(final TBooleanSet t)

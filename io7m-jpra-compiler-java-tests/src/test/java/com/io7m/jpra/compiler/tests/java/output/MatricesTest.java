@@ -218,7 +218,7 @@ public final class MatricesTest
       MatricesTest.check3x3DZero(v.getM3dReadable());
       MatricesTest.check3x3FZero(v.getM3fReadable());
       // MatricesTest.check4x4FZero(v.getM4fReadable());
-      check4x4DZero(v.getM4dReadable());
+      MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable4x4FType k = v.getM4fReadable();
 
@@ -279,7 +279,7 @@ public final class MatricesTest
       // MatricesTest.check3x3DZero(v.getM3dReadable());
       MatricesTest.check3x3FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
-      check4x4DZero(v.getM4dReadable());
+      MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable3x3DType k = v.getM3dReadable();
 
@@ -332,7 +332,7 @@ public final class MatricesTest
       MatricesTest.check3x3DZero(v.getM3dReadable());
       // MatricesTest.check3x3FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
-      check4x4DZero(v.getM4dReadable());
+      MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable3x3FType k = v.getM3fReadable();
 
@@ -379,7 +379,7 @@ public final class MatricesTest
       MatricesTest.check3x3DZero(v.getM3dReadable());
       MatricesTest.check2x2FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
-      check4x4DZero(v.getM4dReadable());
+      MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable2x2DType k = v.getM2dReadable();
 
@@ -420,7 +420,7 @@ public final class MatricesTest
       MatricesTest.check3x3DZero(v.getM3dReadable());
       MatricesTest.check3x3FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
-      check4x4DZero(v.getM4dReadable());
+      MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable2x2FType k = v.getM2fReadable();
 

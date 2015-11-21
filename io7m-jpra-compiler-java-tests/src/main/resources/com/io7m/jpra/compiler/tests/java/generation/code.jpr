@@ -78,6 +78,28 @@
   (field m4d [matrix [float 64] 4 4])
 ])
 
+(record Strings [
+  (field s [string 64 "UTF-8"])
+  (field x [integer signed 32])
+])
+
+(record NestedString2 [
+  (padding-octets 4)
+  (field s [string 4 "UTF-8"])
+])
+
+(record NestedString1 [
+  (padding-octets 4)
+  (field s [string 4 "UTF-8"])
+  (field n NestedString2)
+])
+
+(record NestedString0 [
+  (padding-octets 4)
+  (field s [string 4 "UTF-8"])
+  (field n NestedString1)
+])
+
 (packed OpenGL565 [
   (field r [integer unsigned-normalized 5])
   (field g [integer unsigned-normalized 6])
