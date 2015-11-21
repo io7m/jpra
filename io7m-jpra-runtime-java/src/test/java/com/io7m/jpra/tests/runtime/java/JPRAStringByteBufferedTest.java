@@ -268,4 +268,63 @@ public final class JPRAStringByteBufferedTest
     this.expected.expectMessage(new StringContains("Bytes length"));
     s.setValue("EFGHIJKLMNOPQRSTUVWXYZ", JPRAStringTruncation.REJECT);
   }
+
+  @Test public void testGetByteRejected()
+  {
+    final AtomicLong base = new AtomicLong(0L);
+    final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
+    final JPRACursorByteReadableType cursor = () -> base;
+    final JPRAStringType s =
+      JPRAStringByteBuffered.newString(
+        buf,
+        0,
+        cursor,
+        StandardCharsets.UTF_8,
+        8);
+
+    this.expected.expect(IndexOutOfBoundsException.class);
+    this.expected.expectMessage(new StringContains("Index"));
+    s.getByte(8);
+  }
+
+  @Test public void testGetByteRejectedNegative()
+  {
+    final AtomicLong base = new AtomicLong(0L);
+    final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
+    final JPRACursorByteReadableType cursor = () -> base;
+    final JPRAStringType s =
+      JPRAStringByteBuffered.newString(
+        buf,
+        0,
+        cursor,
+        StandardCharsets.UTF_8,
+        8);
+
+    this.expected.expect(IndexOutOfBoundsException.class);
+    this.expected.expectMessage(new StringContains("Index"));
+    s.getByte(-1);
+  }
+
+  @Test public void testGetByte()
+  {
+    final AtomicLong base = new AtomicLong(0L);
+    final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
+    final JPRACursorByteReadableType cursor = () -> base;
+    final JPRAStringType s =
+      JPRAStringByteBuffered.newString(
+        buf,
+        0,
+        cursor,
+        StandardCharsets.UTF_8,
+        8);
+
+    s.setValue("EFGH", JPRAStringTruncation.REJECT);
+    Assert.assertEquals(4L, (long) s.getUsedLength());
+    Assert.assertEquals("EFGH", s.getNewValue());
+
+    Assert.assertEquals((long) 'E', (long) s.getByte(0));
+    Assert.assertEquals((long) 'F', (long) s.getByte(1));
+    Assert.assertEquals((long) 'G', (long) s.getByte(2));
+    Assert.assertEquals((long) 'H', (long) s.getByte(3));
+  }
 }

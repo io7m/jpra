@@ -37,6 +37,17 @@ public interface JPRAStringReadableType
   int getUsedLength();
 
   /**
+   * @param index The byte index
+   *
+   * @return The byte at index {@code index} in the string
+   *
+   * @throws IndexOutOfBoundsException Iff {@code index >= getMaximumLength()}
+   */
+
+  byte getByte(int index)
+    throws IndexOutOfBoundsException;
+
+  /**
    * @param buf    The buffer to which string data will be written
    * @param offset The starting index of {@code buf} to which data will be
    *               written

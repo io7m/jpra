@@ -113,6 +113,21 @@ public final class JPRAStringByteBuffered implements JPRAStringType
     return Math.min(this.max_length, Math.max(0, val));
   }
 
+  @Override public byte getByte(final int index)
+    throws IndexOutOfBoundsException
+  {
+    final int max = this.getMaximumLength();
+    if (index >= max || index < 0) {
+      final String message = String.format(
+        "Index %d must be < %d && > 0",
+        Integer.valueOf(index),
+        Integer.valueOf(max));
+      throw new IndexOutOfBoundsException(message);
+    }
+
+    return this.buffer.get(this.getOffsetForStringByte(index));
+  }
+
   @Override public void getBytes(
     final byte[] buf,
     final int buf_offset,
