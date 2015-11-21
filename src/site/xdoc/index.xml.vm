@@ -17,19 +17,13 @@
         efficient "flyweight" <tt>ByteBuffer</tt>-backed record types
         in Java.
       </p>
+    </subsection>
+    <subsection name="Examples">
+      <h4>OpenGL Vertices</h4>
+      <p>
+        A definition for a vertex type:
+      </p>
       <pre>
-(record OpenGL888 [
-  (field r [integer unsigned-normalized 8])
-  (field g [integer unsigned-normalized 8])
-  (field b [integer unsigned-normalized 8])
-])
-
-(packed OpenGL565 [
-  (field r [integer unsigned-normalized 5])
-  (field g [integer unsigned-normalized 6])
-  (field b [integer unsigned-normalized 5])
-])
-
 (record Vertex [
   (field position [vector [float 32] 3])
   (field normal   [vector [float 16] 3])
@@ -37,6 +31,61 @@
   (field tangent  [vector [float 16] 4])
   (padding-octets 2)
 ])
+      </pre>
+      <p>
+        Assuming a <tt>ByteBuffer</tt> <tt>b</tt> containing a mapped region
+        of memory on the GPU with space for <tt>100</tt> vertices:
+      </p>
+      <pre><![CDATA[
+final JPRACursor1DType<VertexType> c =
+  JPRACursor1DByteBufferedUnchecked.newCursor(
+    b, VertexByteBuffered::newValueWithOffset);
+
+final VertexType v = c.getElementView();
+final Vector3FType p = c.getPositionWritable();
+final Vector3FType n = c.getNormalWritable();
+final Vector2DType u = c.getUVWritable();
+final Vector4DType t = c.getTangentWritable();
+
+for (int index = 0; index < 100; ++index) {
+  c.setElementIndex(index);
+
+  p.set3F(...);
+  n.set3F(...);
+  u.set2F(...);
+  t.set4F(...);
+}
+]]>
+      </pre>
+      <h4>OpenGL Textures</h4>
+      <p>
+        A definition for an RGB565 format pixel:
+      </p>
+      <pre>
+(packed OpenGL565 [
+  (field r [integer unsigned-normalized 5])
+  (field g [integer unsigned-normalized 6])
+  (field b [integer unsigned-normalized 5])
+])
+      </pre>
+      <p>
+        Assuming a <tt>ByteBuffer</tt> <tt>b</tt> containing data
+        for a 256x256 RGB565 texture:
+      </p>
+      <pre><![CDATA[
+final JPRACursor2DType<OpenGL565Type> c =
+  JPRACursor2DByteBufferedUnchecked.newCursor(
+    b, OpenGL565ByteBuffered::newValueWithOffset);
+
+final OpenGL565Type v = c.getElementView();
+
+for (int y = 0; y < 256; ++y) {
+  for (int x = 0; x < 256; ++x) {
+    c.setElementPosition(x, y);
+    v.set(x / 256.0, y / 256.0, 1.0);
+  }
+}
+]]>
       </pre>
     </subsection>
     <subsection name="Features">
