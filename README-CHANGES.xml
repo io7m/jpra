@@ -3,6 +3,29 @@
   <c:project>io7m-jpra</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jpra">
+    <c:date>2015-11-21</c:date>
+    <c:version>0.2.1</c:version>
+    <c:item>
+      <c:date>2015-11-21</c:date>
+      <c:type-code-fix/>
+      <c:summary>Correct API documentation links</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.github.io7m.jpra">
+    <c:date>2015-11-21</c:date>
+    <c:version>0.2.0</c:version>
+    <c:item>
+      <c:date>2015-11-21</c:date>
+      <c:type-code-new/>
+      <c:ticket>2</c:ticket>
+      <c:ticket>6</c:ticket>
+      <c:ticket>7</c:ticket>
+      <c:summary>Implement more of the language</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.github.io7m.jpra">
     <c:date>2015-11-16</c:date>
     <c:version>0.1.0</c:version>
     <c:item>
@@ -13,7 +36,7 @@
   </c:release>
 
   <c:ticket-system xml:id="com.github.io7m.jpra">
-    <c:ticket-url>https://github.com/io7m/jpra/issues</c:ticket-url>
+    <c:ticket-url>https://github.com/io7m/jpra/issues/</c:ticket-url>
   </c:ticket-system>
 
 </c:changelog>
