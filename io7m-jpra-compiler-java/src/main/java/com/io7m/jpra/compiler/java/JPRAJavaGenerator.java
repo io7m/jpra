@@ -97,7 +97,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     jmb.returns(int.class);
     jmb.addParameter(int.class, "field_offset", Modifier.FINAL);
     jmb.addStatement(
-      "final int b = (int) this.$N.getByteOffset()", "pointer");
+      "final int b = (int) this.$N.getByteOffsetObservable().get()", "pointer");
     jmb.addStatement(
       "return $N + this.$N + $N", "b", "base_offset", "field_offset");
     jcb.addMethod(jmb.build());
@@ -109,7 +109,7 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     jmb.addModifiers(Modifier.PRIVATE);
     jmb.returns(int.class);
     jmb.addStatement(
-      "final int b = (int) this.$N.getByteOffset()", "pointer");
+      "final int b = (int) this.$N.getByteOffsetObservable().get()", "pointer");
     jmb.addStatement(
       "return $N + this.$N", "b", "base_offset");
     jcb.addMethod(jmb.build());

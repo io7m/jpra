@@ -33,6 +33,8 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
+import com.io7m.jpra.runtime.java.JPRAStringReadableType;
+import com.io7m.jpra.runtime.java.JPRAStringType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
@@ -78,8 +80,28 @@ final class RecordFieldImplementationProcessor
   {
     this.generateFieldOffsetConstant();
 
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    final String reader_name =
+      JPRAGeneratedNames.getGetterStringReadableName(this.field.getName());
+    final String writer_name =
+      JPRAGeneratedNames.getGetterStringWritableName(this.field.getName());
+
+    final String f_name = JPRAGeneratedNames.getFieldName(this.field.getName());
+
+    final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
+    read_b.addModifiers(Modifier.PUBLIC);
+    read_b.addAnnotation(Override.class);
+    read_b.returns(JPRAStringReadableType.class);
+    read_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(read_b.build());
+
+    final MethodSpec.Builder write_b = MethodSpec.methodBuilder(writer_name);
+    write_b.addModifiers(Modifier.PUBLIC);
+    write_b.addAnnotation(Override.class);
+    write_b.returns(JPRAStringType.class);
+    write_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(write_b.build());
+
+    return Unit.unit();
   }
 
   @Override public Unit matchBooleanSet(
@@ -298,8 +320,30 @@ final class RecordFieldImplementationProcessor
   {
     this.generateFieldOffsetConstant();
 
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
+
+    final String reader_name =
+      JPRAGeneratedNames.getGetterVectorReadableName(this.field.getName());
+    final String writer_name =
+      JPRAGeneratedNames.getGetterVectorWritableName(this.field.getName());
+
+    final String f_name = JPRAGeneratedNames.getFieldName(this.field.getName());
+
+    final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
+    read_b.addModifiers(Modifier.PUBLIC);
+    read_b.addAnnotation(Override.class);
+    read_b.returns(c.getBaseReadable());
+    read_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(read_b.build());
+
+    final MethodSpec.Builder write_b = MethodSpec.methodBuilder(writer_name);
+    write_b.addModifiers(Modifier.PUBLIC);
+    write_b.addAnnotation(Override.class);
+    write_b.returns(c.getBaseInterface());
+    write_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(write_b.build());
+
+    return Unit.unit();
   }
 
   @Override public Unit matchMatrix(
@@ -307,8 +351,30 @@ final class RecordFieldImplementationProcessor
   {
     this.generateFieldOffsetConstant();
 
-    // TODO: Generated method stub!
-    throw new UnimplementedCodeException();
+    final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
+
+    final String reader_name =
+      JPRAGeneratedNames.getGetterMatrixReadableName(this.field.getName());
+    final String writer_name =
+      JPRAGeneratedNames.getGetterMatrixWritableName(this.field.getName());
+
+    final String f_name = JPRAGeneratedNames.getFieldName(this.field.getName());
+
+    final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
+    read_b.addModifiers(Modifier.PUBLIC);
+    read_b.addAnnotation(Override.class);
+    read_b.returns(c.getBaseReadable());
+    read_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(read_b.build());
+
+    final MethodSpec.Builder write_b = MethodSpec.methodBuilder(writer_name);
+    write_b.addModifiers(Modifier.PUBLIC);
+    write_b.addAnnotation(Override.class);
+    write_b.returns(c.getBaseInterface());
+    write_b.addStatement("return this.$N", f_name);
+    this.class_builder.addMethod(write_b.build());
+
+    return Unit.unit();
   }
 
   @Override public Unit matchRecord(

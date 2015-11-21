@@ -179,9 +179,8 @@ public final class Main
 
       if (error) {
         System.exit(1);
-      } else {
-        System.exit(0);
       }
+      System.exit(0);
     }
   }
 
@@ -276,9 +275,8 @@ public final class Main
       System.err.flush();
       if (error) {
         System.exit(1);
-      } else {
-        System.exit(0);
       }
+      System.exit(0);
     }
   }
 }

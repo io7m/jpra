@@ -17,20 +17,8 @@
         efficient "flyweight" <tt>ByteBuffer</tt>-backed record types
         in Java.
       </p>
-      <pre>
-(record OpenGL888 [
-  (field r [integer unsigned-normalized 8])
-  (field g [integer unsigned-normalized 8])
-  (field b [integer unsigned-normalized 8])
-])
-
-(packed OpenGL565 [
-  (field r [integer unsigned-normalized 5])
-  (field g [integer unsigned-normalized 6])
-  (field b [integer unsigned-normalized 5])
-])
-      </pre>
     </subsection>
+
     <subsection name="Features">
       <ul>
         <li>Generate <tt>ByteBuffer</tt>-backed record types in Java, using a cursor abstraction for allocation-free access to large off-heap arrays.</li>

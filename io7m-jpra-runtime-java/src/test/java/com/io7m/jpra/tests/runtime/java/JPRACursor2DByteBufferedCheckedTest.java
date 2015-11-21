@@ -92,7 +92,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.assertEquals(0L, (long) c.getElementX());
     Assert.assertEquals(0L, (long) c.getElementY());
     Assert.assertEquals(v, c.getElementView());
-    Assert.assertEquals(0L, c.getByteOffset());
+    Assert.assertEquals(0L, c.getByteOffsetObservable().get());
   }
 
   @Test public void testBufferRowStartsIdentity()
@@ -111,7 +111,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
       Assert.assertEquals(0L, (long) c.getElementX());
       Assert.assertEquals((long) row, (long) c.getElementY());
       Assert.assertEquals(v, c.getElementView());
-      Assert.assertEquals((long) row * (3L * 10L), c.getByteOffset());
+      Assert.assertEquals((long) row * (3L * 10L), c.getByteOffsetObservable().get());
       final String text = String.format(
         "[Cursor 0,%d/%d,%d]",
         Integer.valueOf(c.getElementY()),
@@ -201,7 +201,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
       Assert.assertEquals((long) column, (long) c.getElementX());
       Assert.assertEquals(0L, (long) c.getElementY());
       Assert.assertEquals(v, c.getElementView());
-      Assert.assertEquals((long) column * 3L, c.getByteOffset());
+      Assert.assertEquals((long) column * 3L, c.getByteOffsetObservable().get());
 
       final String text = String.format(
         "[Cursor %d,0/%d,%d]",

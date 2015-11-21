@@ -52,7 +52,7 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     final JPRACursor1DType<JPRAValueType> c =
       JPRACursor1DByteBufferedUnchecked.newCursor(buf, cons);
     Assert.assertEquals(0L, (long) c.getElementIndex());
-    Assert.assertEquals(0L, c.getByteOffset());
+    Assert.assertEquals(0L, c.getByteOffsetObservable().get());
     Assert.assertEquals(v, c.getElementView());
     Assert.assertEquals("[Cursor 0]", c.toString());
   }
@@ -69,7 +69,7 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     for (int index = 0; index < 100; ++index) {
       c.setElementIndex(index);
       Assert.assertEquals((long) index, (long) c.getElementIndex());
-      Assert.assertEquals((long) (index * 2), c.getByteOffset());
+      Assert.assertEquals((long) (index * 2), c.getByteOffsetObservable().get());
       Assert.assertEquals("[Cursor " + index + "]", c.toString());
     }
   }

@@ -32,12 +32,15 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
+import com.io7m.jpra.runtime.java.JPRAStringByteBuffered;
+import com.io7m.jpra.runtime.java.JPRAStringType;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
+import java.nio.charset.Charset;
 
 /**
  * A type matcher that produces constructor field assignment statements for a
@@ -68,6 +71,25 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchString(final TString t)
   {
+    final FieldName f_name = this.field.getName();
+    final String field_name = JPRAGeneratedNames.getFieldName(f_name);
+    final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
+
+    this.constructor_builder.addStatement(
+      "this.$N = $T.newString($N, $N + $N, $N, $T.forName($S), $L)",
+      field_name,
+      JPRAStringByteBuffered.class,
+      "in_buffer",
+      offset_name,
+      "in_base_offset",
+      "in_pointer",
+      Charset.class,
+      t.getEncoding(),
+      t.getMaximumStringLength().getValue().intValue());
+
+    this.class_builder.addField(
+      JPRAStringType.class, field_name, Modifier.FINAL, Modifier.PRIVATE);
+
     return Unit.unit();
   }
 
@@ -88,11 +110,45 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchVector(final TVector t)
   {
+    final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
+
+    final FieldName f_name = this.field.getName();
+    final String field_name = JPRAGeneratedNames.getFieldName(f_name);
+    final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.newVectorFromByteBufferAndBase($N, $N, $N + $N)",
+      field_name,
+      c.getBufferedConstructors(),
+      "in_buffer",
+      "in_pointer.getByteOffsetObservable()",
+      "in_base_offset",
+      offset_name);
+
+    this.class_builder.addField(
+      c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
+
     return Unit.unit();
   }
 
   @Override public Unit matchMatrix(final TMatrix t)
   {
+    final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
+
+    final FieldName f_name = this.field.getName();
+    final String field_name = JPRAGeneratedNames.getFieldName(f_name);
+    final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.newMatrixFromByteBufferAndBase($N, $N, $N + $N)",
+      field_name,
+      c.getBufferedConstructors(),
+      "in_buffer",
+      "in_pointer.getByteOffsetObservable()",
+      "in_base_offset",
+      offset_name);
+
+    this.class_builder.addField(
+      c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
+
     return Unit.unit();
   }
 
@@ -114,11 +170,12 @@ final class RecordFieldImplementationConstructorProcessor
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
     final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
     this.constructor_builder.addStatement(
-      "this.$N = $N.newValueWithOffset($N, $N, $N)",
+      "this.$N = $N.newValueWithOffset($N, $N, $N + $N)",
       field_name,
       t_imp_name,
       "in_buffer",
       "in_pointer",
+      "in_base_offset",
       offset_name);
 
     final PackageNameQualified p = pkg_ctxt.getName();

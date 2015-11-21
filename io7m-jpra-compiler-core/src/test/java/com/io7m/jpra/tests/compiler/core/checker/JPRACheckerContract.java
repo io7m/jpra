@@ -227,7 +227,12 @@ import java.math.BigInteger;
     final TypeExprString<IdentifierType, TType> e =
       TypeExprString.class.cast(ch.checkTypeExpression(te));
     final TString ti = TString.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(256L), ti.getSizeInBits().getValue());
+    Assert.assertEquals(
+      BigInteger.valueOf(288L),
+      ti.getSizeInBits().getValue());
+    Assert.assertEquals(
+      BigInteger.valueOf(32L),
+      ti.getMaximumStringLength().getValue());
     Assert.assertEquals("UTF-8", ti.getEncoding());
   }
 
@@ -268,7 +273,9 @@ import java.math.BigInteger;
     final TypeExprArray<IdentifierType, TType> e =
       TypeExprArray.class.cast(ch.checkTypeExpression(te));
     final TArray ta = TArray.class.cast(e.getType());
-    Assert.assertEquals(BigInteger.valueOf(32L * 32L), ta.getSizeInBits().getValue());
+    Assert.assertEquals(
+      BigInteger.valueOf(32L * 32L),
+      ta.getSizeInBits().getValue());
     Assert.assertEquals(
       BigInteger.valueOf(32L), ta.getElementCount().getValue());
     Assert.assertEquals(TIntegerSigned.class, ta.getElementType().getClass());
@@ -411,26 +418,6 @@ import java.math.BigInteger;
     this.expected.expect(
       new JPRACompilerCheckerExceptionMatcher(
         JPRACheckerErrorCode.VECTOR_SIZE_INTEGER_UNSUPPORTED));
-    ch.checkTypeExpression(te);
-  }
-
-  @Test public final void testTypeExprVectorFloatUnsupported()
-    throws Exception
-  {
-    final JPRAParserType p = this.newParser();
-    final GlobalContextType c =
-      GlobalContexts.newContext(new AlwaysEmptyLoader());
-    final JPRAResolverType r = this.newResolver(c);
-    final JPRACheckerType ch = this.newChecker(
-      c, JPRACheckerStandardCapabilities.newCapabilities());
-
-    final TypeExprType<IdentifierType, Untyped> te = r.resolveTypeExpression(
-      p.parseTypeExpression(
-        this.newStringSExpr("(vector [float 16] 4)")));
-
-    this.expected.expect(
-      new JPRACompilerCheckerExceptionMatcher(
-        JPRACheckerErrorCode.VECTOR_SIZE_FLOAT_UNSUPPORTED));
     ch.checkTypeExpression(te);
   }
 
@@ -656,7 +643,9 @@ import java.math.BigInteger;
 
     final TRecord.FieldPaddingOctets f = TRecord.FieldPaddingOctets.class.cast(
       tt.getFieldsInDeclarationOrder().get(0));
-    Assert.assertEquals(BigInteger.valueOf(8L * 8L), f.getSizeInBits().getValue());
+    Assert.assertEquals(
+      BigInteger.valueOf(8L * 8L),
+      f.getSizeInBits().getValue());
   }
 
   @Test public final void testTypeDeclRecordPaddingOctets_Error0()

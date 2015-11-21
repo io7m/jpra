@@ -33,6 +33,7 @@ import java.util.Optional;
   private final Size<SizeUnitOctetsType>                     size;
   private final Optional<ImmutableLexicalPositionType<Path>> lex;
   private final Size<SizeUnitBitsType>                       size_bits;
+  private final Size<SizeUnitOctetsType>                     length;
 
   /**
    * Construct an expression.
@@ -50,8 +51,18 @@ import java.util.Optional;
   {
     this.lex = NullCheck.notNull(in_lex);
     this.encoding = NullCheck.notNull(in_encoding);
-    this.size = NullCheck.notNull(in_size);
+    this.length = NullCheck.notNull(in_size);
+    this.size = in_size.add(Size.valueOf(4L));
     this.size_bits = Size.toBits(this.size);
+  }
+
+  /**
+   * @return The maximum length of the string in octets
+   */
+
+  public Size<SizeUnitOctetsType> getMaximumStringLength()
+  {
+    return this.length;
   }
 
   /**

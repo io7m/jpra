@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jpra</groupId>
     <artifactId>io7m-jpra</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
   </parent>
   <artifactId>io7m-jpra-compiler-java</artifactId>
 
@@ -42,6 +42,18 @@
     <dependency>
       <groupId>com.io7m.ieee754b16</groupId>
       <artifactId>io7m-ieee754b16-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-bytebuffered</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-ieee754b16</artifactId>
     </dependency>
 
     <dependency>

@@ -16,21 +16,21 @@
 
 package com.io7m.jpra.runtime.java;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
- * The type of cursors that expose byte offsets.
- *
- * For reasons of compatibility with external libraries, offsets are exposed via
- * an {@code AtomicLong} value. This should be considered a <i>read-only</i>
- * value; the effects of modifying it are undefined!
+ * Behaviour for string truncation.
  */
 
-public interface JPRACursorByteReadableType
+public enum JPRAStringTruncation
 {
   /**
-   * @return The current byte offset
+   * Truncate the given string.
    */
 
-  AtomicLong getByteOffsetObservable();
+  TRUNCATE,
+
+  /**
+   * Reject the string rather than truncating.
+   */
+
+  REJECT
 }

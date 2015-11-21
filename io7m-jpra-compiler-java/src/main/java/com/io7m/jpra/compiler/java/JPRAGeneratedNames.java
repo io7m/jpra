@@ -115,22 +115,12 @@ final class JPRAGeneratedNames
 
   static String getGetterRecordReadableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
-    final StringBuilder sb = new StringBuilder(128);
-    sb.append("get");
-    sb.append(text);
-    sb.append("Readable");
-    return sb.toString();
+    return JPRAGeneratedNames.getObjectReadableName(name);
   }
 
   static String getGetterRecordWritableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
-    final StringBuilder sb = new StringBuilder(128);
-    sb.append("get");
-    sb.append(text);
-    sb.append("Writable");
-    return sb.toString();
+    return JPRAGeneratedNames.getObjectWritableName(name);
   }
 
   static String getRecordImplementationByteBufferedName(
@@ -197,5 +187,55 @@ final class JPRAGeneratedNames
     sb.append(text);
     sb.append("Raw");
     return sb.toString();
+  }
+
+  public static String getGetterVectorReadableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectReadableName(name);
+  }
+
+  private static String getObjectReadableName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("get");
+    sb.append(text);
+    sb.append("Readable");
+    return sb.toString();
+  }
+
+  public static String getGetterVectorWritableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectWritableName(name);
+  }
+
+  public static String getGetterMatrixReadableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectReadableName(name);
+  }
+
+  public static String getGetterMatrixWritableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectWritableName(name);
+  }
+
+  private static String getObjectWritableName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("get");
+    sb.append(text);
+    sb.append("Writable");
+    return sb.toString();
+  }
+
+  public static String getGetterStringReadableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectReadableName(name);
+  }
+
+  public static String getGetterStringWritableName(final FieldName name)
+  {
+    return JPRAGeneratedNames.getObjectWritableName(name);
   }
 }
