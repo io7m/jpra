@@ -17,9 +17,9 @@
 package com.io7m.jpra.tests.runtime.java;
 
 import com.io7m.jpra.runtime.java.JPRACursorByteReadableType;
-import com.io7m.jpra.runtime.java.JPRAStringByteBuffered;
+import com.io7m.jpra.runtime.java.JPRAStringCursorByteBuffered;
 import com.io7m.jpra.runtime.java.JPRAStringTruncation;
-import com.io7m.jpra.runtime.java.JPRAStringType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorType;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -39,8 +39,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -61,7 +61,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringContains("Maximum length"));
 
-    JPRAStringByteBuffered.newString(
+    JPRAStringCursorByteBuffered.newString(
       buf,
       0,
       cursor,
@@ -78,7 +78,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringContains("Offset"));
 
-    JPRAStringByteBuffered.newString(
+    JPRAStringCursorByteBuffered.newString(
       buf,
       -1,
       cursor,
@@ -91,8 +91,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -116,8 +116,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -156,8 +156,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -199,8 +199,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -219,8 +219,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -249,8 +249,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -274,8 +274,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -292,8 +292,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,
@@ -310,8 +310,8 @@ public final class JPRAStringByteBufferedTest
     final AtomicLong base = new AtomicLong(0L);
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
-    final JPRAStringType s =
-      JPRAStringByteBuffered.newString(
+    final JPRAStringCursorType s =
+      JPRAStringCursorByteBuffered.newString(
         buf,
         0,
         cursor,

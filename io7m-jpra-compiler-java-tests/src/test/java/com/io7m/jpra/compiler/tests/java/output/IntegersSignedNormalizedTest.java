@@ -23,6 +23,7 @@ import com.io7m.jpra.compiler.tests.java.generation.code
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ import java.nio.ByteBuffer;
 
 public final class IntegersSignedNormalizedTest
 {
-  @Test public void testSize()
+  @Test public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -39,6 +40,25 @@ public final class IntegersSignedNormalizedTest
 
     final IntegersSignedNormalizedType v = c.getElementView();
     Assert.assertEquals(16L, (long) v.sizeOctets());
+
+    Assert.assertEquals(0L, (long) v.metaSn8OffsetFromType());
+    Assert.assertEquals(2L, (long) v.metaSn16OffsetFromType());
+    Assert.assertEquals(4L, (long) v.metaSn32OffsetFromType());
+    Assert.assertEquals(8L, (long) v.metaSn64OffsetFromType());
+
+    Assert.assertEquals(0L, (long) v.metaSn8OffsetFromCursor());
+    Assert.assertEquals(2L, (long) v.metaSn16OffsetFromCursor());
+    Assert.assertEquals(4L, (long) v.metaSn32OffsetFromCursor());
+    Assert.assertEquals(8L, (long) v.metaSn64OffsetFromCursor());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerSignedNormalized.of(8), v.metaSn8Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerSignedNormalized.of(16), v.metaSn16Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerSignedNormalized.of(32), v.metaSn32Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerSignedNormalized.of(64), v.metaSn64Type());
   }
 
   @Test public void testSetU8()
@@ -78,7 +98,7 @@ public final class IntegersSignedNormalizedTest
     final IntegersSignedNormalizedType v = c.getElementView();
 
     v.setSn8Raw(Byte.MAX_VALUE);
-    Assert.assertEquals(Byte.MAX_VALUE, v.getSn8Raw());
+    Assert.assertEquals((long) Byte.MAX_VALUE, (long) v.getSn8Raw());
   }
 
   @Test public void testSetU16()
@@ -119,7 +139,7 @@ public final class IntegersSignedNormalizedTest
     final IntegersSignedNormalizedType v = c.getElementView();
 
     v.setSn16Raw(Short.MAX_VALUE);
-    Assert.assertEquals(Short.MAX_VALUE, v.getSn16Raw());
+    Assert.assertEquals((long) Short.MAX_VALUE, (long) v.getSn16Raw());
   }
 
   @Test public void testSetU32()
@@ -140,7 +160,7 @@ public final class IntegersSignedNormalizedTest
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       BufferChecks.checkRangeInclusiveIsZero(buf, offset + 0, offset + 3);
-      Assert.assertEquals(index + 1L, (long) buf.getInt(offset + 4));
+      Assert.assertEquals((long) index + 1L, (long) buf.getInt(offset + 4));
       BufferChecks.checkRangeInclusiveIsZero(buf, offset + 8, offset + 15);
       offset += 16;
     }
@@ -160,7 +180,7 @@ public final class IntegersSignedNormalizedTest
     final IntegersSignedNormalizedType v = c.getElementView();
 
     v.setSn32Raw(Integer.MAX_VALUE);
-    Assert.assertEquals(Integer.MAX_VALUE, v.getSn32Raw());
+    Assert.assertEquals((long) Integer.MAX_VALUE, (long) v.getSn32Raw());
   }
 
   @Test public void testSetU64()
@@ -175,13 +195,13 @@ public final class IntegersSignedNormalizedTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      v.setSn64Raw(index + 1L);
+      v.setSn64Raw((long) index + 1L);
     }
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       BufferChecks.checkRangeInclusiveIsZero(buf, offset + 0, offset + 7);
-      Assert.assertEquals(index + 1L, buf.getLong(offset + 8));
+      Assert.assertEquals((long) index + 1L, buf.getLong(offset + 8));
       offset += 16;
     }
 

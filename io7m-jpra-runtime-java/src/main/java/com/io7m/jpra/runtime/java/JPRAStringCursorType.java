@@ -14,9 +14,14 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jpra.runtime.java;
+
 /**
- * Types and functions implementing the <tt>jpra</tt> type_model.
+ * The type of readable and writable strings.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model;
-
+public interface JPRAStringCursorType
+  extends JPRAStringCursorReadableType, JPRAStringCursorWritableType
+{
+  // No extra methods
+}

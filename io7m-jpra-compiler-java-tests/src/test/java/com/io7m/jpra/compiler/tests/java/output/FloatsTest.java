@@ -21,6 +21,7 @@ import com.io7m.jpra.compiler.tests.java.generation.code.FloatsByteBuffered;
 import com.io7m.jpra.compiler.tests.java.generation.code.FloatsType;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ import java.nio.ByteBuffer;
 
 public final class FloatsTest
 {
-  @Test public void testSize()
+  @Test public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<FloatsType> c =
@@ -37,6 +38,21 @@ public final class FloatsTest
 
     final FloatsType v = c.getElementView();
     Assert.assertEquals(16L, (long) v.sizeOctets());
+
+    Assert.assertEquals(0L, (long) v.metaF16OffsetFromType());
+    Assert.assertEquals(2L, (long) v.metaF32OffsetFromType());
+    Assert.assertEquals(6L, (long) v.metaF64OffsetFromType());
+
+    Assert.assertEquals(0L, (long) v.metaF16OffsetFromCursor());
+    Assert.assertEquals(2L, (long) v.metaF32OffsetFromCursor());
+    Assert.assertEquals(6L, (long) v.metaF64OffsetFromCursor());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAFloat.of(16), v.metaF16Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAFloat.of(32), v.metaF32Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAFloat.of(64), v.metaF64Type());
   }
 
   @Test public void testSetF16()
@@ -51,13 +67,13 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      v.setF16(index + 1.0);
+      v.setF16((double) index + 1.0);
     }
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       Assert.assertEquals(
-        (index + 1.0), Binary16.unpackDouble(
+        ((double) index + 1.0), Binary16.unpackDouble(
           buf.getChar(offset + 0)), 0.0);
 
       Assert.assertEquals(0L, (long) buf.get(offset + 2));
@@ -79,7 +95,7 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      Assert.assertEquals(index + 1.0, v.getF16(), 0.0);
+      Assert.assertEquals((double) index + 1.0, v.getF16(), 0.0);
     }
   }
 
@@ -95,14 +111,16 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      v.setF32(index + 1.0f);
+      v.setF32((float) index + 1.0f);
     }
 
     int offset = 0;
     for (int index = 0; index < 8; ++index) {
       Assert.assertEquals(0L, (long) buf.get(offset + 0));
       Assert.assertEquals(0L, (long) buf.get(offset + 1));
-      Assert.assertEquals(index + 1.0f, (long) buf.getFloat(offset + 2), 0.0f);
+      Assert.assertEquals(
+        (float) index + 1.0f,
+        (float) (long) buf.getFloat(offset + 2), 0.0f);
 
       Assert.assertEquals(0L, (long) buf.get(offset + 6));
       Assert.assertEquals(0L, (long) buf.get(offset + 7));
@@ -119,7 +137,7 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      Assert.assertEquals(index + 1.0f, v.getF32(), 0.0f);
+      Assert.assertEquals((float) index + 1.0f, v.getF32(), 0.0f);
     }
   }
 
@@ -135,7 +153,7 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      v.setF64(index + 1.0f);
+      v.setF64((double) ((float) index + 1.0f));
     }
 
     int offset = 0;
@@ -146,7 +164,9 @@ public final class FloatsTest
       Assert.assertEquals(0L, (long) buf.get(offset + 3));
       Assert.assertEquals(0L, (long) buf.get(offset + 4));
       Assert.assertEquals(0L, (long) buf.get(offset + 5));
-      Assert.assertEquals(index + 1.0, (long) buf.getDouble(offset + 6), 0.0);
+      Assert.assertEquals(
+        (double) index + 1.0,
+        (double) (long) buf.getDouble(offset + 6), 0.0);
       Assert.assertEquals(0L, (long) buf.get(offset + 14));
       Assert.assertEquals(0L, (long) buf.get(offset + 15));
       offset += 16;
@@ -154,7 +174,7 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      Assert.assertEquals(index + 1.0f, v.getF64(), 0.0f);
+      Assert.assertEquals((double) ((float) index + 1.0f), v.getF64(), 0.0);
     }
   }
 }

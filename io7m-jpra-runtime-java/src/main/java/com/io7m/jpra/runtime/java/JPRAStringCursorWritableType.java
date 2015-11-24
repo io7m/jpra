@@ -17,11 +17,19 @@
 package com.io7m.jpra.runtime.java;
 
 /**
- * The type of readable and writable strings.
+ * The type of pointers to writable strings
  */
 
-public interface JPRAStringType
-  extends JPRAStringReadableType, JPRAStringWritableType
+public interface JPRAStringCursorWritableType
 {
-  // No extra methods
+  /**
+   * Set the string value, optionally truncating data based on {@code trunc}.
+   *
+   * @param text  The new string value
+   * @param trunc The truncation behaviour
+   */
+
+  void setValue(
+    String text,
+    JPRAStringTruncation trunc);
 }

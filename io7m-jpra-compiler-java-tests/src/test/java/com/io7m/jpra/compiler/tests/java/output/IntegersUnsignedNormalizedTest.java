@@ -23,6 +23,7 @@ import com.io7m.jpra.compiler.tests.java.generation.code
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ import java.nio.ByteBuffer;
 
 public final class IntegersUnsignedNormalizedTest
 {
-  @Test public void testSize()
+  @Test public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -39,6 +40,25 @@ public final class IntegersUnsignedNormalizedTest
 
     final IntegersUnsignedNormalizedType v = c.getElementView();
     Assert.assertEquals(16L, (long) v.sizeOctets());
+
+    Assert.assertEquals(0L, (long) v.metaUn8OffsetFromType());
+    Assert.assertEquals(2L, (long) v.metaUn16OffsetFromType());
+    Assert.assertEquals(4L, (long) v.metaUn32OffsetFromType());
+    Assert.assertEquals(8L, (long) v.metaUn64OffsetFromType());
+
+    Assert.assertEquals(0L, (long) v.metaUn8OffsetFromCursor());
+    Assert.assertEquals(2L, (long) v.metaUn16OffsetFromCursor());
+    Assert.assertEquals(4L, (long) v.metaUn32OffsetFromCursor());
+    Assert.assertEquals(8L, (long) v.metaUn64OffsetFromCursor());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerUnsignedNormalized.of(8), v.metaUn8Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerUnsignedNormalized.of(16), v.metaUn16Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerUnsignedNormalized.of(32), v.metaUn32Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAIntegerUnsignedNormalized.of(64), v.metaUn64Type());
   }
 
   @Test public void testSetU8()

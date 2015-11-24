@@ -18,12 +18,14 @@ package com.io7m.jpra.compiler.tests.java.output;
 
 import com.io7m.jpra.compiler.tests.java.generation.code
   .IntegersUnsignedReadableType;
+import com.io7m.jpra.compiler.tests.java.generation.code.IntegersUnsignedType;
 import com.io7m.jpra.compiler.tests.java.generation.code
   .IntegersUnsignedWritableType;
 import com.io7m.jpra.compiler.tests.java.generation.code.ReferencesByteBuffered;
 import com.io7m.jpra.compiler.tests.java.generation.code.ReferencesType;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,6 +42,25 @@ public final class ReferencesTest
 
     final ReferencesType v = c.getElementView();
     Assert.assertEquals(16L * 3L, (long) v.sizeOctets());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAUserDefined.of(IntegersUnsignedType.class),
+      v.metaR0Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAUserDefined.of(IntegersUnsignedType.class),
+      v.metaR1Type());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAUserDefined.of(IntegersUnsignedType.class),
+      v.metaR2Type());
+
+    Assert.assertEquals(0L, (long) v.metaR0OffsetFromType());
+    Assert.assertEquals(0L, (long) v.metaR0OffsetFromCursor());
+
+    Assert.assertEquals(16L, (long) v.metaR1OffsetFromType());
+    Assert.assertEquals(16L, (long) v.metaR1OffsetFromCursor());
+
+    Assert.assertEquals(32L, (long) v.metaR2OffsetFromType());
+    Assert.assertEquals(32L, (long) v.metaR2OffsetFromCursor());
   }
 
   @Test public void testSetGet()
