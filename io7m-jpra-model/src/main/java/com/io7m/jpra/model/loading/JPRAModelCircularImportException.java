@@ -31,7 +31,7 @@ public final class JPRAModelCircularImportException extends JPRAException
   private final ImmutableList<PackageImport> imports;
 
   /**
-   * Construct a model loading exception.
+   * Construct a type_model loading exception.
    *
    * @param message    The error message
    * @param in_imports The imports

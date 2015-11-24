@@ -17,6 +17,8 @@
 package com.io7m.jpra.compiler.java;
 
 import com.io7m.jnull.NullCheck;
+import com.io7m.jpra.model.types.TArray;
+import com.io7m.jpra.model.types.TBooleanSet;
 import com.io7m.jpra.model.types.TFloat;
 import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TIntegerSignedNormalized;
@@ -24,10 +26,16 @@ import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
 import com.io7m.jpra.model.types.TIntegerUnsignedNormalized;
 import com.io7m.jpra.model.types.TMatrix;
+import com.io7m.jpra.model.types.TPacked;
+import com.io7m.jpra.model.types.TRecord;
+import com.io7m.jpra.model.types.TString;
+import com.io7m.jpra.model.types.TType;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeIntegerMatcherType;
+import com.io7m.jpra.model.types.TypeMatcherType;
 import com.io7m.jpra.model.types.TypeScalarMatcherType;
 import com.io7m.jpra.model.types.TypeScalarType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import com.io7m.jtensors.Matrix2x2DType;
 import com.io7m.jtensors.Matrix2x2FType;
 import com.io7m.jtensors.Matrix3x3DType;
@@ -113,6 +121,7 @@ import com.io7m.jtensors.ieee754b16.VectorReadable2Db16Type;
 import com.io7m.jtensors.ieee754b16.VectorReadable3Db16Type;
 import com.io7m.jtensors.ieee754b16.VectorReadable4Db16Type;
 import com.io7m.junreachable.UnreachableCodeException;
+import com.squareup.javapoet.ClassName;
 
 /**
  * Functions to return sets of classes for a given type.
@@ -140,6 +149,137 @@ final class JPRAClasses
     final TypeScalarType e_type = t.getElementType();
     final int e_width = t.getWidth().getValue().intValue();
     return e_type.matchTypeScalar(new MatrixClassMatcher(e_width, e_width));
+  }
+
+  public static ClassName
+  getModelScalarTypeForScalarType(
+    final TypeScalarType type)
+  {
+    return type.matchTypeScalar(new TypeScalarMatcherType<ClassName,
+      RuntimeException>()
+    {
+      @Override
+      public ClassName matchScalarInteger(
+        final
+        TIntegerType t)
+      {
+        return t.matchTypeInteger(
+          new TypeIntegerMatcherType<ClassName,
+            RuntimeException>()
+          {
+            @Override
+            public ClassName
+            matchIntegerUnsigned(
+              final TIntegerUnsigned t)
+            {
+              return ClassName.get(JPRATypeModel.JPRAIntegerUnsigned.class);
+            }
+
+            @Override
+            public ClassName
+            matchIntegerSigned(
+              final TIntegerSigned t)
+            {
+              return ClassName.get(JPRATypeModel.JPRAIntegerSigned.class);
+            }
+
+            @Override
+            public ClassName
+            matchIntegerSignedNormalized(
+              final TIntegerSignedNormalized t)
+            {
+              return ClassName.get(
+                JPRATypeModel.JPRAIntegerSignedNormalized.class);
+            }
+
+            @Override
+            public ClassName
+            matchIntegerUnsignedNormalized(
+              final TIntegerUnsignedNormalized t)
+            {
+              return ClassName.get(
+                JPRATypeModel.JPRAIntegerUnsignedNormalized.class);
+            }
+          });
+      }
+
+      @Override
+      public ClassName matchScalarFloat(final TFloat t)
+      {
+        return ClassName.get(JPRATypeModel.JPRAFloat.class);
+      }
+    });
+  }
+
+  public static ClassName
+  getModelTypeForType(final TType type)
+  {
+    return type.matchType(
+      new TypeMatcherType<ClassName, RuntimeException>()
+      {
+        @Override
+        public ClassName matchArray(
+          final TArray t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAArray.class);
+        }
+
+        @Override
+        public ClassName matchString(
+          final TString t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAString.class);
+        }
+
+        @Override
+        public ClassName matchBooleanSet(
+          final TBooleanSet t)
+        {
+          return ClassName.get(JPRATypeModel.JPRABooleanSet.class);
+        }
+
+        @Override
+        public ClassName matchInteger(
+          final TIntegerType t)
+        {
+          return JPRAClasses.getModelScalarTypeForScalarType(t);
+        }
+
+        @Override
+        public ClassName matchFloat(
+          final TFloat t)
+        {
+          return JPRAClasses.getModelScalarTypeForScalarType(t);
+        }
+
+        @Override
+        public ClassName matchVector(
+          final TVector t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAVector.class);
+        }
+
+        @Override
+        public ClassName matchMatrix(
+          final TMatrix t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAMatrix.class);
+        }
+
+        @Override
+        public ClassName matchRecord(
+          final TRecord t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
+        }
+
+        @Override
+        public ClassName matchPacked(
+          final TPacked t)
+        {
+          return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
+        }
+      });
   }
 
   static final class VectorsClasses

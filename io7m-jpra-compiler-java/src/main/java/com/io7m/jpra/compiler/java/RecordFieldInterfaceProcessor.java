@@ -32,8 +32,8 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
-import com.io7m.jpra.runtime.java.JPRAStringReadableType;
-import com.io7m.jpra.runtime.java.JPRAStringType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorReadableType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
@@ -62,6 +62,52 @@ final class RecordFieldInterfaceProcessor
     this.field = NullCheck.notNull(in_field);
     this.class_builder = NullCheck.notNull(in_class_builder);
     this.methods = NullCheck.notNull(in_methods);
+
+    if (this.methods.wantGetters()) {
+      this.metaMethods();
+    }
+  }
+
+  private void metaMethods()
+  {
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaOffsetTypeReadableName(this.field.getName());
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return The offset in octets of the {@code $L} field, from the start"
+        + " of the type",
+        this.field.getName());
+      getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+      getb.returns(int.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaOffsetCursorReadableName(
+          this.field.getName());
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return The offset in octets of the {@code $L} field, from the cursor",
+        this.field.getName());
+      getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+      getb.returns(int.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaTypeGetName(this.field.getName());
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addJavadoc(
+        "@return The type of the {@code $L} field",
+        this.field.getName());
+      getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+      getb.returns(
+        JPRAClasses.getModelTypeForType(this.field.getType()));
+      this.class_builder.addMethod(getb.build());
+    }
   }
 
   @Override public Unit matchArray(final TArray t)
@@ -81,7 +127,7 @@ final class RecordFieldInterfaceProcessor
         "@return Read-only access to the {@code $L} field",
         this.field.getName());
       getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
-      getb.returns(JPRAStringReadableType.class);
+      getb.returns(JPRAStringCursorReadableType.class);
       this.class_builder.addMethod(getb.build());
     }
 
@@ -94,7 +140,7 @@ final class RecordFieldInterfaceProcessor
         "@return Writable access to the {@code $L} field",
         this.field.getName());
       setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
-      setb.returns(JPRAStringType.class);
+      setb.returns(JPRAStringCursorType.class);
       this.class_builder.addMethod(setb.build());
     }
 

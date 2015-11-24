@@ -22,7 +22,7 @@ import java.nio.charset.Charset;
  * The type of read-only pointers to strings.
  */
 
-public interface JPRAStringReadableType
+public interface JPRAStringCursorReadableType
 {
   /**
    * @return The maximum length of the string in octets

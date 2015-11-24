@@ -21,6 +21,7 @@ import com.io7m.jpra.compiler.tests.java.generation.code.VectorsType;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import com.io7m.jtensors.Vector2DType;
 import com.io7m.jtensors.Vector2FType;
 import com.io7m.jtensors.Vector2IType;
@@ -136,7 +137,7 @@ public final class VectorsTest
     Assert.assertEquals(0L, (long) v.getWI());
   }
 
-  @Test public void testSize()
+  @Test public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<VectorsType> c =
@@ -145,6 +146,54 @@ public final class VectorsTest
 
     final VectorsType v = c.getElementView();
     Assert.assertEquals(234L, (long) v.sizeOctets());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(2, JPRATypeModel.JPRAFloat.of(16)),
+      v.metaV2hType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(2, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaV2fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(2, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaV2dType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(2, JPRATypeModel.JPRAIntegerSigned.of(32)),
+      v.metaV2iType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(2, JPRATypeModel.JPRAIntegerSigned.of(64)),
+      v.metaV2lType());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(3, JPRATypeModel.JPRAFloat.of(16)),
+      v.metaV3hType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(3, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaV3fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(3, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaV3dType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(3, JPRATypeModel.JPRAIntegerSigned.of(32)),
+      v.metaV3iType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(3, JPRATypeModel.JPRAIntegerSigned.of(64)),
+      v.metaV3lType());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(4, JPRATypeModel.JPRAFloat.of(16)),
+      v.metaV4hType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(4, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaV4fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(4, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaV4dType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(4, JPRATypeModel.JPRAIntegerSigned.of(32)),
+      v.metaV4iType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAVector.of(4, JPRATypeModel.JPRAIntegerSigned.of(64)),
+      v.metaV4lType());
   }
 
   @Test public void testV4D()

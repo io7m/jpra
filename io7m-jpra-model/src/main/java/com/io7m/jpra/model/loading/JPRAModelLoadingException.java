@@ -19,13 +19,13 @@ package com.io7m.jpra.model.loading;
 import com.io7m.jpra.core.JPRAException;
 
 /**
- * The type of model loading exceptions.
+ * The type of type_model loading exceptions.
  */
 
 public final class JPRAModelLoadingException extends JPRAException
 {
   /**
-   * Construct a model loading exception.
+   * Construct a type_model loading exception.
    *
    * @param message The error message
    */

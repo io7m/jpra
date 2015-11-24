@@ -20,13 +20,17 @@ import com.io7m.jpra.compiler.tests.java.generation.code
   .NestedString0ByteBuffered;
 import com.io7m.jpra.compiler.tests.java.generation.code.NestedString0Type;
 import com.io7m.jpra.compiler.tests.java.generation.code
+  .NestedString1ReadableType;
+import com.io7m.jpra.compiler.tests.java.generation.code
   .NestedString1WritableType;
+import com.io7m.jpra.compiler.tests.java.generation.code
+  .NestedString2ReadableType;
 import com.io7m.jpra.compiler.tests.java.generation.code
   .NestedString2WritableType;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorType;
 import com.io7m.jpra.runtime.java.JPRAStringTruncation;
-import com.io7m.jpra.runtime.java.JPRAStringType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,15 +46,32 @@ public final class NestedString0Test
         buf,
         NestedString0ByteBuffered::newValueWithOffset);
 
+    final NestedString0Type n0 = c.getElementView();
+    final JPRAStringCursorType n0s = n0.getSWritable();
+    final NestedString1ReadableType n1r = n0.getNReadable();
+    final NestedString1WritableType n1w = n0.getNWritable();
+    final JPRAStringCursorType n1s = n1w.getSWritable();
+    final NestedString2ReadableType n2r = n1r.getNReadable();
+    final NestedString2WritableType n2w = n1w.getNWritable();
+    final JPRAStringCursorType n2s = n2w.getSWritable();
+
+    Assert.assertEquals(4L, (long) n0.metaSOffsetFromType());
+    Assert.assertEquals(4L, (long) n0.metaSOffsetFromCursor());
+
+    Assert.assertEquals(12L, (long) n0.metaNOffsetFromType());
+    Assert.assertEquals(12L, (long) n0.metaNOffsetFromCursor());
+
+    Assert.assertEquals(4L, (long) n1r.metaSOffsetFromType());
+    Assert.assertEquals(4L + 12L, (long) n1r.metaSOffsetFromCursor());
+
+    Assert.assertEquals(12L, (long) n1r.metaNOffsetFromType());
+    Assert.assertEquals(12L + 12L, (long) n1r.metaNOffsetFromCursor());
+
+    Assert.assertEquals(4L, (long) n2r.metaSOffsetFromType());
+    Assert.assertEquals(4L + 12L + 12L, (long) n2r.metaSOffsetFromCursor());
+
     for (int index = 0; index < 2; ++index) {
       c.setElementIndex(index);
-
-      final NestedString0Type n0 = c.getElementView();
-      final JPRAStringType n0s = n0.getSWritable();
-      final NestedString1WritableType n1w = n0.getNWritable();
-      final JPRAStringType n1s = n1w.getSWritable();
-      final NestedString2WritableType n2w = n1w.getNWritable();
-      final JPRAStringType n2s = n2w.getSWritable();
 
       Assert.assertEquals("", n0s.getNewValue());
       Assert.assertEquals("", n1s.getNewValue());

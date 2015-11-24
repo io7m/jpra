@@ -33,8 +33,8 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
-import com.io7m.jpra.runtime.java.JPRAStringReadableType;
-import com.io7m.jpra.runtime.java.JPRAStringType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorReadableType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
@@ -65,6 +65,55 @@ final class RecordFieldImplementationProcessor
     this.field = NullCheck.notNull(in_field);
     this.offset = NullCheck.notNull(in_offset);
     this.class_builder = NullCheck.notNull(in_class_builder);
+
+    this.metaMethods();
+  }
+
+  private void metaMethods()
+  {
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaOffsetTypeReadableName(this.field.getName());
+      final String offset_constant =
+        JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
+
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addModifiers(Modifier.PUBLIC);
+      getb.addAnnotation(Override.class);
+      getb.addStatement("return $N", offset_constant);
+      getb.returns(int.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaOffsetCursorReadableName(
+          this.field.getName());
+      final String offset_constant =
+        JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
+
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addModifiers(Modifier.PUBLIC);
+      getb.addAnnotation(Override.class);
+      getb.addStatement("return $N + this.$N", offset_constant, "base_offset");
+      getb.returns(int.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    {
+      final String getter_name =
+        JPRAGeneratedNames.getMetaTypeGetName(this.field.getName());
+      final String field_name =
+        JPRAGeneratedNames.getMetaTypeFieldName(this.field.getName());
+
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+      getb.addModifiers(Modifier.PUBLIC);
+      getb.addAnnotation(Override.class);
+      getb.addStatement("return this.$N", field_name);
+      getb.returns(
+        JPRAClasses.getModelTypeForType(this.field.getType()));
+      this.class_builder.addMethod(getb.build());
+    }
   }
 
   @Override public Unit matchArray(
@@ -90,14 +139,14 @@ final class RecordFieldImplementationProcessor
     final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
     read_b.addModifiers(Modifier.PUBLIC);
     read_b.addAnnotation(Override.class);
-    read_b.returns(JPRAStringReadableType.class);
+    read_b.returns(JPRAStringCursorReadableType.class);
     read_b.addStatement("return this.$N", f_name);
     this.class_builder.addMethod(read_b.build());
 
     final MethodSpec.Builder write_b = MethodSpec.methodBuilder(writer_name);
     write_b.addModifiers(Modifier.PUBLIC);
     write_b.addAnnotation(Override.class);
-    write_b.returns(JPRAStringType.class);
+    write_b.returns(JPRAStringCursorType.class);
     write_b.addStatement("return this.$N", f_name);
     this.class_builder.addMethod(write_b.build());
 
@@ -130,7 +179,6 @@ final class RecordFieldImplementationProcessor
           .replace(" ", "0");
 
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-      getb.addJavadoc("@return The value of the {@code $L} field", f);
       getb.addAnnotation(Override.class);
       getb.addModifiers(Modifier.PUBLIC);
       getb.returns(boolean.class);
@@ -145,8 +193,6 @@ final class RecordFieldImplementationProcessor
       final String setter_name =
         JPRAGeneratedNames.getSetterBooleanSetName(this.field.getName(), f);
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
-      setb.addJavadoc("Set the value of the {@code $L} field\n", f);
-      setb.addJavadoc("@param x The new value");
       setb.addAnnotation(Override.class);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addParameter(boolean.class, "x", Modifier.FINAL);
@@ -239,8 +285,6 @@ final class RecordFieldImplementationProcessor
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addModifiers(Modifier.PUBLIC);
       getb.addAnnotation(Override.class);
-      getb.addJavadoc(
-        "@return The value of the {@code $L} field", this.field.getName());
       getb.returns(double.class);
       getb.addStatement(
         "return $T.unpackDouble($N.$N(this.getByteOffsetFor($N)))",
@@ -257,9 +301,6 @@ final class RecordFieldImplementationProcessor
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addAnnotation(Override.class);
-      setb.addJavadoc(
-        "Set the value of the {@code $L} field\n", this.field.getName());
-      setb.addJavadoc("@param x The new value");
       setb.addParameter(double.class, "x", Modifier.FINAL);
       setb.returns(void.class);
       setb.addStatement(
@@ -280,8 +321,6 @@ final class RecordFieldImplementationProcessor
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addModifiers(Modifier.PUBLIC);
       getb.addAnnotation(Override.class);
-      getb.addJavadoc(
-        "@return The value of the {@code $L} field", this.field.getName());
       getb.returns(itype);
       getb.addStatement(
         "return this.$N.$N(this.getByteOffsetFor($N))",
@@ -298,9 +337,6 @@ final class RecordFieldImplementationProcessor
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
       setb.addModifiers(Modifier.PUBLIC);
       setb.addAnnotation(Override.class);
-      setb.addJavadoc(
-        "Set the value of the {@code $L} field\n", this.field.getName());
-      setb.addJavadoc("@param x The new value");
       setb.addParameter(itype, "x", Modifier.FINAL);
       setb.returns(void.class);
       setb.addStatement(

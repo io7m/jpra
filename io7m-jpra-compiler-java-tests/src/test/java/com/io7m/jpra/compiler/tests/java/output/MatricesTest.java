@@ -21,6 +21,7 @@ import com.io7m.jpra.compiler.tests.java.generation.code.MatricesType;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import com.io7m.jtensors.Matrix2x2DType;
 import com.io7m.jtensors.Matrix2x2FType;
 import com.io7m.jtensors.Matrix3x3DType;
@@ -94,7 +95,7 @@ public final class MatricesTest
     }
   }
 
-  @Test public void testSize()
+  @Test public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<MatricesType> c =
@@ -104,6 +105,41 @@ public final class MatricesTest
 
     final MatricesType v = c.getElementView();
     Assert.assertEquals(348L, (long) v.sizeOctets());
+
+    Assert.assertEquals(0L, (long) v.metaM2fOffsetFromType());
+    Assert.assertEquals(16L, (long) v.metaM2dOffsetFromType());
+    Assert.assertEquals(48L, (long) v.metaM3fOffsetFromType());
+    Assert.assertEquals(84L, (long) v.metaM3dOffsetFromType());
+    Assert.assertEquals(156L, (long) v.metaM4fOffsetFromType());
+    Assert.assertEquals(220L, (long) v.metaM4dOffsetFromType());
+
+    Assert.assertEquals(0L, (long) v.metaM2fOffsetFromCursor());
+    Assert.assertEquals(16L, (long) v.metaM2dOffsetFromCursor());
+    Assert.assertEquals(48L, (long) v.metaM3fOffsetFromCursor());
+    Assert.assertEquals(84L, (long) v.metaM3dOffsetFromCursor());
+    Assert.assertEquals(156L, (long) v.metaM4fOffsetFromCursor());
+    Assert.assertEquals(220L, (long) v.metaM4dOffsetFromCursor());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(2, 2, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaM2fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(2, 2, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaM2dType());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(3, 3, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaM3fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(3, 3, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaM3dType());
+
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(4, 4, JPRATypeModel.JPRAFloat.of(32)),
+      v.metaM4fType());
+    Assert.assertEquals(
+      JPRATypeModel.JPRAMatrix.of(4, 4, JPRATypeModel.JPRAFloat.of(64)),
+      v.metaM4dType());
   }
 
   @Test public void testV4x4D()
