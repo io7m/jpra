@@ -15,7 +15,7 @@
  */
 
 /**
- * Unit tests for the model.
+ * Unit tests for the type_model.
  */
 
 package com.io7m.jpra.tests.core;

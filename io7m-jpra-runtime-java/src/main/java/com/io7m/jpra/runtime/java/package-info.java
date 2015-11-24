@@ -18,5 +18,6 @@
  * Runtime components.
  */
 
+@JPRAStyleType
 package com.io7m.jpra.runtime.java;
 

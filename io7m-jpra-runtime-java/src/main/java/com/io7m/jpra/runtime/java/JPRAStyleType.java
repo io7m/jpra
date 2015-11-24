@@ -16,20 +16,25 @@
 
 package com.io7m.jpra.runtime.java;
 
+import org.immutables.value.Value;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * The type of pointers to writable strings
+ * Style settings for generated immutable types.
  */
 
-public interface JPRAStringWritableType
+@Target({ ElementType.PACKAGE, ElementType.TYPE })
+@Retention(RetentionPolicy.CLASS)
+@Value.Style(
+  typeAbstract = { "*Type" },
+  typeImmutable = "*",
+  typeImmutableEnclosing = "*",
+  visibility = Value.Style.ImplementationVisibility.PUBLIC)
+public @interface JPRAStyleType
 {
-  /**
-   * Set the string value, optionally truncating data based on {@code trunc}.
-   *
-   * @param text  The new string value
-   * @param trunc The truncation behaviour
-   */
 
-  void setValue(
-    String text,
-    JPRAStringTruncation trunc);
 }

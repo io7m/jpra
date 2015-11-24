@@ -32,8 +32,9 @@ import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TString;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.model.types.TypeMatcherType;
-import com.io7m.jpra.runtime.java.JPRAStringByteBuffered;
-import com.io7m.jpra.runtime.java.JPRAStringType;
+import com.io7m.jpra.runtime.java.JPRAStringCursorByteBuffered;
+import com.io7m.jpra.runtime.java.JPRAStringCursorType;
+import com.io7m.jpra.runtime.java.JPRATypeModel;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -78,7 +79,7 @@ final class RecordFieldImplementationConstructorProcessor
     this.constructor_builder.addStatement(
       "this.$N = $T.newString($N, $N + $N, $N, $T.forName($S), $L)",
       field_name,
-      JPRAStringByteBuffered.class,
+      JPRAStringCursorByteBuffered.class,
       "in_buffer",
       offset_name,
       "in_base_offset",
@@ -88,29 +89,118 @@ final class RecordFieldImplementationConstructorProcessor
       t.getMaximumStringLength().getValue().intValue());
 
     this.class_builder.addField(
-      JPRAStringType.class, field_name, Modifier.FINAL, Modifier.PRIVATE);
+      JPRAStringCursorType.class, field_name, Modifier.FINAL, Modifier.PRIVATE);
+
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final Class<JPRATypeModel.JPRAString> c =
+      JPRATypeModel.JPRAString.class;
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      c,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L, $S)",
+      meta_field_name,
+      c,
+      t.getMaximumStringLength().getValue(), t.getEncoding());
 
     return Unit.unit();
   }
 
   @Override public Unit matchBooleanSet(final TBooleanSet t)
   {
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final Class<JPRATypeModel.JPRABooleanSet> c =
+      JPRATypeModel.JPRABooleanSet.class;
+    final FieldName f_name = this.field.getName();
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      c,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L)",
+      meta_field_name,
+      c,
+      t.getSizeInOctets().getValue());
+
     return Unit.unit();
   }
 
   @Override public Unit matchInteger(final TIntegerType t)
   {
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final FieldName f_name = this.field.getName();
+    final ClassName c_name =
+      JPRAClasses.getModelScalarTypeForScalarType(t);
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      c_name,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L)",
+      meta_field_name,
+      c_name,
+      t.getSizeInBits().getValue());
+
     return Unit.unit();
   }
 
   @Override public Unit matchFloat(final TFloat t)
   {
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final FieldName f_name = this.field.getName();
+    final ClassName c_name =
+      JPRAClasses.getModelScalarTypeForScalarType(t);
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      c_name,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L)",
+      meta_field_name,
+      c_name,
+      t.getSizeInBits().getValue());
+
     return Unit.unit();
   }
 
   @Override public Unit matchVector(final TVector t)
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
+
+    /**
+     * Construct a vector cursor field and assign value to it.
+     */
 
     final FieldName f_name = this.field.getName();
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
@@ -123,9 +213,34 @@ final class RecordFieldImplementationConstructorProcessor
       "in_pointer.getByteOffsetObservable()",
       "in_base_offset",
       offset_name);
-
     this.class_builder.addField(
       c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
+
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final ClassName et =
+      JPRAClasses.getModelScalarTypeForScalarType(t.getElementType());
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      JPRATypeModel.JPRAVector.class,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+
+    this.constructor_builder.beginControlFlow("");
+    this.constructor_builder.addStatement(
+      "final $T et = $T.of($L)", et, et,
+      t.getElementType().getSizeInBits().getValue());
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L, et)",
+      meta_field_name,
+      JPRATypeModel.JPRAVector.class,
+      t.getElementCount().getValue());
+    this.constructor_builder.endControlFlow();
 
     return Unit.unit();
   }
@@ -133,6 +248,10 @@ final class RecordFieldImplementationConstructorProcessor
   @Override public Unit matchMatrix(final TMatrix t)
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
+
+    /**
+     * Construct a matrix cursor field and assign value to it.
+     */
 
     final FieldName f_name = this.field.getName();
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
@@ -149,6 +268,33 @@ final class RecordFieldImplementationConstructorProcessor
     this.class_builder.addField(
       c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
 
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final ClassName et =
+      JPRAClasses.getModelScalarTypeForScalarType(t.getElementType());
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      JPRATypeModel.JPRAMatrix.class,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+
+    this.constructor_builder.beginControlFlow("");
+    this.constructor_builder.addStatement(
+      "final $T et = $T.of($L)", et, et,
+      t.getElementType().getSizeInBits().getValue());
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($L, $L, et)",
+      meta_field_name,
+      JPRATypeModel.JPRAMatrix.class,
+      t.getWidth().getValue(),
+      t.getHeight().getValue());
+    this.constructor_builder.endControlFlow();
+
     return Unit.unit();
   }
 
@@ -162,10 +308,13 @@ final class RecordFieldImplementationConstructorProcessor
     final TypeName t_name,
     final PackageContextType pkg_ctxt)
   {
+    /**
+     * Construct a record/packed cursor field and assign a value to it.
+     */
+
     final String t_imp_name =
       JPRAGeneratedNames.getRecordImplementationByteBufferedName(t_name);
     final String t_int_name = JPRAGeneratedNames.getRecordInterfaceName(t_name);
-
     final FieldName f_name = this.field.getName();
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
     final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
@@ -182,6 +331,24 @@ final class RecordFieldImplementationConstructorProcessor
     final ClassName t_cn = ClassName.get(p.toString(), t_int_name);
     this.class_builder.addField(
       t_cn, field_name, Modifier.FINAL, Modifier.PRIVATE);
+
+    /**
+     * Construct a meta type field, and assign a value to it.
+     */
+
+    final String meta_field_name =
+      JPRAGeneratedNames.getMetaTypeFieldName(f_name);
+
+    this.class_builder.addField(
+      JPRATypeModel.JPRAUserDefined.class,
+      meta_field_name,
+      Modifier.FINAL,
+      Modifier.PRIVATE);
+    this.constructor_builder.addStatement(
+      "this.$N = $T.of($T.class)",
+      meta_field_name,
+      JPRATypeModel.JPRAUserDefined.class,
+      t_cn);
   }
 
   @Override public Unit matchPacked(final TPacked t)

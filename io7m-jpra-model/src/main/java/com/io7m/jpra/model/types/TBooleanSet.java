@@ -56,6 +56,15 @@ import java.util.Optional;
   }
 
   /**
+   * @return The size in octets of the set
+   */
+
+  public Size<SizeUnitOctetsType> getSizeInOctets()
+  {
+    return this.size;
+  }
+
+  /**
    * @return The fields in declaration order
    */
 

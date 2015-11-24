@@ -21,11 +21,11 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
- * An implementation of the {@link JPRAStringType} that accesses an underlying
+ * An implementation of the {@link JPRAStringCursorType} that accesses an underlying
  * {@link ByteBuffer}.
  */
 
-public final class JPRAStringByteBuffered implements JPRAStringType
+public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
 {
   private final ByteBuffer                 buffer;
   private final int                        max_length;
@@ -33,7 +33,7 @@ public final class JPRAStringByteBuffered implements JPRAStringType
   private final int                        offset;
   private final Charset                    encoding;
 
-  private JPRAStringByteBuffered(
+  private JPRAStringCursorByteBuffered(
     final ByteBuffer in_buffer,
     final int in_offset,
     final JPRACursorByteReadableType in_cursor,
@@ -74,14 +74,14 @@ public final class JPRAStringByteBuffered implements JPRAStringType
    * @return A new string pointer
    */
 
-  public static JPRAStringType newString(
+  public static JPRAStringCursorType newString(
     final ByteBuffer in_buffer,
     final int in_offset,
     final JPRACursorByteReadableType in_cursor,
     final Charset in_encoding,
     final int in_max_length)
   {
-    return new JPRAStringByteBuffered(
+    return new JPRAStringCursorByteBuffered(
       in_buffer,
       in_offset,
       in_cursor,

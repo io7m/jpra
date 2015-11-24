@@ -238,4 +238,42 @@ final class JPRAGeneratedNames
   {
     return JPRAGeneratedNames.getObjectWritableName(name);
   }
+
+  public static String getMetaOffsetTypeReadableName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("meta");
+    sb.append(text);
+    sb.append("OffsetFromType");
+    return sb.toString();
+  }
+
+  public static String getMetaOffsetCursorReadableName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("meta");
+    sb.append(text);
+    sb.append("OffsetFromCursor");
+    return sb.toString();
+  }
+
+  public static String getMetaTypeGetName(final FieldName name)
+  {
+    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("meta");
+    sb.append(text);
+    sb.append("Type");
+    return sb.toString();
+  }
+
+  public static String getMetaTypeFieldName(final FieldName name)
+  {
+    final StringBuilder sb = new StringBuilder(128);
+    sb.append("meta_type_");
+    sb.append(name.getValue());
+    return sb.toString();
+  }
 }
