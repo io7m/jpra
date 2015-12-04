@@ -4,6 +4,16 @@
 
   <c:release c:ticket-system="com.github.io7m.jpra">
     <c:date>2015-12-04</c:date>
+    <c:version>0.3.2</c:version>
+    <c:item>
+      <c:date>2015-12-04</c:date>
+      <c:type-code-fix/>
+      <c:summary>Use immutables 2.1.2</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.github.io7m.jpra">
+    <c:date>2015-12-04</c:date>
     <c:version>0.3.1</c:version>
     <c:item>
       <c:date>2015-12-04</c:date>
