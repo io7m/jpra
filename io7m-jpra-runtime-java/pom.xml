@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jpra</groupId>
     <artifactId>io7m-jpra</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
   </parent>
   <artifactId>io7m-jpra-runtime-java</artifactId>
 
@@ -48,6 +48,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+        </configuration>
       </plugin>
 
       <!-- Disable incremental compilation -->
