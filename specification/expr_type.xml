@@ -140,7 +140,7 @@ integer_expression =
       <s:paragraph>
         When specified as the type of a
         <s:link s:target="stmt.type.record">record</s:link> field,
-        implementations are not required to support
+        implementations are required to support
         <s:term s:type="expression">integers</s:term> of all formats
         of at least the sizes <s:term s:type="expression">{8, 16, 32, 64}</s:term>.
       </s:paragraph>
