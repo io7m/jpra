@@ -329,10 +329,7 @@ public final class PackedFieldInterfaceProcessor
           MethodSpec.methodBuilder(setter_norm_name);
         setb.addJavadoc(
           "Set the value of the {@code $L} field.\n", this.field.getName());
-        setb.addJavadoc(
-          "The $L least significant bits of {@code x} will be used.\n",
-          this.field.getSize().getValue());
-        setb.addJavadoc("@param x The new value");
+        setb.addJavadoc("@param x The new value (in the range {@code [0, 1]})");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         setb.addParameter(double.class, "x", Modifier.FINAL);
         this.class_builder.addMethod(setb.build());
