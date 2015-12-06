@@ -40,8 +40,6 @@
         The "first" octet in the array is at octet index
         <s:term s:type="constant">0</s:term> and the "last" octet in the
         array is at octet index <s:term s:type="expression">n - 1</s:term>.
-        As a consequence of the above, it can be assumed that
-        <s:term s:type="expression"><![CDATA[k <= n * s]]></s:term>.
       </s:paragraph>
       <s:paragraph>
         Values are tightly packed; The first octet of the first element
