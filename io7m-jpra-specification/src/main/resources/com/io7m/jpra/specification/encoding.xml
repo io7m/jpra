@@ -134,7 +134,7 @@
         most significant bit of octet 1. In effect, for a given octet,
         a <s:term s:type="expression">true</s:term> value for
         the field <s:term s:type="expression">n</s:term> will be encoded
-        as <s:term s:type="expression"><![CDATA[1 << n]]></s:term>
+        as <s:term s:type="expression"><![CDATA[1 << (7 - n)]]></s:term>
         or <s:term s:type="expression"><![CDATA[pow(2, n)]]></s:term>.
       </s:paragraph>
       <s:paragraph>
