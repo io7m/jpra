@@ -60,10 +60,13 @@
       <s:subsection-title>Endianness</s:subsection-title>
       <s:paragraph>
         For data elements larger than a single octet, the
-        <s:term s:type="term">endianness</s:term> is left undefined and is
-        at the discretion of individual code generators. The encoding rules
-        described here are written in a
-        <s:term s:type="term">endianness-agnostic</s:term> manner.
+        <s:term s:type="term">endianness</s:term> is unspecified by the
+        language and is expected to be a configurable property of the
+        underlying storage. The language encoding rules use relative
+        terms such as <s:term s:type="term">first</s:term> and
+        <s:term s:type="term">last</s:term> octets, and these terms are
+        expected to be interpreted with respect to the underlying storage
+        endianness.
       </s:paragraph>
     </s:subsection>
   </s:section>
