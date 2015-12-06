@@ -3,8 +3,23 @@
   <c:project>io7m-jpra</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-12-04</c:date>
+    <c:date>2015-12-06</c:date>
     <c:version>0.3.2</c:version>
+    <c:item>
+      <c:date>2015-12-06</c:date>
+      <c:type-code-fix/>
+      <c:ticket>13</c:ticket>
+      <c:ticket>12</c:ticket>
+      <c:ticket>11</c:ticket>
+      <c:summary>Specification clarifications and improvements</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2015-12-06</c:date>
+      <c:type-code-fix/>
+      <c:ticket>16</c:ticket>
+      <c:ticket>15</c:ticket>
+      <c:summary>Correct JavaDoc for packed 'set' methods</c:summary>
+    </c:item>
     <c:item>
       <c:date>2015-12-04</c:date>
       <c:type-code-fix/>
