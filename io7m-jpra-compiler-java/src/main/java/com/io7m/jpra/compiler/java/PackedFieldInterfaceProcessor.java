@@ -104,6 +104,27 @@ public final class PackedFieldInterfaceProcessor
   {
     final MethodSpec.Builder setb = MethodSpec.methodBuilder("set");
     setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
+    setb.addJavadoc("Set the value of all fields.\n");
+
+    for (final TPacked.FieldType f : ordered) {
+      f.matchField(
+        new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+        {
+          @Override public Unit matchFieldValue(final TPacked.FieldValue f)
+          {
+            final FieldName f_name = f.getName();
+            setb.addJavadoc(
+              "@param $L The value for field {@code $L}\n", f_name, f_name);
+            return Unit.unit();
+          }
+
+          @Override
+          public Unit matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+          {
+            return Unit.unit();
+          }
+        });
+    }
 
     for (final TPacked.FieldType f : ordered) {
       f.matchField(
