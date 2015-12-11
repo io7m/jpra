@@ -11,6 +11,12 @@
       <c:ticket>18</c:ticket>
       <c:summary>Add static size and offset methods to generated types</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2015-12-11</c:date>
+      <c:type-code-fix/>
+      <c:ticket>14</c:ticket>
+      <c:summary>Reduce size of jpra-c frontend jar</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.github.io7m.jpra">
