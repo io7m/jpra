@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jpra</groupId>
     <artifactId>io7m-jpra</artifactId>
-    <version>0.3.2</version>
+    <version>0.4.0</version>
   </parent>
   <artifactId>io7m-jpra-compiler-core</artifactId>
 
