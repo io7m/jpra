@@ -128,12 +128,25 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     fb.initializer(size.getValue().toString());
     jcb.addField(fb.build());
-    final MethodSpec.Builder jmb = MethodSpec.methodBuilder("sizeOctets");
-    jmb.addModifiers(Modifier.PUBLIC);
-    jmb.addAnnotation(Override.class);
-    jmb.returns(int.class);
-    jmb.addStatement("return SIZE_OCTETS");
-    jcb.addMethod(jmb.build());
+
+    {
+      final MethodSpec.Builder jmb = MethodSpec.methodBuilder("sizeOctets");
+      jmb.addModifiers(Modifier.PUBLIC);
+      jmb.addAnnotation(Override.class);
+      jmb.returns(int.class);
+      jmb.addStatement("return SIZE_OCTETS");
+      jcb.addMethod(jmb.build());
+    }
+
+    {
+      final MethodSpec.Builder jmb = MethodSpec.methodBuilder("sizeInOctets");
+      jmb.addJavadoc("@return The size of the type in octets\n");
+      jmb.addModifiers(Modifier.PUBLIC);
+      jmb.addModifiers(Modifier.STATIC);
+      jmb.returns(int.class);
+      jmb.addStatement("return SIZE_OCTETS");
+      jcb.addMethod(jmb.build());
+    }
   }
 
   private static void generateRecordFactoryMethods(

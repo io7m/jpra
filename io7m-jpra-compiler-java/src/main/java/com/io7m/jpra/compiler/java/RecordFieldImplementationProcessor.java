@@ -87,6 +87,31 @@ final class RecordFieldImplementationProcessor
 
     {
       final String getter_name =
+        JPRAGeneratedNames.getMetaOffsetStaticTypeReadableName(
+          this.field.getName());
+      final String offset_constant =
+        JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
+
+      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+
+      {
+        final StringBuilder sb = new StringBuilder(128);
+        sb.append("@return The offset in octets of field ");
+        sb.append("{@code ");
+        sb.append(this.field.getName().getValue());
+        sb.append("} from the start of the type\n");
+        getb.addJavadoc(sb.toString());
+      }
+
+      getb.addModifiers(Modifier.PUBLIC);
+      getb.addModifiers(Modifier.STATIC);
+      getb.addStatement("return $N", offset_constant);
+      getb.returns(int.class);
+      this.class_builder.addMethod(getb.build());
+    }
+
+    {
+      final String getter_name =
         JPRAGeneratedNames.getMetaOffsetCursorReadableName(
           this.field.getName());
       final String offset_constant =
