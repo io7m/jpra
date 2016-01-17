@@ -113,6 +113,13 @@
   (field a [integer unsigned-normalized 4])
 ])
 
+(packed OpenGL8888 [
+  (field r [integer unsigned-normalized 8])
+  (field g [integer unsigned-normalized 8])
+  (field b [integer unsigned-normalized 8])
+  (field a [integer unsigned-normalized 8])
+])
+
 (packed OpenGL101010A2 [
   (field r [integer unsigned-normalized 10])
   (field g [integer unsigned-normalized 10])

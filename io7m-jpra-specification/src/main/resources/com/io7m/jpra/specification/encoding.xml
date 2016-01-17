@@ -57,7 +57,13 @@
     <s:subsection>
       <s:subsection-title>Endianness</s:subsection-title>
       <s:paragraph>
-        For data elements larger than a single octet, the
+        The <s:term s:type="package">jpra</s:term> language handles
+        endianness differently for
+        <s:link s:target="stmt.type.record">record</s:link> and
+        <s:link s:target="stmt.type.packed">packed</s:link> types.
+      </s:paragraph>
+      <s:paragraph>
+        For record types, for data elements larger than a single octet, the
         <s:term s:type="term">endianness</s:term> is unspecified by the
         language and is expected to be a configurable property of the
         underlying storage. The language encoding rules use relative
@@ -65,6 +71,11 @@
         <s:term s:type="term">last</s:term> octets, and these terms are
         expected to be interpreted with respect to the underlying storage
         endianness.
+      </s:paragraph>
+      <s:paragraph>
+        For packed types, the fields are conceptually packed into a
+        single integer, and that integer is written to the underlying
+        storage in big-endian byte order.
       </s:paragraph>
     </s:subsection>
   </s:section>
