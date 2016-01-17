@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Objects;
 
 /**
@@ -307,6 +308,17 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       cno,
       "in_buffer",
       "Buffer");
+
+    jmb.addStatement(
+      "this.$N = ByteBuffer.allocate($L)",
+      "pack_buffer",
+      Integer.valueOf(t.getSizeInOctets().getValue().intValue()));
+    jmb.addStatement(
+      "this.$N.order($T.$L)",
+      "pack_buffer",
+      ByteOrder.class,
+      ByteOrder.BIG_ENDIAN);
+
     jmb.addStatement(
       "this.$N = $T.requireNonNull($N, $S)",
       "pointer",
@@ -569,6 +581,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
       jcb.addField(
         ByteBuffer.class, "buffer", Modifier.PRIVATE, Modifier.FINAL);
+      jcb.addField(
+        ByteBuffer.class, "pack_buffer", Modifier.PRIVATE, Modifier.FINAL);
       jcb.addField(
         int.class, "base_offset", Modifier.PRIVATE, Modifier.FINAL);
       jcb.addField(ptr_class, "pointer", Modifier.PRIVATE, Modifier.FINAL);

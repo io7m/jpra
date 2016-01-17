@@ -109,12 +109,12 @@ public abstract class JPRAJavaGeneratorContract
           files.add(r_file.toFile());
           files.add(w_file.toFile());
           files.add(i_file.toFile());
-        } catch (IOException e) {
+        } catch (final IOException e) {
           throw new UncheckedIOException(e);
         }
       });
 
-    final String[] options = { "-verbose", "-Werror", "-d", path.toString() };
+    final String[] options = {"-verbose", "-Werror", "-d", path.toString()};
     final Iterable<? extends JavaFileObject> fm_files =
       fm.getJavaFileObjectsFromFiles(files);
 
@@ -168,12 +168,12 @@ public abstract class JPRAJavaGeneratorContract
           files.add(r_file.toFile());
           files.add(w_file.toFile());
           files.add(i_file.toFile());
-        } catch (IOException e) {
+        } catch (final IOException e) {
           throw new UncheckedIOException(e);
         }
       });
 
-    final String[] options = { "-verbose", "-Werror", "-d", path.toString() };
+    final String[] options = {"-verbose", "-Werror", "-d", path.toString()};
     final Iterable<? extends JavaFileObject> fm_files =
       fm.getJavaFileObjectsFromFiles(files);
 
@@ -184,9 +184,16 @@ public abstract class JPRAJavaGeneratorContract
     fm.close();
   }
 
+  private static Path createTemporaryDir()
+    throws IOException
+  {
+    return Files.createTempDirectory("jpra");
+  }
+
   protected abstract JPRAJavaGeneratorType getJavaGenerator();
 
-  @Test public final void testRecordEmpty()
+  @Test
+  public final void testRecordEmpty()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -207,10 +214,11 @@ public abstract class JPRAJavaGeneratorContract
     final TRecord r = rb.build();
 
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordIntegerExhaustive()
+  @Test
+  public final void testRecordIntegerExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -265,10 +273,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordFloatExhaustive()
+  @Test
+  public final void testRecordFloatExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -302,10 +311,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordIntegerNormalizedExhaustive()
+  @Test
+  public final void testRecordIntegerNormalizedExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -360,10 +370,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordPaddingExhaustive()
+  @Test
+  public final void testRecordPaddingExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -386,10 +397,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordBooleanSetExhaustive()
+  @Test
+  public final void testRecordBooleanSetExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -425,10 +437,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordFieldRecord()
+  @Test
+  public final void testRecordFieldRecord()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -445,7 +458,7 @@ public abstract class JPRAJavaGeneratorContract
     final Optional<ImmutableLexicalPositionType<Path>> no_lex =
       Optional.empty();
 
-    final Path path = Files.createTempDirectory("jpra");
+    final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
 
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
@@ -460,7 +473,8 @@ public abstract class JPRAJavaGeneratorContract
       path, g, Lists.immutable.of(te, r));
   }
 
-  @Test public final void testRecordFieldRecordTwice()
+  @Test
+  public final void testRecordFieldRecordTwice()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -477,7 +491,7 @@ public abstract class JPRAJavaGeneratorContract
     final Optional<ImmutableLexicalPositionType<Path>> no_lex =
       Optional.empty();
 
-    final Path path = Files.createTempDirectory("jpra");
+    final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
 
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
@@ -493,7 +507,8 @@ public abstract class JPRAJavaGeneratorContract
       path, g, Lists.immutable.of(te, r));
   }
 
-  @Test public final void testPackedEmpty()
+  @Test
+  public final void testPackedEmpty()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -514,10 +529,11 @@ public abstract class JPRAJavaGeneratorContract
     final TPacked r = rb.build();
 
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedAllPadding()
+  @Test
+  public final void testPackedAllPadding()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -540,10 +556,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU4_U4_U4_U4()
+  @Test
+  public final void testPackedIntegerU4_U4_U4_U4()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -581,10 +598,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU8_U8_U8_U8()
+  @Test
+  public final void testPackedIntegerU8_U8_U8_U8()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -622,10 +640,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU16_U16_U16_U16()
+  @Test
+  public final void testPackedIntegerU16_U16_U16_U16()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -664,10 +683,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU2_U2_U2_U2()
+  @Test
+  public final void testPackedIntegerU2_U2_U2_U2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -705,10 +725,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU2_U2_U2_U2_U2_U2_U2_U2()
+  @Test
+  public final void testPackedIntegerU2_U2_U2_U2_U2_U2_U2_U2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -764,10 +785,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerS4_S4_S4_S4()
+  @Test
+  public final void testPackedIntegerS4_S4_S4_S4()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -805,10 +827,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerS8_S8_S8_S8()
+  @Test
+  public final void testPackedIntegerS8_S8_S8_S8()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -846,10 +869,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerS16_S16_S16_S16()
+  @Test
+  public final void testPackedIntegerS16_S16_S16_S16()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -888,10 +912,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerS2_S2_S2_S2()
+  @Test
+  public final void testPackedIntegerS2_S2_S2_S2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -929,10 +954,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerS2_S2_S2_S2_S2_S2_S2_S2()
+  @Test
+  public final void testPackedIntegerS2_S2_S2_S2_S2_S2_S2_S2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -988,10 +1014,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerUN4_UN4_UN4_UN4()
+  @Test
+  public final void testPackedIntegerUN4_UN4_UN4_UN4()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1030,10 +1057,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerUN8_UN8_UN8_UN8()
+  @Test
+  public final void testPackedIntegerUN8_UN8_UN8_UN8()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1072,10 +1100,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerUN16_UN16_UN16_UN16()
+  @Test
+  public final void testPackedIntegerUN16_UN16_UN16_UN16()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1114,10 +1143,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerUN2_UN2_UN2_UN2()
+  @Test
+  public final void testPackedIntegerUN2_UN2_UN2_UN2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1156,10 +1186,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerUN2_UN2_UN2_UN2_UN2_UN2_UN2_UN2()
+  @Test
+  public final void testPackedIntegerUN2_UN2_UN2_UN2_UN2_UN2_UN2_UN2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1215,10 +1246,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerSN4_SN4_SN4_SN4()
+  @Test
+  public final void testPackedIntegerSN4_SN4_SN4_SN4()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1257,10 +1289,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerSN8_SN8_SN8_SN8()
+  @Test
+  public final void testPackedIntegerSN8_SN8_SN8_SN8()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1299,10 +1332,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerSN16_SN16_SN16_SN16()
+  @Test
+  public final void testPackedIntegerSN16_SN16_SN16_SN16()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1341,10 +1375,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerSN2_SN2_SN2_SN2()
+  @Test
+  public final void testPackedIntegerSN2_SN2_SN2_SN2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1383,10 +1418,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerSN2_SN2_SN2_SN2_SN2_SN2_SN2_SN2()
+  @Test
+  public final void testPackedIntegerSN2_SN2_SN2_SN2_SN2_SN2_SN2_SN2()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1442,10 +1478,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testPackedIntegerU4_S4_UN4_SN4()
+  @Test
+  public final void testPackedIntegerU4_S4_UN4_SN4()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1483,10 +1520,11 @@ public abstract class JPRAJavaGeneratorContract
 
     final TPacked r = rb.build();
     JPRAJavaGeneratorContract.compilePackeds(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 
-  @Test public final void testRecordVectorExhaustive()
+  @Test
+  public final void testRecordVectorExhaustive()
     throws Exception
   {
     final JPRAJavaGeneratorType g = this.getJavaGenerator();
@@ -1556,6 +1594,6 @@ public abstract class JPRAJavaGeneratorContract
 
     final TRecord r = rb.build();
     JPRAJavaGeneratorContract.compileRecords(
-      Files.createTempDirectory("jpra"), g, Lists.immutable.of(r));
+      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
   }
 }

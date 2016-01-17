@@ -134,27 +134,31 @@ public final class PackedFieldImplementationProcessor
         final Class<?> f_class = f_type.matchTypeInteger(
           new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
           {
-            @Override public Class<?> matchIntegerUnsigned(
+            @Override
+            public Class<?> matchIntegerUnsigned(
               final TIntegerUnsigned t)
             {
               return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
                 f_size);
             }
 
-            @Override public Class<?> matchIntegerSigned(
+            @Override
+            public Class<?> matchIntegerSigned(
               final TIntegerSigned t)
             {
               return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
                 f_size);
             }
 
-            @Override public Class<?> matchIntegerSignedNormalized(
+            @Override
+            public Class<?> matchIntegerSignedNormalized(
               final TIntegerSignedNormalized t)
             {
               return double.class;
             }
 
-            @Override public Class<?> matchIntegerUnsignedNormalized(
+            @Override
+            public Class<?> matchIntegerUnsignedNormalized(
               final TIntegerUnsignedNormalized t)
             {
               return double.class;
@@ -171,7 +175,8 @@ public final class PackedFieldImplementationProcessor
         f_type.matchTypeInteger(
           new TypeIntegerMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchIntegerUnsigned(
+            @Override
+            public Unit matchIntegerUnsigned(
               final TIntegerUnsigned t)
             {
               PackedFieldImplementationProcessor.onInteger(
@@ -179,7 +184,8 @@ public final class PackedFieldImplementationProcessor
               return Unit.unit();
             }
 
-            @Override public Unit matchIntegerSigned(
+            @Override
+            public Unit matchIntegerSigned(
               final TIntegerSigned t)
             {
               PackedFieldImplementationProcessor.onInteger(
@@ -187,7 +193,8 @@ public final class PackedFieldImplementationProcessor
               return Unit.unit();
             }
 
-            @Override public Unit matchIntegerSignedNormalized(
+            @Override
+            public Unit matchIntegerSignedNormalized(
               final TIntegerSignedNormalized t)
             {
               PackedFieldImplementationProcessor.onNormalized(
@@ -195,7 +202,8 @@ public final class PackedFieldImplementationProcessor
               return Unit.unit();
             }
 
-            @Override public Unit matchIntegerUnsignedNormalized(
+            @Override
+            public Unit matchIntegerUnsignedNormalized(
               final TIntegerUnsignedNormalized t)
             {
               PackedFieldImplementationProcessor.onNormalized(
@@ -205,13 +213,59 @@ public final class PackedFieldImplementationProcessor
           });
       });
 
-    setb.addStatement(
-      "this.$N.$N(this.getByteOffset(), ($T) result)",
-      "buffer",
-      iput,
-      container_type);
+    PackedFieldImplementationProcessor.bufferWriteStatement(
+      t, setb, container_type, iput, "result");
     setb.returns(void.class);
     class_builder.addMethod(setb.build());
+  }
+
+  private static void bufferReadStatement(
+    final TPacked t,
+    final MethodSpec.Builder setb)
+  {
+    setb.beginControlFlow("");
+    setb.addStatement("final int off = this.getByteOffset()");
+
+    final int bytes = t.getSizeInOctets().getValue().intValue();
+    for (int index = 0; index < bytes; ++index) {
+      setb.addStatement(
+        "this.$N.put($L, this.$N.get(off + $L))",
+        "pack_buffer",
+        Integer.valueOf(index),
+        "buffer",
+        Integer.valueOf(index));
+    }
+
+    setb.endControlFlow();
+  }
+
+  private static void bufferWriteStatement(
+    final TPacked t,
+    final MethodSpec.Builder setb,
+    final Class<?> container_type,
+    final String iput,
+    final String value)
+  {
+    setb.beginControlFlow("");
+    setb.addStatement("final int off = this.getByteOffset()");
+    setb.addStatement(
+      "this.$N.$N(0, ($T) $N)",
+      "pack_buffer",
+      iput,
+      container_type,
+      value);
+
+    final int bytes = t.getSizeInOctets().getValue().intValue();
+    for (int index = 0; index < bytes; ++index) {
+      setb.addStatement(
+        "this.$N.put(off + $L, this.$N.get($L))",
+        "buffer",
+        Integer.valueOf(index),
+        "pack_buffer",
+        Integer.valueOf(index));
+    }
+
+    setb.endControlFlow();
   }
 
   private static void onInteger(
@@ -322,7 +376,8 @@ public final class PackedFieldImplementationProcessor
     return String.format("toUnsignedNormalized%s", field_size);
   }
 
-  @Override public Unit matchIntegerUnsigned(
+  @Override
+  public Unit matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits());
@@ -340,10 +395,15 @@ public final class PackedFieldImplementationProcessor
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
     return this.integerGetterSetter(
-      container_size, field_size, getter_name, setter_name);
+      this.field.getOwner(),
+      container_size,
+      field_size,
+      getter_name,
+      setter_name);
   }
 
   private Unit integerGetterSetter(
+    final TPacked t,
     final BigInteger container_size,
     final BigInteger field_size,
     final String getter_name,
@@ -421,10 +481,11 @@ public final class PackedFieldImplementationProcessor
     getb.addModifiers(Modifier.PUBLIC);
     getb.returns(external_type);
     getb.addAnnotation(Override.class);
+    PackedFieldImplementationProcessor.bufferReadStatement(t, getb);
     getb.addStatement(
-      "final $T read = this.$N.$N(this.getByteOffset())",
+      "final $T read = this.$N.$N(0)",
       container_type,
-      "buffer",
+      "pack_buffer",
       iget);
     getb.addStatement(
       "return ($T) ((read >>> $L) & $L)", external_type, shift, field_mask);
@@ -435,10 +496,11 @@ public final class PackedFieldImplementationProcessor
     setb.addParameter(external_type, "x", Modifier.FINAL);
     setb.addAnnotation(Override.class);
     setb.returns(void.class);
+    PackedFieldImplementationProcessor.bufferReadStatement(t, setb);
     setb.addStatement(
-      "final $T result = this.$N.$N(this.getByteOffset())",
+      "final $T result = this.$N.$N(0)",
       container_type,
-      "buffer",
+      "pack_buffer",
       iget);
     setb.addStatement(
       "final $T r_mask = $L", arith_type, container_mask);
@@ -448,22 +510,22 @@ public final class PackedFieldImplementationProcessor
       "final $T x_valu = (x & x_mask) << $L", arith_type, shift);
     setb.addStatement(
       "final $T w_valu = (result & r_mask) | x_valu", arith_type);
-    setb.addStatement(
-      "this.$N.$N(this.getByteOffset(), ($T) w_valu)",
-      "buffer",
-      iput,
-      container_type);
+    PackedFieldImplementationProcessor.bufferWriteStatement(
+      this.field.getOwner(), setb, container_type, iput, "w_valu");
+
     this.class_builder.addMethod(setb.build());
     return Unit.unit();
   }
 
-  @Override public Unit matchIntegerSigned(
+  @Override
+  public Unit matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits());
   }
 
-  @Override public Unit matchIntegerSignedNormalized(
+  @Override
+  public Unit matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue(), true);
@@ -486,7 +548,11 @@ public final class PackedFieldImplementationProcessor
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
     this.integerGetterSetter(
-      container_size, field_size, getter_norm_raw_name, setter_norm_raw_name);
+      this.field.getOwner(),
+      container_size,
+      field_size,
+      getter_norm_raw_name,
+      setter_norm_raw_name);
 
     final Class<?> nfp_class =
       PackedFieldImplementationProcessor.getNFPClassFromFieldSizeAndSign(
@@ -516,53 +582,63 @@ public final class PackedFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchIntegerUnsignedNormalized(
+  @Override
+  public Unit matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue(), false);
   }
 
-  @Override public Unit matchArray(final TArray t)
+  @Override
+  public Unit matchArray(final TArray t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchString(final TString t)
+  @Override
+  public Unit matchString(final TString t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchBooleanSet(final TBooleanSet t)
+  @Override
+  public Unit matchBooleanSet(final TBooleanSet t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchInteger(final TIntegerType t)
+  @Override
+  public Unit matchInteger(final TIntegerType t)
   {
     return t.matchTypeInteger(this);
   }
 
-  @Override public Unit matchFloat(final TFloat t)
+  @Override
+  public Unit matchFloat(final TFloat t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchVector(final TVector t)
+  @Override
+  public Unit matchVector(final TVector t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchMatrix(final TMatrix t)
+  @Override
+  public Unit matchMatrix(final TMatrix t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchRecord(final TRecord t)
+  @Override
+  public Unit matchRecord(final TRecord t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchPacked(final TPacked t)
+  @Override
+  public Unit matchPacked(final TPacked t)
   {
     throw new UnreachableCodeException();
   }
