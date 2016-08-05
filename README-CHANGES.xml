@@ -15,6 +15,11 @@
       <c:type-code-change/>
       <c:summary>Update to latest version of all dependencies (changes API)</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2016-08-05</c:date>
+      <c:type-code-fix/>
+      <c:summary>The runtime jar is now an OSGi bundle</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.github.io7m.jpra">

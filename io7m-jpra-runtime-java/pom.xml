@@ -12,7 +12,7 @@
   </parent>
   <artifactId>io7m-jpra-runtime-java</artifactId>
 
-  <packaging>jar</packaging>
+  <packaging>bundle</packaging>
   <name>io7m-jpra-runtime-java</name>
   <description>Packed record access (Java runtime)</description>
   <url>http://io7m.github.io/jpra/</url>
@@ -61,6 +61,18 @@
         <configuration>
           <!-- Prevents an endPosTable exception during compilation -->
           <useIncrementalCompilation>false</useIncrementalCompilation>
+        </configuration>
+      </plugin>
+
+      <!-- Produce OSGi bundle -->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>com.io7m.jpra.runtime.java</Export-Package>
+          </instructions>
         </configuration>
       </plugin>
     </plugins>
