@@ -28,17 +28,15 @@ import com.io7m.jpra.compiler.core.resolver.JPRAResolver;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jsx.SExpressionType;
+import com.io7m.jsx.api.lexer.JSXLexerConfiguration;
+import com.io7m.jsx.api.lexer.JSXLexerType;
+import com.io7m.jsx.api.parser.JSXParserConfiguration;
+import com.io7m.jsx.api.parser.JSXParserException;
+import com.io7m.jsx.api.parser.JSXParserType;
+import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.jsx.lexer.JSXLexer;
-import com.io7m.jsx.lexer.JSXLexerConfiguration;
-import com.io7m.jsx.lexer.JSXLexerConfigurationBuilderType;
-import com.io7m.jsx.lexer.JSXLexerType;
 import com.io7m.jsx.parser.JSXParser;
-import com.io7m.jsx.parser.JSXParserConfiguration;
-import com.io7m.jsx.parser.JSXParserConfigurationBuilderType;
-import com.io7m.jsx.parser.JSXParserException;
-import com.io7m.jsx.parser.JSXParserType;
 import com.io7m.jsx.serializer.JSXSerializerTrivial;
-import com.io7m.jsx.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
 
 import java.io.ByteArrayInputStream;
@@ -55,38 +53,42 @@ public final class JPRACheckerTest extends JPRACheckerContract
     final UnicodeCharacterReaderPushBackType r =
       UnicodeCharacterReader.newReader(ir);
 
-    final JSXLexerConfigurationBuilderType lc =
-      JSXLexerConfiguration.newBuilder();
+    final JSXLexerConfiguration.Builder lc =
+      JSXLexerConfiguration.builder();
     lc.setNewlinesInQuotedStrings(false);
     lc.setSquareBrackets(true);
 
     final JSXLexerType lex = JSXLexer.newLexer(lc.build(), r);
-    final JSXParserConfigurationBuilderType pc =
-      JSXParserConfiguration.newBuilder();
-    pc.preserveLexicalInformation(true);
+    final JSXParserConfiguration.Builder pc =
+      JSXParserConfiguration.builder();
+    pc.setPreserveLexical(true);
 
     return JSXParser.newParser(pc.build(), lex);
   }
 
-  @Override protected JPRAParserType newParser()
+  @Override
+  protected JPRAParserType newParser()
   {
     final JSXSerializerType serial = JSXSerializerTrivial.newSerializer();
     return JPRAParser.newParser(serial, JPRAReferenceParser.newParser(serial));
   }
 
-  @Override protected JPRAResolverType newResolver(final GlobalContextType c)
+  @Override
+  protected JPRAResolverType newResolver(final GlobalContextType c)
   {
     return JPRAResolver.newResolver(c, Optional.empty());
   }
 
-  @Override protected JPRACheckerType newChecker(
+  @Override
+  protected JPRACheckerType newChecker(
     final GlobalContextType c,
     final JPRACheckerCapabilitiesType caps)
   {
     return JPRAChecker.newChecker(c, caps);
   }
 
-  @Override protected SExpressionType newStringSExpr(final String expr)
+  @Override
+  protected SExpressionType newStringSExpr(final String expr)
   {
     try {
       final InputStream s = new ByteArrayInputStream(expr.getBytes("UTF-8"));

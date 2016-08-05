@@ -19,7 +19,7 @@ package com.io7m.jpra.tests.model;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import org.junit.Assert;
 import org.junit.Test;
-import org.valid4j.exceptions.RequireViolation;
+import org.valid4j.errors.RequireViolation;
 
 import java.util.Optional;
 

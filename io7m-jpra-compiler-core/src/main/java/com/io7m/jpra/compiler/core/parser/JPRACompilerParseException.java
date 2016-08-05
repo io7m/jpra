@@ -170,7 +170,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
   public static JPRACompilerParseException expectedNonEmptyList(
     final SExpressionListType e)
   {
-    Assertive.require(e.isEmpty());
+    Assertive.require(e.size() == 0);
 
     final StringBuilder mb = new StringBuilder(256);
     mb.append("  Expected: A non-empty list");

@@ -21,7 +21,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 import org.valid4j.Assertive;
-import org.valid4j.exceptions.RequireViolation;
+import org.valid4j.errors.RequireViolation;
 
 import java.nio.file.Path;
 import java.util.Optional;

@@ -46,17 +46,15 @@ import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jsx.SExpressionType;
+import com.io7m.jsx.api.lexer.JSXLexerConfiguration;
+import com.io7m.jsx.api.lexer.JSXLexerType;
+import com.io7m.jsx.api.parser.JSXParserConfiguration;
+import com.io7m.jsx.api.parser.JSXParserException;
+import com.io7m.jsx.api.parser.JSXParserType;
+import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.jsx.lexer.JSXLexer;
-import com.io7m.jsx.lexer.JSXLexerConfiguration;
-import com.io7m.jsx.lexer.JSXLexerConfigurationBuilderType;
-import com.io7m.jsx.lexer.JSXLexerType;
 import com.io7m.jsx.parser.JSXParser;
-import com.io7m.jsx.parser.JSXParserConfiguration;
-import com.io7m.jsx.parser.JSXParserConfigurationBuilderType;
-import com.io7m.jsx.parser.JSXParserException;
-import com.io7m.jsx.parser.JSXParserType;
 import com.io7m.jsx.serializer.JSXSerializerTrivial;
-import com.io7m.jsx.serializer.JSXSerializerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
@@ -99,17 +97,17 @@ public final class JPRADriver implements JPRADriverType
     final UnicodeCharacterReaderPushBackType r =
       UnicodeCharacterReader.newReader(ir);
 
-    final JSXLexerConfigurationBuilderType lc =
-      JSXLexerConfiguration.newBuilder();
+    final JSXLexerConfiguration.Builder lc =
+      JSXLexerConfiguration.builder();
     lc.setNewlinesInQuotedStrings(false);
     lc.setSquareBrackets(true);
     lc.setFile(Optional.of(file));
 
     final JSXLexerType lex = JSXLexer.newLexer(lc.build(), r);
 
-    final JSXParserConfigurationBuilderType pc =
-      JSXParserConfiguration.newBuilder();
-    pc.preserveLexicalInformation(true);
+    final JSXParserConfiguration.Builder pc =
+      JSXParserConfiguration.builder();
+    pc.setPreserveLexical(true);
 
     return JSXParser.newParser(pc.build(), lex);
   }
@@ -137,14 +135,15 @@ public final class JPRADriver implements JPRADriverType
     return this.global.loadPackage(p);
   }
 
-  @Override public GlobalContextType getGlobalContext()
+  @Override
+  public GlobalContextType getGlobalContext()
   {
     return this.global;
   }
 
   private static final class Loader implements JPRAPackageLoaderType
   {
-    private final Path                        source_directory;
+    private final Path source_directory;
     private final JPRACheckerCapabilitiesType caps;
 
     private Loader(
@@ -164,7 +163,8 @@ public final class JPRADriver implements JPRADriverType
       return file.resolveSibling(file.getFileName() + ".jpr");
     }
 
-    @Override public PackageContextType evaluate(
+    @Override
+    public PackageContextType evaluate(
       final GlobalContextType c,
       final PackageNameQualified p)
       throws JPRAModelLoadingException

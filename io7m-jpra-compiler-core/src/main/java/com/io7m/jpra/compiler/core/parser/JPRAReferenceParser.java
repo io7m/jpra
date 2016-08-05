@@ -28,7 +28,7 @@ import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.names.TypeReference;
 import com.io7m.jsx.SExpressionSymbolType;
-import com.io7m.jsx.serializer.JSXSerializerType;
+import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.valid4j.Assertive;
 
@@ -183,7 +183,8 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     return new JPRAReferenceParser(in_serial);
   }
 
-  @Override public TypeReference parseTypeReference(
+  @Override
+  public TypeReference parseTypeReference(
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
@@ -213,7 +214,8 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     throw JPRAReferenceParser.badTypeReference(this.serial, se);
   }
 
-  @Override public FieldReference parseFieldReference(
+  @Override
+  public FieldReference parseFieldReference(
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
