@@ -41,6 +41,7 @@ public final class JPRACursor2DByteBufferedUncheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage("Element size must be positive");
     JPRACursor2DByteBufferedUnchecked.newCursor(buf, 10, 10, cons);
+    Assert.fail();
   }
 
   @Test public void testWidthNegative()
@@ -52,6 +53,7 @@ public final class JPRACursor2DByteBufferedUncheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringEndsWith(" must be positive"));
     JPRACursor2DByteBufferedUnchecked.newCursor(buf, -1, 10, cons);
+    Assert.fail();
   }
 
   @Test public void testHeightNegative()
@@ -63,6 +65,7 @@ public final class JPRACursor2DByteBufferedUncheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringEndsWith(" must be positive"));
     JPRACursor2DByteBufferedUnchecked.newCursor(buf, 10, -1, cons);
+    Assert.fail();
   }
 
   @Test public void testBufferIdentity()

@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.valid4j.exceptions.RequireViolation;
+import org.valid4j.errors.RequireViolation;
 
 public final class JPRAMasksTest
 {

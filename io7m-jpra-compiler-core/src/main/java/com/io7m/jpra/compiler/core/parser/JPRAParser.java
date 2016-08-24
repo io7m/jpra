@@ -67,12 +67,12 @@ import com.io7m.jsx.SExpressionMatcherType;
 import com.io7m.jsx.SExpressionQuotedStringType;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.SExpressionType;
-import com.io7m.jsx.serializer.JSXSerializerType;
+import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.valid4j.Assertive;
-import org.valid4j.exceptions.RequireViolation;
+import org.valid4j.errors.RequireViolation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -540,8 +540,7 @@ public final class JPRAParser implements JPRAParserType
     NullCheck.notNull(expr);
 
     final SExpressionListType le = JPRAParser.requireList(expr);
-
-    if (le.isEmpty()) {
+    if (le.size() == 0) {
       throw JPRACompilerParseException.expectedNonEmptyList(le);
     }
 
@@ -679,7 +678,7 @@ public final class JPRAParser implements JPRAParserType
     for (int index = 0; index < fields.size(); ++index) {
       final SExpressionListType l_expr =
         JPRAParser.requireList(fields.get(index));
-      if (l_expr.isEmpty()) {
+      if (l_expr.size() == 0) {
         throw JPRACompilerParseException.expectedNonEmptyList(l_expr);
       }
 
@@ -836,7 +835,7 @@ public final class JPRAParser implements JPRAParserType
     for (int index = 0; index < fields.size(); ++index) {
       final SExpressionListType l_expr =
         JPRAParser.requireList(fields.get(index));
-      if (l_expr.isEmpty()) {
+      if (l_expr.size() == 0) {
         throw JPRACompilerParseException.expectedNonEmptyList(l_expr);
       }
 
@@ -1006,7 +1005,7 @@ public final class JPRAParser implements JPRAParserType
           final SExpressionListType le)
           throws JPRACompilerParseException
         {
-          if (le.isEmpty()) {
+          if (le.size() == 0) {
             throw JPRACompilerParseException.expectedNonEmptyList(le);
           }
 
@@ -1354,7 +1353,7 @@ public final class JPRAParser implements JPRAParserType
           final SExpressionListType le)
           throws JPRACompilerParseException
         {
-          if (le.isEmpty()) {
+          if (le.size() == 0) {
             throw JPRACompilerParseException.expectedNonEmptyList(le);
           }
 

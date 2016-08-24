@@ -41,6 +41,7 @@ public final class JPRACursor1DByteBufferedCheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage("Element size must be positive");
     JPRACursor1DByteBufferedChecked.newCursor(buf, cons);
+    Assert.fail();
   }
 
   @Test public void testBufferTooSmallOne()
@@ -53,6 +54,7 @@ public final class JPRACursor1DByteBufferedCheckedTest
     this.expected.expectMessage(
       new StringContains("is too small for one element of size"));
     JPRACursor1DByteBufferedChecked.newCursor(buf, cons);
+    Assert.fail();
   }
 
   @Test public void testBufferIdentity()
@@ -98,6 +100,7 @@ public final class JPRACursor1DByteBufferedCheckedTest
 
     this.expected.expect(IndexOutOfBoundsException.class);
     c.setElementIndex(-1);
+    Assert.fail();
   }
 
   @Test public void testBufferSetOutOfBounds1()
@@ -111,5 +114,6 @@ public final class JPRACursor1DByteBufferedCheckedTest
 
     this.expected.expect(IndexOutOfBoundsException.class);
     c.setElementIndex(100);
+    Assert.fail();
   }
 }

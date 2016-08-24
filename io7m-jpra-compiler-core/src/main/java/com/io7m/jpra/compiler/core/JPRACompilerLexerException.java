@@ -16,7 +16,8 @@
 
 package com.io7m.jpra.compiler.core;
 
-import com.io7m.jsx.parser.JSXParserException;
+
+import com.io7m.jsx.api.parser.JSXParserException;
 
 import java.util.Optional;
 
