@@ -67,6 +67,8 @@ public final class JPRAStringByteBufferedTest
       cursor,
       StandardCharsets.UTF_8,
       -1);
+
+    Assert.fail();
   }
 
   @Test public void testNegativeOffset()
@@ -84,6 +86,8 @@ public final class JPRAStringByteBufferedTest
       cursor,
       StandardCharsets.UTF_8,
       96);
+
+    Assert.fail();
   }
 
   @Test public void testUsedLength()
@@ -212,6 +216,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IndexOutOfBoundsException.class);
     this.expected.expectMessage(new StringContains("Length"));
     s.getBytes(b, 0, 16);
+    Assert.fail();
   }
 
   @Test public void testSetValueTruncated()
@@ -267,6 +272,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IndexOutOfBoundsException.class);
     this.expected.expectMessage(new StringContains("Bytes length"));
     s.setValue("EFGHIJKLMNOPQRSTUVWXYZ", JPRAStringTruncation.REJECT);
+    Assert.fail();
   }
 
   @Test public void testGetByteRejected()
@@ -285,6 +291,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IndexOutOfBoundsException.class);
     this.expected.expectMessage(new StringContains("Index"));
     s.getByte(8);
+    Assert.fail();
   }
 
   @Test public void testGetByteRejectedNegative()
@@ -303,6 +310,7 @@ public final class JPRAStringByteBufferedTest
     this.expected.expect(IndexOutOfBoundsException.class);
     this.expected.expectMessage(new StringContains("Index"));
     s.getByte(-1);
+    Assert.fail();
   }
 
   @Test public void testGetByte()

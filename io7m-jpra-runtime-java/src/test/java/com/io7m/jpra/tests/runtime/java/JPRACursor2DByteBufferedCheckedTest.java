@@ -42,6 +42,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage("Element size must be positive");
     JPRACursor2DByteBufferedChecked.newCursor(buf, 10, 10, cons);
+    Assert.fail();
   }
 
   @Test public void testWidthNegative()
@@ -53,6 +54,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringEndsWith(" must be positive"));
     JPRACursor2DByteBufferedChecked.newCursor(buf, -1, 10, cons);
+    Assert.fail();
   }
 
   @Test public void testHeightNegative()
@@ -64,6 +66,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage(new StringEndsWith(" must be positive"));
     JPRACursor2DByteBufferedChecked.newCursor(buf, 10, -1, cons);
+    Assert.fail();
   }
 
   @Test public void testRegionTooSmall()
@@ -77,6 +80,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
       new StringStartsWith(
         "Buffer is too small to hold the specified region."));
     JPRACursor2DByteBufferedChecked.newCursor(buf, 10, 10, cons);
+    Assert.fail();
   }
 
   @Test public void testBufferIdentity()
@@ -135,6 +139,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expectMessage(
       new StringStartsWith("X or Y position out of bounds."));
     c.setElementPosition(0, -1);
+    Assert.fail();
   }
 
   @Test public void testBufferRowOutOfRange1()
@@ -151,6 +156,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expectMessage(
       new StringStartsWith("X or Y position out of bounds."));
     c.setElementPosition(0, 10);
+    Assert.fail();
   }
 
   @Test public void testBufferColumnOutOfRange0()
@@ -167,6 +173,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expectMessage(
       new StringStartsWith("X or Y position out of bounds."));
     c.setElementPosition(-1, 0);
+    Assert.fail();
   }
 
   @Test public void testBufferColumnOutOfRange1()
@@ -183,6 +190,7 @@ public final class JPRACursor2DByteBufferedCheckedTest
     this.expected.expectMessage(
       new StringStartsWith("X or Y position out of bounds."));
     c.setElementPosition(10, 0);
+    Assert.fail();
   }
 
   @Test public void testBufferColumnStartsIdentity()

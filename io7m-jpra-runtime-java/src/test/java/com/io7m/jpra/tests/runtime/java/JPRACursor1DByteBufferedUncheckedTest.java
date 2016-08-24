@@ -40,6 +40,7 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     this.expected.expect(IllegalArgumentException.class);
     this.expected.expectMessage("Element size must be positive");
     JPRACursor1DByteBufferedUnchecked.newCursor(buf, cons);
+    Assert.fail();
   }
 
   @Test public void testBufferIdentity()
