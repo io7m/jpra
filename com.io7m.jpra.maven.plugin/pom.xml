@@ -7,15 +7,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpra</groupId>
-    <artifactId>io7m-jpra</artifactId>
+    <artifactId>com.io7m.jpra</artifactId>
     <version>0.5.0</version>
   </parent>
-  <artifactId>io7m-jpra-maven-plugin</artifactId>
+  <artifactId>com.io7m.jpra.maven.plugin</artifactId>
 
   <packaging>maven-plugin</packaging>
-  <name>io7m-jpra-maven-plugin</name>
+  <name>com.io7m.jpra.maven.plugin</name>
   <description>Packed record access (Maven plugin)</description>
-  <url>http://io7m.github.io/jpra/</url>
+  <url>http://github.com/io7m/jpra</url>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -27,12 +27,12 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-compiler-core</artifactId>
+      <artifactId>com.io7m.jpra.compiler.core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-compiler-java</artifactId>
+      <artifactId>com.io7m.jpra.compiler.java</artifactId>
       <version>${project.version}</version>
     </dependency>
 

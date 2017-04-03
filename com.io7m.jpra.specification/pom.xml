@@ -7,15 +7,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpra</groupId>
-    <artifactId>io7m-jpra</artifactId>
+    <artifactId>com.io7m.jpra</artifactId>
     <version>0.5.0</version>
   </parent>
-  <artifactId>io7m-jpra-specification</artifactId>
+  <artifactId>com.io7m.jpra.specification</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jpra-specification</name>
+  <name>com.io7m.jpra.specification</name>
   <description>Packed record access (Language specification)</description>
-  <url>http://io7m.github.io/jpra/</url>
+  <url>http://github.com/io7m/jpra</url>
 
   <scm>
     <url>${project.parent.scm.url}</url>

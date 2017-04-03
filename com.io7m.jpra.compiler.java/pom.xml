@@ -7,15 +7,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpra</groupId>
-    <artifactId>io7m-jpra</artifactId>
+    <artifactId>com.io7m.jpra</artifactId>
     <version>0.5.0</version>
   </parent>
-  <artifactId>io7m-jpra-compiler-core</artifactId>
+  <artifactId>com.io7m.jpra.compiler.java</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jpra-compiler-core</name>
-  <description>Packed record access (Compiler core)</description>
-  <url>http://io7m.github.io/jpra/</url>
+  <name>com.io7m.jpra.compiler.java</name>
+  <description>Packed record access (Java backend)</description>
+  <url>http://github.com/io7m/jpra</url>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -26,33 +26,49 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-core</artifactId>
+      <artifactId>com.io7m.jpra.model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-model</artifactId>
+      <artifactId>com.io7m.jpra.runtime.java</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>com.io7m.jsx</groupId>
-      <artifactId>io7m-jsx-core</artifactId>
+      <groupId>com.io7m.jnfp</groupId>
+      <artifactId>io7m-jnfp-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.io7m.jsx</groupId>
-      <artifactId>io7m-jsx-parser</artifactId>
+      <groupId>com.io7m.ieee754b16</groupId>
+      <artifactId>io7m-ieee754b16-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-bytebuffered</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-ieee754b16</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-
     <dependency>
-      <groupId>com.github.marschall</groupId>
-      <artifactId>memoryfilesystem</artifactId>
-      <scope>test</scope>
+      <groupId>com.squareup</groupId>
+      <artifactId>javapoet</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>

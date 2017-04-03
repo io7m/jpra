@@ -1,7 +1,24 @@
+env:
+  _JAVA_OPTIONS="-Xms1G -Xmx4G"
+
 language: java
 
 jdk:
   - oraclejdk8
 
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+install: true
+
+script:
+  - mvn -DskipTests=true clean package
+
+notifications:
+  irc: "chat.freenode.net#io7m"
+
 after_failure:
   - cat io7m-jpra-compiler-java/target/surefire-reports/*
+

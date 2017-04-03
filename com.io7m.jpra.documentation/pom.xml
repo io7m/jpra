@@ -7,15 +7,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpra</groupId>
-    <artifactId>io7m-jpra</artifactId>
+    <artifactId>com.io7m.jpra</artifactId>
     <version>0.5.0</version>
   </parent>
-  <artifactId>io7m-jpra-documentation</artifactId>
+  <artifactId>com.io7m.jpra.documentation</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jpra-documentation</name>
+  <name>com.io7m.jpra.documentation</name>
   <description>Packed record access (Documentation)</description>
-  <url>http://io7m.github.io/jpra/</url>
+  <url>http://github.com/io7m/jpra</url>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -31,32 +31,32 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-compiler-core</artifactId>
+      <artifactId>com.io7m.jpra.compiler.core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-compiler-frontend</artifactId>
+      <artifactId>com.io7m.jpra.compiler.frontend</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-compiler-java</artifactId>
+      <artifactId>com.io7m.jpra.compiler.java</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-core</artifactId>
+      <artifactId>com.io7m.jpra.core</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-model</artifactId>
+      <artifactId>com.io7m.jpra.model</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpra-runtime-java</artifactId>
+      <artifactId>com.io7m.jpra.runtime.java</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
