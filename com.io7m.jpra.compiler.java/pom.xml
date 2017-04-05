@@ -45,15 +45,11 @@
     </dependency>
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors-core</artifactId>
+      <artifactId>com.io7m.jtensors.storage.api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors-bytebuffered</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors-ieee754b16</artifactId>
+      <artifactId>com.io7m.jtensors.storage.bytebuffered</artifactId>
     </dependency>
 
     <dependency>

@@ -21,17 +21,17 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
- * An implementation of the {@link JPRAStringCursorType} that accesses an underlying
- * {@link ByteBuffer}.
+ * An implementation of the {@link JPRAStringCursorType} that accesses an
+ * underlying {@link ByteBuffer}.
  */
 
 public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
 {
-  private final ByteBuffer                 buffer;
-  private final int                        max_length;
+  private final ByteBuffer buffer;
+  private final int max_length;
   private final JPRACursorByteReadableType cursor;
-  private final int                        offset;
-  private final Charset                    encoding;
+  private final int offset;
+  private final Charset encoding;
 
   private JPRAStringCursorByteBuffered(
     final ByteBuffer in_buffer,
@@ -97,23 +97,27 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
 
   private int getOffsetForDataStart()
   {
-    final int base = this.cursor.getByteOffsetObservable().intValue();
+    final int base =
+      Math.toIntExact(this.cursor.getByteOffsetObservable().value());
     return base + this.offset;
   }
 
-  @Override public int getMaximumLength()
+  @Override
+  public int getMaximumLength()
   {
     return this.max_length;
   }
 
-  @Override public int getUsedLength()
+  @Override
+  public int getUsedLength()
   {
     final int off = this.getOffsetForDataStart();
     final int val = this.buffer.getInt(off);
     return Math.min(this.max_length, Math.max(0, val));
   }
 
-  @Override public byte getByte(final int index)
+  @Override
+  public byte getByte(final int index)
     throws IndexOutOfBoundsException
   {
     final int max = this.getMaximumLength();
@@ -128,7 +132,8 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
     return this.buffer.get(this.getOffsetForStringByte(index));
   }
 
-  @Override public void getBytes(
+  @Override
+  public void getBytes(
     final byte[] buf,
     final int buf_offset,
     final int length)
@@ -150,7 +155,8 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
     this.buffer.position(old_pos);
   }
 
-  @Override public String getNewValue()
+  @Override
+  public String getNewValue()
   {
     final int used = this.getUsedLength();
     final byte[] buf = new byte[used];
@@ -162,12 +168,14 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
     return new String(buf, this.encoding);
   }
 
-  @Override public Charset getEncoding()
+  @Override
+  public Charset getEncoding()
   {
     return this.encoding;
   }
 
-  @Override public void setValue(
+  @Override
+  public void setValue(
     final String text,
     final JPRAStringTruncation trunc)
   {

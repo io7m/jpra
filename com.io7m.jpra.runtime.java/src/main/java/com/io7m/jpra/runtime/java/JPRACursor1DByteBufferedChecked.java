@@ -16,9 +16,11 @@
 
 package com.io7m.jpra.runtime.java;
 
+import com.io7m.mutable.numbers.core.MutableLong;
+import com.io7m.mutable.numbers.core.MutableLongType;
+
 import java.nio.ByteBuffer;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A 1D cursor implementation that addresses values within a {@link ByteBuffer}
@@ -30,18 +32,18 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
   implements JPRACursor1DType<T>
 {
-  private final T          instance;
-  private final int        element_size;
-  private final int        index_max;
-  private final AtomicLong byte_offset;
-  private       int        index;
+  private final T instance;
+  private final int element_size;
+  private final int index_max;
+  private final MutableLong byte_offset;
+  private int index;
 
   private JPRACursor1DByteBufferedChecked(
     final ByteBuffer in_buffer,
     final JPRAValueByteBufferedConstructorType<T> in_cons)
   {
     Objects.requireNonNull(in_buffer, "Buffer");
-    this.byte_offset = new AtomicLong(0L);
+    this.byte_offset = MutableLong.create();
     this.instance = Objects.requireNonNull(
       Objects.requireNonNull(in_cons, "Constructor").create(in_buffer, this, 0),
       "Constructed value");
@@ -83,7 +85,8 @@ public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
     return new JPRACursor1DByteBufferedChecked<>(in_buffer, in_cons);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[Cursor ");
     sb.append(this.index);
@@ -93,17 +96,19 @@ public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
     return sb.toString();
   }
 
-  @Override public int getElementIndex()
+  @Override
+  public int getElementIndex()
   {
     return this.index;
   }
 
-  @Override public void setElementIndex(final int new_index)
+  @Override
+  public void setElementIndex(final int new_index)
     throws IndexOutOfBoundsException
   {
     if (new_index <= this.index_max && new_index >= 0) {
       this.index = new_index;
-      this.byte_offset.set(this.index * this.element_size);
+      this.byte_offset.setValue(this.index * this.element_size);
     } else {
       throw new IndexOutOfBoundsException(
         String.format(
@@ -113,12 +118,14 @@ public final class JPRACursor1DByteBufferedChecked<T extends JPRAValueType>
     }
   }
 
-  @Override public T getElementView()
+  @Override
+  public T getElementView()
   {
     return this.instance;
   }
 
-  @Override public AtomicLong getByteOffsetObservable()
+  @Override
+  public MutableLongType getByteOffsetObservable()
   {
     return this.byte_offset;
   }

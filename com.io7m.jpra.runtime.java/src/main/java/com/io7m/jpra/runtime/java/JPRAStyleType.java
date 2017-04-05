@@ -27,10 +27,10 @@ import java.lang.annotation.Target;
  * Style settings for generated immutable types.
  */
 
-@Target({ ElementType.PACKAGE, ElementType.TYPE })
+@Target({ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
 @Value.Style(
-  typeAbstract = { "*Type" },
+  typeAbstract = {"*Type"},
   typeImmutable = "*",
   typeImmutableEnclosing = "*",
   visibility = Value.Style.ImplementationVisibility.PUBLIC)

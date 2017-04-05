@@ -22,7 +22,8 @@ import org.immutables.value.Value;
  * The run-time {@code jpra} type model.
  */
 
-@Value.Enclosing public interface JPRATypeModelType
+@Value.Enclosing
+public interface JPRATypeModelType
 {
   /**
    * The type of {@code jpra} scalar types.
@@ -30,7 +31,8 @@ import org.immutables.value.Value;
 
   interface JPRAScalarType extends JPRATypeType
   {
-    @Value.Parameter int sizeInBits();
+    @Value.Parameter
+    int sizeInBits();
 
     <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
@@ -228,17 +230,20 @@ import org.immutables.value.Value;
    * The type of {@code jpra} {@code float} types.
    */
 
-  @Value.Immutable(builder = false, prehash = true) abstract class JPRAFloatType
+  @Value.Immutable(builder = false, prehash = true)
+  abstract class JPRAFloatType
     implements JPRAScalarType
   {
-    @Override public final <A, E extends Exception> A matchScalar(
+    @Override
+    public final <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
       throws E
     {
       return m.onFloat(this);
     }
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -254,14 +259,16 @@ import org.immutables.value.Value;
   abstract class JPRAIntegerSignedType
     implements JPRAScalarType
   {
-    @Override public final <A, E extends Exception> A matchScalar(
+    @Override
+    public final <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
       throws E
     {
       return m.onIntegerSigned(this);
     }
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -277,14 +284,16 @@ import org.immutables.value.Value;
   abstract class JPRAIntegerUnsignedType
     implements JPRAScalarType
   {
-    @Override public final <A, E extends Exception> A matchScalar(
+    @Override
+    public final <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
       throws E
     {
       return m.onIntegerUnsigned(this);
     }
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -300,14 +309,16 @@ import org.immutables.value.Value;
   abstract class JPRAIntegerSignedNormalizedType
     implements JPRAScalarType
   {
-    @Override public final <A, E extends Exception> A matchScalar(
+    @Override
+    public final <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
       throws E
     {
       return m.onIntegerSignedNormalized(this);
     }
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -323,14 +334,16 @@ import org.immutables.value.Value;
   abstract class JPRAIntegerUnsignedNormalizedType
     implements JPRAScalarType
   {
-    @Override public final <A, E extends Exception> A matchScalar(
+    @Override
+    public final <A, E extends Exception> A matchScalar(
       final JPRAScalarMatcherType<A, E> m)
       throws E
     {
       return m.onIntegerUnsignedNormalized(this);
     }
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -346,13 +359,17 @@ import org.immutables.value.Value;
   abstract class JPRAMatrixType
     implements JPRATypeType
   {
-    @Value.Parameter abstract int width();
+    @Value.Parameter
+    abstract int width();
 
-    @Value.Parameter abstract int height();
+    @Value.Parameter
+    abstract int height();
 
-    @Value.Parameter abstract JPRAScalarType elementType();
+    @Value.Parameter
+    abstract JPRAScalarType elementType();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -367,11 +384,14 @@ import org.immutables.value.Value;
   @Value.Immutable(builder = false, prehash = true)
   abstract class JPRAVectorType implements JPRATypeType
   {
-    @Value.Parameter abstract int length();
+    @Value.Parameter
+    abstract int length();
 
-    @Value.Parameter abstract JPRAScalarType elementType();
+    @Value.Parameter
+    abstract JPRAScalarType elementType();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -386,11 +406,14 @@ import org.immutables.value.Value;
   @Value.Immutable(builder = false, prehash = true)
   abstract class JPRAStringType implements JPRATypeType
   {
-    @Value.Parameter abstract int length();
+    @Value.Parameter
+    abstract int length();
 
-    @Value.Parameter abstract String encoding();
+    @Value.Parameter
+    abstract String encoding();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -405,9 +428,11 @@ import org.immutables.value.Value;
   @Value.Immutable(builder = false, prehash = true)
   abstract class JPRABooleanSetType implements JPRATypeType
   {
-    @Value.Parameter abstract int sizeInOctets();
+    @Value.Parameter
+    abstract int sizeInOctets();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -422,9 +447,11 @@ import org.immutables.value.Value;
   @Value.Immutable(builder = false, prehash = true)
   abstract class JPRAUserDefinedType implements JPRATypeType
   {
-    @Value.Parameter abstract Class<? extends JPRAValueType> type();
+    @Value.Parameter
+    abstract Class<? extends JPRAValueType> type();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {
@@ -439,11 +466,14 @@ import org.immutables.value.Value;
   @Value.Immutable(builder = false, prehash = true)
   abstract class JPRAArrayType implements JPRATypeType
   {
-    @Value.Parameter abstract int length();
+    @Value.Parameter
+    abstract int length();
 
-    @Value.Parameter abstract JPRATypeType elementType();
+    @Value.Parameter
+    abstract JPRATypeType elementType();
 
-    @Override public final <A, E extends Exception> A matchType(
+    @Override
+    public final <A, E extends Exception> A matchType(
       final JPRATypeMatcherType<A, E> m)
       throws E
     {

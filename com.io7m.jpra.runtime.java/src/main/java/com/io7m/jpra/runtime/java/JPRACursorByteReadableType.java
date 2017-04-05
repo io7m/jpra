@@ -16,14 +16,10 @@
 
 package com.io7m.jpra.runtime.java;
 
-import java.util.concurrent.atomic.AtomicLong;
+import com.io7m.mutable.numbers.core.MutableLongType;
 
 /**
  * The type of cursors that expose byte offsets.
- *
- * For reasons of compatibility with external libraries, offsets are exposed via
- * an {@code AtomicLong} value. This should be considered a <i>read-only</i>
- * value; the effects of modifying it are undefined!
  */
 
 public interface JPRACursorByteReadableType
@@ -32,5 +28,5 @@ public interface JPRACursorByteReadableType
    * @return The current byte offset
    */
 
-  AtomicLong getByteOffsetObservable();
+  MutableLongType getByteOffsetObservable();
 }

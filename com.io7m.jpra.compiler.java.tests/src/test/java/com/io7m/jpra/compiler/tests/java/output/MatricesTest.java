@@ -22,18 +22,15 @@ import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedChecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DByteBufferedUnchecked;
 import com.io7m.jpra.runtime.java.JPRACursor1DType;
 import com.io7m.jpra.runtime.java.JPRATypeModel;
-import com.io7m.jtensors.Matrix2x2DType;
-import com.io7m.jtensors.Matrix2x2FType;
-import com.io7m.jtensors.Matrix3x3DType;
-import com.io7m.jtensors.Matrix3x3FType;
-import com.io7m.jtensors.Matrix4x4DType;
-import com.io7m.jtensors.Matrix4x4FType;
-import com.io7m.jtensors.MatrixReadable2x2DType;
-import com.io7m.jtensors.MatrixReadable2x2FType;
-import com.io7m.jtensors.MatrixReadable3x3DType;
-import com.io7m.jtensors.MatrixReadable3x3FType;
-import com.io7m.jtensors.MatrixReadable4x4DType;
-import com.io7m.jtensors.MatrixReadable4x4FType;
+import com.io7m.jtensors.core.unparameterized.matrices.Matrix2x2D;
+import com.io7m.jtensors.core.unparameterized.matrices.Matrix3x3D;
+import com.io7m.jtensors.core.unparameterized.matrices.Matrix4x4D;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable2x2DType;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable3x3DType;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable4x4DType;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage2x2Type;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage3x3Type;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage4x4Type;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,7 +42,7 @@ public final class MatricesTest
   {
     for (int row = 0; row < 2; ++row) {
       for (int col = 0; col < 2; ++col) {
-        Assert.assertEquals(0.0, m.getRowColumnD(row, col), 0.0);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
@@ -54,7 +51,7 @@ public final class MatricesTest
   {
     for (int row = 0; row < 3; ++row) {
       for (int col = 0; col < 3; ++col) {
-        Assert.assertEquals(0.0, m.getRowColumnD(row, col), 0.0);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
@@ -63,39 +60,40 @@ public final class MatricesTest
   {
     for (int row = 0; row < 4; ++row) {
       for (int col = 0; col < 4; ++col) {
-        Assert.assertEquals(0.0, m.getRowColumnD(row, col), 0.0);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
 
-  private static void check2x2FZero(final MatrixReadable2x2FType m)
+  private static void check2x2FZero(final MatrixReadable2x2DType m)
   {
     for (int row = 0; row < 2; ++row) {
       for (int col = 0; col < 2; ++col) {
-        Assert.assertEquals(0.0f, m.getRowColumnF(row, col), 0.0f);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
 
-  private static void check3x3FZero(final MatrixReadable3x3FType m)
+  private static void check3x3FZero(final MatrixReadable3x3DType m)
   {
     for (int row = 0; row < 3; ++row) {
       for (int col = 0; col < 3; ++col) {
-        Assert.assertEquals(0.0f, m.getRowColumnF(row, col), 0.0f);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
 
-  private static void check4x4FZero(final MatrixReadable4x4FType m)
+  private static void check4x4FZero(final MatrixReadable4x4DType m)
   {
     for (int row = 0; row < 4; ++row) {
       for (int col = 0; col < 4; ++col) {
-        Assert.assertEquals(0.0f, m.getRowColumnF(row, col), 0.0f);
+        Assert.assertEquals(0.0, m.rowColumn(row, col), 0.0);
       }
     }
   }
 
-  @Test public void testMeta()
+  @Test
+  public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<MatricesType> c =
@@ -142,7 +140,8 @@ public final class MatricesTest
       v.metaM4dType());
   }
 
-  @Test public void testV4x4D()
+  @Test
+  public void testV4x4D()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -155,26 +154,32 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix4x4DType k = v.getM4dWritable();
-      k.setR0C0D((index * 10.0) + 1.0);
-      k.setR1C0D((index * 10.0) + 2.0);
-      k.setR2C0D((index * 10.0) + 3.0);
-      k.setR3C0D((index * 10.0) + 4.0);
+      final MatrixStorage4x4Type k = v.getM4dWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
+      final double r2c0 = ((index * 10.0) + 3.0);
+      final double r3c0 = ((index * 10.0) + 4.0);
 
-      k.setR0C1D((index * 10.0) + 10.0);
-      k.setR1C1D((index * 10.0) + 20.0);
-      k.setR2C1D((index * 10.0) + 30.0);
-      k.setR3C1D((index * 10.0) + 40.0);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+      final double r2c1 = ((index * 10.0) + 30.0);
+      final double r3c1 = ((index * 10.0) + 40.0);
 
-      k.setR0C2D((index * 10.0) + 100.0);
-      k.setR1C2D((index * 10.0) + 200.0);
-      k.setR2C2D((index * 10.0) + 300.0);
-      k.setR3C2D((index * 10.0) + 400.0);
+      final double r0c2 = ((index * 10.0) + 100.0);
+      final double r1c2 = ((index * 10.0) + 200.0);
+      final double r2c2 = ((index * 10.0) + 300.0);
+      final double r3c2 = ((index * 10.0) + 400.0);
 
-      k.setR0C3D((index * 10.0) + 1000.0);
-      k.setR1C3D((index * 10.0) + 2000.0);
-      k.setR2C3D((index * 10.0) + 3000.0);
-      k.setR3C3D((index * 10.0) + 4000.0);
+      final double r0c3 = ((index * 10.0) + 1000.0);
+      final double r1c3 = ((index * 10.0) + 2000.0);
+      final double r2c3 = ((index * 10.0) + 3000.0);
+      final double r3c3 = ((index * 10.0) + 4000.0);
+
+      k.setMatrix4x4D(Matrix4x4D.of(
+        r0c0, r0c1, r0c2, r0c3,
+        r1c0, r1c1, r1c2, r1c3,
+        r2c0, r2c1, r2c2, r2c3,
+        r3c0, r3c1, r3c2, r3c3));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -185,33 +190,34 @@ public final class MatricesTest
       MatricesTest.check3x3DZero(v.getM3dReadable());
       MatricesTest.check3x3FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
-      // check4x4DZero(v.getM4dReadable());
+      // MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable4x4DType k = v.getM4dReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3.0, k.getR2C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 4.0, k.getR3C0D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3.0, k.r2c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 4.0, k.r3c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 30.0, k.getR2C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 40.0, k.getR3C1D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 30.0, k.r2c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 40.0, k.r3c1(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 100.0, k.getR0C2D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 200.0, k.getR1C2D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 300.0, k.getR2C2D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 400.0, k.getR3C2D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 100.0, k.r0c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 200.0, k.r1c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 300.0, k.r2c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 400.0, k.r3c2(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 1000.0, k.getR0C3D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2000.0, k.getR1C3D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3000.0, k.getR2C3D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 4000.0, k.getR3C3D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1000.0, k.r0c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2000.0, k.r1c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3000.0, k.r2c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 4000.0, k.r3c3(), 0.0);
     }
   }
 
-  @Test public void testV4x4F()
+  @Test
+  public void testV4x4F()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -224,26 +230,32 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix4x4FType k = v.getM4fWritable();
-      k.setR0C0F((index * 10.0f) + 1.0f);
-      k.setR1C0F((index * 10.0f) + 2.0f);
-      k.setR2C0F((index * 10.0f) + 3.0f);
-      k.setR3C0F((index * 10.0f) + 4.0f);
+      final MatrixStorage4x4Type k = v.getM4fWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
+      final double r2c0 = ((index * 10.0) + 3.0);
+      final double r3c0 = ((index * 10.0) + 4.0);
 
-      k.setR0C1F((index * 10.0f) + 10.0f);
-      k.setR1C1F((index * 10.0f) + 20.0f);
-      k.setR2C1F((index * 10.0f) + 30.0f);
-      k.setR3C1F((index * 10.0f) + 40.0f);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+      final double r2c1 = ((index * 10.0) + 30.0);
+      final double r3c1 = ((index * 10.0) + 40.0);
 
-      k.setR0C2F((index * 10.0f) + 100.0f);
-      k.setR1C2F((index * 10.0f) + 200.0f);
-      k.setR2C2F((index * 10.0f) + 300.0f);
-      k.setR3C2F((index * 10.0f) + 400.0f);
+      final double r0c2 = ((index * 10.0) + 100.0);
+      final double r1c2 = ((index * 10.0) + 200.0);
+      final double r2c2 = ((index * 10.0) + 300.0);
+      final double r3c2 = ((index * 10.0) + 400.0);
 
-      k.setR0C3F((index * 10.0f) + 1000.0f);
-      k.setR1C3F((index * 10.0f) + 2000.0f);
-      k.setR2C3F((index * 10.0f) + 3000.0f);
-      k.setR3C3F((index * 10.0f) + 4000.0f);
+      final double r0c3 = ((index * 10.0) + 1000.0);
+      final double r1c3 = ((index * 10.0) + 2000.0);
+      final double r2c3 = ((index * 10.0) + 3000.0);
+      final double r3c3 = ((index * 10.0) + 4000.0);
+
+      k.setMatrix4x4D(Matrix4x4D.of(
+        r0c0, r0c1, r0c2, r0c3,
+        r1c0, r1c1, r1c2, r1c3,
+        r2c0, r2c1, r2c2, r2c3,
+        r3c0, r3c1, r3c2, r3c3));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -256,31 +268,32 @@ public final class MatricesTest
       // MatricesTest.check4x4FZero(v.getM4fReadable());
       MatricesTest.check4x4DZero(v.getM4dReadable());
 
-      final MatrixReadable4x4FType k = v.getM4fReadable();
+      final MatrixReadable4x4DType k = v.getM4fReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3.0, k.getR2C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 4.0, k.getR3C0F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3.0, k.r2c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 4.0, k.r3c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 30.0, k.getR2C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 40.0, k.getR3C1F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 30.0, k.r2c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 40.0, k.r3c1(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 100.0, k.getR0C2F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 200.0, k.getR1C2F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 300.0, k.getR2C2F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 400.0, k.getR3C2F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 100.0, k.r0c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 200.0, k.r1c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 300.0, k.r2c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 400.0, k.r3c2(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 1000.0, k.getR0C3F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2000.0, k.getR1C3F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3000.0, k.getR2C3F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 4000.0, k.getR3C3F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1000.0, k.r0c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2000.0, k.r1c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3000.0, k.r2c3(), 0.0);
+      Assert.assertEquals((index * 10.0) + 4000.0, k.r3c3(), 0.0);
     }
   }
 
-  @Test public void testV3x3D()
+  @Test
+  public void testV3x3D()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -293,18 +306,23 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix3x3DType k = v.getM3dWritable();
-      k.setR0C0D((index * 10.0) + 1.0);
-      k.setR1C0D((index * 10.0) + 2.0);
-      k.setR2C0D((index * 10.0) + 3.0);
+      final MatrixStorage3x3Type k = v.getM3dWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
+      final double r2c0 = ((index * 10.0) + 3.0);
 
-      k.setR0C1D((index * 10.0) + 10.0);
-      k.setR1C1D((index * 10.0) + 20.0);
-      k.setR2C1D((index * 10.0) + 30.0);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+      final double r2c1 = ((index * 10.0) + 30.0);
 
-      k.setR0C2D((index * 10.0) + 100.0);
-      k.setR1C2D((index * 10.0) + 200.0);
-      k.setR2C2D((index * 10.0) + 300.0);
+      final double r0c2 = ((index * 10.0) + 100.0);
+      final double r1c2 = ((index * 10.0) + 200.0);
+      final double r2c2 = ((index * 10.0) + 300.0);
+
+      k.setMatrix3x3D(Matrix3x3D.of(
+        r0c0, r0c1, r0c2,
+        r1c0, r1c1, r1c2,
+        r2c0, r2c1, r2c2));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -319,21 +337,22 @@ public final class MatricesTest
 
       final MatrixReadable3x3DType k = v.getM3dReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3.0, k.getR2C0D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3.0, k.r2c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 30.0, k.getR2C1D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 30.0, k.r2c1(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 100.0, k.getR0C2D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 200.0, k.getR1C2D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 300.0, k.getR2C2D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 100.0, k.r0c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 200.0, k.r1c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 300.0, k.r2c2(), 0.0);
     }
   }
 
-  @Test public void testV3x3F()
+  @Test
+  public void testV3x3F()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -346,18 +365,23 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix3x3FType k = v.getM3fWritable();
-      k.setR0C0F((index * 10.0f) + 1.0f);
-      k.setR1C0F((index * 10.0f) + 2.0f);
-      k.setR2C0F((index * 10.0f) + 3.0f);
+      final MatrixStorage3x3Type k = v.getM3fWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
+      final double r2c0 = ((index * 10.0) + 3.0);
 
-      k.setR0C1F((index * 10.0f) + 10.0f);
-      k.setR1C1F((index * 10.0f) + 20.0f);
-      k.setR2C1F((index * 10.0f) + 30.0f);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+      final double r2c1 = ((index * 10.0) + 30.0);
 
-      k.setR0C2F((index * 10.0f) + 100.0f);
-      k.setR1C2F((index * 10.0f) + 200.0f);
-      k.setR2C2F((index * 10.0f) + 300.0f);
+      final double r0c2 = ((index * 10.0) + 100.0);
+      final double r1c2 = ((index * 10.0) + 200.0);
+      final double r2c2 = ((index * 10.0) + 300.0);
+
+      k.setMatrix3x3D(Matrix3x3D.of(
+        r0c0, r0c1, r0c2,
+        r1c0, r1c1, r1c2,
+        r2c0, r2c1, r2c2));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -370,23 +394,24 @@ public final class MatricesTest
       MatricesTest.check4x4FZero(v.getM4fReadable());
       MatricesTest.check4x4DZero(v.getM4dReadable());
 
-      final MatrixReadable3x3FType k = v.getM3fReadable();
+      final MatrixReadable3x3DType k = v.getM3fReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 3.0, k.getR2C0F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 3.0, k.r2c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 30.0, k.getR2C1F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 30.0, k.r2c1(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 100.0, k.getR0C2F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 200.0, k.getR1C2F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 300.0, k.getR2C2F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 100.0, k.r0c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 200.0, k.r1c2(), 0.0);
+      Assert.assertEquals((index * 10.0) + 300.0, k.r2c2(), 0.0);
     }
   }
 
-  @Test public void testV2x2D()
+  @Test
+  public void testV2x2D()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -399,12 +424,16 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix2x2DType k = v.getM2dWritable();
-      k.setR0C0D((index * 10.0) + 1.0);
-      k.setR1C0D((index * 10.0) + 2.0);
+      final MatrixStorage2x2Type k = v.getM2dWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
 
-      k.setR0C1D((index * 10.0) + 10.0);
-      k.setR1C1D((index * 10.0) + 20.0);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+
+      k.setMatrix2x2D(Matrix2x2D.of(
+        r0c0, r0c1,
+        r1c0, r1c1));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -413,21 +442,22 @@ public final class MatricesTest
       // MatricesTest.check2x2DZero(v.getM2dReadable());
       MatricesTest.check2x2FZero(v.getM2fReadable());
       MatricesTest.check3x3DZero(v.getM3dReadable());
-      MatricesTest.check2x2FZero(v.getM3fReadable());
+      MatricesTest.check3x3FZero(v.getM3fReadable());
       MatricesTest.check4x4FZero(v.getM4fReadable());
       MatricesTest.check4x4DZero(v.getM4dReadable());
 
       final MatrixReadable2x2DType k = v.getM2dReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1D(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1D(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
     }
   }
 
-  @Test public void testV2x2F()
+  @Test
+  public void testV2x2F()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 348);
     final JPRACursor1DType<MatricesType> c =
@@ -440,12 +470,16 @@ public final class MatricesTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      final Matrix2x2FType k = v.getM2fWritable();
-      k.setR0C0F((index * 10.0f) + 1.0f);
-      k.setR1C0F((index * 10.0f) + 2.0f);
+      final MatrixStorage2x2Type k = v.getM2fWritable();
+      final double r0c0 = ((index * 10.0) + 1.0);
+      final double r1c0 = ((index * 10.0) + 2.0);
 
-      k.setR0C1F((index * 10.0f) + 10.0f);
-      k.setR1C1F((index * 10.0f) + 20.0f);
+      final double r0c1 = ((index * 10.0) + 10.0);
+      final double r1c1 = ((index * 10.0) + 20.0);
+
+      k.setMatrix2x2D(Matrix2x2D.of(
+        r0c0, r0c1,
+        r1c0, r1c1));
     }
 
     for (int index = 0; index < 8; ++index) {
@@ -458,13 +492,13 @@ public final class MatricesTest
       MatricesTest.check4x4FZero(v.getM4fReadable());
       MatricesTest.check4x4DZero(v.getM4dReadable());
 
-      final MatrixReadable2x2FType k = v.getM2fReadable();
+      final MatrixReadable2x2DType k = v.getM2fReadable();
 
-      Assert.assertEquals((index * 10.0) + 1.0, k.getR0C0F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 2.0, k.getR1C0F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 1.0, k.r0c0(), 0.0);
+      Assert.assertEquals((index * 10.0) + 2.0, k.r1c0(), 0.0);
 
-      Assert.assertEquals((index * 10.0) + 10.0, k.getR0C1F(), 0.0);
-      Assert.assertEquals((index * 10.0) + 20.0, k.getR1C1F(), 0.0);
+      Assert.assertEquals((index * 10.0) + 10.0, k.r0c1(), 0.0);
+      Assert.assertEquals((index * 10.0) + 20.0, k.r1c1(), 0.0);
     }
   }
 }
