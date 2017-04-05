@@ -17,6 +17,10 @@
   <description>Packed record access (Documentation)</description>
   <url>http://github.com/io7m/jpra</url>
 
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+  </properties>
+
   <scm>
     <url>${project.parent.scm.url}</url>
     <connection>${project.parent.scm.connection}</connection>

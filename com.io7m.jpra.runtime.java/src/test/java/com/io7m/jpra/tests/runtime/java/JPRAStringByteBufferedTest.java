@@ -18,8 +18,9 @@ package com.io7m.jpra.tests.runtime.java;
 
 import com.io7m.jpra.runtime.java.JPRACursorByteReadableType;
 import com.io7m.jpra.runtime.java.JPRAStringCursorByteBuffered;
-import com.io7m.jpra.runtime.java.JPRAStringTruncation;
 import com.io7m.jpra.runtime.java.JPRAStringCursorType;
+import com.io7m.jpra.runtime.java.JPRAStringTruncation;
+import com.io7m.mutable.numbers.core.MutableLong;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -28,15 +29,15 @@ import org.junit.rules.ExpectedException;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.AtomicLong;
 
 public final class JPRAStringByteBufferedTest
 {
   @Rule public ExpectedException expected = ExpectedException.none();
 
-  @Test public void testIdentities()
+  @Test
+  public void testIdentities()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -52,9 +53,10 @@ public final class JPRAStringByteBufferedTest
     Assert.assertEquals(StandardCharsets.UTF_8, s.getEncoding());
   }
 
-  @Test public void testNegativeMaximum()
+  @Test
+  public void testNegativeMaximum()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
 
@@ -71,9 +73,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testNegativeOffset()
+  @Test
+  public void testNegativeOffset()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
 
@@ -90,9 +93,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testUsedLength()
+  @Test
+  public void testUsedLength()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(1000);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -105,7 +109,7 @@ public final class JPRAStringByteBufferedTest
 
     for (int index = 0; index < 10; ++index) {
       final int offset = index * 100;
-      base.set((long) offset);
+      base.setValue((long) offset);
 
       Assert.assertEquals(0L, (long) s.getUsedLength());
       buf.putInt(offset, -1);
@@ -115,9 +119,10 @@ public final class JPRAStringByteBufferedTest
     }
   }
 
-  @Test public void testNewValue()
+  @Test
+  public void testNewValue()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -130,7 +135,7 @@ public final class JPRAStringByteBufferedTest
 
     for (int index = 0; index < 10; ++index) {
       final int offset = index * (8 + 4);
-      base.set((long) offset);
+      base.setValue((long) offset);
 
       buf.putInt(offset + 0, 4);
 
@@ -155,9 +160,10 @@ public final class JPRAStringByteBufferedTest
     }
   }
 
-  @Test public void testGetBytes()
+  @Test
+  public void testGetBytes()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -170,7 +176,7 @@ public final class JPRAStringByteBufferedTest
 
     for (int index = 0; index < 10; ++index) {
       final int offset = index * (8 + 4);
-      base.set((long) offset);
+      base.setValue((long) offset);
 
       buf.putInt(offset + 0, 4);
       buf.put(offset + 4, (byte) 'A');
@@ -198,9 +204,10 @@ public final class JPRAStringByteBufferedTest
     }
   }
 
-  @Test public void testGetBytesOutOfBounds()
+  @Test
+  public void testGetBytesOutOfBounds()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -219,9 +226,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testSetValueTruncated()
+  @Test
+  public void testSetValueTruncated()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(10 * (8 + 4));
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -234,7 +242,7 @@ public final class JPRAStringByteBufferedTest
 
     for (int index = 0; index < 10; ++index) {
       final int offset = index * (8 + 4);
-      base.set((long) offset);
+      base.setValue((long) offset);
 
       Assert.assertEquals(0L, (long) s.getUsedLength());
       Assert.assertEquals("", s.getNewValue());
@@ -249,9 +257,10 @@ public final class JPRAStringByteBufferedTest
     }
   }
 
-  @Test public void testSetValueRejected()
+  @Test
+  public void testSetValueRejected()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -275,9 +284,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testGetByteRejected()
+  @Test
+  public void testGetByteRejected()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -294,9 +304,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testGetByteRejectedNegative()
+  @Test
+  public void testGetByteRejectedNegative()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =
@@ -313,9 +324,10 @@ public final class JPRAStringByteBufferedTest
     Assert.fail();
   }
 
-  @Test public void testGetByte()
+  @Test
+  public void testGetByte()
   {
-    final AtomicLong base = new AtomicLong(0L);
+    final MutableLong base = MutableLong.create();
     final ByteBuffer buf = ByteBuffer.allocate(8 + 4);
     final JPRACursorByteReadableType cursor = () -> base;
     final JPRAStringCursorType s =

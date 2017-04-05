@@ -36,90 +36,45 @@ import com.io7m.jpra.model.types.TypeMatcherType;
 import com.io7m.jpra.model.types.TypeScalarMatcherType;
 import com.io7m.jpra.model.types.TypeScalarType;
 import com.io7m.jpra.runtime.java.JPRATypeModel;
-import com.io7m.jtensors.Matrix2x2DType;
-import com.io7m.jtensors.Matrix2x2FType;
-import com.io7m.jtensors.Matrix3x3DType;
-import com.io7m.jtensors.Matrix3x3FType;
-import com.io7m.jtensors.Matrix4x4DType;
-import com.io7m.jtensors.Matrix4x4FType;
-import com.io7m.jtensors.MatrixReadable2x2DType;
-import com.io7m.jtensors.MatrixReadable2x2FType;
-import com.io7m.jtensors.MatrixReadable3x3DType;
-import com.io7m.jtensors.MatrixReadable3x3FType;
-import com.io7m.jtensors.MatrixReadable4x4DType;
-import com.io7m.jtensors.MatrixReadable4x4FType;
-import com.io7m.jtensors.Vector2DType;
-import com.io7m.jtensors.Vector2FType;
-import com.io7m.jtensors.Vector2IType;
-import com.io7m.jtensors.Vector2LType;
-import com.io7m.jtensors.Vector3DType;
-import com.io7m.jtensors.Vector3FType;
-import com.io7m.jtensors.Vector3IType;
-import com.io7m.jtensors.Vector3LType;
-import com.io7m.jtensors.Vector4DType;
-import com.io7m.jtensors.Vector4FType;
-import com.io7m.jtensors.Vector4IType;
-import com.io7m.jtensors.Vector4LType;
-import com.io7m.jtensors.VectorReadable2DType;
-import com.io7m.jtensors.VectorReadable2FType;
-import com.io7m.jtensors.VectorReadable2IType;
-import com.io7m.jtensors.VectorReadable2LType;
-import com.io7m.jtensors.VectorReadable3DType;
-import com.io7m.jtensors.VectorReadable3FType;
-import com.io7m.jtensors.VectorReadable3IType;
-import com.io7m.jtensors.VectorReadable3LType;
-import com.io7m.jtensors.VectorReadable4DType;
-import com.io7m.jtensors.VectorReadable4FType;
-import com.io7m.jtensors.VectorReadable4IType;
-import com.io7m.jtensors.VectorReadable4LType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered2x2DType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered2x2FType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered3x3DType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered3x3FType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered4x4DType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBuffered4x4FType;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM2x2D;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM2x2F;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM3x3D;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM3x3F;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM4x4D;
-import com.io7m.jtensors.bytebuffered.MatrixByteBufferedM4x4F;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered2DType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered2FType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered2IType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered2LType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered3DType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered3FType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered3IType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered3LType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered4DType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered4FType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered4IType;
-import com.io7m.jtensors.bytebuffered.VectorByteBuffered4LType;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM2D;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM2F;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM2I;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM2L;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM3D;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM3F;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM3I;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM3L;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM4D;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM4F;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM4I;
-import com.io7m.jtensors.bytebuffered.VectorByteBufferedM4L;
-import com.io7m.jtensors.ieee754b16.Vector2Db16Type;
-import com.io7m.jtensors.ieee754b16.Vector3Db16Type;
-import com.io7m.jtensors.ieee754b16.Vector4Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorByteBuffered2Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorByteBuffered3Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorByteBuffered4Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorByteBufferedM2Db16;
-import com.io7m.jtensors.ieee754b16.VectorByteBufferedM3Db16;
-import com.io7m.jtensors.ieee754b16.VectorByteBufferedM4Db16;
-import com.io7m.jtensors.ieee754b16.VectorReadable2Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorReadable3Db16Type;
-import com.io7m.jtensors.ieee754b16.VectorReadable4Db16Type;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable2x2DType;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable3x3DType;
+import com.io7m.jtensors.core.unparameterized.matrices.MatrixReadable4x4DType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable2DType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable2LType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable3DType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable3LType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable4DType;
+import com.io7m.jtensors.core.unparameterized.vectors.VectorReadable4LType;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage2x2Type;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage3x3Type;
+import com.io7m.jtensors.storage.api.unparameterized.matrices.MatrixStorage4x4Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageFloating2Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageFloating3Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageFloating4Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageIntegral2Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageIntegral3Type;
+import com.io7m.jtensors.storage.api.unparameterized.vectors.VectorStorageIntegral4Type;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered2x2s32;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered2x2s64;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered3x3s32;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered3x3s64;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered4x4s32;
+import com.io7m.jtensors.storage.bytebuffered.MatrixByteBuffered4x4s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating2s16;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating2s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating2s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating3s16;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating3s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating3s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating4s16;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating4s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedFloating4s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral2s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral2s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral3s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral3s64;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral4s32;
+import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral4s64;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
 
@@ -392,22 +347,22 @@ final class JPRAClasses
           switch (this.width) {
             case 2:
               return new MatrixClasses(
-                Matrix2x2FType.class,
-                MatrixReadable2x2FType.class,
-                MatrixByteBufferedM2x2F.class,
-                MatrixByteBuffered2x2FType.class);
+                MatrixStorage2x2Type.class,
+                MatrixReadable2x2DType.class,
+                MatrixByteBuffered2x2s32.class,
+                MatrixStorage2x2Type.class);
             case 3:
               return new MatrixClasses(
-                Matrix3x3FType.class,
-                MatrixReadable3x3FType.class,
-                MatrixByteBufferedM3x3F.class,
-                MatrixByteBuffered3x3FType.class);
+                MatrixStorage3x3Type.class,
+                MatrixReadable3x3DType.class,
+                MatrixByteBuffered3x3s32.class,
+                MatrixStorage3x3Type.class);
             case 4:
               return new MatrixClasses(
-                Matrix4x4FType.class,
-                MatrixReadable4x4FType.class,
-                MatrixByteBufferedM4x4F.class,
-                MatrixByteBuffered4x4FType.class);
+                MatrixStorage4x4Type.class,
+                MatrixReadable4x4DType.class,
+                MatrixByteBuffered4x4s32.class,
+                MatrixStorage4x4Type.class);
           }
 
           throw new UnsupportedOperationException("Unsupported matrix size");
@@ -416,22 +371,22 @@ final class JPRAClasses
           switch (this.width) {
             case 2:
               return new MatrixClasses(
-                Matrix2x2DType.class,
+                MatrixStorage2x2Type.class,
                 MatrixReadable2x2DType.class,
-                MatrixByteBufferedM2x2D.class,
-                MatrixByteBuffered2x2DType.class);
+                MatrixByteBuffered2x2s64.class,
+                MatrixStorage2x2Type.class);
             case 3:
               return new MatrixClasses(
-                Matrix3x3DType.class,
+                MatrixStorage3x3Type.class,
                 MatrixReadable3x3DType.class,
-                MatrixByteBufferedM3x3D.class,
-                MatrixByteBuffered3x3DType.class);
+                MatrixByteBuffered3x3s64.class,
+                MatrixStorage3x3Type.class);
             case 4:
               return new MatrixClasses(
-                Matrix4x4DType.class,
+                MatrixStorage4x4Type.class,
                 MatrixReadable4x4DType.class,
-                MatrixByteBufferedM4x4D.class,
-                MatrixByteBuffered4x4DType.class);
+                MatrixByteBuffered4x4s64.class,
+                MatrixStorage4x4Type.class);
           }
 
           throw new UnsupportedOperationException("Unsupported matrix size");
@@ -475,24 +430,24 @@ final class JPRAClasses
               switch (VectorClassMatcher.this.e_count) {
                 case 2: {
                   return new VectorsClasses(
-                    Vector2IType.class,
-                    VectorReadable2IType.class,
-                    VectorByteBufferedM2I.class,
-                    VectorByteBuffered2IType.class);
+                    VectorStorageIntegral2Type.class,
+                    VectorReadable2LType.class,
+                    VectorByteBufferedIntegral2s32.class,
+                    VectorStorageIntegral2Type.class);
                 }
                 case 3: {
                   return new VectorsClasses(
-                    Vector3IType.class,
-                    VectorReadable3IType.class,
-                    VectorByteBufferedM3I.class,
-                    VectorByteBuffered3IType.class);
+                    VectorStorageIntegral3Type.class,
+                    VectorReadable3LType.class,
+                    VectorByteBufferedIntegral3s32.class,
+                    VectorStorageIntegral3Type.class);
                 }
                 case 4: {
                   return new VectorsClasses(
-                    Vector4IType.class,
-                    VectorReadable4IType.class,
-                    VectorByteBufferedM4I.class,
-                    VectorByteBuffered4IType.class);
+                    VectorStorageIntegral4Type.class,
+                    VectorReadable4LType.class,
+                    VectorByteBufferedIntegral4s32.class,
+                    VectorStorageIntegral4Type.class);
                 }
               }
 
@@ -503,24 +458,24 @@ final class JPRAClasses
               switch (VectorClassMatcher.this.e_count) {
                 case 2: {
                   return new VectorsClasses(
-                    Vector2LType.class,
+                    VectorStorageIntegral2Type.class,
                     VectorReadable2LType.class,
-                    VectorByteBufferedM2L.class,
-                    VectorByteBuffered2LType.class);
+                    VectorByteBufferedIntegral2s64.class,
+                    VectorStorageIntegral2Type.class);
                 }
                 case 3: {
                   return new VectorsClasses(
-                    Vector3LType.class,
+                    VectorStorageIntegral3Type.class,
                     VectorReadable3LType.class,
-                    VectorByteBufferedM3L.class,
-                    VectorByteBuffered3LType.class);
+                    VectorByteBufferedIntegral3s64.class,
+                    VectorStorageIntegral3Type.class);
                 }
                 case 4: {
                   return new VectorsClasses(
-                    Vector4LType.class,
+                    VectorStorageIntegral4Type.class,
                     VectorReadable4LType.class,
-                    VectorByteBufferedM4L.class,
-                    VectorByteBuffered4LType.class);
+                    VectorByteBufferedIntegral4s64.class,
+                    VectorStorageIntegral4Type.class);
                 }
               }
 
@@ -558,24 +513,24 @@ final class JPRAClasses
           switch (this.e_count) {
             case 2: {
               return new VectorsClasses(
-                Vector2Db16Type.class,
-                VectorReadable2Db16Type.class,
-                VectorByteBufferedM2Db16.class,
-                VectorByteBuffered2Db16Type.class);
+                VectorStorageFloating2Type.class,
+                VectorReadable2DType.class,
+                VectorByteBufferedFloating2s16.class,
+                VectorStorageFloating2Type.class);
             }
             case 3: {
               return new VectorsClasses(
-                Vector3Db16Type.class,
-                VectorReadable3Db16Type.class,
-                VectorByteBufferedM3Db16.class,
-                VectorByteBuffered3Db16Type.class);
+                VectorStorageFloating3Type.class,
+                VectorReadable3DType.class,
+                VectorByteBufferedFloating3s16.class,
+                VectorStorageFloating3Type.class);
             }
             case 4: {
               return new VectorsClasses(
-                Vector4Db16Type.class,
-                VectorReadable4Db16Type.class,
-                VectorByteBufferedM4Db16.class,
-                VectorByteBuffered4Db16Type.class);
+                VectorStorageFloating4Type.class,
+                VectorReadable4DType.class,
+                VectorByteBufferedFloating4s16.class,
+                VectorStorageFloating4Type.class);
             }
           }
 
@@ -587,24 +542,24 @@ final class JPRAClasses
           switch (this.e_count) {
             case 2: {
               return new VectorsClasses(
-                Vector2FType.class,
-                VectorReadable2FType.class,
-                VectorByteBufferedM2F.class,
-                VectorByteBuffered2FType.class);
+                VectorStorageFloating2Type.class,
+                VectorReadable2DType.class,
+                VectorByteBufferedFloating2s32.class,
+                VectorStorageFloating2Type.class);
             }
             case 3: {
               return new VectorsClasses(
-                Vector3FType.class,
-                VectorReadable3FType.class,
-                VectorByteBufferedM3F.class,
-                VectorByteBuffered3FType.class);
+                VectorStorageFloating3Type.class,
+                VectorReadable3DType.class,
+                VectorByteBufferedFloating3s32.class,
+                VectorStorageFloating3Type.class);
             }
             case 4: {
               return new VectorsClasses(
-                Vector4FType.class,
-                VectorReadable4FType.class,
-                VectorByteBufferedM4F.class,
-                VectorByteBuffered4FType.class);
+                VectorStorageFloating4Type.class,
+                VectorReadable4DType.class,
+                VectorByteBufferedFloating4s32.class,
+                VectorStorageFloating4Type.class);
             }
           }
 
@@ -615,24 +570,24 @@ final class JPRAClasses
           switch (this.e_count) {
             case 2: {
               return new VectorsClasses(
-                Vector2DType.class,
+                VectorStorageFloating2Type.class,
                 VectorReadable2DType.class,
-                VectorByteBufferedM2D.class,
-                VectorByteBuffered2DType.class);
+                VectorByteBufferedFloating2s64.class,
+                VectorStorageFloating2Type.class);
             }
             case 3: {
               return new VectorsClasses(
-                Vector3DType.class,
+                VectorStorageFloating3Type.class,
                 VectorReadable3DType.class,
-                VectorByteBufferedM3D.class,
-                VectorByteBuffered3DType.class);
+                VectorByteBufferedFloating3s64.class,
+                VectorStorageFloating3Type.class);
             }
             case 4: {
               return new VectorsClasses(
-                Vector4DType.class,
+                VectorStorageFloating4Type.class,
                 VectorReadable4DType.class,
-                VectorByteBufferedM4D.class,
-                VectorByteBuffered4DType.class);
+                VectorByteBufferedFloating4s64.class,
+                VectorStorageFloating4Type.class);
             }
           }
 

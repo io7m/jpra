@@ -73,7 +73,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       f.matchField(
         new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(
+          @Override
+          public Unit matchFieldValue(
             final TRecord.FieldValue f)
           {
             final TType t = f.getType();
@@ -81,7 +82,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               new RecordFieldImplementationProcessor(f, o, jcb));
           }
 
-          @Override public Unit matchFieldPaddingOctets(
+          @Override
+          public Unit matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
             return Unit.unit();
@@ -91,26 +93,30 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  private static void generateRecordByteOffsetMethod(final TypeSpec.Builder jcb)
+  private static void generateRecordByteOffsetMethod(
+    final TypeSpec.Builder jcb)
   {
     final MethodSpec.Builder jmb = MethodSpec.methodBuilder("getByteOffsetFor");
     jmb.addModifiers(Modifier.PRIVATE);
     jmb.returns(int.class);
     jmb.addParameter(int.class, "field_offset", Modifier.FINAL);
     jmb.addStatement(
-      "final int b = (int) this.$N.getByteOffsetObservable().get()", "pointer");
+      "final int b = (int) this.$N.getByteOffsetObservable().value()",
+      "pointer");
     jmb.addStatement(
       "return $N + this.$N + $N", "b", "base_offset", "field_offset");
     jcb.addMethod(jmb.build());
   }
 
-  private static void generatePackedByteOffsetMethod(final TypeSpec.Builder jcb)
+  private static void generatePackedByteOffsetMethod(
+    final TypeSpec.Builder jcb)
   {
     final MethodSpec.Builder jmb = MethodSpec.methodBuilder("getByteOffset");
     jmb.addModifiers(Modifier.PRIVATE);
     jmb.returns(int.class);
     jmb.addStatement(
-      "final int b = (int) this.$N.getByteOffsetObservable().get()", "pointer");
+      "final int b = (int) this.$N.getByteOffsetObservable().value()",
+      "pointer");
     jmb.addStatement(
       "return $N + this.$N", "b", "base_offset");
     jcb.addMethod(jmb.build());
@@ -271,7 +277,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       f.matchField(
         new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(
+          @Override
+          public Unit matchFieldValue(
             final TRecord.FieldValue f)
           {
             final TType t = f.getType();
@@ -280,7 +287,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
                 f, jcb, jmb));
           }
 
-          @Override public Unit matchFieldPaddingOctets(
+          @Override
+          public Unit matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
             return Unit.unit();
@@ -335,17 +343,20 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     return JPRAGeneratedNames.getRecordImplementationByteBufferedName(t);
   }
 
-  @Override public String getRecordInterfaceReadableName(final TypeName t)
+  @Override
+  public String getRecordInterfaceReadableName(final TypeName t)
   {
     return JPRAGeneratedNames.getRecordInterfaceReadableName(t);
   }
 
-  @Override public String getRecordInterfaceWritableName(final TypeName t)
+  @Override
+  public String getRecordInterfaceWritableName(final TypeName t)
   {
     return JPRAGeneratedNames.getRecordInterfaceWritableName(t);
   }
 
-  @Override public String getRecordInterfaceName(final TypeName t)
+  @Override
+  public String getRecordInterfaceName(final TypeName t)
   {
     return JPRAGeneratedNames.getRecordInterfaceName(t);
   }
@@ -356,22 +367,26 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     return JPRAGeneratedNames.getPackedImplementationByteBufferedName(t);
   }
 
-  @Override public String getPackedInterfaceReadableName(final TypeName t)
+  @Override
+  public String getPackedInterfaceReadableName(final TypeName t)
   {
     return JPRAGeneratedNames.getPackedInterfaceReadableName(t);
   }
 
-  @Override public String getPackedInterfaceWritableName(final TypeName t)
+  @Override
+  public String getPackedInterfaceWritableName(final TypeName t)
   {
     return JPRAGeneratedNames.getPackedInterfaceWritableName(t);
   }
 
-  @Override public String getPackedInterfaceName(final TypeName t)
+  @Override
+  public String getPackedInterfaceName(final TypeName t)
   {
     return JPRAGeneratedNames.getPackedInterfaceName(t);
   }
 
-  @Override public void generateRecordImplementation(
+  @Override
+  public void generateRecordImplementation(
     final TRecord t,
     final OutputStream os)
     throws IOException
@@ -418,7 +433,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generateRecordInterfaceReadable(
+  @Override
+  public void generateRecordInterfaceReadable(
     final TRecord t,
     final OutputStream os)
     throws IOException
@@ -443,7 +459,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         f.matchField(
           new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchFieldValue(
+            @Override
+            public Unit matchFieldValue(
               final TRecord.FieldValue f)
             {
               final TType t = f.getType();
@@ -453,7 +470,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               return Unit.unit();
             }
 
-            @Override public Unit matchFieldPaddingOctets(
+            @Override
+            public Unit matchFieldPaddingOctets(
               final TRecord.FieldPaddingOctets f)
             {
               return Unit.unit();
@@ -468,7 +486,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generateRecordInterfaceWritable(
+  @Override
+  public void generateRecordInterfaceWritable(
     final TRecord t,
     final OutputStream os)
     throws IOException
@@ -491,7 +510,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         f.matchField(
           new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchFieldValue(
+            @Override
+            public Unit matchFieldValue(
               final TRecord.FieldValue f)
             {
               final TType t = f.getType();
@@ -501,7 +521,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               return Unit.unit();
             }
 
-            @Override public Unit matchFieldPaddingOctets(
+            @Override
+            public Unit matchFieldPaddingOctets(
               final TRecord.FieldPaddingOctets f)
             {
               return Unit.unit();
@@ -517,7 +538,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generateRecordInterface(
+  @Override
+  public void generateRecordInterface(
     final TRecord t,
     final OutputStream os)
     throws IOException
@@ -551,7 +573,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generatePackedImplementation(
+  @Override
+  public void generatePackedImplementation(
     final TPacked t,
     final OutputStream os)
     throws IOException
@@ -599,7 +622,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         f.matchField(
           new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchFieldValue(
+            @Override
+            public Unit matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
@@ -607,7 +631,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               return Unit.unit();
             }
 
-            @Override public Unit matchFieldPaddingBits(
+            @Override
+            public Unit matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
               return Unit.unit();
@@ -625,7 +650,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generatePackedInterfaceReadable(
+  @Override
+  public void generatePackedInterfaceReadable(
     final TPacked t,
     final OutputStream os)
     throws IOException
@@ -650,7 +676,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         f.matchField(
           new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchFieldValue(
+            @Override
+            public Unit matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
@@ -660,7 +687,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               return Unit.unit();
             }
 
-            @Override public Unit matchFieldPaddingBits(
+            @Override
+            public Unit matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
               return Unit.unit();
@@ -675,7 +703,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generatePackedInterfaceWritable(
+  @Override
+  public void generatePackedInterfaceWritable(
     final TPacked t,
     final OutputStream os)
     throws IOException
@@ -699,7 +728,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         f.matchField(
           new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
           {
-            @Override public Unit matchFieldValue(
+            @Override
+            public Unit matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
@@ -709,7 +739,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
               return Unit.unit();
             }
 
-            @Override public Unit matchFieldPaddingBits(
+            @Override
+            public Unit matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
               return Unit.unit();
@@ -727,7 +758,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     }
   }
 
-  @Override public void generatePackedInterface(
+  @Override
+  public void generatePackedInterface(
     final TPacked t,
     final OutputStream os)
     throws IOException

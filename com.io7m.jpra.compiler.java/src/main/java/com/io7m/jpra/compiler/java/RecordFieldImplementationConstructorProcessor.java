@@ -206,7 +206,7 @@ final class RecordFieldImplementationConstructorProcessor
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
     final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
     this.constructor_builder.addStatement(
-      "this.$N = $T.newVectorFromByteBufferAndBase($N, $N, $N + $N)",
+      "this.$N = $T.createWithBase($N, $N, $N + $N)",
       field_name,
       c.getBufferedConstructors(),
       "in_buffer",
@@ -257,7 +257,7 @@ final class RecordFieldImplementationConstructorProcessor
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
     final String offset_name = JPRAGeneratedNames.getOffsetConstantName(f_name);
     this.constructor_builder.addStatement(
-      "this.$N = $T.newMatrixFromByteBufferAndBase($N, $N, $N + $N)",
+      "this.$N = $T.createWithBase($N, $N, $N + $N)",
       field_name,
       c.getBufferedConstructors(),
       "in_buffer",

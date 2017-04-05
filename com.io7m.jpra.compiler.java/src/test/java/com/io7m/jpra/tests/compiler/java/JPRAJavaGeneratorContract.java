@@ -44,6 +44,8 @@ import com.io7m.jpra.model.types.TRecordBuilderType;
 import com.io7m.jpra.model.types.TVector;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -56,6 +58,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -66,6 +69,12 @@ import java.util.Optional;
 
 public abstract class JPRAJavaGeneratorContract
 {
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(JPRAJavaGeneratorContract.class);
+  }
+
   private static void compilePackeds(
     final Path path,
     final JPRAJavaGeneratorType g,
@@ -178,7 +187,20 @@ public abstract class JPRAJavaGeneratorContract
       fm.getJavaFileObjectsFromFiles(files);
 
     final JavaCompiler.CompilationTask task =
-      jc.getTask(null, null, null, Arrays.asList(options), null, fm_files);
+      jc.getTask(
+        null,
+        null,
+        diagnostic -> {
+          LOG.error("{}:{}:{}: {}",
+                    diagnostic.getCode(),
+                    Long.valueOf(diagnostic.getLineNumber()),
+                    Long.valueOf(diagnostic.getColumnNumber()),
+                    diagnostic.getMessage(Locale.getDefault()));
+        },
+        Arrays.asList(options),
+        null,
+        fm_files);
+
     final Boolean result = task.call();
     Assert.assertEquals(Boolean.TRUE, result);
     fm.close();

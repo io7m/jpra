@@ -16,9 +16,11 @@
 
 package com.io7m.jpra.runtime.java;
 
+import com.io7m.mutable.numbers.core.MutableLong;
+import com.io7m.mutable.numbers.core.MutableLongType;
+
 import java.nio.ByteBuffer;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A 2D cursor implementation that addresses values within a {@link ByteBuffer}
@@ -30,14 +32,14 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class JPRACursor2DByteBufferedUnchecked<T extends JPRAValueType>
   implements JPRACursor2DType<T>
 {
-  private final T          instance;
-  private final int        element_size;
-  private final int        width;
-  private final int        height;
-  private final int        row_byte_span;
-  private final AtomicLong byte_offset;
-  private       int        x;
-  private       int        y;
+  private final T instance;
+  private final int element_size;
+  private final int width;
+  private final int height;
+  private final int row_byte_span;
+  private final MutableLong byte_offset;
+  private int x;
+  private int y;
 
   private JPRACursor2DByteBufferedUnchecked(
     final ByteBuffer in_buffer,
@@ -46,7 +48,7 @@ public final class JPRACursor2DByteBufferedUnchecked<T extends JPRAValueType>
     final JPRAValueByteBufferedConstructorType<T> in_cons)
   {
     Objects.requireNonNull(in_buffer, "Buffer");
-    this.byte_offset = new AtomicLong(0L);
+    this.byte_offset = MutableLong.create();
 
     if (in_width <= 0) {
       throw new IllegalArgumentException(
@@ -95,27 +97,32 @@ public final class JPRACursor2DByteBufferedUnchecked<T extends JPRAValueType>
       in_buffer, width, height, in_cons);
   }
 
-  @Override public T getElementView()
+  @Override
+  public T getElementView()
   {
     return this.instance;
   }
 
-  @Override public AtomicLong getByteOffsetObservable()
+  @Override
+  public MutableLongType getByteOffsetObservable()
   {
     return this.byte_offset;
   }
 
-  @Override public int getElementX()
+  @Override
+  public int getElementX()
   {
     return this.x;
   }
 
-  @Override public int getElementY()
+  @Override
+  public int getElementY()
   {
     return this.y;
   }
 
-  @Override public void setElementPosition(
+  @Override
+  public void setElementPosition(
     final int in_x,
     final int in_y)
     throws IndexOutOfBoundsException
@@ -127,10 +134,11 @@ public final class JPRACursor2DByteBufferedUnchecked<T extends JPRAValueType>
     final long ly = (long) in_y;
     final long row_bytes = ly * (long) this.row_byte_span;
     final long col_bytes = lx * (long) this.element_size;
-    this.byte_offset.set(row_bytes + col_bytes);
+    this.byte_offset.setValue(row_bytes + col_bytes);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("[Cursor ");
