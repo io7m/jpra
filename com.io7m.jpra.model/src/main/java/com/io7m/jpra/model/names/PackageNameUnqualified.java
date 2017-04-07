@@ -23,6 +23,7 @@ import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +47,7 @@ public final class PackageNameUnqualified implements ModelElementType
     PATTERN_TEXT = "[\\p{IsLowercase}][\\p{IsLowercase}\\p{IsDigit}_]*";
     PATTERN = NullCheck.notNull(
       Pattern.compile(
-        PackageNameUnqualified.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS),
+        PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS),
       "Pattern");
   }
 
@@ -67,7 +68,7 @@ public final class PackageNameUnqualified implements ModelElementType
     this.lex = NullCheck.notNull(in_lex, "Lexical information");
     this.value = NullCheck.notNull(in_value, "Value");
 
-    final Matcher matcher = PackageNameUnqualified.PATTERN.matcher(this.value);
+    final Matcher matcher = PATTERN.matcher(this.value);
     Preconditions.checkPrecondition(
       in_value,
       matcher.matches(),
@@ -116,7 +117,7 @@ public final class PackageNameUnqualified implements ModelElementType
     }
 
     final PackageNameUnqualified that = (PackageNameUnqualified) o;
-    return this.value.equals(that.value);
+    return Objects.equals(this.value, that.value);
   }
 
   @Override

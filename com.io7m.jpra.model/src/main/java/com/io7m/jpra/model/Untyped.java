@@ -35,6 +35,6 @@ public final class Untyped
 
   public static Untyped get()
   {
-    return Untyped.INSTANCE;
+    return INSTANCE;
   }
 }

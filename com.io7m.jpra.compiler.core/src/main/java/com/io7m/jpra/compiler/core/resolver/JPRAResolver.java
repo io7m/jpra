@@ -79,6 +79,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -180,7 +181,7 @@ public final class JPRAResolver implements JPRAResolverType
     if (this.expected_package.isPresent()) {
       final PackageNameQualified got = s.getPackageName();
       final PackageNameQualified expected = this.expected_package.get();
-      if (!got.equals(expected)) {
+      if (!Objects.equals(got, expected)) {
         throw JPRACompilerResolverException.unexpectedPackage(expected, got);
       }
       this.expected_received = true;
@@ -195,7 +196,7 @@ public final class JPRAResolver implements JPRAResolverType
       throw JPRACompilerResolverException.duplicatePackage(name, p.getName());
     }
 
-    JPRAResolver.LOG.debug("start package {}", name);
+    LOG.debug("start package {}", name);
 
     this.current_package = Optional.of(name);
     return new StatementPackageBegin<>(name);
@@ -227,7 +228,7 @@ public final class JPRAResolver implements JPRAResolverType
     }
 
     try {
-      JPRAResolver.LOG.debug(
+      LOG.debug(
         "package {} imports {}", this.current_package.get(), q_name);
 
       final PackageContextType p = this.context.loadPackage(q_name);
@@ -252,7 +253,7 @@ public final class JPRAResolver implements JPRAResolverType
         s.getLexicalInformation());
     }
 
-    JPRAResolver.LOG.debug("end package {}", this.current_package.get());
+    LOG.debug("end package {}", this.current_package.get());
 
     this.imports.clear();
     this.import_names.clear();
@@ -708,7 +709,7 @@ public final class JPRAResolver implements JPRAResolverType
     if (pack_opt.isPresent()) {
       final PackageNameUnqualified p_name = pack_opt.get();
       if (!this.import_names.containsKey(p_name)) {
-        JPRAResolver.LOG.debug("nonexistent package reference: {}", p_name);
+        LOG.debug("nonexistent package reference: {}", p_name);
         throw JPRACompilerResolverException.nonexistentPackageReference(p_name);
       }
 
@@ -722,7 +723,7 @@ public final class JPRAResolver implements JPRAResolverType
       final Map<TypeName, TypeUserDefinedType> pt = p.getTypes();
 
       if (!pt.containsKey(t_name)) {
-        JPRAResolver.LOG.debug("nonexistent type: {}", t_name);
+        LOG.debug("nonexistent type: {}", t_name);
         throw JPRACompilerResolverException.nonexistentType(
           Optional.of(q_name), t_name);
       }
@@ -731,7 +732,7 @@ public final class JPRAResolver implements JPRAResolverType
     }
 
     if (!this.current_types.containsKey(t_name)) {
-      JPRAResolver.LOG.debug("nonexistent type: {}", t_name);
+      LOG.debug("nonexistent type: {}", t_name);
       throw JPRACompilerResolverException.nonexistentType(
         this.current_package, t_name);
     }
@@ -753,7 +754,7 @@ public final class JPRAResolver implements JPRAResolverType
           final SizeExprConstant<Unresolved, Untyped> s)
           throws JPRACompilerResolverException
         {
-          return JPRAResolver.this.resolveSizeExprConstant(s);
+          return JPRAResolver.resolveSizeExprConstant(s);
         }
 
         @Override
@@ -816,7 +817,7 @@ public final class JPRAResolver implements JPRAResolverType
       this.resolveTypeExpression(s.getTypeExpression()));
   }
 
-  private SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
+  private static SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
     final SizeExprConstant<Unresolved, Untyped> s)
   {
     return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());

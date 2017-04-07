@@ -140,16 +140,16 @@ public final class PackedFieldInterfaceProcessor
                 @Override public Class<?> matchIntegerUnsigned(
                   final TIntegerUnsigned t)
                 {
-                  return PackedFieldInterfaceProcessor
-                    .getPackedIntegerTypeForSize(
+                  return
+                    getPackedIntegerTypeForSize(
                       f_size);
                 }
 
                 @Override public Class<?> matchIntegerSigned(
                   final TIntegerSigned t)
                 {
-                  return PackedFieldInterfaceProcessor
-                    .getPackedIntegerTypeForSize(
+                  return
+                    getPackedIntegerTypeForSize(
                       f_size);
                 }
 
@@ -258,7 +258,7 @@ public final class PackedFieldInterfaceProcessor
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
     final Class<?> itype =
-      PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(size);
+      getPackedIntegerTypeForSize(size);
 
     if (this.methods.wantGetters()) {
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
@@ -298,7 +298,7 @@ public final class PackedFieldInterfaceProcessor
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
     final Class<?> itype =
-      PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
+      getPackedIntegerTypeForSize(
         size);
 
     if (this.methods.wantGetters()) {

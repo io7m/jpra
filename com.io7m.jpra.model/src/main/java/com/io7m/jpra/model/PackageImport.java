@@ -22,6 +22,7 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -78,8 +79,8 @@ public final class PackageImport implements ModelElementType
     }
 
     final PackageImport that = (PackageImport) o;
-    return this.from.equals(that.from)
-      && this.to.equals(that.to);
+    return Objects.equals(this.from, that.from)
+      && Objects.equals(this.to, that.to);
   }
 
   @Override

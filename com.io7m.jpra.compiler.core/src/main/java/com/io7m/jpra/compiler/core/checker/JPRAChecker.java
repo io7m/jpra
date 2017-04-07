@@ -311,12 +311,11 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkPackedFieldValue(r);
     final TypeExprType<IdentifierType, TType> rvt = rv.getType();
 
-    final TIntegerType rvti;
     final TType rvtt = rvt.getType();
     if (!(rvtt instanceof TIntegerType)) {
       throw JPRACompilerCheckerException.packedNonIntegerType(r, rvt);
     }
-    rvti = (TIntegerType) rvtt;
+    final TIntegerType rvti = (TIntegerType) rvtt;
 
     fields_ordered.add(rv);
     fields_named.put(rv.getName(), rv);
@@ -344,7 +343,7 @@ public final class JPRAChecker implements JPRACheckerType
     final PackedFieldDeclPaddingBits<IdentifierType, TType> rv =
       this.checkPackedFieldPaddingBits(r);
     final Size<SizeUnitBitsType> size =
-      this.evaluateSize(rv.getSizeExpression());
+      JPRAChecker.evaluateSize(rv.getSizeExpression());
 
     if (size.getValue().compareTo(BigInteger.ZERO) <= 0) {
       throw JPRACompilerCheckerException.paddingSizeInvalid(
@@ -476,7 +475,7 @@ public final class JPRAChecker implements JPRACheckerType
     final RecordFieldDeclPaddingOctets<IdentifierType, TType> rv =
       this.checkRecordFieldPaddingOctets(r);
     final Size<SizeUnitOctetsType> size =
-      this.evaluateSize(rv.getSizeExpression());
+      JPRAChecker.evaluateSize(rv.getSizeExpression());
 
     if (size.getValue().compareTo(BigInteger.ZERO) <= 0) {
       throw JPRACompilerCheckerException.paddingSizeInvalid(
@@ -645,8 +644,8 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkSizeExpr(e.getHeight());
     final TypeExprType<IdentifierType, TType> te_type_pre =
       this.checkTypeExpression(e.getElementType());
-    final Size<?> t_width = this.evaluateSize(e_width);
-    final Size<?> t_height = this.evaluateSize(e_height);
+    final Size<?> t_width = JPRAChecker.evaluateSize(e_width);
+    final Size<?> t_height = JPRAChecker.evaluateSize(e_height);
 
     final BigInteger tw = t_width.getValue();
     final BigInteger th = t_height.getValue();
@@ -711,7 +710,7 @@ public final class JPRAChecker implements JPRACheckerType
     }
 
     final TypeScalarType t_type = (TypeScalarType) e_type.getType();
-    final Size<?> t_size = this.evaluateSize(e_count);
+    final Size<?> t_size = JPRAChecker.evaluateSize(e_count);
     if (!this.caps.isVectorSizeElementsSupported(t_size.getValue())) {
       throw JPRACompilerCheckerException.vectorSizeNotSupported(
         e, t_size.getValue(), this.caps.getVectorSizeSupported());
@@ -758,11 +757,11 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> size_expr =
       this.checkSizeExpr(e.getSizeExpression());
-    final Size<SizeUnitOctetsType> size_octets = this.evaluateSize(size_expr);
+    final Size<SizeUnitOctetsType> size_octets = JPRAChecker.evaluateSize(size_expr);
 
-    if (!JPRAChecker.BOOLEAN_SET_SIZES.includesValue(size_octets.getValue())) {
+    if (!BOOLEAN_SET_SIZES.includesValue(size_octets.getValue())) {
       throw JPRACompilerCheckerException.booleanSetSizeInvalid(
-        e, JPRAChecker.BOOLEAN_SET_SIZES, size_octets.getValue());
+        e, BOOLEAN_SET_SIZES, size_octets.getValue());
     }
 
     final BigInteger required =
@@ -791,7 +790,7 @@ public final class JPRAChecker implements JPRACheckerType
     final SizeExprType<IdentifierType, TType> e_count =
       this.checkSizeExpr(e.getElementCount());
 
-    final Size<?> ex_count = this.evaluateSize(e_count);
+    final Size<?> ex_count = JPRAChecker.evaluateSize(e_count);
     final TType ex_type = e_type.getType();
     final TArray type =
       new TArray(e.getLexicalInformation(), ex_count, ex_type);
@@ -805,7 +804,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitOctetsType> size = this.evaluateSize(se);
+    final Size<SizeUnitOctetsType> size = JPRAChecker.evaluateSize(se);
 
     if (this.caps.isStringEncodingSupported(e.getEncoding())) {
       final TString type =
@@ -824,7 +823,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitBitsType> size = this.evaluateSize(se);
+    final Size<SizeUnitBitsType> size = JPRAChecker.evaluateSize(se);
 
     if (this.caps.isRecordFloatSizeBitsSupported(size.getValue())) {
       final TType type = new TFloat(e.getLexicalInformation(), size);
@@ -842,7 +841,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitBitsType> size = this.evaluateSize(se);
+    final Size<SizeUnitBitsType> size = JPRAChecker.evaluateSize(se);
 
     final TType type = new TIntegerUnsigned(e.getLexicalInformation(), size);
     final TypeExprIntegerUnsigned<IdentifierType, TType> rv =
@@ -859,7 +858,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitBitsType> size = this.evaluateSize(se);
+    final Size<SizeUnitBitsType> size = JPRAChecker.evaluateSize(se);
 
     final TType type =
       new TIntegerSignedNormalized(e.getLexicalInformation(), size);
@@ -878,7 +877,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitBitsType> size = this.evaluateSize(se);
+    final Size<SizeUnitBitsType> size = JPRAChecker.evaluateSize(se);
 
     final TType type =
       new TIntegerUnsignedNormalized(e.getLexicalInformation(), size);
@@ -923,7 +922,7 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> se =
       this.checkSizeExpr(e.getSize());
-    final Size<SizeUnitBitsType> size = this.evaluateSize(se);
+    final Size<SizeUnitBitsType> size = JPRAChecker.evaluateSize(se);
 
     final TType type = new TIntegerSigned(e.getLexicalInformation(), size);
     final TypeExprIntegerSigned<IdentifierType, TType> rv =
@@ -934,7 +933,7 @@ public final class JPRAChecker implements JPRACheckerType
     return rv;
   }
 
-  private <T extends SizeUnitType> Size<T> evaluateSize(
+  private static <T extends SizeUnitType> Size<T> evaluateSize(
     final SizeExprType<IdentifierType, TType> se)
   {
     return se.matchSizeExpression(
@@ -979,7 +978,7 @@ public final class JPRAChecker implements JPRACheckerType
           final SizeExprConstant<IdentifierType, Untyped> s)
           throws JPRACompilerCheckerException
         {
-          return JPRAChecker.this.checkSizeExprConstant(s);
+          return JPRAChecker.checkSizeExprConstant(s);
         }
 
         @Override
@@ -1016,7 +1015,7 @@ public final class JPRAChecker implements JPRACheckerType
       this.checkTypeExpression(s.getTypeExpression()));
   }
 
-  private SizeExprType<IdentifierType, TType> checkSizeExprConstant(
+  private static SizeExprType<IdentifierType, TType> checkSizeExprConstant(
     final SizeExprConstant<IdentifierType, Untyped> s)
   {
     return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());

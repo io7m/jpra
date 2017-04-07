@@ -36,6 +36,6 @@ public final class Unresolved
 
   public static Unresolved get()
   {
-    return Unresolved.INSTANCE;
+    return INSTANCE;
   }
 }

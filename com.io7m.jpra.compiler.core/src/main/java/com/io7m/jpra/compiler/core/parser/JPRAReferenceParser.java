@@ -194,7 +194,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       se.lexical().map(LexicalPosition::copyOf);
 
     {
-      final Matcher m = JPRAReferenceParser.PATTERN_PT.matcher(text);
+      final Matcher m = PATTERN_PT.matcher(text);
       if (m.matches()) {
         final PackageNameUnqualified p_name =
           new PackageNameUnqualified(lex, m.group(1));
@@ -210,7 +210,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       }
     }
 
-    throw JPRAReferenceParser.badTypeReference(this.serial, se);
+    throw badTypeReference(this.serial, se);
   }
 
   @Override
@@ -225,39 +225,39 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       se.lexical().map(LexicalPosition::copyOf);
 
     {
-      final Matcher m = JPRAReferenceParser.PATTERN_PTF.matcher(text);
+      final Matcher m = PATTERN_PTF.matcher(text);
       if (m.matches()) {
         final PackageNameUnqualified p_name =
           new PackageNameUnqualified(lex, m.group(1));
         final TypeName t_name = new TypeName(lex, m.group(2));
         final ImmutableList<FieldName> fields =
-          JPRAReferenceParser.getFieldPath(lex, se, m.group(3));
+          getFieldPath(lex, se, m.group(3));
         return new FieldReference(
           Optional.of(p_name), Optional.of(t_name), FieldPath.ofList(fields));
       }
     }
 
     {
-      final Matcher m = JPRAReferenceParser.PATTERN_TF.matcher(text);
+      final Matcher m = PATTERN_TF.matcher(text);
       if (m.matches()) {
         final TypeName t_name = new TypeName(lex, m.group(1));
         final ImmutableList<FieldName> fields =
-          JPRAReferenceParser.getFieldPath(lex, se, m.group(2));
+          getFieldPath(lex, se, m.group(2));
         return new FieldReference(
           Optional.empty(), Optional.of(t_name), FieldPath.ofList(fields));
       }
     }
 
     {
-      final Matcher m = JPRAReferenceParser.PATTERN_F.matcher(text);
+      final Matcher m = PATTERN_F.matcher(text);
       if (m.matches()) {
         final ImmutableList<FieldName> fields =
-          JPRAReferenceParser.getFieldPath(lex, se, text);
+          getFieldPath(lex, se, text);
         return new FieldReference(
           Optional.empty(), Optional.empty(), FieldPath.ofList(fields));
       }
     }
 
-    throw JPRAReferenceParser.badFieldReference(this.serial, se);
+    throw badFieldReference(this.serial, se);
   }
 }

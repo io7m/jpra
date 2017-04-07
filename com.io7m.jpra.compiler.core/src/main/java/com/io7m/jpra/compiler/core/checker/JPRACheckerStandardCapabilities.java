@@ -50,11 +50,6 @@ public final class JPRACheckerStandardCapabilities
   private JPRACheckerStandardCapabilities()
   {
     final BigInteger b2 = BigInteger.valueOf(2L);
-    final BigInteger b3 = BigInteger.valueOf(3L);
-    final BigInteger b4 = BigInteger.valueOf(4L);
-    final BigInteger b8 = BigInteger.valueOf(8L);
-    final BigInteger b16 = BigInteger.valueOf(16L);
-    final BigInteger b32 = BigInteger.valueOf(32L);
     final BigInteger b64 = BigInteger.valueOf(64L);
 
     {
@@ -63,6 +58,9 @@ public final class JPRACheckerStandardCapabilities
       this.packed_integer_sizes = s.toImmutable();
     }
 
+    final BigInteger b32 = BigInteger.valueOf(32L);
+    final BigInteger b16 = BigInteger.valueOf(16L);
+    final BigInteger b8 = BigInteger.valueOf(8L);
     {
       final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
       s.add(new RangeInclusiveB(b8, b8));
@@ -84,6 +82,8 @@ public final class JPRACheckerStandardCapabilities
       this.encodings = Sets.immutable.of("UTF-8");
     }
 
+    final BigInteger b4 = BigInteger.valueOf(4L);
+    final BigInteger b3 = BigInteger.valueOf(3L);
     {
       final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
       s.add(new RangeInclusiveB(b2, b2));
@@ -112,10 +112,10 @@ public final class JPRACheckerStandardCapabilities
         Lists.mutable.empty();
 
       final RangeInclusiveB r2 = new RangeInclusiveB(b2, b2);
-      final RangeInclusiveB r3 = new RangeInclusiveB(b3, b3);
-      final RangeInclusiveB r4 = new RangeInclusiveB(b4, b4);
       s.add(Pair.pair(r2, r2));
+      final RangeInclusiveB r3 = new RangeInclusiveB(b3, b3);
       s.add(Pair.pair(r3, r3));
+      final RangeInclusiveB r4 = new RangeInclusiveB(b4, b4);
       s.add(Pair.pair(r4, r4));
       this.matrix_sizes = s.toImmutable();
     }

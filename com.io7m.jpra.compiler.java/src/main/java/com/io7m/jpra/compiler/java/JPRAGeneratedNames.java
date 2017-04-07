@@ -40,7 +40,7 @@ final class JPRAGeneratedNames
   static String getGetterName(final FieldName name)
   {
     final String raw = name.toString();
-    final String text = JPRAGeneratedNames.getRecased(raw);
+    final String text = getRecased(raw);
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -56,7 +56,7 @@ final class JPRAGeneratedNames
 
   static String getSetterName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
@@ -65,7 +65,7 @@ final class JPRAGeneratedNames
 
   static String getNormalizedSetterName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
@@ -74,7 +74,7 @@ final class JPRAGeneratedNames
 
   static String getNormalizedGetterName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -86,9 +86,9 @@ final class JPRAGeneratedNames
     final FieldName field_name)
   {
     final String base_text =
-      JPRAGeneratedNames.getRecased(base_name.toString());
+      getRecased(base_name.toString());
     final String field_text =
-      JPRAGeneratedNames.getRecased(field_name.toString());
+      getRecased(field_name.toString());
 
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
@@ -102,9 +102,9 @@ final class JPRAGeneratedNames
     final FieldName field_name)
   {
     final String base_text =
-      JPRAGeneratedNames.getRecased(base_name.toString());
+      getRecased(base_name.toString());
     final String field_text =
-      JPRAGeneratedNames.getRecased(field_name.toString());
+      getRecased(field_name.toString());
 
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
@@ -115,12 +115,12 @@ final class JPRAGeneratedNames
 
   static String getGetterRecordReadableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectReadableName(name);
+    return getObjectReadableName(name);
   }
 
   static String getGetterRecordWritableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectWritableName(name);
+    return getObjectWritableName(name);
   }
 
   static String getRecordImplementationByteBufferedName(
@@ -171,7 +171,7 @@ final class JPRAGeneratedNames
 
   static String getNormalizedRawGetterName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -181,7 +181,7 @@ final class JPRAGeneratedNames
 
   static String getNormalizedRawSetterName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("set");
     sb.append(text);
@@ -191,12 +191,12 @@ final class JPRAGeneratedNames
 
   public static String getGetterVectorReadableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectReadableName(name);
+    return getObjectReadableName(name);
   }
 
   private static String getObjectReadableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -206,22 +206,22 @@ final class JPRAGeneratedNames
 
   public static String getGetterVectorWritableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectWritableName(name);
+    return getObjectWritableName(name);
   }
 
   public static String getGetterMatrixReadableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectReadableName(name);
+    return getObjectReadableName(name);
   }
 
   public static String getGetterMatrixWritableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectWritableName(name);
+    return getObjectWritableName(name);
   }
 
   private static String getObjectWritableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("get");
     sb.append(text);
@@ -231,17 +231,17 @@ final class JPRAGeneratedNames
 
   public static String getGetterStringReadableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectReadableName(name);
+    return getObjectReadableName(name);
   }
 
   public static String getGetterStringWritableName(final FieldName name)
   {
-    return JPRAGeneratedNames.getObjectWritableName(name);
+    return getObjectWritableName(name);
   }
 
   public static String getMetaOffsetTypeReadableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("meta");
     sb.append(text);
@@ -251,7 +251,7 @@ final class JPRAGeneratedNames
 
   public static String getMetaOffsetStaticTypeReadableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("meta");
     sb.append(text);
@@ -261,7 +261,7 @@ final class JPRAGeneratedNames
 
   public static String getMetaOffsetCursorReadableName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("meta");
     sb.append(text);
@@ -271,7 +271,7 @@ final class JPRAGeneratedNames
 
   public static String getMetaTypeGetName(final FieldName name)
   {
-    final String text = JPRAGeneratedNames.getRecased(name.toString());
+    final String text = getRecased(name.toString());
     final StringBuilder sb = new StringBuilder(128);
     sb.append("meta");
     sb.append(text);

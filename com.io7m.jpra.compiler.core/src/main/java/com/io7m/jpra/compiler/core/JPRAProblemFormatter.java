@@ -75,7 +75,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
     final PrintWriter w,
     final JPRACompilerException e)
   {
-    JPRAProblemFormatter.printLex(w, e.getLexicalInformation());
+    printLex(w, e.getLexicalInformation());
 
     if (e instanceof JPRACompilerLexerException) {
       w.print("lexical error: ");
@@ -110,7 +110,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
   {
     final ImmutableList<PackageImport> imports = e.getImports();
 
-    JPRAProblemFormatter.printLex(
+    printLex(
       w, imports.get(0).getTo().getLexicalInformation());
 
     w.println("error: circular import:");
@@ -147,7 +147,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
     final PrintWriter w = new PrintWriter(os);
     try {
       if (e instanceof JPRACompilerException) {
-        JPRAProblemFormatter.onCompilerException(w, (JPRACompilerException) e);
+        onCompilerException(w, (JPRACompilerException) e);
         return;
       }
 
@@ -159,7 +159,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
       }
 
       if (e instanceof JPRAModelCircularImportException) {
-        JPRAProblemFormatter.onCircularImportException(
+        onCircularImportException(
           w, (JPRAModelCircularImportException) e);
         return;
       }

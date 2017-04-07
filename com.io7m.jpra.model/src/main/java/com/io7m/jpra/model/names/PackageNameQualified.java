@@ -27,6 +27,7 @@ import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -128,7 +129,7 @@ public final class PackageNameQualified implements ModelElementType
     }
 
     final PackageNameQualified that = (PackageNameQualified) o;
-    return this.image.equals(that.image);
+    return Objects.equals(this.image, that.image);
   }
 
   @Override

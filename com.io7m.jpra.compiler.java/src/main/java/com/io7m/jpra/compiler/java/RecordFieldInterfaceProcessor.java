@@ -198,9 +198,6 @@ final class RecordFieldInterfaceProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    final Class<?> itype;
-    final boolean pack;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
@@ -208,10 +205,12 @@ final class RecordFieldInterfaceProcessor
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the types used for values in the interface.
+    /*
+      Determine the types used for values in the interface.
      */
 
+    final boolean pack;
+    final Class<?> itype;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = double.class;
       pack = false;
@@ -220,8 +219,8 @@ final class RecordFieldInterfaceProcessor
       pack = false;
     } else {
 
-      /**
-       * 16-bit floating point types use a raw unsigned integer value.
+      /*
+        16-bit floating point types use a raw unsigned integer value.
        */
 
       itype = char.class;

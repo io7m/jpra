@@ -182,11 +182,11 @@ public final class JPRADriver implements JPRADriverType
       Optional<PackageContextType> pack_opt = Optional.empty();
 
       final Path file = this.fileForPackage(p);
-      JPRADriver.LOG.debug("loading package {} from {}", p, file);
+      LOG.debug("loading package {} from {}", p, file);
 
       boolean error = false;
       try (final InputStream is = Files.newInputStream(file)) {
-        final JSXParserType sxp = JPRADriver.newJSXParser(is, file);
+        final JSXParserType sxp = newJSXParser(is, file);
 
         Optional<LexicalPosition<Path>> lex = Optional.empty();
         boolean done = false;
@@ -198,9 +198,9 @@ public final class JPRADriver implements JPRADriverType
               final Optional<LexicalPositionType<Path>> lex_opt = s.lexical();
               lex = lex_opt.map(LexicalPosition::copyOf);
 
-              /**
-               * The resolver is configured to only accept packages named
-               * {@code p}.
+              /*
+                The resolver is configured to only accept packages named
+                {@code p}.
                */
 
               final Optional<PackageContextType> pr = pipe.onExpression(s);

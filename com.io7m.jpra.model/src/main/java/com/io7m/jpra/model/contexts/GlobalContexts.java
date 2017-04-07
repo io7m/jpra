@@ -73,7 +73,7 @@ public final class GlobalContexts implements GlobalContextType
     this.error_queue = new ArrayDeque<>(128);
 
     this.graph = new DirectedAcyclicGraph<>(PackageImport::new);
-    GlobalContexts.LOG.trace("created");
+    LOG.trace("created");
   }
 
   /**
@@ -98,7 +98,7 @@ public final class GlobalContexts implements GlobalContextType
   public IdentifierType getFreshIdentifier()
   {
     this.id_pool = this.id_pool.add(BigInteger.ONE);
-    GlobalContexts.LOG.trace("fresh identifier: {}", this.id_pool);
+    LOG.trace("fresh identifier: {}", this.id_pool);
     return new Identifier(this.id_pool);
   }
 
@@ -115,7 +115,7 @@ public final class GlobalContexts implements GlobalContextType
   {
     NullCheck.notNull(p, "Package name");
 
-    GlobalContexts.LOG.debug("get package: {}", p);
+    LOG.debug("get package: {}", p);
 
     final Optional<PackageNameQualified> previous_opt = this.loading;
     try {
@@ -123,11 +123,11 @@ public final class GlobalContexts implements GlobalContextType
 
       this.loading = Optional.of(p);
       if (this.packages.containsKey(p)) {
-        GlobalContexts.LOG.debug("returning loaded package: {}", p);
+        LOG.debug("returning loaded package: {}", p);
         return this.packages.get(p);
       }
 
-      GlobalContexts.LOG.debug("loading package: {}", p);
+      LOG.debug("loading package: {}", p);
       final PackageContextType r = this.loader.evaluate(this, p);
       this.packages.put(p, r);
       return r;
@@ -150,10 +150,10 @@ public final class GlobalContexts implements GlobalContextType
         this.graph.addDagEdge(previous, current);
       } catch (final DirectedAcyclicGraph.CycleFoundException e) {
 
-        /**
-         * Because a cycle as occurred on an insertion of edge A → B, then
-         * there must be some path B → A already in the graph. Use a
-         * shortest path algorithm to determine that path.
+        /*
+          Because a cycle as occurred on an insertion of edge A → B, then
+          there must be some path B → A already in the graph. Use a
+          shortest path algorithm to determine that path.
          */
 
         final DijkstraShortestPath<PackageNameQualified, PackageImport> djp =

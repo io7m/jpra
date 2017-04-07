@@ -96,9 +96,9 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
 
     final TypeName t_name = t.getName();
     final PackageNameQualified p_name = t.getPackageContext().getName();
-    JPRAJavaWriter.LOG.debug("exporting {}.{}", p_name, t_name);
+    LOG.debug("exporting {}.{}", p_name, t_name);
 
-    final Path pkg_path = JPRAJavaWriter.getPathForPackage(path, p_name);
+    final Path pkg_path = getPathForPackage(path, p_name);
     Files.createDirectories(pkg_path);
 
     final JPRAJavaGeneratorType g = this.generator;
@@ -117,19 +117,19 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
           final Path i_file =
             pkg_path.resolve(g.getRecordInterfaceName(t_name) + ".java");
 
-          JPRAJavaWriter.LOG.debug("writing {}", c_file);
+          LOG.debug("writing {}", c_file);
           try (final OutputStream w = Files.newOutputStream(c_file)) {
             g.generateRecordImplementation(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", r_file);
+          LOG.debug("writing {}", r_file);
           try (final OutputStream w = Files.newOutputStream(r_file)) {
             g.generateRecordInterfaceReadable(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", w_file);
+          LOG.debug("writing {}", w_file);
           try (final OutputStream w = Files.newOutputStream(w_file)) {
             g.generateRecordInterfaceWritable(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", i_file);
+          LOG.debug("writing {}", i_file);
           try (final OutputStream w = Files.newOutputStream(i_file)) {
             g.generateRecordInterface(r, w);
           }
@@ -149,19 +149,19 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
           final Path i_file =
             pkg_path.resolve(g.getPackedInterfaceName(t_name) + ".java");
 
-          JPRAJavaWriter.LOG.debug("writing {}", c_file);
+          LOG.debug("writing {}", c_file);
           try (final OutputStream w = Files.newOutputStream(c_file)) {
             g.generatePackedImplementation(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", r_file);
+          LOG.debug("writing {}", r_file);
           try (final OutputStream w = Files.newOutputStream(r_file)) {
             g.generatePackedInterfaceReadable(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", w_file);
+          LOG.debug("writing {}", w_file);
           try (final OutputStream w = Files.newOutputStream(w_file)) {
             g.generatePackedInterfaceWritable(r, w);
           }
-          JPRAJavaWriter.LOG.debug("writing {}", i_file);
+          LOG.debug("writing {}", i_file);
           try (final OutputStream w = Files.newOutputStream(i_file)) {
             g.generatePackedInterface(r, w);
           }

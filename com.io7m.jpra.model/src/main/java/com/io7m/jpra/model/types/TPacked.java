@@ -32,6 +32,7 @@ import com.io7m.jranges.RangeInclusiveB;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -80,7 +81,7 @@ public final class TPacked implements TType, TypeUserDefinedType
           "Named fields must contain %s", f.name);
         final FieldValue fr = this.fields_by_name.get(f_name);
         Preconditions.checkPrecondition(
-          fr.equals(f), "Field value must match");
+          Objects.equals(fr, f), "Field value must match");
       });
 
     this.size_bits = this.fields_by_order.injectInto(
@@ -89,7 +90,7 @@ public final class TPacked implements TType, TypeUserDefinedType
     final BigInteger sv = this.size_bits.getValue();
     final BigInteger b8 = BigInteger.valueOf(8L);
     Preconditions.checkPreconditionV(
-      sv.remainder(b8).equals(BigInteger.ZERO),
+      Objects.equals(sv.remainder(b8), BigInteger.ZERO),
       "Size %s must be divisible by 8", sv);
     this.size_octets = new Size<>(sv.divide(b8));
   }

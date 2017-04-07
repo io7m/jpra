@@ -159,10 +159,10 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
   public String getNewValue()
   {
     final int used = this.getUsedLength();
-    final byte[] buf = new byte[used];
     final int b_pos = this.getOffsetForStringByte(0);
     final int old_pos = this.buffer.position();
     this.buffer.position(b_pos);
+    final byte[] buf = new byte[used];
     this.buffer.get(buf, 0, used);
     this.buffer.position(old_pos);
     return new String(buf, this.encoding);

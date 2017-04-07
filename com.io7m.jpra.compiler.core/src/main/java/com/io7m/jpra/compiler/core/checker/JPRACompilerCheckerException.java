@@ -42,6 +42,7 @@ import com.io7m.jranges.RangeInclusiveB;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -116,7 +117,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = sizes.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -165,7 +166,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = sizes.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -311,7 +312,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -380,7 +381,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -429,7 +430,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -486,7 +487,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       {
         final BigInteger lo = l.getLower();
         final BigInteger hi = l.getUpper();
-        if (lo.equals(hi)) {
+        if (Objects.equals(lo, hi)) {
           sb.append(lo);
         } else {
           sb.append("[");
@@ -502,7 +503,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       {
         final BigInteger lo = r.getLower();
         final BigInteger hi = r.getUpper();
-        if (lo.equals(hi)) {
+        if (Objects.equals(lo, hi)) {
           sb.append(lo);
         } else {
           sb.append("[");
@@ -572,7 +573,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -621,7 +622,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");
@@ -723,7 +724,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = supported.get(index);
       final BigInteger lo = r.getLower();
       final BigInteger hi = r.getUpper();
-      if (lo.equals(hi)) {
+      if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
         sb.append("[");

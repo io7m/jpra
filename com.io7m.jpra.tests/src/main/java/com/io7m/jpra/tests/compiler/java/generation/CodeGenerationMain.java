@@ -79,8 +79,8 @@ public final class CodeGenerationMain
     final Path source_directory = Paths.get(args[0]).toAbsolutePath();
     final Path target_directory = Paths.get(args[1]).toAbsolutePath();
 
-    CodeGenerationMain.LOG.debug("source directory: {}", source_directory);
-    CodeGenerationMain.LOG.debug("target directory: {}", target_directory);
+    LOG.debug("source directory: {}", source_directory);
+    LOG.debug("target directory: {}", target_directory);
 
     final List<PackageNameQualified> pack_names = Lists.mutable.empty();
     pack_names.add(
@@ -97,7 +97,7 @@ public final class CodeGenerationMain
     final GlobalContextType gc = driver.getGlobalContext();
 
     for (final PackageNameQualified pack_name : pack_names) {
-      CodeGenerationMain.LOG.debug("checking {}", pack_name);
+      LOG.debug("checking {}", pack_name);
 
       try {
         driver.compilePackage(pack_name);
@@ -116,7 +116,7 @@ public final class CodeGenerationMain
     }
 
     if (!error) {
-      CodeGenerationMain.LOG.debug("generating code");
+      LOG.debug("generating code");
 
       final Map<PackageNameQualified, PackageContextType> packs =
         gc.getPackages();

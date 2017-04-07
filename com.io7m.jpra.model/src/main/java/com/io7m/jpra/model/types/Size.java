@@ -20,6 +20,7 @@ import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A size value.
@@ -91,7 +92,7 @@ public final class Size<U extends SizeUnitType>
     }
 
     final Size<?> size = (Size<?>) o;
-    return this.getValue().equals(size.getValue());
+    return Objects.equals(this.getValue(), size.getValue());
   }
 
   @Override

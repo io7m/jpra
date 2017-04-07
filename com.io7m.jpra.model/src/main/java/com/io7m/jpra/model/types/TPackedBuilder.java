@@ -139,7 +139,7 @@ final class TPackedBuilder implements TPackedBuilderType
             final BigInteger lsb =
               current_msb.subtract(size).add(BigInteger.ONE);
 
-            TPackedBuilder.LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+            LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
             f.setRange(new RangeInclusiveB(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
             return Unit.unit();
@@ -155,7 +155,7 @@ final class TPackedBuilder implements TPackedBuilderType
             final BigInteger lsb =
               current_msb.subtract(size).add(BigInteger.ONE);
 
-            TPackedBuilder.LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+            LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
             f.setRange(new RangeInclusiveB(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
             return Unit.unit();

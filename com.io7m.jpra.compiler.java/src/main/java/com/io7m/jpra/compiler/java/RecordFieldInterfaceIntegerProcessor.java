@@ -83,16 +83,15 @@ final class RecordFieldInterfaceIntegerProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    final Class<?> itype;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the types used for values in the interface.
+    /*
+      Determine the types used for values in the interface.
      */
 
+    final Class<?> itype;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
@@ -137,17 +136,16 @@ final class RecordFieldInterfaceIntegerProcessor
     final String setter_norm_raw_name =
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
-    final Class<?> itype;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the types used for values in the interface. These types
-     * are used to set the raw integer values of normalized fields.
+    /*
+      Determine the types used for values in the interface. These types
+      are used to set the raw integer values of normalized fields.
      */
 
+    final Class<?> itype;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
     } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {

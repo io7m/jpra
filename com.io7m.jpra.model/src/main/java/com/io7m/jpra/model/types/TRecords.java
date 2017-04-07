@@ -55,7 +55,7 @@ public final class TRecords
     final FieldName first = es.get(0);
     final ImmutableList<FieldName> rest = es.drop(1);
 
-    return TRecords.typeForFieldPathActual(t, first, rest);
+    return typeForFieldPathActual(t, first, rest);
   }
 
   private static TypeLookupType typeForFieldPathActual(
@@ -120,7 +120,7 @@ public final class TRecords
 
           final TRecord.FieldValue f = by_name.get(name);
           final FieldName next = rest.get(0);
-          return TRecords.typeForFieldPathActual(
+          return typeForFieldPathActual(
             f.getType(), next, rest.drop(1));
         }
 
@@ -136,7 +136,7 @@ public final class TRecords
 
           final TPacked.FieldValue f = by_name.get(name);
           final FieldName next = rest.get(0);
-          return TRecords.typeForFieldPathActual(
+          return typeForFieldPathActual(
             f.getType(), next, rest.drop(1));
         }
       });

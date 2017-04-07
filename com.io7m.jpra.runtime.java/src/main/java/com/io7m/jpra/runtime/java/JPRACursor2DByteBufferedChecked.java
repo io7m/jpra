@@ -76,8 +76,8 @@ public final class JPRACursor2DByteBufferedChecked<T extends JPRAValueType>
     final long max = (long) (this.height * this.row_byte_span);
     if (max > capacity) {
       final StringBuilder sb = new StringBuilder(256);
-      final String sep = System.lineSeparator();
       sb.append("Buffer is too small to hold the specified region.");
+      final String sep = System.lineSeparator();
       sb.append(sep);
       sb.append("Width:                 ");
       sb.append(this.width);
@@ -166,9 +166,9 @@ public final class JPRACursor2DByteBufferedChecked<T extends JPRAValueType>
       final long col_bytes = lx * (long) this.element_size;
       this.byte_offset.setValue(row_bytes + col_bytes);
     } else {
-      final String sep = System.lineSeparator();
       final StringBuilder sb = new StringBuilder(128);
       sb.append("X or Y position out of bounds.");
+      final String sep = System.lineSeparator();
       sb.append(sep);
       sb.append("X:      ");
       sb.append(in_x);

@@ -20,6 +20,8 @@ import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 
+import java.util.Objects;
+
 /**
  * A path to a field.
  */
@@ -63,7 +65,7 @@ public final class FieldPath
     }
 
     final FieldPath fp = (FieldPath) o;
-    return this.image.equals(fp.image);
+    return Objects.equals(this.image, fp.image);
   }
 
   @Override

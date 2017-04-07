@@ -83,19 +83,18 @@ final class RecordFieldImplementationIntegerProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    final String iput;
-    final String iget;
-    final Class<?> itype;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the type and methods used to put/get values to/from the
-     * underlying byte buffer.
+    /*
+      Determine the type and methods used to put/get values to/from the
+      underlying byte buffer.
      */
 
+    final Class<?> itype;
+    final String iget;
+    final String iput;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = long.class;
       iput = "putLong";
@@ -208,26 +207,25 @@ final class RecordFieldImplementationIntegerProcessor
     final String setter_norm_raw_name =
       JPRAGeneratedNames.getNormalizedRawSetterName(this.field.getName());
 
-    final Class<?> i_type;
-    final Class<?> r_type;
-    final Class<?> r_class;
-    final Class<?> nfp_class;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the type and methods used to put/get values to/from the
-     * underlying byte buffer. Additionally, a reference to the corresponding
-     * boxed type is necessary to allow for access to functions to convert
-     * values to/from unsigned types.
+    /*
+      Determine the type and methods used to put/get values to/from the
+      underlying byte buffer. Additionally, a reference to the corresponding
+      boxed type is necessary to allow for access to functions to convert
+      values to/from unsigned types.
      */
 
     final String iput;
     final String iget;
     final String conv;
 
+    final Class<?> nfp_class;
+    final Class<?> r_class;
+    final Class<?> r_type;
+    final Class<?> i_type;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       r_type = long.class;
       i_type = long.class;
@@ -278,9 +276,9 @@ final class RecordFieldImplementationIntegerProcessor
       conv = "toUnsignedInt";
     }
 
-    /**
-     * Construct names of the methods used to convert values to/from
-     * normalized fixed-point form.
+    /*
+      Construct names of the methods used to convert values to/from
+      normalized fixed-point form.
      */
 
     final String m_to;
@@ -293,15 +291,15 @@ final class RecordFieldImplementationIntegerProcessor
       m_of = String.format("fromUnsignedNormalized%s", size);
     }
 
-    /**
-     * Generate raw getters and setters.
+    /*
+      Generate raw getters and setters.
      */
 
     this.integerGetter(offset_constant, getter_norm_raw_name, iget, r_type);
     this.integerSetter(offset_constant, setter_norm_raw_name, iput, r_type);
 
-    /**
-     * Generate a method to return a value in normalized floating point form.
+    /*
+      Generate a method to return a value in normalized floating point form.
      */
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
@@ -314,8 +312,8 @@ final class RecordFieldImplementationIntegerProcessor
         "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
     } else {
 
-      /**
-       * Types of different sizes require explicit unsigned conversions.
+      /*
+        Types of different sizes require explicit unsigned conversions.
        */
 
       getb.addStatement(
@@ -333,8 +331,8 @@ final class RecordFieldImplementationIntegerProcessor
 
     this.class_builder.addMethod(getb.build());
 
-    /**
-     * Generate a method to set a value in normalized floating point form.
+    /*
+      Generate a method to set a value in normalized floating point form.
      */
 
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);

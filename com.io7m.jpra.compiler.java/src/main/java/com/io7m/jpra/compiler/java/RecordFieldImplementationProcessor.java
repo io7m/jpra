@@ -183,8 +183,8 @@ final class RecordFieldImplementationProcessor
   {
     this.generateFieldOffsetConstant();
 
-    /**
-     * Generate a get and set method for each field of the boolean set.
+    /*
+      Generate a get and set method for each field of the boolean set.
      */
 
     final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
@@ -199,10 +199,6 @@ final class RecordFieldImplementationProcessor
       final String offset_name = JPRAGeneratedNames.getOffsetConstantName(
         this.field.getName());
 
-      final String bin =
-        String.format("0b%8s", Integer.toBinaryString(1 << bit))
-          .replace(" ", "0");
-
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addAnnotation(Override.class);
       getb.addModifiers(Modifier.PUBLIC);
@@ -212,6 +208,10 @@ final class RecordFieldImplementationProcessor
         offset_name,
         Integer.valueOf(octet));
       getb.addStatement("final int k = this.buffer.get(i)");
+      final String bin = String.format(
+        "0b%8s",
+        Integer.toBinaryString(1 << bit))
+        .replace(" ", "0");
       getb.addStatement("return (k & $L) == $L", bin, bin);
       this.class_builder.addMethod(getb.build());
 
@@ -262,11 +262,6 @@ final class RecordFieldImplementationProcessor
     final String setter_name =
       JPRAGeneratedNames.getSetterName(this.field.getName());
 
-    final String iput;
-    final String iget;
-    final Class<?> itype;
-    final boolean pack;
-
     if (size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
@@ -274,11 +269,15 @@ final class RecordFieldImplementationProcessor
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * Determine the type and methods used to put/get values to/from the
-     * underlying byte buffer.
+    /*
+      Determine the type and methods used to put/get values to/from the
+      underlying byte buffer.
      */
 
+    final boolean pack;
+    final Class<?> itype;
+    final String iget;
+    final String iput;
     if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
       itype = double.class;
       iput = "putDouble";
@@ -296,15 +295,15 @@ final class RecordFieldImplementationProcessor
       pack = true;
     }
 
-    /**
-     * Some floating point sizes require packing into integers, as they
-     * have no direct representation in Java.
+    /*
+      Some floating point sizes require packing into integers, as they
+      have no direct representation in Java.
      */
 
     if (pack) {
 
-      /**
-       * Generate a method to unpack values from the byte buffer.
+      /*
+        Generate a method to unpack values from the byte buffer.
        */
 
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
@@ -319,8 +318,8 @@ final class RecordFieldImplementationProcessor
         offset_constant);
       this.class_builder.addMethod(getb.build());
 
-      /**
-       * Generate a method to pack values into the byte buffer.
+      /*
+        Generate a method to pack values into the byte buffer.
        */
 
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
@@ -338,9 +337,9 @@ final class RecordFieldImplementationProcessor
       this.class_builder.addMethod(setb.build());
     } else {
 
-      /**
-       * Generate a method to retrieve floating point values from the byte
-       * buffer.
+      /*
+        Generate a method to retrieve floating point values from the byte
+        buffer.
        */
 
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
@@ -354,9 +353,9 @@ final class RecordFieldImplementationProcessor
         offset_constant);
       this.class_builder.addMethod(getb.build());
 
-      /**
-       * Generate a method to insert floating point values into the byte
-       * buffer.
+      /*
+        Generate a method to insert floating point values into the byte
+        buffer.
        */
 
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);

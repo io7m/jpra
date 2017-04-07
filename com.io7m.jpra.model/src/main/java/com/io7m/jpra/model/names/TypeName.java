@@ -23,6 +23,7 @@ import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +47,7 @@ public final class TypeName implements ModelElementType
     PATTERN_TEXT = "[\\p{IsUppercase}][\\p{IsAlphabetic}\\p{IsDigit}_]*";
     PATTERN = NullCheck.notNull(
       Pattern.compile(
-        TypeName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS), "Pattern");
+        PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS), "Pattern");
   }
 
   private final String value;
@@ -66,7 +67,7 @@ public final class TypeName implements ModelElementType
     this.lex = NullCheck.notNull(in_lex, "Lexical information");
     this.value = NullCheck.notNull(in_value, "Value");
 
-    final Matcher matcher = TypeName.PATTERN.matcher(this.value);
+    final Matcher matcher = PATTERN.matcher(this.value);
     Preconditions.checkPrecondition(
       in_value,
       matcher.matches(),
@@ -101,7 +102,7 @@ public final class TypeName implements ModelElementType
     }
 
     final TypeName other = (TypeName) o;
-    return this.value.equals(other.value);
+    return Objects.equals(this.value, other.value);
   }
 
   @Override

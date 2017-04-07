@@ -103,8 +103,8 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
       JPRACheckerStandardCapabilities.newCapabilities());
     final GlobalContextType gc = driver.getGlobalContext();
 
-    /**
-     * Check all listed packages, printing all errors for each.
+    /*
+      Check all listed packages, printing all errors for each.
      */
 
     boolean failed = false;
@@ -127,8 +127,8 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
       }
     }
 
-    /**
-     * Generate code if all of the packages above compiled correctly.
+    /*
+      Generate code if all of the packages above compiled correctly.
      */
 
     if (!failed) {
@@ -153,8 +153,8 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
       }
     }
 
-    /**
-     * Fail the build on errors.
+    /*
+      Fail the build on errors.
      */
 
     if (failed) {

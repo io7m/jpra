@@ -20,6 +20,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.IdentifierType;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 final class Identifier implements IdentifierType
 {
@@ -48,7 +49,7 @@ final class Identifier implements IdentifierType
     }
 
     final Identifier that = (Identifier) o;
-    return this.value.equals(that.value);
+    return Objects.equals(this.value, that.value);
   }
 
   @Override

@@ -197,14 +197,14 @@ final class JPRAClasses
         public ClassName matchInteger(
           final TIntegerType t)
         {
-          return JPRAClasses.getModelScalarTypeForScalarType(t);
+          return getModelScalarTypeForScalarType(t);
         }
 
         @Override
         public ClassName matchFloat(
           final TFloat t)
         {
-          return JPRAClasses.getModelScalarTypeForScalarType(t);
+          return getModelScalarTypeForScalarType(t);
         }
 
         @Override
@@ -331,14 +331,16 @@ final class JPRAClasses
       this.height = in_height;
     }
 
-    @Override public MatrixClasses matchScalarInteger(
+    @Override
+    public MatrixClasses matchScalarInteger(
       final TIntegerType t)
     {
       throw new UnsupportedOperationException(
         "Integer matrices are not supported");
     }
 
-    @Override public MatrixClasses matchScalarFloat(
+    @Override
+    public MatrixClasses matchScalarFloat(
       final TFloat t)
     {
       final int e_size = t.getSizeInBits().getValue().intValue();
@@ -363,10 +365,11 @@ final class JPRAClasses
                 MatrixReadable4x4DType.class,
                 MatrixByteBuffered4x4s32.class,
                 MatrixStorage4x4Type.class);
+            default:
+              throw new UnsupportedOperationException("Unsupported matrix size");
           }
-
-          throw new UnsupportedOperationException("Unsupported matrix size");
         }
+
         case 64: {
           switch (this.width) {
             case 2:
@@ -387,14 +390,15 @@ final class JPRAClasses
                 MatrixReadable4x4DType.class,
                 MatrixByteBuffered4x4s64.class,
                 MatrixStorage4x4Type.class);
+            default:
+              throw new UnsupportedOperationException("Unsupported matrix size");
           }
-
-          throw new UnsupportedOperationException("Unsupported matrix size");
         }
-      }
 
-      throw new UnsupportedOperationException(
-        "Unsupported matrix element size");
+        default:
+          throw new UnsupportedOperationException(
+            "Unsupported matrix element size");
+      }
     }
   }
 
@@ -408,20 +412,23 @@ final class JPRAClasses
       this.e_count = in_e_count;
     }
 
-    @Override public VectorsClasses matchScalarInteger(
+    @Override
+    public VectorsClasses matchScalarInteger(
       final TIntegerType t)
     {
       return t.matchTypeInteger(new TypeIntegerMatcherType<VectorsClasses,
         RuntimeException>()
       {
-        @Override public VectorsClasses matchIntegerUnsigned(
+        @Override
+        public VectorsClasses matchIntegerUnsigned(
           final TIntegerUnsigned t)
         {
           throw new UnsupportedOperationException(
             "Unsigned integer vectors are not supported");
         }
 
-        @Override public VectorsClasses matchIntegerSigned(
+        @Override
+        public VectorsClasses matchIntegerSigned(
           final TIntegerSigned t)
         {
           final int e_size = t.getSizeInBits().getValue().intValue();
@@ -449,10 +456,12 @@ final class JPRAClasses
                     VectorByteBufferedIntegral4s32.class,
                     VectorStorageIntegral4Type.class);
                 }
+                default:
+                  throw new UnsupportedOperationException(
+                    "Unsupported integer vector size");
               }
 
-              throw new UnsupportedOperationException(
-                "Unsupported integer vector size");
+
             }
             case 64: {
               switch (VectorClassMatcher.this.e_count) {
@@ -477,25 +486,28 @@ final class JPRAClasses
                     VectorByteBufferedIntegral4s64.class,
                     VectorStorageIntegral4Type.class);
                 }
+                default:
+                  throw new UnsupportedOperationException(
+                    "Unsupported integer vector size");
               }
-
-              throw new UnsupportedOperationException(
-                "Unsupported integer vector size");
             }
-          }
 
-          throw new UnsupportedOperationException(
-            "Unsupported integer element size");
+            default:
+              throw new UnsupportedOperationException(
+                "Unsupported integer element size");
+          }
         }
 
-        @Override public VectorsClasses matchIntegerSignedNormalized(
+        @Override
+        public VectorsClasses matchIntegerSignedNormalized(
           final TIntegerSignedNormalized t)
         {
           throw new UnsupportedOperationException(
             "Signed normalized integer vectors are not supported");
         }
 
-        @Override public VectorsClasses matchIntegerUnsignedNormalized(
+        @Override
+        public VectorsClasses matchIntegerUnsignedNormalized(
           final TIntegerUnsignedNormalized t)
         {
           throw new UnsupportedOperationException(
@@ -504,7 +516,8 @@ final class JPRAClasses
       });
     }
 
-    @Override public VectorsClasses matchScalarFloat(
+    @Override
+    public VectorsClasses matchScalarFloat(
       final TFloat t)
     {
       final int e_size = t.getSizeInBits().getValue().intValue();
@@ -532,10 +545,10 @@ final class JPRAClasses
                 VectorByteBufferedFloating4s16.class,
                 VectorStorageFloating4Type.class);
             }
+            default:
+              throw new UnsupportedOperationException(
+                "Unsupported float vector size");
           }
-
-          throw new UnsupportedOperationException(
-            "Unsupported float vector size");
         }
 
         case 32: {
@@ -561,11 +574,12 @@ final class JPRAClasses
                 VectorByteBufferedFloating4s32.class,
                 VectorStorageFloating4Type.class);
             }
+            default:
+              throw new UnsupportedOperationException(
+                "Unsupported float vector size");
           }
-
-          throw new UnsupportedOperationException(
-            "Unsupported float vector size");
         }
+
         case 64: {
           switch (this.e_count) {
             case 2: {
@@ -589,15 +603,16 @@ final class JPRAClasses
                 VectorByteBufferedFloating4s64.class,
                 VectorStorageFloating4Type.class);
             }
+            default:
+              throw new UnsupportedOperationException(
+                "Unsupported double vector size");
           }
-
-          throw new UnsupportedOperationException(
-            "Unsupported double vector size");
         }
-      }
 
-      throw new UnsupportedOperationException(
-        "Unsupported float vector element size");
+        default:
+          throw new UnsupportedOperationException(
+            "Unsupported float vector element size");
+      }
     }
   }
 }

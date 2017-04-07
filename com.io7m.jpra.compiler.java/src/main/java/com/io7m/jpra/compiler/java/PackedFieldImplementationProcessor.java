@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces implementation methods for a given packed
@@ -105,15 +106,15 @@ public final class PackedFieldImplementationProcessor
     final Class<?> container_type;
     final String iput;
 
-    if (container_size.equals(BigInteger.valueOf(64L))) {
+    if (Objects.equals(container_size, BigInteger.valueOf(64L))) {
       container_type = long.class;
       arith_type = long.class;
       iput = "putLong";
-    } else if (container_size.equals(BigInteger.valueOf(32L))) {
+    } else if (Objects.equals(container_size, BigInteger.valueOf(32L))) {
       container_type = int.class;
       arith_type = int.class;
       iput = "putInt";
-    } else if (container_size.equals(BigInteger.valueOf(16L))) {
+    } else if (Objects.equals(container_size, BigInteger.valueOf(16L))) {
       container_type = short.class;
       arith_type = int.class;
       iput = "putShort";
@@ -179,7 +180,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerUnsigned(
               final TIntegerUnsigned t)
             {
-              PackedFieldImplementationProcessor.onInteger(
+              onInteger(
                 setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -188,7 +189,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerSigned(
               final TIntegerSigned t)
             {
-              PackedFieldImplementationProcessor.onInteger(
+              onInteger(
                 setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -197,7 +198,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerSignedNormalized(
               final TIntegerSignedNormalized t)
             {
-              PackedFieldImplementationProcessor.onNormalized(
+              onNormalized(
                 true, field_size, setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -206,14 +207,14 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerUnsignedNormalized(
               final TIntegerUnsignedNormalized t)
             {
-              PackedFieldImplementationProcessor.onNormalized(
+              onNormalized(
                 false, field_size, setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
           });
       });
 
-    PackedFieldImplementationProcessor.bufferWriteStatement(
+    bufferWriteStatement(
       t, setb, container_type, iput, "result");
     setb.returns(void.class);
     class_builder.addMethod(setb.build());
@@ -297,10 +298,10 @@ public final class PackedFieldImplementationProcessor
     final BigInteger shift)
   {
     final Class<?> nfp_class =
-      PackedFieldImplementationProcessor.getNFPClassFromFieldSizeAndSign(
+      getNFPClassFromFieldSizeAndSign(
         field_size, signed);
     final String m_to =
-      PackedFieldImplementationProcessor.getNormalizedToMethod(
+      getNormalizedToMethod(
         field_size, signed);
 
     setb.addStatement(
@@ -323,11 +324,11 @@ public final class PackedFieldImplementationProcessor
     final BigInteger field_size,
     final boolean signed)
   {
-    final Class<?> nfp_class;
     if (field_size.compareTo(BigInteger.valueOf(64L)) > 0) {
       throw new UnimplementedCodeException();
     }
 
+    final Class<?> nfp_class;
     if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
       if (signed) {
         nfp_class = NFPSignedDoubleLong.class;
@@ -413,24 +414,22 @@ public final class PackedFieldImplementationProcessor
       throw new UnimplementedCodeException();
     }
 
-    /**
-     * The implementation deals with three types:
-     *
-     * The "container" type is the type that will be used to actually store
-     * packed values; all of the fields of the packed record are packed into
-     * a value of this type.
-     *
-     * The "arith" type is the type that will be used to perform operations
-     * upon field values; this type will be {@code int} or larger, and no
-     * smaller than the container type.
-     *
-     * The "external" type is the type that the programmer will use to interact
-     * with the generated code. This will be {@code int} or larger, and no
-     * smaller than the field size.
+    /*
+      The implementation deals with three types:
+
+      The "container" type is the type that will be used to actually store
+      packed values; all of the fields of the packed record are packed into
+      a value of this type.
+
+      The "arith" type is the type that will be used to perform operations
+      upon field values; this type will be {@code int} or larger, and no
+      smaller than the container type.
+
+      The "external" type is the type that the programmer will use to interact
+      with the generated code. This will be {@code int} or larger, and no
+      smaller than the field size.
      */
 
-    final Class<?> container_type;
-    final Class<?> arith_type;
     final Class<?> external_type;
 
     if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
@@ -445,17 +444,19 @@ public final class PackedFieldImplementationProcessor
 
     final String iget;
     final String iput;
-    if (container_size.equals(BigInteger.valueOf(64L))) {
+    final Class<?> arith_type;
+    final Class<?> container_type;
+    if (Objects.equals(container_size, BigInteger.valueOf(64L))) {
       container_type = long.class;
       arith_type = long.class;
       iget = "getLong";
       iput = "putLong";
-    } else if (container_size.equals(BigInteger.valueOf(32L))) {
+    } else if (Objects.equals(container_size, BigInteger.valueOf(32L))) {
       container_type = int.class;
       arith_type = int.class;
       iget = "getInt";
       iput = "putInt";
-    } else if (container_size.equals(BigInteger.valueOf(16L))) {
+    } else if (Objects.equals(container_size, BigInteger.valueOf(16L))) {
       container_type = short.class;
       arith_type = int.class;
       iget = "getShort";
@@ -481,7 +482,7 @@ public final class PackedFieldImplementationProcessor
     getb.addModifiers(Modifier.PUBLIC);
     getb.returns(external_type);
     getb.addAnnotation(Override.class);
-    PackedFieldImplementationProcessor.bufferReadStatement(t, getb);
+    bufferReadStatement(t, getb);
     getb.addStatement(
       "final $T read = this.$N.$N(0)",
       container_type,
@@ -496,7 +497,7 @@ public final class PackedFieldImplementationProcessor
     setb.addParameter(external_type, "x", Modifier.FINAL);
     setb.addAnnotation(Override.class);
     setb.returns(void.class);
-    PackedFieldImplementationProcessor.bufferReadStatement(t, setb);
+    bufferReadStatement(t, setb);
     setb.addStatement(
       "final $T result = this.$N.$N(0)",
       container_type,
@@ -510,7 +511,7 @@ public final class PackedFieldImplementationProcessor
       "final $T x_valu = (x & x_mask) << $L", arith_type, shift);
     setb.addStatement(
       "final $T w_valu = (result & r_mask) | x_valu", arith_type);
-    PackedFieldImplementationProcessor.bufferWriteStatement(
+    bufferWriteStatement(
       this.field.getOwner(), setb, container_type, iput, "w_valu");
 
     this.class_builder.addMethod(setb.build());
@@ -555,13 +556,13 @@ public final class PackedFieldImplementationProcessor
       setter_norm_raw_name);
 
     final Class<?> nfp_class =
-      PackedFieldImplementationProcessor.getNFPClassFromFieldSizeAndSign(
+      getNFPClassFromFieldSizeAndSign(
         field_size, signed);
     final String m_to =
-      PackedFieldImplementationProcessor.getNormalizedToMethod(
+      getNormalizedToMethod(
         field_size, signed);
     final String m_of =
-      PackedFieldImplementationProcessor.getNormalizedFromMethod(
+      getNormalizedFromMethod(
         field_size, signed);
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);

@@ -86,13 +86,13 @@ final class RecordFieldImplementationConstructorProcessor
       "in_pointer",
       Charset.class,
       t.getEncoding(),
-      t.getMaximumStringLength().getValue().intValue());
+      Integer.valueOf(t.getMaximumStringLength().getValue().intValue()));
 
     this.class_builder.addField(
       JPRAStringCursorType.class, field_name, Modifier.FINAL, Modifier.PRIVATE);
 
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final Class<JPRATypeModel.JPRAString> c =
@@ -117,8 +117,8 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchBooleanSet(final TBooleanSet t)
   {
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final Class<JPRATypeModel.JPRABooleanSet> c =
@@ -144,8 +144,8 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchInteger(final TIntegerType t)
   {
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final FieldName f_name = this.field.getName();
@@ -170,8 +170,8 @@ final class RecordFieldImplementationConstructorProcessor
 
   @Override public Unit matchFloat(final TFloat t)
   {
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final FieldName f_name = this.field.getName();
@@ -198,8 +198,8 @@ final class RecordFieldImplementationConstructorProcessor
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
 
-    /**
-     * Construct a vector cursor field and assign value to it.
+    /*
+      Construct a vector cursor field and assign value to it.
      */
 
     final FieldName f_name = this.field.getName();
@@ -216,8 +216,8 @@ final class RecordFieldImplementationConstructorProcessor
     this.class_builder.addField(
       c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
 
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final ClassName et =
@@ -249,8 +249,8 @@ final class RecordFieldImplementationConstructorProcessor
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
 
-    /**
-     * Construct a matrix cursor field and assign value to it.
+    /*
+      Construct a matrix cursor field and assign value to it.
      */
 
     final FieldName f_name = this.field.getName();
@@ -268,8 +268,8 @@ final class RecordFieldImplementationConstructorProcessor
     this.class_builder.addField(
       c.getBufferedInterface(), field_name, Modifier.FINAL, Modifier.PRIVATE);
 
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final ClassName et =
@@ -308,8 +308,8 @@ final class RecordFieldImplementationConstructorProcessor
     final TypeName t_name,
     final PackageContextType pkg_ctxt)
   {
-    /**
-     * Construct a record/packed cursor field and assign a value to it.
+    /*
+      Construct a record/packed cursor field and assign a value to it.
      */
 
     final String t_imp_name =
@@ -332,8 +332,8 @@ final class RecordFieldImplementationConstructorProcessor
     this.class_builder.addField(
       t_cn, field_name, Modifier.FINAL, Modifier.PRIVATE);
 
-    /**
-     * Construct a meta type field, and assign a value to it.
+    /*
+      Construct a meta type field, and assign a value to it.
      */
 
     final String meta_field_name =

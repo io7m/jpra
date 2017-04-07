@@ -31,6 +31,7 @@ import com.io7m.jpra.model.names.TypeName;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -78,7 +79,7 @@ public final class TRecord implements TType, TypeUserDefinedType
           "Named fields must contain %s", f.name);
         final FieldValue fr = this.fields_by_name.get(f.name);
         Preconditions.checkPrecondition(
-          fr.equals(f), "Field value must match");
+          Objects.equals(fr, f), "Field value must match");
       });
 
     this.size_bits = this.fields_by_order.injectInto(
@@ -87,7 +88,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     final BigInteger b8 = BigInteger.valueOf(8L);
     final BigInteger br = this.size_bits.getValue().remainder(b8);
     Preconditions.checkPreconditionV(
-      br.equals(BigInteger.ZERO),
+      Objects.equals(br, BigInteger.ZERO),
       "Size %s must be divisible by 8", this.size_bits);
 
     this.size_octets = new Size<>(this.size_bits.getValue().divide(b8));
@@ -300,7 +301,7 @@ public final class TRecord implements TType, TypeUserDefinedType
       final BigInteger br = bits.getValue().remainder(b8);
       Preconditions.checkPrecondition(
         br,
-        br.equals(BigInteger.ZERO),
+        Objects.equals(br, BigInteger.ZERO),
         s -> String.format("Size %s must be divisible by 8", s));
 
       this.size_octets = new Size<>(bits.getValue().divide(b8));

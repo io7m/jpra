@@ -420,12 +420,12 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         int.class, "base_offset", Modifier.PRIVATE, Modifier.FINAL);
       jcb.addField(ptr_class, "pointer", Modifier.PRIVATE, Modifier.FINAL);
 
-      JPRAJavaGenerator.generateRecordConstructor(t, ptr_class, jcb);
-      JPRAJavaGenerator.generateRecordFactoryMethods(
+      generateRecordConstructor(t, ptr_class, jcb);
+      generateRecordFactoryMethods(
         imp_name, int_name, ptr_class, jcb);
-      JPRAJavaGenerator.generateSizeMethods(jcb, t.getSizeInOctets());
-      JPRAJavaGenerator.generateRecordByteOffsetMethod(jcb);
-      JPRAJavaGenerator.generateRecordFieldMethods(t, jcb);
+      generateSizeMethods(jcb, t.getSizeInOctets());
+      generateRecordByteOffsetMethod(jcb);
+      generateRecordFieldMethods(t, jcb);
 
       final JavaFile.Builder jfb = JavaFile.builder(pack_name, jcb.build());
       final JavaFile jf = jfb.build();
@@ -610,11 +610,11 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
         int.class, "base_offset", Modifier.PRIVATE, Modifier.FINAL);
       jcb.addField(ptr_class, "pointer", Modifier.PRIVATE, Modifier.FINAL);
 
-      JPRAJavaGenerator.generatePackedConstructor(t, ptr_class, jcb);
-      JPRAJavaGenerator.generatePackedFactoryMethods(
+      generatePackedConstructor(t, ptr_class, jcb);
+      generatePackedFactoryMethods(
         imp_name, int_name, ptr_class, jcb);
-      JPRAJavaGenerator.generateSizeMethods(jcb, t.getSizeInOctets());
-      JPRAJavaGenerator.generatePackedByteOffsetMethod(jcb);
+      generateSizeMethods(jcb, t.getSizeInOctets());
+      generatePackedByteOffsetMethod(jcb);
 
       BigInteger offset = BigInteger.valueOf(0L);
       for (final TPacked.FieldType f : t.getFieldsInDeclarationOrder()) {

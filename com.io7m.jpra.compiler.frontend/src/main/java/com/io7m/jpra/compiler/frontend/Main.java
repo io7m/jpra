@@ -92,7 +92,7 @@ public final class Main
     } catch (final ParseArgumentsMissingException
       | ParseOptionMissingException
       | ParseArgumentsUnexpectedException e) {
-      Main.LOG.error("parse error: {}", e.getMessage());
+      LOG.error("parse error: {}", e.getMessage());
       Help.help(parser.getMetadata(), Collections.emptyList());
     }
   }
@@ -158,7 +158,7 @@ public final class Main
         PackageNameQualified::valueOf).collect(Collectors.toList());
 
       for (final PackageNameQualified name : names) {
-        Main.LOG.debug("checking {}", name);
+        LOG.debug("checking {}", name);
 
         try {
           driver.compilePackage(name);
@@ -232,7 +232,7 @@ public final class Main
         PackageNameQualified::valueOf).collect(Collectors.toList());
 
       for (final PackageNameQualified pack_name : pack_names) {
-        Main.LOG.debug("checking {}", pack_name);
+        LOG.debug("checking {}", pack_name);
 
         try {
           driver.compilePackage(pack_name);
@@ -251,7 +251,7 @@ public final class Main
       }
 
       if (!error) {
-        Main.LOG.debug("generating code");
+        LOG.debug("generating code");
 
         final Map<PackageNameQualified, PackageContextType> packs =
           gc.getPackages();
