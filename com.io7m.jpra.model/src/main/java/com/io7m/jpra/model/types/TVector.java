@@ -49,9 +49,9 @@ public final class TVector implements TType
     final Size<?> in_size,
     final TypeScalarType in_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
-    this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.size = NullCheck.notNull(in_size, "Size");
+    this.type = NullCheck.notNull(in_type, "Type");
 
     final BigInteger ecv = this.size.getValue();
     final BigInteger etv = this.type.getSizeInBits().getValue();

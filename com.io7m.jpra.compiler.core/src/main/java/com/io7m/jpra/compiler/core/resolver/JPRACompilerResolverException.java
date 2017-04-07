@@ -48,7 +48,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final String message)
   {
     super(in_lex, message);
-    this.code = NullCheck.notNull(in_code);
+    this.code = NullCheck.notNull(in_code, "Code");
   }
 
   /**
@@ -65,7 +65,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final Exception e)
   {
     super(in_lex, e);
-    this.code = NullCheck.notNull(in_code);
+    this.code = NullCheck.notNull(in_code, "Code");
   }
 
   /**

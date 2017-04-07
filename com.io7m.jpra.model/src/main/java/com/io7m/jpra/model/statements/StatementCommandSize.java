@@ -45,7 +45,7 @@ public final class StatementCommandSize<I, T>
   public StatementCommandSize(
     final SizeExprType<I, T> e)
   {
-    this.expr = NullCheck.notNull(e);
+    this.expr = NullCheck.notNull(e, "Expression");
   }
 
   /**

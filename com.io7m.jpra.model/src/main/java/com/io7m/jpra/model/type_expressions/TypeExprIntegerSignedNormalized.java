@@ -50,9 +50,9 @@ public final class TypeExprIntegerSignedNormalized<I, T>
     final Optional<LexicalPosition<Path>> in_lex,
     final SizeExprType<I, T> in_size)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.size = NullCheck.notNull(in_size, "Size");
   }
 
   @Override

@@ -45,7 +45,7 @@ public final class SizeExprInBits<I, T> implements SizeExprType<I, T>
   public SizeExprInBits(
     final TypeExprType<I, T> in_expression)
   {
-    this.expression = NullCheck.notNull(in_expression);
+    this.expression = NullCheck.notNull(in_expression, "Expression");
   }
 
   /**

@@ -92,7 +92,7 @@ final class JPRAClasses
   static VectorsClasses getVectorClassesFor(
     final TVector v)
   {
-    NullCheck.notNull(v);
+    NullCheck.notNull(v, "v");
     final TypeScalarType e_type = v.getElementType();
     final int e_count = v.getElementCount().getValue().intValue();
     return e_type.matchTypeScalar(new VectorClassMatcher(e_count));
@@ -100,7 +100,7 @@ final class JPRAClasses
 
   public static MatrixClasses getMatrixClassesFor(final TMatrix t)
   {
-    NullCheck.notNull(t);
+    NullCheck.notNull(t, "t");
     final TypeScalarType e_type = t.getElementType();
     final int e_width = t.getWidth().getValue().intValue();
     return e_type.matchTypeScalar(new MatrixClassMatcher(e_width, e_width));
@@ -250,10 +250,10 @@ final class JPRAClasses
       final Class<?> in_buffered_cons,
       final Class<?> in_buffered)
     {
-      this.base_interface = NullCheck.notNull(in_base);
-      this.base_readable = NullCheck.notNull(in_readable);
-      this.buffered_constructors = NullCheck.notNull(in_buffered_cons);
-      this.buffered_interface = NullCheck.notNull(in_buffered);
+      this.base_interface = NullCheck.notNull(in_base, "Base");
+      this.base_readable = NullCheck.notNull(in_readable, "Readable");
+      this.buffered_constructors = NullCheck.notNull(in_buffered_cons, "Buffered_cons");
+      this.buffered_interface = NullCheck.notNull(in_buffered, "Buffered");
     }
 
     public Class<?> getBaseInterface()
@@ -290,10 +290,10 @@ final class JPRAClasses
       final Class<?> in_buffered_cons,
       final Class<?> in_buffered)
     {
-      this.base_interface = NullCheck.notNull(in_base);
-      this.base_readable = NullCheck.notNull(in_readable);
-      this.buffered_constructors = NullCheck.notNull(in_buffered_cons);
-      this.buffered_interface = NullCheck.notNull(in_buffered);
+      this.base_interface = NullCheck.notNull(in_base, "Base");
+      this.base_readable = NullCheck.notNull(in_readable, "Readable");
+      this.buffered_constructors = NullCheck.notNull(in_buffered_cons, "Buffered_cons");
+      this.buffered_interface = NullCheck.notNull(in_buffered, "Buffered");
     }
 
     public Class<?> getBaseInterface()

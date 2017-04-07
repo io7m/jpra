@@ -60,9 +60,9 @@ final class RecordFieldImplementationConstructorProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSpec.Builder in_constructor_builder)
   {
-    this.field = NullCheck.notNull(in_field);
-    this.class_builder = NullCheck.notNull(in_class_builder);
-    this.constructor_builder = NullCheck.notNull(in_constructor_builder);
+    this.field = NullCheck.notNull(in_field, "Field");
+    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
+    this.constructor_builder = NullCheck.notNull(in_constructor_builder, "Constructor builder");
   }
 
   @Override

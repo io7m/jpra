@@ -391,8 +391,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -439,8 +439,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -492,8 +492,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -544,8 +544,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -579,8 +579,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -656,8 +656,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -709,8 +709,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
@@ -764,8 +764,8 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(os);
+    NullCheck.notNull(t, "t");
+    NullCheck.notNull(os, "os");
 
     try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();

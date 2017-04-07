@@ -50,9 +50,9 @@ public final class TBooleanSet implements TType
     final ImmutableList<FieldName> in_fields,
     final Size<SizeUnitOctetsType> in_size)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.fields = NullCheck.notNull(in_fields);
-    this.size = NullCheck.notNull(in_size);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.fields = NullCheck.notNull(in_fields, "Fields");
+    this.size = NullCheck.notNull(in_size, "Size");
     this.size_bits = Size.toBits(this.size);
   }
 

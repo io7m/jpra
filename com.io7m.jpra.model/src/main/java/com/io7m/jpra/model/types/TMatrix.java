@@ -54,10 +54,10 @@ public final class TMatrix implements TType
     final Size<?> in_size_height,
     final TypeScalarType in_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.size_width = NullCheck.notNull(in_size_width);
-    this.size_height = NullCheck.notNull(in_size_height);
-    this.type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.size_width = NullCheck.notNull(in_size_width, "Size width");
+    this.size_height = NullCheck.notNull(in_size_height, "Size height");
+    this.type = NullCheck.notNull(in_type, "Type");
 
     final BigInteger sw = this.size_width.getValue();
     final BigInteger sh = this.size_height.getValue();

@@ -1022,7 +1022,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(expr);
+    NullCheck.notNull(expr, "expr");
 
     return expr.matchExpression(
       new SExpressionMatcherType<TypeExprType<Unresolved, Untyped>,

@@ -40,8 +40,8 @@ public final class TypeReference
     final Optional<PackageNameUnqualified> in_pack,
     final TypeName in_type)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.pack = NullCheck.notNull(in_pack);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.pack = NullCheck.notNull(in_pack, "Pack");
   }
 
   /**

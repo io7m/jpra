@@ -62,9 +62,9 @@ final class RecordFieldImplementationProcessor
     final BigInteger in_offset,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field);
-    this.offset = NullCheck.notNull(in_offset);
-    this.class_builder = NullCheck.notNull(in_class_builder);
+    this.field = NullCheck.notNull(in_field, "Field");
+    this.offset = NullCheck.notNull(in_offset, "Offset");
+    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
 
     this.metaMethods();
   }

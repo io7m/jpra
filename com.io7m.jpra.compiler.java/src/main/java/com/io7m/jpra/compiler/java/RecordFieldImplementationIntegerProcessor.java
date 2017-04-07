@@ -52,8 +52,8 @@ final class RecordFieldImplementationIntegerProcessor
     final TRecord.FieldValue in_field,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field);
-    this.class_builder = NullCheck.notNull(in_class_builder);
+    this.field = NullCheck.notNull(in_field, "Field");
+    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
   }
 
   @Override

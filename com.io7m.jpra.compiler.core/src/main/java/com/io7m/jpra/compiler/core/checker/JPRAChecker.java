@@ -1040,10 +1040,10 @@ public final class JPRAChecker implements JPRACheckerType
       final GlobalContextType c,
       final PackageNameQualified in_name)
     {
-      this.context = NullCheck.notNull(c);
+      this.context = NullCheck.notNull(c, "Context");
       this.types = Maps.mutable.empty();
       this.types_view = this.types.asUnmodifiable();
-      this.name = NullCheck.notNull(in_name);
+      this.name = NullCheck.notNull(in_name, "Name");
     }
 
     void putType(final TypeUserDefinedType t)

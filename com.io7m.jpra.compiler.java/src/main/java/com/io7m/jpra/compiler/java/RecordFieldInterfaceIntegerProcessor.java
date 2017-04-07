@@ -49,9 +49,9 @@ final class RecordFieldInterfaceIntegerProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSelection in_methods)
   {
-    this.field = NullCheck.notNull(in_field);
-    this.class_builder = NullCheck.notNull(in_class_builder);
-    this.methods = NullCheck.notNull(in_methods);
+    this.field = NullCheck.notNull(in_field, "Field");
+    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
+    this.methods = NullCheck.notNull(in_methods, "Methods");
   }
 
   @Override

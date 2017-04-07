@@ -50,7 +50,7 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
   private JPRAJavaWriter(
     final JPRAJavaGeneratorType in_generator)
   {
-    this.generator = NullCheck.notNull(in_generator);
+    this.generator = NullCheck.notNull(in_generator, "Generator");
   }
 
   /**
@@ -92,8 +92,8 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     final TypeUserDefinedType t)
     throws IOException
   {
-    NullCheck.notNull(path);
-    NullCheck.notNull(t);
+    NullCheck.notNull(path, "path");
+    NullCheck.notNull(t, "t");
 
     final TypeName t_name = t.getName();
     final PackageNameQualified p_name = t.getPackageContext().getName();

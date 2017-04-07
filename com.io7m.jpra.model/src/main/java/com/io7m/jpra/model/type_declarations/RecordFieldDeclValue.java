@@ -53,9 +53,9 @@ public final class RecordFieldDeclValue<I, T>
     final FieldName in_name,
     final TypeExprType<I, T> in_type)
   {
-    this.data = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_name);
-    this.type = NullCheck.notNull(in_type);
+    this.data = NullCheck.notNull(in_identifier, "Identifier");
+    this.name = NullCheck.notNull(in_name, "Name");
+    this.type = NullCheck.notNull(in_type, "Type");
   }
 
   /**

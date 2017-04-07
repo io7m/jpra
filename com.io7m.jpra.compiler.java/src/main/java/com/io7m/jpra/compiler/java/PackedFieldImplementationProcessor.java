@@ -78,9 +78,9 @@ public final class PackedFieldImplementationProcessor
     final BigInteger in_offset_bits,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field);
-    this.offset_bits = NullCheck.notNull(in_offset_bits);
-    this.class_builder = NullCheck.notNull(in_class_builder);
+    this.field = NullCheck.notNull(in_field, "in_field");
+    this.offset_bits = NullCheck.notNull(in_offset_bits, "Offset_bits");
+    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
   }
 
   /**
@@ -180,7 +180,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerUnsigned(
               final TIntegerUnsigned t)
             {
-              onInteger(
+              PackedFieldImplementationProcessor.onInteger(
                 setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -189,7 +189,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerSigned(
               final TIntegerSigned t)
             {
-              onInteger(
+              PackedFieldImplementationProcessor.onInteger(
                 setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -198,7 +198,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerSignedNormalized(
               final TIntegerSignedNormalized t)
             {
-              onNormalized(
+              PackedFieldImplementationProcessor.onNormalized(
                 true, field_size, setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }
@@ -207,7 +207,7 @@ public final class PackedFieldImplementationProcessor
             public Unit matchIntegerUnsignedNormalized(
               final TIntegerUnsignedNormalized t)
             {
-              onNormalized(
+              PackedFieldImplementationProcessor.onNormalized(
                 false, field_size, setb, arith_type, f_name_text, mask, shift);
               return Unit.unit();
             }

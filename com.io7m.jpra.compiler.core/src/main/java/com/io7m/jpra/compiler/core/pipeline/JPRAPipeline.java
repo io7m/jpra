@@ -55,9 +55,9 @@ public final class JPRAPipeline implements JPRAPipelineType
     final JPRAResolverType in_resolver,
     final JPRACheckerType in_checker)
   {
-    this.checker = NullCheck.notNull(in_checker);
-    this.parser = NullCheck.notNull(in_parser);
-    this.resolver = NullCheck.notNull(in_resolver);
+    this.checker = NullCheck.notNull(in_checker, "Checker");
+    this.parser = NullCheck.notNull(in_parser, "Parser");
+    this.resolver = NullCheck.notNull(in_resolver, "Resolver");
   }
 
   /**

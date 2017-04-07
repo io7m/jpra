@@ -52,10 +52,10 @@ public final class TypeExprArray<I, T> implements TypeExprType<I, T>
     final SizeExprType<I, T> in_element_count,
     final TypeExprType<I, T> in_element_type)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.lex = NullCheck.notNull(in_lex);
-    this.element_count = NullCheck.notNull(in_element_count);
-    this.element_type = NullCheck.notNull(in_element_type);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.element_count = NullCheck.notNull(in_element_count, "Element count");
+    this.element_type = NullCheck.notNull(in_element_type, "Element type");
   }
 
   /**

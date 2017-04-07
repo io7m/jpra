@@ -43,9 +43,9 @@ public final class FieldReference
     final Optional<TypeName> in_type,
     final FieldPath in_field_path)
   {
-    this.pack = NullCheck.notNull(in_pack);
-    this.type = NullCheck.notNull(in_type);
-    this.field_path = NullCheck.notNull(in_field_path);
+    this.pack = NullCheck.notNull(in_pack, "Package");
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.field_path = NullCheck.notNull(in_field_path, "Field path");
   }
 
   /**

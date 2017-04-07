@@ -45,7 +45,7 @@ public final class StatementCommandType<I, T>
   public StatementCommandType(
     final TypeExprType<I, T> e)
   {
-    this.expr = NullCheck.notNull(e);
+    this.expr = NullCheck.notNull(e, "Type");
   }
 
   /**

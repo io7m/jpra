@@ -50,9 +50,9 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
     final T in_type,
     final FieldReference in_field_reference)
   {
-    this.field_reference = NullCheck.notNull(in_field_reference);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.type = NullCheck.notNull(in_type);
+    this.field_reference = NullCheck.notNull(in_field_reference, "Field reference");
+    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
+    this.type = NullCheck.notNull(in_type, "Type");
   }
 
   @Override

@@ -46,8 +46,8 @@ public final class PackageImport implements ModelElementType
     final PackageNameQualified in_from,
     final PackageNameQualified in_to)
   {
-    this.from = NullCheck.notNull(in_from);
-    this.to = NullCheck.notNull(in_to);
+    this.from = NullCheck.notNull(in_from, "From");
+    this.to = NullCheck.notNull(in_to, "To");
   }
 
   /**

@@ -49,9 +49,9 @@ public final class TypeExprName<I, T> implements TypeExprType<I, T>
     final T in_type,
     final TypeReference in_ref)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.ref = NullCheck.notNull(in_ref);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
+    this.ref = NullCheck.notNull(in_ref, "Ref");
   }
 
   @Override

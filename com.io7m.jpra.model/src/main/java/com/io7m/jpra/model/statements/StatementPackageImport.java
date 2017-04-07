@@ -49,8 +49,8 @@ public final class StatementPackageImport<I, T>
     final PackageNameQualified in_pack,
     final PackageNameUnqualified in_using)
   {
-    this.pack = NullCheck.notNull(in_pack);
-    this.using = NullCheck.notNull(in_using);
+    this.pack = NullCheck.notNull(in_pack, "Pack");
+    this.using = NullCheck.notNull(in_using, "Using");
   }
 
   /**

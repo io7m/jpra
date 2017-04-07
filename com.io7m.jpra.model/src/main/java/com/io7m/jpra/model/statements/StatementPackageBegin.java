@@ -45,7 +45,7 @@ public final class StatementPackageBegin<I, T>
   public StatementPackageBegin(
     final PackageNameQualified in_pack)
   {
-    this.pack = NullCheck.notNull(in_pack);
+    this.pack = NullCheck.notNull(in_pack, "Pack");
   }
 
   /**

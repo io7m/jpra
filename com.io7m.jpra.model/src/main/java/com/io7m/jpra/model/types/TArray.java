@@ -49,9 +49,9 @@ public final class TArray implements TType
     final Size<?> in_size,
     final TType in_type)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.element_count = NullCheck.notNull(in_size);
-    this.element_type = NullCheck.notNull(in_type);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.element_count = NullCheck.notNull(in_size, "Size");
+    this.element_type = NullCheck.notNull(in_type, "Type");
 
     final BigInteger ecv = this.element_count.getValue();
     final BigInteger etv = this.element_type.getSizeInBits().getValue();

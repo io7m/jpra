@@ -49,8 +49,8 @@ public final class SizeExprConstant<I, T>
     final Optional<LexicalPosition<Path>> in_lex,
     final BigInteger in_size)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.value = NullCheck.notNull(in_size);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.value = NullCheck.notNull(in_size, "Size");
   }
 
   /**

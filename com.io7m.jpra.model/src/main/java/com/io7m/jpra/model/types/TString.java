@@ -50,9 +50,9 @@ public final class TString implements TType
     final String in_encoding,
     final Size<SizeUnitOctetsType> in_size)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.encoding = NullCheck.notNull(in_encoding);
-    this.length = NullCheck.notNull(in_size);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.encoding = NullCheck.notNull(in_encoding, "Encoding");
+    this.length = NullCheck.notNull(in_size, "Size");
     this.size = in_size.add(Size.valueOf(4L));
     this.size_bits = Size.toBits(this.size);
   }

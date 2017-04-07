@@ -44,8 +44,8 @@ public final class TIntegerSigned implements TIntegerType
     final Optional<LexicalPosition<Path>> in_lex,
     final Size<SizeUnitBitsType> in_size)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.size = NullCheck.notNull(in_size, "Size");
   }
 
   @Override

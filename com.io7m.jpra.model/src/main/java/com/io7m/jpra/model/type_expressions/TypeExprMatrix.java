@@ -55,11 +55,11 @@ public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
     final SizeExprType<I, T> in_height,
     final TypeExprType<I, T> in_element_type)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.lex = NullCheck.notNull(in_lex);
-    this.width = NullCheck.notNull(in_width);
-    this.height = NullCheck.notNull(in_height);
-    this.element_type = NullCheck.notNull(in_element_type);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.width = NullCheck.notNull(in_width, "Width");
+    this.height = NullCheck.notNull(in_height, "Height");
+    this.element_type = NullCheck.notNull(in_element_type, "Element type");
   }
 
   @Override

@@ -29,7 +29,7 @@ final class Identifier implements IdentifierType
   Identifier(
     final BigInteger in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = NullCheck.notNull(in_value, "Value");
   }
 
   @Override

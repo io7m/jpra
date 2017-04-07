@@ -41,7 +41,7 @@ public final class Size<U extends SizeUnitType>
 
   public Size(final BigInteger in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = NullCheck.notNull(in_value, "Value");
   }
 
   /**

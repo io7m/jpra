@@ -44,7 +44,7 @@ public final class StatementPackageEnd<I, T>
   public StatementPackageEnd(
     final Optional<LexicalPosition<Path>> in_lex)
   {
-    this.lex = NullCheck.notNull(in_lex);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
   }
 
   @Override

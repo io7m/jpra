@@ -48,8 +48,8 @@ public final class TRecords
     final TRecord t,
     final FieldPath p)
   {
-    NullCheck.notNull(t);
-    NullCheck.notNull(p);
+    NullCheck.notNull(t, "Record");
+    NullCheck.notNull(p, "Field path");
 
     final ImmutableList<FieldName> es = p.getElements();
     final FieldName first = es.get(0);
@@ -190,9 +190,9 @@ public final class TRecords
       final FieldName in_name,
       final ImmutableList<FieldName> in_rest)
     {
-      this.end = NullCheck.notNull(in_t);
-      this.name = NullCheck.notNull(in_name);
-      this.rest = NullCheck.notNull(in_rest);
+      this.end = NullCheck.notNull(in_t, "Type");
+      this.name = NullCheck.notNull(in_name, "Field name");
+      this.rest = NullCheck.notNull(in_rest, "Field names");
     }
 
     @Override
@@ -222,7 +222,7 @@ public final class TRecords
     public TypeLookupSucceeded(
       final TType in_result)
     {
-      this.result = NullCheck.notNull(in_result);
+      this.result = NullCheck.notNull(in_result, "Type");
     }
 
     @Override

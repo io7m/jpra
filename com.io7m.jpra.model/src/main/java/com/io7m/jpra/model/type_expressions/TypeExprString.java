@@ -52,10 +52,10 @@ public final class TypeExprString<I, T> implements TypeExprType<I, T>
     final SizeExprType<I, T> in_size,
     final String in_encoding)
   {
-    this.type = NullCheck.notNull(in_type);
-    this.lex = NullCheck.notNull(in_lex);
-    this.size = NullCheck.notNull(in_size);
-    this.encoding = NullCheck.notNull(in_encoding);
+    this.type = NullCheck.notNull(in_type, "Type");
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.size = NullCheck.notNull(in_size, "Size");
+    this.encoding = NullCheck.notNull(in_encoding, "Encoding");
   }
 
   @Override

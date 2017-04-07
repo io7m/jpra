@@ -46,7 +46,7 @@ public final class SizeExprInOctets<I, T>
   public SizeExprInOctets(
     final TypeExprType<I, T> in_expression)
   {
-    this.expression = NullCheck.notNull(in_expression);
+    this.expression = NullCheck.notNull(in_expression, "Expression");
   }
 
   /**
