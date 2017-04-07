@@ -32,7 +32,8 @@ import java.nio.ByteBuffer;
 
 public final class ReferencesTest
 {
-  @Test public void testReferences()
+  @Test
+  public void testReferences()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<ReferencesType> c =
@@ -62,7 +63,8 @@ public final class ReferencesTest
     Assert.assertEquals(32L, (long) v.metaR2OffsetFromCursor());
   }
 
-  @Test public void testSetGet()
+  @Test
+  public void testSetGet()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16 * 3);
     final JPRACursor1DType<ReferencesType> c =

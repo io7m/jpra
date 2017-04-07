@@ -27,14 +27,16 @@ import java.nio.file.Path;
 
 public final class JPRADriverTestLinuxFS extends JPRADriverContract
 {
-  @Override protected JPRADriverType getDriver(
+  @Override
+  protected JPRADriverType getDriver(
     final Path base,
     final JPRACheckerCapabilitiesType caps)
   {
     return JPRADriver.newDriver(base, caps);
   }
 
-  @Override protected FileSystem getFilesystem()
+  @Override
+  protected FileSystem getFilesystem()
     throws IOException
   {
     return MemoryFileSystemBuilder.newLinux().build("test");

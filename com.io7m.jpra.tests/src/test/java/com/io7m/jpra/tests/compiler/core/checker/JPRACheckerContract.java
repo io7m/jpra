@@ -72,7 +72,8 @@ import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
 
-@SuppressWarnings("unchecked") public abstract class JPRACheckerContract
+@SuppressWarnings("unchecked")
+public abstract class JPRACheckerContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
@@ -88,7 +89,8 @@ import java.math.BigInteger;
   protected abstract SExpressionType newStringSExpr(
     final String expr);
 
-  @Test public final void testTypeExprIntegerSignedSizeCorrect()
+  @Test
+  public final void testTypeExprIntegerSignedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -108,7 +110,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
-  @Test public final void testTypeExprIntegerSignedNormalizedSizeCorrect()
+  @Test
+  public final void testTypeExprIntegerSignedNormalizedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -129,7 +132,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
-  @Test public final void testTypeExprIntegerUnsignedSizeCorrect()
+  @Test
+  public final void testTypeExprIntegerUnsignedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -149,7 +153,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
-  @Test public final void testTypeExprIntegerUnsignedNormalizedSizeCorrect()
+  @Test
+  public final void testTypeExprIntegerUnsignedNormalizedSizeCorrect()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -170,7 +175,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
-  @Test public final void testRecordTypeExprFloatSizeSupported()
+  @Test
+  public final void testRecordTypeExprFloatSizeSupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -190,7 +196,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(32L), ti.getSizeInBits().getValue());
   }
 
-  @Test public final void testRecordTypeExprFloatSizeUnsupported()
+  @Test
+  public final void testRecordTypeExprFloatSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -210,7 +217,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testRecordTypeExprStringEncodingSupported()
+  @Test
+  public final void testRecordTypeExprStringEncodingSupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -236,7 +244,8 @@ import java.math.BigInteger;
     Assert.assertEquals("UTF-8", ti.getEncoding());
   }
 
-  @Test public final void testRecordTypeExprStringEncodingUnsupported()
+  @Test
+  public final void testRecordTypeExprStringEncodingUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -256,7 +265,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testRecordTypeExprArray_0()
+  @Test
+  public final void testRecordTypeExprArray_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -281,7 +291,8 @@ import java.math.BigInteger;
     Assert.assertEquals(TIntegerSigned.class, ta.getElementType().getClass());
   }
 
-  @Test public final void testRecordTypeExprBooleanSet_0()
+  @Test
+  public final void testRecordTypeExprBooleanSet_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -301,7 +312,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(8L), ta.getSizeInBits().getValue());
   }
 
-  @Test public final void testRecordTypeExprBooleanSet_Error0()
+  @Test
+  public final void testRecordTypeExprBooleanSet_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -321,7 +333,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testRecordTypeExprBooleanSet_Error1()
+  @Test
+  public final void testRecordTypeExprBooleanSet_Error1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -341,7 +354,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testRecordTypeExprBooleanSet_1()
+  @Test
+  public final void testRecordTypeExprBooleanSet_1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -361,7 +375,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(64L), ta.getSizeInBits().getValue());
   }
 
-  @Test public final void testTypeExprVectorSizeUnsupported()
+  @Test
+  public final void testTypeExprVectorSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -381,7 +396,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprVectorNonScalar()
+  @Test
+  public final void testTypeExprVectorNonScalar()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -401,7 +417,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprVectorIntegerUnsupported()
+  @Test
+  public final void testTypeExprVectorIntegerUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -421,7 +438,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprVector_0()
+  @Test
+  public final void testTypeExprVector_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -442,7 +460,8 @@ import java.math.BigInteger;
     Assert.assertEquals(TIntegerSigned.class, t.getElementType().getClass());
   }
 
-  @Test public final void testTypeExprVector_1()
+  @Test
+  public final void testTypeExprVector_1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -463,7 +482,8 @@ import java.math.BigInteger;
     Assert.assertEquals(TFloat.class, t.getElementType().getClass());
   }
 
-  @Test public final void testTypeExprMatrixUnsupported()
+  @Test
+  public final void testTypeExprMatrixUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -483,7 +503,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprMatrixNonScalar()
+  @Test
+  public final void testTypeExprMatrixNonScalar()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -503,7 +524,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprMatrixElementUnsupported_0()
+  @Test
+  public final void testTypeExprMatrixElementUnsupported_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -523,7 +545,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprMatrixElementUnsupported_1()
+  @Test
+  public final void testTypeExprMatrixElementUnsupported_1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -543,7 +566,8 @@ import java.math.BigInteger;
     ch.checkTypeExpression(te);
   }
 
-  @Test public final void testTypeExprMatrix_0()
+  @Test
+  public final void testTypeExprMatrix_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -565,7 +589,8 @@ import java.math.BigInteger;
     Assert.assertEquals(TFloat.class, t.getElementType().getClass());
   }
 
-  @Test public final void testTypeExprMatrix_1()
+  @Test
+  public final void testTypeExprMatrix_1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -588,7 +613,8 @@ import java.math.BigInteger;
     Assert.assertEquals(TIntegerSigned.class, t.getElementType().getClass());
   }
 
-  @Test public final void testTypeDeclRecordField_0()
+  @Test
+  public final void testTypeDeclRecordField_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -615,7 +641,8 @@ import java.math.BigInteger;
     this.checkRecordInvariants(tr, tt);
   }
 
-  @Test public final void testTypeDeclRecordPadding_0()
+  @Test
+  public final void testTypeDeclRecordPadding_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -648,7 +675,8 @@ import java.math.BigInteger;
       f.getSizeInBits().getValue());
   }
 
-  @Test public final void testTypeDeclRecordPaddingOctets_Error0()
+  @Test
+  public final void testTypeDeclRecordPaddingOctets_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -700,7 +728,8 @@ import java.math.BigInteger;
       k -> Assert.assertTrue("Map contains " + k, tr_named.containsKey(k)));
   }
 
-  @Test public final void testTypeExprName_0()
+  @Test
+  public final void testTypeExprName_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -757,7 +786,8 @@ import java.math.BigInteger;
       k -> Assert.assertTrue("Map contains " + k, tr_named.containsKey(k)));
   }
 
-  @Test public final void testTypeDeclPackedField_0()
+  @Test
+  public final void testTypeDeclPackedField_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -784,7 +814,8 @@ import java.math.BigInteger;
     this.checkPackedInvariants(tr, tt);
   }
 
-  @Test public final void testTypeDeclPackedPadding_0()
+  @Test
+  public final void testTypeDeclPackedPadding_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -815,7 +846,8 @@ import java.math.BigInteger;
     Assert.assertEquals(BigInteger.valueOf(8L), f.getSize().getValue());
   }
 
-  @Test public final void testTypeDeclPackedPaddingBits_Error0()
+  @Test
+  public final void testTypeDeclPackedPaddingBits_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -839,7 +871,8 @@ import java.math.BigInteger;
           this.newStringSExpr("(packed T [(padding-bits 0)])"))));
   }
 
-  @Test public final void testTypeDeclPackedField_Error0()
+  @Test
+  public final void testTypeDeclPackedField_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -863,7 +896,8 @@ import java.math.BigInteger;
           this.newStringSExpr("(packed T [(field x [boolean-set 1 (x)])])"))));
   }
 
-  @Test public final void testTypeDeclPackedSize_Error0()
+  @Test
+  public final void testTypeDeclPackedSize_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -887,7 +921,8 @@ import java.math.BigInteger;
           this.newStringSExpr("(packed T [(field x [integer signed 4])])"))));
   }
 
-  @Test public final void testRecordTypeExprIntegerSignedSizeUnsupported()
+  @Test
+  public final void testRecordTypeExprIntegerSignedSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -912,7 +947,8 @@ import java.math.BigInteger;
             "(record T [(field x [integer signed 128])])"))));
   }
 
-  @Test public final void testRecordTypeExprIntegerUnsignedSizeUnsupported()
+  @Test
+  public final void testRecordTypeExprIntegerUnsignedSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -989,7 +1025,8 @@ import java.math.BigInteger;
             "(record T [(field x [integer signed-normalized 128])])"))));
   }
 
-  @Test public final void testPackedTypeExprIntegerSignedSizeUnsupported()
+  @Test
+  public final void testPackedTypeExprIntegerSignedSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -1014,7 +1051,8 @@ import java.math.BigInteger;
             "(packed T [(field x [integer signed 128])])"))));
   }
 
-  @Test public final void testPackedTypeExprIntegerUnsignedSizeUnsupported()
+  @Test
+  public final void testPackedTypeExprIntegerUnsignedSizeUnsupported()
     throws Exception
   {
     final JPRAParserType p = this.newParser();

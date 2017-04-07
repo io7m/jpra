@@ -18,4 +18,5 @@
  * Shared compiler types.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.compiler.core;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.compiler.core;

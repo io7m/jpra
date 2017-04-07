@@ -33,7 +33,8 @@ import java.nio.ByteBuffer;
 
 public final class NestedString0Test
 {
-  @Test public void testNesting()
+  @Test
+  public void testNesting()
   {
     final ByteBuffer buf = ByteBuffer.allocate(2 * 36);
     final JPRACursor1DType<NestedString0Type> c =

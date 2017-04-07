@@ -79,6 +79,7 @@ public interface JPRAParserType
    * EOF has been encountered.
    *
    * @param lex Lexical information, if any
+   *
    * @throws JPRACompilerParseException On parse errors
    */
 

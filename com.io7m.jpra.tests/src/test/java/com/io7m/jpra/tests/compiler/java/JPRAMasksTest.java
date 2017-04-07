@@ -19,7 +19,6 @@ package com.io7m.jpra.tests.compiler.java;
 import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jpra.compiler.java.JPRAMasks;
 import org.hamcrest.core.StringContains;
-import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;

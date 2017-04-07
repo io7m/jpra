@@ -128,7 +128,7 @@ public final class Main
       arity = 1,
       description = "Source directory",
       name = "--source-directory",
-      required = true) private String       source_directory;
+      required = true) private String source_directory;
     @Arguments(
       description = "Packages to be checked",
       required = true) private List<String> packages;
@@ -142,7 +142,8 @@ public final class Main
 
     }
 
-    @Override public void run()
+    @Override
+    public void run()
     {
       this.setup();
 
@@ -195,12 +196,12 @@ public final class Main
       arity = 1,
       description = "Source directory",
       name = "--source-directory",
-      required = true) private String       source_directory;
+      required = true) private String source_directory;
     @Option(
       arity = 1,
       description = "Target directory",
       name = "--target-directory",
-      required = true) private String       target_directory;
+      required = true) private String target_directory;
     @Arguments(
       description = "Packages to be exported",
       required = true) private List<String> packages;
@@ -214,7 +215,8 @@ public final class Main
 
     }
 
-    @Override public void run()
+    @Override
+    public void run()
     {
       this.setup();
 

@@ -141,6 +141,44 @@ public final class JPRAChecker implements JPRACheckerType
     return new JPRAChecker(c, caps);
   }
 
+  private static <T extends SizeUnitType> Size<T> evaluateSize(
+    final SizeExprType<IdentifierType, TType> se)
+  {
+    return se.matchSizeExpression(
+      new SizeExprMatcherType<IdentifierType, TType, Size<T>,
+        UnreachableCodeException>()
+      {
+        @Override
+        public Size<T> matchConstant(
+          final SizeExprConstant<IdentifierType, TType> s)
+        {
+          return new Size<>(s.getValue());
+        }
+
+        @Override
+        public Size<T> matchInOctets(
+          final SizeExprInOctets<IdentifierType, TType> s)
+        {
+          // TODO: Generated method stub!
+          throw new UnimplementedCodeException();
+        }
+
+        @Override
+        public Size<T> matchInBits(
+          final SizeExprInBits<IdentifierType, TType> s)
+        {
+          // TODO: Generated method stub!
+          throw new UnimplementedCodeException();
+        }
+      });
+  }
+
+  private static SizeExprType<IdentifierType, TType> checkSizeExprConstant(
+    final SizeExprConstant<IdentifierType, Untyped> s)
+  {
+    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
+  }
+
   @Override
   public void checkPackageBegin(
     final StatementPackageBegin<IdentifierType, Untyped> s)
@@ -757,7 +795,8 @@ public final class JPRAChecker implements JPRACheckerType
   {
     final SizeExprType<IdentifierType, TType> size_expr =
       this.checkSizeExpr(e.getSizeExpression());
-    final Size<SizeUnitOctetsType> size_octets = JPRAChecker.evaluateSize(size_expr);
+    final Size<SizeUnitOctetsType> size_octets = JPRAChecker.evaluateSize(
+      size_expr);
 
     if (!BOOLEAN_SET_SIZES.includesValue(size_octets.getValue())) {
       throw JPRACompilerCheckerException.booleanSetSizeInvalid(
@@ -933,38 +972,6 @@ public final class JPRAChecker implements JPRACheckerType
     return rv;
   }
 
-  private static <T extends SizeUnitType> Size<T> evaluateSize(
-    final SizeExprType<IdentifierType, TType> se)
-  {
-    return se.matchSizeExpression(
-      new SizeExprMatcherType<IdentifierType, TType, Size<T>,
-        UnreachableCodeException>()
-      {
-        @Override
-        public Size<T> matchConstant(
-          final SizeExprConstant<IdentifierType, TType> s)
-        {
-          return new Size<>(s.getValue());
-        }
-
-        @Override
-        public Size<T> matchInOctets(
-          final SizeExprInOctets<IdentifierType, TType> s)
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-
-        @Override
-        public Size<T> matchInBits(
-          final SizeExprInBits<IdentifierType, TType> s)
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-      });
-  }
-
   private SizeExprType<IdentifierType, TType> checkSizeExpr(
     final SizeExprType<IdentifierType, Untyped> e)
     throws JPRACompilerCheckerException
@@ -1013,12 +1020,6 @@ public final class JPRAChecker implements JPRACheckerType
   {
     return new SizeExprInOctets<>(
       this.checkTypeExpression(s.getTypeExpression()));
-  }
-
-  private static SizeExprType<IdentifierType, TType> checkSizeExprConstant(
-    final SizeExprConstant<IdentifierType, Untyped> s)
-  {
-    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
   }
 
   private enum TypeExpressionContext

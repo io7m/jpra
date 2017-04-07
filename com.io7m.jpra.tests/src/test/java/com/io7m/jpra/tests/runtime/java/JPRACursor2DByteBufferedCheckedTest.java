@@ -33,7 +33,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
 {
   @Rule public ExpectedException expected = ExpectedException.none();
 
-  @Test public void testElementSizeZero()
+  @Test
+  public void testElementSizeZero()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -45,7 +46,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testWidthNegative()
+  @Test
+  public void testWidthNegative()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -57,7 +59,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testHeightNegative()
+  @Test
+  public void testHeightNegative()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -69,7 +72,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testRegionTooSmall()
+  @Test
+  public void testRegionTooSmall()
   {
     final ByteBuffer buf = ByteBuffer.allocate(50);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -83,7 +87,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferIdentity()
+  @Test
+  public void testBufferIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueType v = () -> 1;
@@ -99,7 +104,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.assertEquals(0L, c.getByteOffsetObservable().value());
   }
 
-  @Test public void testBufferRowStartsIdentity()
+  @Test
+  public void testBufferRowStartsIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -115,7 +121,9 @@ public final class JPRACursor2DByteBufferedCheckedTest
       Assert.assertEquals(0L, (long) c.getElementX());
       Assert.assertEquals((long) row, (long) c.getElementY());
       Assert.assertEquals(v, c.getElementView());
-      Assert.assertEquals((long) row * (3L * 10L), c.getByteOffsetObservable().value());
+      Assert.assertEquals(
+        (long) row * (3L * 10L),
+        c.getByteOffsetObservable().value());
       final String text = String.format(
         "[Cursor 0,%d/%d,%d]",
         Integer.valueOf(c.getElementY()),
@@ -125,7 +133,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     }
   }
 
-  @Test public void testBufferRowOutOfRange0()
+  @Test
+  public void testBufferRowOutOfRange0()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -142,7 +151,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferRowOutOfRange1()
+  @Test
+  public void testBufferRowOutOfRange1()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -159,7 +169,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferColumnOutOfRange0()
+  @Test
+  public void testBufferColumnOutOfRange0()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -176,7 +187,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferColumnOutOfRange1()
+  @Test
+  public void testBufferColumnOutOfRange1()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -193,7 +205,8 @@ public final class JPRACursor2DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferColumnStartsIdentity()
+  @Test
+  public void testBufferColumnStartsIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(300);
     final JPRAValueType v = () -> 3;
@@ -209,7 +222,9 @@ public final class JPRACursor2DByteBufferedCheckedTest
       Assert.assertEquals((long) column, (long) c.getElementX());
       Assert.assertEquals(0L, (long) c.getElementY());
       Assert.assertEquals(v, c.getElementView());
-      Assert.assertEquals((long) column * 3L, c.getByteOffsetObservable().value());
+      Assert.assertEquals(
+        (long) column * 3L,
+        c.getByteOffsetObservable().value());
 
       final String text = String.format(
         "[Cursor %d,0/%d,%d]",

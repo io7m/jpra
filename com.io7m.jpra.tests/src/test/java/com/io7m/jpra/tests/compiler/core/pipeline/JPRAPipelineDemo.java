@@ -20,7 +20,6 @@ import com.gs.collections.impl.factory.Maps;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.compiler.core.checker.JPRAChecker;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
@@ -42,7 +41,6 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.jsx.SExpressionType;
-import com.io7m.jsx.lexer.JSXLexer;
 import com.io7m.jsx.api.lexer.JSXLexerConfiguration;
 import com.io7m.jsx.api.lexer.JSXLexerType;
 import com.io7m.jsx.api.parser.JSXParserConfiguration;
@@ -81,17 +79,20 @@ public final class JPRAPipelineDemo
   {
     final JPRAPackageLoaderType loader = (c, p) -> new PackageContextType()
     {
-      @Override public GlobalContextType getGlobalContext()
+      @Override
+      public GlobalContextType getGlobalContext()
       {
         return c;
       }
 
-      @Override public Map<TypeName, TypeUserDefinedType> getTypes()
+      @Override
+      public Map<TypeName, TypeUserDefinedType> getTypes()
       {
         return Maps.mutable.empty();
       }
 
-      @Override public PackageNameQualified getName()
+      @Override
+      public PackageNameQualified getName()
       {
         return p;
       }

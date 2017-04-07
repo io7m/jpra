@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
 
 public final class FloatsTest
 {
-  @Test public void testMeta()
+  @Test
+  public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<FloatsType> c =
@@ -55,7 +56,8 @@ public final class FloatsTest
       JPRATypeModel.JPRAFloat.of(64), v.metaF64Type());
   }
 
-  @Test public void testSetF16()
+  @Test
+  public void testSetF16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<FloatsType> c =
@@ -99,7 +101,8 @@ public final class FloatsTest
     }
   }
 
-  @Test public void testSetF32()
+  @Test
+  public void testSetF32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<FloatsType> c =
@@ -141,7 +144,8 @@ public final class FloatsTest
     }
   }
 
-  @Test public void testSetF64()
+  @Test
+  public void testSetF64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<FloatsType> c =

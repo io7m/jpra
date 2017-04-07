@@ -32,7 +32,8 @@ public final class JPRACursor1DByteBufferedCheckedTest
 {
   @Rule public ExpectedException expected = ExpectedException.none();
 
-  @Test public void testElementSizeZero()
+  @Test
+  public void testElementSizeZero()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -44,7 +45,8 @@ public final class JPRACursor1DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferTooSmallOne()
+  @Test
+  public void testBufferTooSmallOne()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -57,7 +59,8 @@ public final class JPRACursor1DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferIdentity()
+  @Test
+  public void testBufferIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueType v = () -> 1;
@@ -72,7 +75,8 @@ public final class JPRACursor1DByteBufferedCheckedTest
     Assert.assertEquals("[Cursor 0/99]", c.toString());
   }
 
-  @Test public void testBufferSetIdentity()
+  @Test
+  public void testBufferSetIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(200);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -84,12 +88,15 @@ public final class JPRACursor1DByteBufferedCheckedTest
     for (int index = 0; index < 100; ++index) {
       c.setElementIndex(index);
       Assert.assertEquals((long) index, (long) c.getElementIndex());
-      Assert.assertEquals((long) (index * 2), c.getByteOffsetObservable().value());
+      Assert.assertEquals(
+        (long) (index * 2),
+        c.getByteOffsetObservable().value());
       Assert.assertEquals("[Cursor " + index + "/99]", c.toString());
     }
   }
 
-  @Test public void testBufferSetOutOfBounds0()
+  @Test
+  public void testBufferSetOutOfBounds0()
   {
     final ByteBuffer buf = ByteBuffer.allocate(200);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -103,7 +110,8 @@ public final class JPRACursor1DByteBufferedCheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferSetOutOfBounds1()
+  @Test
+  public void testBufferSetOutOfBounds1()
   {
     final ByteBuffer buf = ByteBuffer.allocate(200);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =

@@ -93,7 +93,8 @@ public abstract class JPRADriverContract
   protected abstract FileSystem getFilesystem()
     throws IOException;
 
-  @Test public final void testPackageNonexistent()
+  @Test
+  public final void testPackageNonexistent()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -133,7 +134,8 @@ public abstract class JPRADriverContract
     }
   }
 
-  @Test public final void testPackageCircular()
+  @Test
+  public final void testPackageCircular()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -193,7 +195,8 @@ public abstract class JPRADriverContract
     }
   }
 
-  @Test public final void testPackageEmpty()
+  @Test
+  public final void testPackageEmpty()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -235,7 +238,8 @@ public abstract class JPRADriverContract
     }
   }
 
-  @Test public final void testPackageUnparseable()
+  @Test
+  public final void testPackageUnparseable()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -282,7 +286,8 @@ public abstract class JPRADriverContract
     }
   }
 
-  @Test public final void testPackageTwice()
+  @Test
+  public final void testPackageTwice()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -318,12 +323,14 @@ public abstract class JPRADriverContract
   private static class LoggingCauseMatcher<T extends Throwable>
     extends TypeSafeDiagnosingMatcher<T>
   {
-    @Override public void describeTo(final Description description)
+    @Override
+    public void describeTo(final Description description)
     {
 
     }
 
-    @Override protected boolean matchesSafely(
+    @Override
+    protected boolean matchesSafely(
       final T item,
       final Description mismatchDescription)
     {

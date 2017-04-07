@@ -51,8 +51,8 @@ final class RecordFieldInterfaceProcessor
   implements TypeMatcherType<Unit, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
-  private final MethodSelection    methods;
+  private final TypeSpec.Builder class_builder;
+  private final MethodSelection methods;
 
   RecordFieldInterfaceProcessor(
     final TRecord.FieldValue in_field,
@@ -76,7 +76,7 @@ final class RecordFieldInterfaceProcessor
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
       getb.addJavadoc(
         "@return The offset in octets of the {@code $L} field, from the start"
-        + " of the type",
+          + " of the type",
         this.field.getName());
       getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       getb.returns(int.class);
@@ -110,13 +110,15 @@ final class RecordFieldInterfaceProcessor
     }
   }
 
-  @Override public Unit matchArray(final TArray t)
+  @Override
+  public Unit matchArray(final TArray t)
   {
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
   }
 
-  @Override public Unit matchString(final TString t)
+  @Override
+  public Unit matchString(final TString t)
   {
     if (this.methods.wantGetters()) {
       final String getter_name =
@@ -147,7 +149,8 @@ final class RecordFieldInterfaceProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchBooleanSet(final TBooleanSet t)
+  @Override
+  public Unit matchBooleanSet(final TBooleanSet t)
   {
     final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
     for (final FieldName f : ordered) {
@@ -181,7 +184,8 @@ final class RecordFieldInterfaceProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchInteger(final TIntegerType t)
+  @Override
+  public Unit matchInteger(final TIntegerType t)
   {
     final RecordFieldInterfaceIntegerProcessor p =
       new RecordFieldInterfaceIntegerProcessor(
@@ -189,7 +193,8 @@ final class RecordFieldInterfaceProcessor
     return t.matchTypeInteger(p);
   }
 
-  @Override public Unit matchFloat(final TFloat t)
+  @Override
+  public Unit matchFloat(final TFloat t)
   {
     final BigInteger size = t.getSizeInBits().getValue();
 
@@ -270,7 +275,8 @@ final class RecordFieldInterfaceProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchVector(final TVector t)
+  @Override
+  public Unit matchVector(final TVector t)
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
 
@@ -303,7 +309,8 @@ final class RecordFieldInterfaceProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchMatrix(final TMatrix t)
+  @Override
+  public Unit matchMatrix(final TMatrix t)
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
 
@@ -336,7 +343,8 @@ final class RecordFieldInterfaceProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchRecord(final TRecord t)
+  @Override
+  public Unit matchRecord(final TRecord t)
   {
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
     return Unit.unit();
@@ -391,7 +399,8 @@ final class RecordFieldInterfaceProcessor
     }
   }
 
-  @Override public Unit matchPacked(final TPacked t)
+  @Override
+  public Unit matchPacked(final TPacked t)
   {
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
     return Unit.unit();

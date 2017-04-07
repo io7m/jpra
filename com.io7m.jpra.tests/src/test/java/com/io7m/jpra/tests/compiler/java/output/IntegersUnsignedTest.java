@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
 
 public final class IntegersUnsignedTest
 {
-  @Test public void testMeta()
+  @Test
+  public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -59,7 +60,8 @@ public final class IntegersUnsignedTest
       JPRATypeModel.JPRAIntegerUnsigned.of(64), v.metaU64Type());
   }
 
-  @Test public void testSetU8()
+  @Test
+  public void testSetU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -87,7 +89,8 @@ public final class IntegersUnsignedTest
     }
   }
 
-  @Test public void testRangeU8()
+  @Test
+  public void testRangeU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -99,7 +102,8 @@ public final class IntegersUnsignedTest
     Assert.assertEquals(0b11111111L, Byte.toUnsignedLong(v.getU8()));
   }
 
-  @Test public void testSetU16()
+  @Test
+  public void testSetU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -128,7 +132,8 @@ public final class IntegersUnsignedTest
     }
   }
 
-  @Test public void testRangeU16()
+  @Test
+  public void testRangeU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -140,7 +145,8 @@ public final class IntegersUnsignedTest
     Assert.assertEquals(0b11111111_11111111L, Short.toUnsignedLong(v.getU16()));
   }
 
-  @Test public void testSetU32()
+  @Test
+  public void testSetU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -169,7 +175,8 @@ public final class IntegersUnsignedTest
     }
   }
 
-  @Test public void testRangeU32()
+  @Test
+  public void testRangeU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -183,7 +190,8 @@ public final class IntegersUnsignedTest
       Integer.toUnsignedLong(v.getU32()));
   }
 
-  @Test public void testSetU64()
+  @Test
+  public void testSetU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedType> c =
@@ -211,7 +219,8 @@ public final class IntegersUnsignedTest
     }
   }
 
-  @Test public void testRangeU64()
+  @Test
+  public void testRangeU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedType> c =

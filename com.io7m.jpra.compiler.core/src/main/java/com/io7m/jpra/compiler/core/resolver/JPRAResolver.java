@@ -140,6 +140,12 @@ public final class JPRAResolver implements JPRAResolverType
     return new JPRAResolver(c, in_expected_package);
   }
 
+  private static SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
+    final SizeExprConstant<Unresolved, Untyped> s)
+  {
+    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
+  }
+
   @Override
   public Optional<PackageNameQualified> resolveGetCurrentPackage()
   {
@@ -815,11 +821,5 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new SizeExprInOctets<>(
       this.resolveTypeExpression(s.getTypeExpression()));
-  }
-
-  private static SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
-    final SizeExprConstant<Unresolved, Untyped> s)
-  {
-    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
   }
 }

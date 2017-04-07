@@ -421,15 +421,6 @@ public final class JPRACompilerParseException extends JPRACompilerException
   }
 
   /**
-   * @return The parser error code
-   */
-
-  public JPRAParseErrorCode getErrorCode()
-  {
-    return this.code;
-  }
-
-  /**
    * @param e       The expression
    * @param message The exception message
    *
@@ -446,5 +437,14 @@ public final class JPRACompilerParseException extends JPRACompilerException
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.UNRECOGNIZED_PACKED_FIELD_KEYWORD,
       message);
+  }
+
+  /**
+   * @return The parser error code
+   */
+
+  public JPRAParseErrorCode getErrorCode()
+  {
+    return this.code;
   }
 }

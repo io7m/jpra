@@ -21,7 +21,8 @@ import com.io7m.jpra.compiler.java.JPRAJavaGeneratorType;
 
 public final class JPRAJavaGeneratorTest extends JPRAJavaGeneratorContract
 {
-  @Override protected JPRAJavaGeneratorType getJavaGenerator()
+  @Override
+  protected JPRAJavaGeneratorType getJavaGenerator()
   {
     return JPRAJavaGenerator.newGenerator();
   }

@@ -18,4 +18,5 @@
  * Driver.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.compiler.core.driver;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.compiler.core.driver;

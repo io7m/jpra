@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
 
 public final class OpenGL4444Test
 {
-  @Test public void testSize()
+  @Test
+  public void testSize()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -40,7 +41,8 @@ public final class OpenGL4444Test
     Assert.assertEquals(2L, (long) v.sizeOctets());
   }
 
-  @Test public void testSetR()
+  @Test
+  public void testSetR()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -64,7 +66,8 @@ public final class OpenGL4444Test
     }
   }
 
-  @Test public void testSetB()
+  @Test
+  public void testSetB()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -88,7 +91,8 @@ public final class OpenGL4444Test
     }
   }
 
-  @Test public void testSetA()
+  @Test
+  public void testSetA()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -112,7 +116,8 @@ public final class OpenGL4444Test
     }
   }
 
-  @Test public void testRangeR()
+  @Test
+  public void testRangeR()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -132,7 +137,8 @@ public final class OpenGL4444Test
     Assert.assertEquals(1.0, v.getR(), 0.0);
   }
 
-  @Test public void testRangeB()
+  @Test
+  public void testRangeB()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -152,7 +158,8 @@ public final class OpenGL4444Test
     Assert.assertEquals(1.0, v.getB(), 0.0);
   }
 
-  @Test public void testRangeA()
+  @Test
+  public void testRangeA()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -172,7 +179,8 @@ public final class OpenGL4444Test
     Assert.assertEquals(1.0, v.getA(), 0.0);
   }
 
-  @Test public void testSetG()
+  @Test
+  public void testSetG()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -196,7 +204,8 @@ public final class OpenGL4444Test
     }
   }
 
-  @Test public void testRangeG()
+  @Test
+  public void testRangeG()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL4444Type> c =
@@ -216,7 +225,8 @@ public final class OpenGL4444Test
     Assert.assertEquals(1.0, v.getG(), 0.0);
   }
 
-  @Test public void testStructureRGBA()
+  @Test
+  public void testStructureRGBA()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL4444Type> c =

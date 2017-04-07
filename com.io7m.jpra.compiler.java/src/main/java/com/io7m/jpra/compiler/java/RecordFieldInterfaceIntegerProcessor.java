@@ -41,8 +41,8 @@ final class RecordFieldInterfaceIntegerProcessor
   implements TypeIntegerMatcherType<Unit, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
-  private final MethodSelection    methods;
+  private final TypeSpec.Builder class_builder;
+  private final MethodSelection methods;
 
   RecordFieldInterfaceIntegerProcessor(
     final TRecord.FieldValue in_field,
@@ -54,23 +54,27 @@ final class RecordFieldInterfaceIntegerProcessor
     this.methods = NullCheck.notNull(in_methods);
   }
 
-  @Override public Unit matchIntegerUnsigned(final TIntegerUnsigned t)
+  @Override
+  public Unit matchIntegerUnsigned(final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSigned(final TIntegerSigned t)
+  @Override
+  public Unit matchIntegerSigned(final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSignedNormalized(
+  @Override
+  public Unit matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerUnsignedNormalized(
+  @Override
+  public Unit matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());

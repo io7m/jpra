@@ -52,8 +52,8 @@ public final class PackedFieldInterfaceProcessor
   TypeIntegerMatcherType<Unit, UnreachableCodeException>
 {
   private final TPacked.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
-  private final MethodSelection    methods;
+  private final TypeSpec.Builder class_builder;
+  private final MethodSelection methods;
 
   PackedFieldInterfaceProcessor(
     final TPacked.FieldValue in_field,
@@ -110,7 +110,8 @@ public final class PackedFieldInterfaceProcessor
       f.matchField(
         new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(final TPacked.FieldValue f)
+          @Override
+          public Unit matchFieldValue(final TPacked.FieldValue f)
           {
             final FieldName f_name = f.getName();
             setb.addJavadoc(
@@ -130,14 +131,16 @@ public final class PackedFieldInterfaceProcessor
       f.matchField(
         new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(final TPacked.FieldValue f)
+          @Override
+          public Unit matchFieldValue(final TPacked.FieldValue f)
           {
             final BigInteger f_size = f.getSize().getValue();
             final FieldName f_name = f.getName();
             final Class<?> f_type = f.getType().matchTypeInteger(
               new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
               {
-                @Override public Class<?> matchIntegerUnsigned(
+                @Override
+                public Class<?> matchIntegerUnsigned(
                   final TIntegerUnsigned t)
                 {
                   return
@@ -145,7 +148,8 @@ public final class PackedFieldInterfaceProcessor
                       f_size);
                 }
 
-                @Override public Class<?> matchIntegerSigned(
+                @Override
+                public Class<?> matchIntegerSigned(
                   final TIntegerSigned t)
                 {
                   return
@@ -153,13 +157,15 @@ public final class PackedFieldInterfaceProcessor
                       f_size);
                 }
 
-                @Override public Class<?> matchIntegerSignedNormalized(
+                @Override
+                public Class<?> matchIntegerSignedNormalized(
                   final TIntegerSignedNormalized t)
                 {
                   return double.class;
                 }
 
-                @Override public Class<?> matchIntegerUnsignedNormalized(
+                @Override
+                public Class<?> matchIntegerUnsignedNormalized(
                   final TIntegerUnsignedNormalized t)
                 {
                   return double.class;
@@ -181,70 +187,83 @@ public final class PackedFieldInterfaceProcessor
     class_builder.addMethod(setb.build());
   }
 
-  @Override public Unit matchArray(final TArray t)
+  @Override
+  public Unit matchArray(final TArray t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchString(final TString t)
+  @Override
+  public Unit matchString(final TString t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchBooleanSet(final TBooleanSet t)
+  @Override
+  public Unit matchBooleanSet(final TBooleanSet t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchInteger(final TIntegerType t)
+  @Override
+  public Unit matchInteger(final TIntegerType t)
   {
     return t.matchTypeInteger(this);
   }
 
-  @Override public Unit matchFloat(final TFloat t)
+  @Override
+  public Unit matchFloat(final TFloat t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchVector(final TVector t)
+  @Override
+  public Unit matchVector(final TVector t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchMatrix(final TMatrix t)
+  @Override
+  public Unit matchMatrix(final TMatrix t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchRecord(final TRecord t)
+  @Override
+  public Unit matchRecord(final TRecord t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchPacked(final TPacked t)
+  @Override
+  public Unit matchPacked(final TPacked t)
   {
     throw new UnreachableCodeException();
   }
 
-  @Override public Unit matchIntegerUnsigned(
+  @Override
+  public Unit matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSigned(
+  @Override
+  public Unit matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSignedNormalized(
+  @Override
+  public Unit matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerUnsignedNormalized(
+  @Override
+  public Unit matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());

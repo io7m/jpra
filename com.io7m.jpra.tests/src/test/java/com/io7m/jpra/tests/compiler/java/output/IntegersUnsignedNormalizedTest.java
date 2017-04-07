@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
 
 public final class IntegersUnsignedNormalizedTest
 {
-  @Test public void testMeta()
+  @Test
+  public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -59,7 +60,8 @@ public final class IntegersUnsignedNormalizedTest
       JPRATypeModel.JPRAIntegerUnsignedNormalized.of(64), v.metaUn64Type());
   }
 
-  @Test public void testSetU8()
+  @Test
+  public void testSetU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -87,7 +89,8 @@ public final class IntegersUnsignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU8()
+  @Test
+  public void testRangeU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -107,7 +110,8 @@ public final class IntegersUnsignedNormalizedTest
     Assert.assertEquals(1.0, v.getUn8(), 0.0);
   }
 
-  @Test public void testSetU16()
+  @Test
+  public void testSetU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -136,7 +140,8 @@ public final class IntegersUnsignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU16()
+  @Test
+  public void testRangeU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -158,7 +163,8 @@ public final class IntegersUnsignedNormalizedTest
     Assert.assertEquals(1.0, v.getUn16(), 0.0);
   }
 
-  @Test public void testSetU32()
+  @Test
+  public void testSetU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -187,7 +193,8 @@ public final class IntegersUnsignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU32()
+  @Test
+  public void testRangeU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -211,7 +218,8 @@ public final class IntegersUnsignedNormalizedTest
     Assert.assertEquals(1.0, v.getUn32(), 0.0);
   }
 
-  @Test public void testSetU64()
+  @Test
+  public void testSetU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =
@@ -239,7 +247,8 @@ public final class IntegersUnsignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU64()
+  @Test
+  public void testRangeU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersUnsignedNormalizedType> c =

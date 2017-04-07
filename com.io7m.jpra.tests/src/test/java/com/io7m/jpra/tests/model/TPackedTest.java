@@ -39,7 +39,8 @@ import java.util.Optional;
 
 public final class TPackedTest
 {
-  @Test public void testLSBMSBRanges_0()
+  @Test
+  public void testLSBMSBRanges_0()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -60,7 +61,8 @@ public final class TPackedTest
     Assert.assertEquals(Size.zero(), tp.getSizeInBits());
   }
 
-  @Test public void testLSBMSBRanges_1()
+  @Test
+  public void testLSBMSBRanges_1()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =
@@ -131,7 +133,8 @@ public final class TPackedTest
     }
   }
 
-  @Test public void testLSBMSBRanges_2()
+  @Test
+  public void testLSBMSBRanges_2()
     throws Exception
   {
     final Optional<LexicalPosition<Path>> no_lex =

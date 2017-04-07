@@ -64,7 +64,8 @@ import org.junit.rules.ExpectedException;
 import java.math.BigInteger;
 import java.util.Optional;
 
-@SuppressWarnings("unchecked") public abstract class JPRAParserContract
+@SuppressWarnings("unchecked")
+public abstract class JPRAParserContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
@@ -76,7 +77,8 @@ import java.util.Optional;
   protected abstract SExpressionType newStringSExpr(
     final String expr);
 
-  @Test public final void testTypeExprIntegerUnsigned32_Error0()
+  @Test
+  public final void testTypeExprIntegerUnsigned32_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned)");
@@ -88,7 +90,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error0()
+  @Test
+  public final void testTypeExprInteger_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer)");
@@ -100,7 +103,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error1()
+  @Test
+  public final void testTypeExprInteger_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer ())");
@@ -112,7 +116,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error2()
+  @Test
+  public final void testTypeExprInteger_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer \"x\")");
@@ -124,7 +129,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error3()
+  @Test
+  public final void testTypeExprInteger_Error3()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed \"x\")");
@@ -136,7 +142,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error4()
+  @Test
+  public final void testTypeExprInteger_Error4()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed ())");
@@ -148,7 +155,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprInteger_Error5()
+  @Test
+  public final void testTypeExprInteger_Error5()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer raspberry 23)");
@@ -160,7 +168,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerUnsigned32_Error1()
+  @Test
+  public final void testTypeExprIntegerUnsigned32_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned q)");
@@ -172,7 +181,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerUnsigned32_Correct0()
+  @Test
+  public final void testTypeExprIntegerUnsigned32_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer unsigned 32)");
@@ -189,7 +199,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeExprIntegerSigned32_Error0()
+  @Test
+  public final void testTypeExprIntegerSigned32_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed)");
@@ -201,7 +212,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerSigned32_Error1()
+  @Test
+  public final void testTypeExprIntegerSigned32_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed q)");
@@ -213,7 +225,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerSigned32_Correct0()
+  @Test
+  public final void testTypeExprIntegerSigned32_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(integer signed 32)");
@@ -230,7 +243,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeExprIntegerSignedNormalized32_Error0()
+  @Test
+  public final void testTypeExprIntegerSignedNormalized32_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -243,7 +257,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerSignedNormalized32_Error1()
+  @Test
+  public final void testTypeExprIntegerSignedNormalized32_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -256,7 +271,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerSignedNormalized32_Correct0()
+  @Test
+  public final void testTypeExprIntegerSignedNormalized32_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -275,7 +291,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeExprIntegerUnsignedNormalized32_Error0()
+  @Test
+  public final void testTypeExprIntegerUnsignedNormalized32_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -288,7 +305,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerUnsignedNormalized32_Error1()
+  @Test
+  public final void testTypeExprIntegerUnsignedNormalized32_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -301,7 +319,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprIntegerUnsignedNormalized32_Correct0()
+  @Test
+  public final void testTypeExprIntegerUnsignedNormalized32_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr(
@@ -320,7 +339,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeExpr_Error0()
+  @Test
+  public final void testTypeExpr_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
@@ -332,7 +352,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExpr_Error1()
+  @Test
+  public final void testTypeExpr_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"\"");
@@ -344,7 +365,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExpr_Error2()
+  @Test
+  public final void testTypeExpr_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(unknown)");
@@ -356,7 +378,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExpr_Error3()
+  @Test
+  public final void testTypeExpr_Error3()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(\"\")");
@@ -368,7 +391,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testSizeExpr_Error0()
+  @Test
+  public final void testSizeExpr_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
@@ -380,7 +404,8 @@ import java.util.Optional;
     p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeExpr_Error1()
+  @Test
+  public final void testSizeExpr_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"\"");
@@ -392,7 +417,8 @@ import java.util.Optional;
     p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeExpr_Error2()
+  @Test
+  public final void testSizeExpr_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-meters T)");
@@ -404,7 +430,8 @@ import java.util.Optional;
     p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeExpr_Constant_OK0()
+  @Test
+  public final void testSizeExpr_Constant_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("32");
@@ -416,7 +443,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), sc.getValue());
   }
 
-  @Test public final void testSizeExpr_Bits_OK0()
+  @Test
+  public final void testSizeExpr_Bits_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-bits T)");
@@ -430,7 +458,8 @@ import java.util.Optional;
     Assert.assertEquals("T", tr.getType().getValue());
   }
 
-  @Test public final void testSizeExpr_Bits_Error0()
+  @Test
+  public final void testSizeExpr_Bits_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-bits)");
@@ -442,7 +471,8 @@ import java.util.Optional;
     p.parseSizeExpression(e);
   }
 
-  @Test public final void testSizeExpr_Octets_OK0()
+  @Test
+  public final void testSizeExpr_Octets_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-octets T)");
@@ -457,7 +487,8 @@ import java.util.Optional;
     Assert.assertEquals("T", tr.getType().getValue());
   }
 
-  @Test public final void testSizeExpr_Octets_Error0()
+  @Test
+  public final void testSizeExpr_Octets_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(size-in-octets)");
@@ -469,7 +500,8 @@ import java.util.Optional;
     p.parseSizeExpression(e);
   }
 
-  @Test public final void testTypeExprFloat_Error0()
+  @Test
+  public final void testTypeExprFloat_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float)");
@@ -481,7 +513,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprFloat_Error1()
+  @Test
+  public final void testTypeExprFloat_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float ())");
@@ -493,7 +526,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprFloat_Error2()
+  @Test
+  public final void testTypeExprFloat_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float \"x\")");
@@ -505,7 +539,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprFloat_Correct0()
+  @Test
+  public final void testTypeExprFloat_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(float 32)");
@@ -522,7 +557,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), s.getValue());
   }
 
-  @Test public final void testTypeExprVector_Correct0()
+  @Test
+  public final void testTypeExprVector_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector T 3)");
@@ -539,7 +575,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
   }
 
-  @Test public final void testTypeExprVector_Error0()
+  @Test
+  public final void testTypeExprVector_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector)");
@@ -551,7 +588,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprVector_Error1()
+  @Test
+  public final void testTypeExprVector_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector 32)");
@@ -563,7 +601,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprVector_Error2()
+  @Test
+  public final void testTypeExprVector_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(vector T ())");
@@ -575,7 +614,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprMatrix_Correct0()
+  @Test
+  public final void testTypeExprMatrix_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 4 2)");
@@ -597,7 +637,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(2L), h.getValue());
   }
 
-  @Test public final void testTypeExprMatrix_Error0()
+  @Test
+  public final void testTypeExprMatrix_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T)");
@@ -609,7 +650,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprMatrix_Error1()
+  @Test
+  public final void testTypeExprMatrix_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 2)");
@@ -621,7 +663,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprMatrix_Error2()
+  @Test
+  public final void testTypeExprMatrix_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(matrix T 2 ())");
@@ -633,7 +676,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprArray_Correct0()
+  @Test
+  public final void testTypeExprArray_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array T 3)");
@@ -650,7 +694,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(3L), s.getValue());
   }
 
-  @Test public final void testTypeExprArray_Error0()
+  @Test
+  public final void testTypeExprArray_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array)");
@@ -662,7 +707,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprArray_Error1()
+  @Test
+  public final void testTypeExprArray_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array 32)");
@@ -674,7 +720,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprArray_Error2()
+  @Test
+  public final void testTypeExprArray_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(array T ())");
@@ -686,7 +733,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprString_Correct0()
+  @Test
+  public final void testTypeExprString_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string 64 \"UTF-8\")");
@@ -704,7 +752,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(64L), s.getValue());
   }
 
-  @Test public final void testTypeExprString_Error0()
+  @Test
+  public final void testTypeExprString_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string)");
@@ -716,7 +765,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprString_Error1()
+  @Test
+  public final void testTypeExprString_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string 32)");
@@ -728,7 +778,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprString_Error2()
+  @Test
+  public final void testTypeExprString_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(string T ())");
@@ -740,7 +791,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Correct0()
+  @Test
+  public final void testTypeExprBooleanSet_Correct0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x y z))");
@@ -758,7 +810,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(1L), s.getValue());
   }
 
-  @Test public final void testTypeExprBooleanSet_Error0()
+  @Test
+  public final void testTypeExprBooleanSet_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set)");
@@ -770,7 +823,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Error1()
+  @Test
+  public final void testTypeExprBooleanSet_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set x)");
@@ -782,7 +836,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Error2()
+  @Test
+  public final void testTypeExprBooleanSet_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 \"\")");
@@ -794,7 +849,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Error3()
+  @Test
+  public final void testTypeExprBooleanSet_Error3()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (x x))");
@@ -806,7 +862,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Error4()
+  @Test
+  public final void testTypeExprBooleanSet_Error4()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 (T))");
@@ -818,7 +875,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testTypeExprBooleanSet_Error5()
+  @Test
+  public final void testTypeExprBooleanSet_Error5()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(boolean-set 1 x)");
@@ -830,7 +888,8 @@ import java.util.Optional;
     p.parseTypeExpression(e);
   }
 
-  @Test public final void testPackageBegin_OK0()
+  @Test
+  public final void testPackageBegin_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin x.y.z)");
@@ -842,7 +901,8 @@ import java.util.Optional;
     Assert.assertEquals("x.y.z", pb.getPackageName().toString());
   }
 
-  @Test public final void testPackageImport_OK0()
+  @Test
+  public final void testPackageImport_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z as q)");
@@ -855,7 +915,8 @@ import java.util.Optional;
     Assert.assertEquals("q", pi.getUsing().toString());
   }
 
-  @Test public final void testPackageEnd_OK0()
+  @Test
+  public final void testPackageEnd_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-end)");
@@ -866,7 +927,8 @@ import java.util.Optional;
       StatementPackageEnd.class.cast(st);
   }
 
-  @Test public final void testPackageImport_Error0()
+  @Test
+  public final void testPackageImport_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import)");
@@ -878,7 +940,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageImport_Error1()
+  @Test
+  public final void testPackageImport_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z)");
@@ -890,7 +953,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageImport_Error2()
+  @Test
+  public final void testPackageImport_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z as)");
@@ -902,7 +966,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageImport_Error3()
+  @Test
+  public final void testPackageImport_Error3()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(import x.y.z T q)");
@@ -914,7 +979,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageBegin_Error0()
+  @Test
+  public final void testPackageBegin_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin)");
@@ -926,7 +992,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageBegin_Error1()
+  @Test
+  public final void testPackageBegin_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-begin T)");
@@ -938,7 +1005,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackageEnd_Error0()
+  @Test
+  public final void testPackageEnd_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(package-end T)");
@@ -950,7 +1018,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testStatement_Error0()
+  @Test
+  public final void testStatement_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("()");
@@ -962,7 +1031,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testStatement_Error1()
+  @Test
+  public final void testStatement_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("x");
@@ -974,7 +1044,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testStatement_Error2()
+  @Test
+  public final void testStatement_Error2()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("\"x\"");
@@ -986,7 +1057,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecordField_Error0()
+  @Test
+  public final void testRecordField_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-0.jpr");
@@ -998,7 +1070,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecordField_Error1()
+  @Test
+  public final void testRecordField_Error1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-1.jpr");
@@ -1010,7 +1083,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecordField_Error3()
+  @Test
+  public final void testRecordField_Error3()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-3.jpr");
@@ -1022,7 +1096,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecordField_Error6()
+  @Test
+  public final void testRecordField_Error6()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-field-invalid-6.jpr");
@@ -1034,7 +1109,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error0()
+  @Test
+  public final void testRecord_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-0.jpr");
@@ -1046,7 +1122,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error1()
+  @Test
+  public final void testRecord_Error1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-1.jpr");
@@ -1058,7 +1135,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error2()
+  @Test
+  public final void testRecord_Error2()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-2.jpr");
@@ -1070,7 +1148,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error3()
+  @Test
+  public final void testRecord_Error3()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-3.jpr");
@@ -1082,7 +1161,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error4()
+  @Test
+  public final void testRecord_Error4()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-4.jpr");
@@ -1094,7 +1174,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error5()
+  @Test
+  public final void testRecord_Error5()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-5.jpr");
@@ -1106,7 +1187,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_Error6()
+  @Test
+  public final void testRecord_Error6()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-record-invalid-6.jpr");
@@ -1118,7 +1200,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecordPaddingOctets_Error0()
+  @Test
+  public final void testRecordPaddingOctets_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr(
@@ -1131,7 +1214,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testRecord_OK0()
+  @Test
+  public final void testRecord_OK0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr(
@@ -1158,7 +1242,8 @@ import java.util.Optional;
     Assert.assertEquals(f_name, f0.getName());
   }
 
-  @Test public final void testRecord_OK1()
+  @Test
+  public final void testRecord_OK1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr(
@@ -1185,7 +1270,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(4L), size.getValue());
   }
 
-  @Test public final void testCommandSize_Error0()
+  @Test
+  public final void testCommandSize_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:size)");
@@ -1197,7 +1283,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testCommandSize_Error1()
+  @Test
+  public final void testCommandSize_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:size 32 32)");
@@ -1209,7 +1296,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testCommandSize_OK0()
+  @Test
+  public final void testCommandSize_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:size 32)");
@@ -1222,7 +1310,8 @@ import java.util.Optional;
     Assert.assertEquals(BigInteger.valueOf(32L), sc.getValue());
   }
 
-  @Test public final void testCommandType_Error0()
+  @Test
+  public final void testCommandType_Error0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:type)");
@@ -1234,7 +1323,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testCommandType_Error1()
+  @Test
+  public final void testCommandType_Error1()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:type T T)");
@@ -1246,7 +1336,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testCommandType_OK0()
+  @Test
+  public final void testCommandType_OK0()
     throws Exception
   {
     final SExpressionType e = this.newStringSExpr("(:type T)");
@@ -1262,23 +1353,8 @@ import java.util.Optional;
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  @Test public final void testPacked_Error0()
+  @Test
+  public final void testPacked_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-0.jpr");
@@ -1290,7 +1366,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error1()
+  @Test
+  public final void testPacked_Error1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-1.jpr");
@@ -1302,7 +1379,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error2()
+  @Test
+  public final void testPacked_Error2()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-2.jpr");
@@ -1314,7 +1392,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error3()
+  @Test
+  public final void testPacked_Error3()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-3.jpr");
@@ -1326,7 +1405,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error4()
+  @Test
+  public final void testPacked_Error4()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-4.jpr");
@@ -1338,7 +1418,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error5()
+  @Test
+  public final void testPacked_Error5()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-5.jpr");
@@ -1350,7 +1431,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_Error6()
+  @Test
+  public final void testPacked_Error6()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-invalid-6.jpr");
@@ -1362,7 +1444,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackedPaddingBits_Error0()
+  @Test
+  public final void testPackedPaddingBits_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr(
@@ -1375,7 +1458,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPacked_OK0()
+  @Test
+  public final void testPacked_OK0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-0.jpr");
@@ -1401,7 +1485,8 @@ import java.util.Optional;
     Assert.assertEquals(f_name, f0.getName());
   }
 
-  @Test public final void testPacked_OK1()
+  @Test
+  public final void testPacked_OK1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-1.jpr");
@@ -1428,11 +1513,8 @@ import java.util.Optional;
   }
 
 
-
-
-
-
-  @Test public final void testPackedField_Error0()
+  @Test
+  public final void testPackedField_Error0()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-0.jpr");
@@ -1444,7 +1526,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackedField_Error1()
+  @Test
+  public final void testPackedField_Error1()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-1.jpr");
@@ -1456,7 +1539,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackedField_Error3()
+  @Test
+  public final void testPackedField_Error3()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-3.jpr");
@@ -1468,7 +1552,8 @@ import java.util.Optional;
     p.parseStatement(e);
   }
 
-  @Test public final void testPackedField_Error6()
+  @Test
+  public final void testPackedField_Error6()
     throws Exception
   {
     final SExpressionType e = this.newFileSExpr("t-packed-field-invalid-6.jpr");

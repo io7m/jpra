@@ -31,7 +31,8 @@ public final class TypeSafeDiagnosingMatcherWith<T extends Throwable>
     this.after = NullCheck.notNull(in_after);
   }
 
-  @Override protected boolean matchesSafely(
+  @Override
+  protected boolean matchesSafely(
     final T item,
     final Description mismatch)
   {
@@ -39,7 +40,8 @@ public final class TypeSafeDiagnosingMatcherWith<T extends Throwable>
     return true;
   }
 
-  @Override public void describeTo(final Description description)
+  @Override
+  public void describeTo(final Description description)
   {
 
   }

@@ -54,27 +54,24 @@ import java.util.stream.Collectors;
 @Mojo(name = "generate-java", requiresProject = true)
 public final class JPRACodeGeneratorMojo extends AbstractMojo
 {
-  @Parameter(defaultValue = "${project}") private MavenProject project;
+  /**
+   * The list of packages that will be exported to Java source code.
+   */
 
+  @Parameter private final List<String> packages = Lists.mutable.empty();
+  @Parameter(defaultValue = "${project}") private MavenProject project;
   /**
    * The directory that will contain source files.
    */
 
   @Parameter(defaultValue = "${project.basedir}/src/main/jpra") private File
     sourceDirectory;
-
   /**
    * The directory that will contain generated Java files.
    */
 
   @Parameter(defaultValue = "${project.build.directory}/generated-sources")
   private File targetDirectory;
-
-  /**
-   * The list of packages that will be exported to Java source code.
-   */
-
-  @Parameter private final List<String> packages = Lists.mutable.empty();
 
   /**
    * Construct a plugin.
@@ -85,7 +82,8 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
 
   }
 
-  @Override public void execute()
+  @Override
+  public void execute()
     throws MojoExecutionException, MojoFailureException
   {
     final Log logger = this.getLog();

@@ -191,11 +191,12 @@ public abstract class JPRAJavaGeneratorContract
         null,
         null,
         diagnostic -> {
-          LOG.error("{}:{}:{}: {}",
-                    diagnostic.getCode(),
-                    Long.valueOf(diagnostic.getLineNumber()),
-                    Long.valueOf(diagnostic.getColumnNumber()),
-                    diagnostic.getMessage(Locale.getDefault()));
+          LOG.error(
+            "{}:{}:{}: {}",
+            diagnostic.getCode(),
+            Long.valueOf(diagnostic.getLineNumber()),
+            Long.valueOf(diagnostic.getColumnNumber()),
+            diagnostic.getMessage(Locale.getDefault()));
         },
         Arrays.asList(options),
         null,

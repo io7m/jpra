@@ -86,7 +86,8 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     return p;
   }
 
-  @Override public void writeType(
+  @Override
+  public void writeType(
     final Path path,
     final TypeUserDefinedType t)
     throws IOException
@@ -105,7 +106,8 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     t.matchTypeUserDefined(
       new TypeUserDefinedMatcherType<Unit, IOException>()
       {
-        @Override public Unit matchRecord(final TRecord r)
+        @Override
+        public Unit matchRecord(final TRecord r)
           throws IOException
         {
           final Path c_file = pkg_path.resolve(
@@ -137,7 +139,8 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
           return Unit.unit();
         }
 
-        @Override public Unit matchPacked(final TPacked r)
+        @Override
+        public Unit matchPacked(final TPacked r)
           throws IOException
         {
           final Path c_file = pkg_path.resolve(

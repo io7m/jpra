@@ -26,7 +26,6 @@ import com.io7m.jpra.compiler.core.resolver.JPRAResolverType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jsx.SExpressionType;
-import com.io7m.jsx.lexer.JSXLexer;
 import com.io7m.jsx.api.lexer.JSXLexerConfiguration;
 import com.io7m.jsx.api.lexer.JSXLexerType;
 import com.io7m.jsx.api.parser.JSXParserConfiguration;
@@ -65,25 +64,29 @@ public final class JPRAResolverTest extends JPRAResolverContract
     return JSXParser.newParser(pc.build(), lex);
   }
 
-  @Override protected JPRAParserType newParser()
+  @Override
+  protected JPRAParserType newParser()
   {
     final JSXSerializerType serial = JSXSerializerTrivial.newSerializer();
     return JPRAParser.newParser(serial, JPRAReferenceParser.newParser(serial));
   }
 
-  @Override protected JPRAResolverType newResolver(final GlobalContextType c)
+  @Override
+  protected JPRAResolverType newResolver(final GlobalContextType c)
   {
     return JPRAResolver.newResolver(c, Optional.empty());
   }
 
-  @Override protected JPRAResolverType newResolverForPackage(
+  @Override
+  protected JPRAResolverType newResolverForPackage(
     final GlobalContextType c,
     final PackageNameQualified p)
   {
     return JPRAResolver.newResolver(c, Optional.of(p));
   }
 
-  @Override protected SExpressionType newStringSExpr(final String expr)
+  @Override
+  protected SExpressionType newStringSExpr(final String expr)
   {
     try {
       final InputStream s = new ByteArrayInputStream(expr.getBytes("UTF-8"));

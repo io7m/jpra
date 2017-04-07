@@ -31,14 +31,16 @@ public final class JPRACodeGeneratorMojoTest
 
   @Rule public final TestMavenRuntime maven = new TestMavenRuntime();
 
-  @Test public void testEmpty()
+  @Test
+  public void testEmpty()
     throws Exception
   {
     final File basedir = this.resources.getBasedir("empty");
     this.maven.executeMojo(basedir, "generate-java");
   }
 
-  @Test(expected = MojoFailureException.class) public void testCompileFailure()
+  @Test(expected = MojoFailureException.class)
+  public void testCompileFailure()
     throws Exception
   {
     final File basedir = this.resources.getBasedir("compile-failure");
@@ -50,7 +52,8 @@ public final class JPRACodeGeneratorMojoTest
     this.maven.executeMojo(basedir, "generate-java", ps);
   }
 
-  @Test public void testCorrect0()
+  @Test
+  public void testCorrect0()
     throws Exception
   {
     final File basedir = this.resources.getBasedir("correct-0");

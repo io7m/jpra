@@ -52,7 +52,7 @@ final class RecordFieldImplementationConstructorProcessor
   implements TypeMatcherType<Unit, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
+  private final TypeSpec.Builder class_builder;
   private final MethodSpec.Builder constructor_builder;
 
   RecordFieldImplementationConstructorProcessor(
@@ -65,12 +65,14 @@ final class RecordFieldImplementationConstructorProcessor
     this.constructor_builder = NullCheck.notNull(in_constructor_builder);
   }
 
-  @Override public Unit matchArray(final TArray t)
+  @Override
+  public Unit matchArray(final TArray t)
   {
     return Unit.unit();
   }
 
-  @Override public Unit matchString(final TString t)
+  @Override
+  public Unit matchString(final TString t)
   {
     final FieldName f_name = this.field.getName();
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
@@ -115,7 +117,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchBooleanSet(final TBooleanSet t)
+  @Override
+  public Unit matchBooleanSet(final TBooleanSet t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -142,7 +145,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchInteger(final TIntegerType t)
+  @Override
+  public Unit matchInteger(final TIntegerType t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -168,7 +172,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchFloat(final TFloat t)
+  @Override
+  public Unit matchFloat(final TFloat t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -194,7 +199,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchVector(final TVector t)
+  @Override
+  public Unit matchVector(final TVector t)
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
 
@@ -245,7 +251,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchMatrix(final TMatrix t)
+  @Override
+  public Unit matchMatrix(final TMatrix t)
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
 
@@ -298,7 +305,8 @@ final class RecordFieldImplementationConstructorProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchRecord(final TRecord t)
+  @Override
+  public Unit matchRecord(final TRecord t)
   {
     this.recordOrPackedField(t.getName(), t.getPackageContext());
     return Unit.unit();
@@ -351,7 +359,8 @@ final class RecordFieldImplementationConstructorProcessor
       t_cn);
   }
 
-  @Override public Unit matchPacked(final TPacked t)
+  @Override
+  public Unit matchPacked(final TPacked t)
   {
     this.recordOrPackedField(t.getName(), t.getPackageContext());
     return Unit.unit();

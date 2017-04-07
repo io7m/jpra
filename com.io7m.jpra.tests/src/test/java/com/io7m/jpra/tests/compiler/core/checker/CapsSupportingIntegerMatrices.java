@@ -36,7 +36,8 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
     this.delegate = NullCheck.notNull(in_delegate);
   }
 
-  @Override public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
+  @Override
+  public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
   {
     return this.delegate.getMatrixFloatSizeSupported();
   }
@@ -61,12 +62,14 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
         BigInteger.valueOf(32L), BigInteger.valueOf(32L)));
   }
 
-  @Override public boolean isPackedSizeBitsSupported(final BigInteger size)
+  @Override
+  public boolean isPackedSizeBitsSupported(final BigInteger size)
   {
     return this.delegate.isPackedSizeBitsSupported(size);
   }
 
-  @Override public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
+  @Override
+  public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
   {
     return this.delegate.getPackedSizeBitsSupported();
   }
@@ -90,12 +93,14 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
     return this.delegate.getRecordIntegerSizeBitsSupported();
   }
 
-  @Override public ImmutableSet<String> getStringEncodingsSupported()
+  @Override
+  public ImmutableSet<String> getStringEncodingsSupported()
   {
     return this.delegate.getStringEncodingsSupported();
   }
 
-  @Override public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
+  @Override
+  public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
   {
     return this.delegate.getVectorFloatSizeSupported();
   }
@@ -106,29 +111,34 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
     return this.delegate.getVectorIntegerSizeSupported();
   }
 
-  @Override public ImmutableList<RangeInclusiveB> getVectorSizeSupported()
+  @Override
+  public ImmutableList<RangeInclusiveB> getVectorSizeSupported()
   {
     return this.delegate.getVectorSizeSupported();
   }
 
-  @Override public boolean isMatrixFloatSizeSupported(final BigInteger size)
+  @Override
+  public boolean isMatrixFloatSizeSupported(final BigInteger size)
   {
     return this.delegate.isMatrixFloatSizeSupported(size);
   }
 
-  @Override public boolean isMatrixIntegerSizeSupported(final BigInteger size)
+  @Override
+  public boolean isMatrixIntegerSizeSupported(final BigInteger size)
   {
     return size.equals(BigInteger.valueOf(32L));
   }
 
-  @Override public boolean isMatrixSizeElementsSupported(
+  @Override
+  public boolean isMatrixSizeElementsSupported(
     final BigInteger width,
     final BigInteger height)
   {
     return this.delegate.isMatrixSizeElementsSupported(width, height);
   }
 
-  @Override public boolean isRecordFloatSizeBitsSupported(final BigInteger size)
+  @Override
+  public boolean isRecordFloatSizeBitsSupported(final BigInteger size)
   {
     return this.delegate.isRecordFloatSizeBitsSupported(size);
   }
@@ -139,22 +149,26 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
     return this.delegate.isRecordIntegerSizeBitsSupported(size);
   }
 
-  @Override public boolean isStringEncodingSupported(final String encoding)
+  @Override
+  public boolean isStringEncodingSupported(final String encoding)
   {
     return this.delegate.isStringEncodingSupported(encoding);
   }
 
-  @Override public boolean isVectorFloatSizeSupported(final BigInteger size)
+  @Override
+  public boolean isVectorFloatSizeSupported(final BigInteger size)
   {
     return this.delegate.isVectorFloatSizeSupported(size);
   }
 
-  @Override public boolean isVectorIntegerSizeSupported(final BigInteger size)
+  @Override
+  public boolean isVectorIntegerSizeSupported(final BigInteger size)
   {
     return this.delegate.isVectorIntegerSizeSupported(size);
   }
 
-  @Override public boolean isVectorSizeElementsSupported(final BigInteger size)
+  @Override
+  public boolean isVectorSizeElementsSupported(final BigInteger size)
   {
     return this.delegate.isVectorSizeElementsSupported(size);
   }

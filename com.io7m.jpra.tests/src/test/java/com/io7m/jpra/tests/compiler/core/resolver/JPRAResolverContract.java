@@ -57,7 +57,8 @@ import org.junit.rules.ExpectedException;
 import java.math.BigInteger;
 import java.util.Optional;
 
-@SuppressWarnings("unchecked") public abstract class JPRAResolverContract
+@SuppressWarnings("unchecked")
+public abstract class JPRAResolverContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
@@ -81,7 +82,8 @@ import java.util.Optional;
   protected abstract SExpressionType newStringSExpr(
     final String expr);
 
-  @Test public final void testPackageNested()
+  @Test
+  public final void testPackageNested()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -100,7 +102,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
   }
 
-  @Test public final void testPackageUnexpected()
+  @Test
+  public final void testPackageUnexpected()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -121,7 +124,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(package-begin a.b.c)"))));
   }
 
-  @Test public final void testPackageExpected()
+  @Test
+  public final void testPackageExpected()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -140,7 +144,8 @@ import java.util.Optional;
     r.resolveEOF(Optional.empty());
   }
 
-  @Test public final void testPackageBegin()
+  @Test
+  public final void testPackageBegin()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -158,7 +163,8 @@ import java.util.Optional;
     Assert.assertEquals(pb.getLexicalInformation(), rp.getLexicalInformation());
   }
 
-  @Test public final void testPackageDuplicate()
+  @Test
+  public final void testPackageDuplicate()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -181,7 +187,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(package-begin x.y.z)"))));
   }
 
-  @Test public final void testPackageEndNoCurrent()
+  @Test
+  public final void testPackageEndNoCurrent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -197,7 +204,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(package-end)"))));
   }
 
-  @Test public final void testPackageImportNoCurrent()
+  @Test
+  public final void testPackageImportNoCurrent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -213,7 +221,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(import x.y.z as q)"))));
   }
 
-  @Test public final void testPackageImportConflict()
+  @Test
+  public final void testPackageImportConflict()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -245,7 +254,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(import x.b as q)"))));
   }
 
-  @Test public final void testPackageImportNonexistent()
+  @Test
+  public final void testPackageImportNonexistent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -265,7 +275,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(import x.a as q)"))));
   }
 
-  @Test public final void testTypeDeclRecordNoCurrent()
+  @Test
+  public final void testTypeDeclRecordNoCurrent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -281,7 +292,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(record T ())"))));
   }
 
-  @Test public final void testTypeDeclRecordNonexistentPackage0()
+  @Test
+  public final void testTypeDeclRecordNonexistentPackage0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -302,7 +314,8 @@ import java.util.Optional;
           this.newStringSExpr("(record T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclRecordNonexistentPackageType0()
+  @Test
+  public final void testTypeDeclRecordNonexistentPackageType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -326,7 +339,8 @@ import java.util.Optional;
           this.newStringSExpr("(record T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclRecordNonexistentLocalType0()
+  @Test
+  public final void testTypeDeclRecordNonexistentLocalType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -347,7 +361,8 @@ import java.util.Optional;
           this.newStringSExpr("(record T [(field x U)])"))));
   }
 
-  @Test public final void testTypeDeclRecordNonexistentLocalType1()
+  @Test
+  public final void testTypeDeclRecordNonexistentLocalType1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -368,7 +383,8 @@ import java.util.Optional;
           this.newStringSExpr("(record T [(field x T)])"))));
   }
 
-  @Test public final void testTypeDeclRecordDuplicateType0()
+  @Test
+  public final void testTypeDeclRecordDuplicateType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -393,7 +409,8 @@ import java.util.Optional;
           this.newStringSExpr("(record T [(field x [integer signed 32])])"))));
   }
 
-  @Test public final void testTypeExprName_Error0()
+  @Test
+  public final void testTypeExprName_Error0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -409,7 +426,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(:type T)"))));
   }
 
-  @Test public final void testTypeExprIntegerSigned_0()
+  @Test
+  public final void testTypeExprIntegerSigned_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -429,7 +447,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprIntegerUnsigned_0()
+  @Test
+  public final void testTypeExprIntegerUnsigned_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -449,7 +468,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprIntegerUnsignedNormalized_0()
+  @Test
+  public final void testTypeExprIntegerUnsignedNormalized_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -470,7 +490,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprIntegerSignedNormalized_0()
+  @Test
+  public final void testTypeExprIntegerSignedNormalized_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -491,7 +512,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprFloat_0()
+  @Test
+  public final void testTypeExprFloat_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -512,7 +534,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprString_0()
+  @Test
+  public final void testTypeExprString_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -533,7 +556,8 @@ import java.util.Optional;
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprVector_0()
+  @Test
+  public final void testTypeExprVector_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -554,7 +578,8 @@ import java.util.Optional;
       ee.getElementCount(), BigInteger.valueOf(32L));
   }
 
-  @Test public final void testTypeExprMatrix_0()
+  @Test
+  public final void testTypeExprMatrix_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -577,7 +602,8 @@ import java.util.Optional;
       ee.getHeight(), BigInteger.valueOf(4L));
   }
 
-  @Test public final void testTypeExprBooleanSet_0()
+  @Test
+  public final void testTypeExprBooleanSet_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -598,7 +624,8 @@ import java.util.Optional;
       ee.getSizeExpression(), BigInteger.valueOf(1L));
   }
 
-  @Test public final void testTypeExprArray_0()
+  @Test
+  public final void testTypeExprArray_0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -619,7 +646,8 @@ import java.util.Optional;
       ee.getElementCount(), BigInteger.valueOf(64L));
   }
 
-  @Test public final void testTypeDeclPackedNoCurrent()
+  @Test
+  public final void testTypeDeclPackedNoCurrent()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -635,7 +663,8 @@ import java.util.Optional;
         p.parseStatement(this.newStringSExpr("(packed T ())"))));
   }
 
-  @Test public final void testTypeDeclPackedNonexistentPackage0()
+  @Test
+  public final void testTypeDeclPackedNonexistentPackage0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -656,7 +685,8 @@ import java.util.Optional;
           this.newStringSExpr("(packed T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclPackedNonexistentPackageType0()
+  @Test
+  public final void testTypeDeclPackedNonexistentPackageType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -680,7 +710,8 @@ import java.util.Optional;
           this.newStringSExpr("(packed T [(field x p:T)])"))));
   }
 
-  @Test public final void testTypeDeclPackedNonexistentLocalType0()
+  @Test
+  public final void testTypeDeclPackedNonexistentLocalType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -701,7 +732,8 @@ import java.util.Optional;
           this.newStringSExpr("(packed T [(field x U)])"))));
   }
 
-  @Test public final void testTypeDeclPackedNonexistentLocalType1()
+  @Test
+  public final void testTypeDeclPackedNonexistentLocalType1()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -722,7 +754,8 @@ import java.util.Optional;
           this.newStringSExpr("(packed T [(field x T)])"))));
   }
 
-  @Test public final void testTypeDeclPackedDuplicateType0()
+  @Test
+  public final void testTypeDeclPackedDuplicateType0()
     throws Exception
   {
     final JPRAParserType p = this.newParser();
@@ -749,7 +782,8 @@ import java.util.Optional;
 
   private static final class NoPackagesLoader implements JPRAPackageLoaderType
   {
-    @Override public PackageContextType evaluate(
+    @Override
+    public PackageContextType evaluate(
       final GlobalContextType c,
       final PackageNameQualified p)
       throws JPRAModelLoadingException

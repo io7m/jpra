@@ -32,23 +32,27 @@ import java.util.Optional;
 
 public final class AlwaysEmptyLoader implements JPRAPackageLoaderType
 {
-  @Override public PackageContextType evaluate(
+  @Override
+  public PackageContextType evaluate(
     final GlobalContextType c,
     final PackageNameQualified p)
   {
     return new PackageContextType()
     {
-      @Override public GlobalContextType getGlobalContext()
+      @Override
+      public GlobalContextType getGlobalContext()
       {
         return c;
       }
 
-      @Override public Map<TypeName, TypeUserDefinedType> getTypes()
+      @Override
+      public Map<TypeName, TypeUserDefinedType> getTypes()
       {
         return Collections.unmodifiableMap(new HashMap<>());
       }
 
-      @Override public PackageNameQualified getName()
+      @Override
+      public PackageNameQualified getName()
       {
         return p;
       }

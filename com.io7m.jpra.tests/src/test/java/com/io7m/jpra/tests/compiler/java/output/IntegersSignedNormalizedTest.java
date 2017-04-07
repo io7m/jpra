@@ -29,7 +29,8 @@ import java.nio.ByteBuffer;
 
 public final class IntegersSignedNormalizedTest
 {
-  @Test public void testMeta()
+  @Test
+  public void testMeta()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -59,7 +60,8 @@ public final class IntegersSignedNormalizedTest
       JPRATypeModel.JPRAIntegerSignedNormalized.of(64), v.metaSn64Type());
   }
 
-  @Test public void testSetU8()
+  @Test
+  public void testSetU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -87,7 +89,8 @@ public final class IntegersSignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU8()
+  @Test
+  public void testRangeU8()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -99,7 +102,8 @@ public final class IntegersSignedNormalizedTest
     Assert.assertEquals((long) Byte.MAX_VALUE, (long) v.getSn8Raw());
   }
 
-  @Test public void testSetU16()
+  @Test
+  public void testSetU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -128,7 +132,8 @@ public final class IntegersSignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU16()
+  @Test
+  public void testRangeU16()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -140,7 +145,8 @@ public final class IntegersSignedNormalizedTest
     Assert.assertEquals((long) Short.MAX_VALUE, (long) v.getSn16Raw());
   }
 
-  @Test public void testSetU32()
+  @Test
+  public void testSetU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -169,7 +175,8 @@ public final class IntegersSignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU32()
+  @Test
+  public void testRangeU32()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -181,7 +188,8 @@ public final class IntegersSignedNormalizedTest
     Assert.assertEquals((long) Integer.MAX_VALUE, (long) v.getSn32Raw());
   }
 
-  @Test public void testSetU64()
+  @Test
+  public void testSetU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =
@@ -209,7 +217,8 @@ public final class IntegersSignedNormalizedTest
     }
   }
 
-  @Test public void testRangeU64()
+  @Test
+  public void testRangeU64()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<IntegersSignedNormalizedType> c =

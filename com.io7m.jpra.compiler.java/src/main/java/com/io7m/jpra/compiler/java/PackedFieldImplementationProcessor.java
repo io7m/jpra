@@ -70,8 +70,8 @@ public final class PackedFieldImplementationProcessor
   }
 
   private final TPacked.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
-  private final BigInteger         offset_bits;
+  private final TypeSpec.Builder class_builder;
+  private final BigInteger offset_bits;
 
   PackedFieldImplementationProcessor(
     final TPacked.FieldValue in_field,

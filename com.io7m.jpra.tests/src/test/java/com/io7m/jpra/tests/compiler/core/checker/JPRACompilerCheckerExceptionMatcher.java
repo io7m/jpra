@@ -40,7 +40,8 @@ final class JPRACompilerCheckerExceptionMatcher
     this.code = NullCheck.notNull(in_code);
   }
 
-  @Override protected boolean matchesSafely(
+  @Override
+  protected boolean matchesSafely(
     final JPRACompilerCheckerException item,
     final Description mismatchDescription)
   {
@@ -52,7 +53,8 @@ final class JPRACompilerCheckerExceptionMatcher
     return ok;
   }
 
-  @Override public void describeTo(final Description description)
+  @Override
+  public void describeTo(final Description description)
   {
     description.appendText("has error code " + this.code);
   }

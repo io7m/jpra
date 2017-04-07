@@ -46,7 +46,7 @@ final class RecordFieldImplementationIntegerProcessor
   implements TypeIntegerMatcherType<Unit, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
-  private final TypeSpec.Builder   class_builder;
+  private final TypeSpec.Builder class_builder;
 
   RecordFieldImplementationIntegerProcessor(
     final TRecord.FieldValue in_field,
@@ -56,13 +56,15 @@ final class RecordFieldImplementationIntegerProcessor
     this.class_builder = NullCheck.notNull(in_class_builder);
   }
 
-  @Override public Unit matchIntegerUnsigned(
+  @Override
+  public Unit matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
-  @Override public Unit matchIntegerSigned(
+  @Override
+  public Unit matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
@@ -176,7 +178,8 @@ final class RecordFieldImplementationIntegerProcessor
     this.class_builder.addMethod(getb.build());
   }
 
-  @Override public Unit matchIntegerSignedNormalized(
+  @Override
+  public Unit matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     final BigInteger size = t.getSizeInBits().getValue();
@@ -349,7 +352,8 @@ final class RecordFieldImplementationIntegerProcessor
     this.class_builder.addMethod(setb.build());
   }
 
-  @Override public Unit matchIntegerUnsignedNormalized(
+  @Override
+  public Unit matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     final BigInteger size = t.getSizeInBits().getValue();

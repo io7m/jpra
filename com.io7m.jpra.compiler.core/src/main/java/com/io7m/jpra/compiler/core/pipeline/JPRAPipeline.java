@@ -46,9 +46,9 @@ import java.util.Optional;
 
 public final class JPRAPipeline implements JPRAPipelineType
 {
-  private final JPRAParserType   parser;
+  private final JPRAParserType parser;
   private final JPRAResolverType resolver;
-  private final JPRACheckerType  checker;
+  private final JPRACheckerType checker;
 
   private JPRAPipeline(
     final JPRAParserType in_parser,
@@ -86,7 +86,8 @@ public final class JPRAPipeline implements JPRAPipelineType
       new StatementMatcherType<Unresolved, Untyped,
         Optional<PackageContextType>, JPRACompilerException>()
       {
-        @Override public Optional<PackageContextType> matchPackageBegin(
+        @Override
+        public Optional<PackageContextType> matchPackageBegin(
           final StatementPackageBegin<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -96,7 +97,8 @@ public final class JPRAPipeline implements JPRAPipelineType
           return Optional.empty();
         }
 
-        @Override public Optional<PackageContextType> matchPackageEnd(
+        @Override
+        public Optional<PackageContextType> matchPackageEnd(
           final StatementPackageEnd<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -107,7 +109,8 @@ public final class JPRAPipeline implements JPRAPipelineType
           return Optional.of(c);
         }
 
-        @Override public Optional<PackageContextType> matchPackageImport(
+        @Override
+        public Optional<PackageContextType> matchPackageImport(
           final StatementPackageImport<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -116,7 +119,8 @@ public final class JPRAPipeline implements JPRAPipelineType
           return Optional.empty();
         }
 
-        @Override public Optional<PackageContextType> matchTypeDecl(
+        @Override
+        public Optional<PackageContextType> matchTypeDecl(
           final TypeDeclType<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -126,7 +130,8 @@ public final class JPRAPipeline implements JPRAPipelineType
           return Optional.empty();
         }
 
-        @Override public Optional<PackageContextType> matchShowType(
+        @Override
+        public Optional<PackageContextType> matchShowType(
           final StatementCommandType<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -139,7 +144,8 @@ public final class JPRAPipeline implements JPRAPipelineType
           return Optional.empty();
         }
 
-        @Override public Optional<PackageContextType> matchShowSize(
+        @Override
+        public Optional<PackageContextType> matchShowSize(
           final StatementCommandSize<Unresolved, Untyped> s)
           throws JPRACompilerException
         {
@@ -148,7 +154,8 @@ public final class JPRAPipeline implements JPRAPipelineType
       });
   }
 
-  @Override public void onEOF(
+  @Override
+  public void onEOF(
     final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerException
   {

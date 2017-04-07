@@ -54,8 +54,8 @@ final class RecordFieldImplementationProcessor
   implements TypeMatcherType<Unit, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
-  private final BigInteger         offset;
-  private final TypeSpec.Builder   class_builder;
+  private final BigInteger offset;
+  private final TypeSpec.Builder class_builder;
 
   RecordFieldImplementationProcessor(
     final TRecord.FieldValue in_field,
@@ -141,7 +141,8 @@ final class RecordFieldImplementationProcessor
     }
   }
 
-  @Override public Unit matchArray(
+  @Override
+  public Unit matchArray(
     final TArray t)
   {
     this.generateFieldOffsetConstant();
@@ -149,7 +150,8 @@ final class RecordFieldImplementationProcessor
     throw new UnimplementedCodeException();
   }
 
-  @Override public Unit matchString(
+  @Override
+  public Unit matchString(
     final TString t)
   {
     this.generateFieldOffsetConstant();
@@ -178,7 +180,8 @@ final class RecordFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchBooleanSet(
+  @Override
+  public Unit matchBooleanSet(
     final TBooleanSet t)
   {
     this.generateFieldOffsetConstant();
@@ -238,7 +241,8 @@ final class RecordFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchInteger(
+  @Override
+  public Unit matchInteger(
     final TIntegerType t)
   {
     this.generateFieldOffsetConstant();
@@ -248,7 +252,8 @@ final class RecordFieldImplementationProcessor
     return t.matchTypeInteger(p);
   }
 
-  @Override public Unit matchFloat(
+  @Override
+  public Unit matchFloat(
     final TFloat t)
   {
     this.generateFieldOffsetConstant();
@@ -375,7 +380,8 @@ final class RecordFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchVector(
+  @Override
+  public Unit matchVector(
     final TVector t)
   {
     this.generateFieldOffsetConstant();
@@ -406,7 +412,8 @@ final class RecordFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchMatrix(
+  @Override
+  public Unit matchMatrix(
     final TMatrix t)
   {
     this.generateFieldOffsetConstant();
@@ -437,7 +444,8 @@ final class RecordFieldImplementationProcessor
     return Unit.unit();
   }
 
-  @Override public Unit matchRecord(
+  @Override
+  public Unit matchRecord(
     final TRecord t)
   {
     this.generateFieldOffsetConstant();
@@ -489,7 +497,8 @@ final class RecordFieldImplementationProcessor
     this.class_builder.addMethod(write_b.build());
   }
 
-  @Override public Unit matchPacked(
+  @Override
+  public Unit matchPacked(
     final TPacked t)
   {
     this.generateFieldOffsetConstant();

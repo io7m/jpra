@@ -105,7 +105,8 @@ public final class BooleanSetsTest
     v.setB0B15(i == 31);
   }
 
-  @Test public void testSize()
+  @Test
+  public void testSize()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<BooleanSetsType> c =
@@ -116,7 +117,8 @@ public final class BooleanSetsTest
     Assert.assertEquals(4L, (long) v.sizeOctets());
   }
 
-  @Test public void testSetGetExhaustive()
+  @Test
+  public void testSetGetExhaustive()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1 * 8);
     final JPRACursor1DType<BooleanSetsType> c =
@@ -130,7 +132,8 @@ public final class BooleanSetsTest
     }
   }
 
-  @Test public void testSetGet()
+  @Test
+  public void testSetGet()
   {
     final ByteBuffer buf = ByteBuffer.allocate(4 * 8);
     final JPRACursor1DType<BooleanSetsType> c =

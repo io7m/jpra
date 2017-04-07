@@ -28,7 +28,8 @@ import java.nio.ByteBuffer;
 
 public final class OpenGL565Test
 {
-  @Test public void testSize()
+  @Test
+  public void testSize()
   {
     final ByteBuffer buf = ByteBuffer.allocate(1024);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -39,7 +40,8 @@ public final class OpenGL565Test
     Assert.assertEquals(2L, (long) v.sizeOctets());
   }
 
-  @Test public void testSetR()
+  @Test
+  public void testSetR()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -62,7 +64,8 @@ public final class OpenGL565Test
     }
   }
 
-  @Test public void testSetB()
+  @Test
+  public void testSetB()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -85,7 +88,8 @@ public final class OpenGL565Test
     }
   }
 
-  @Test public void testRangeR()
+  @Test
+  public void testRangeR()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -105,7 +109,8 @@ public final class OpenGL565Test
     Assert.assertEquals(1.0, v.getR(), 0.0);
   }
 
-  @Test public void testRangeB()
+  @Test
+  public void testRangeB()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -125,7 +130,8 @@ public final class OpenGL565Test
     Assert.assertEquals(1.0, v.getB(), 0.0);
   }
 
-  @Test public void testSetG()
+  @Test
+  public void testSetG()
   {
     final ByteBuffer buf = ByteBuffer.allocate(8 * 2);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -148,7 +154,8 @@ public final class OpenGL565Test
     }
   }
 
-  @Test public void testRangeG()
+  @Test
+  public void testRangeG()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL565Type> c =
@@ -168,7 +175,8 @@ public final class OpenGL565Test
     Assert.assertEquals(1.0, v.getG(), 0.0);
   }
 
-  @Test public void testStructureRGB()
+  @Test
+  public void testStructureRGB()
   {
     final ByteBuffer buf = ByteBuffer.allocate(16);
     final JPRACursor1DType<OpenGL565Type> c =

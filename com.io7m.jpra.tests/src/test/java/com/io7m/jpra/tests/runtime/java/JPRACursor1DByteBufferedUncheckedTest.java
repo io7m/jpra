@@ -31,7 +31,8 @@ public final class JPRACursor1DByteBufferedUncheckedTest
 {
   @Rule public ExpectedException expected = ExpectedException.none();
 
-  @Test public void testElementSizeZero()
+  @Test
+  public void testElementSizeZero()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -43,7 +44,8 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     Assert.fail();
   }
 
-  @Test public void testBufferIdentity()
+  @Test
+  public void testBufferIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(100);
     final JPRAValueType v = () -> 1;
@@ -58,7 +60,8 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     Assert.assertEquals("[Cursor 0]", c.toString());
   }
 
-  @Test public void testBufferSetIdentity()
+  @Test
+  public void testBufferSetIdentity()
   {
     final ByteBuffer buf = ByteBuffer.allocate(200);
     final JPRAValueByteBufferedConstructorType<JPRAValueType> cons =
@@ -70,7 +73,9 @@ public final class JPRACursor1DByteBufferedUncheckedTest
     for (int index = 0; index < 100; ++index) {
       c.setElementIndex(index);
       Assert.assertEquals((long) index, (long) c.getElementIndex());
-      Assert.assertEquals((long) (index * 2), c.getByteOffsetObservable().value());
+      Assert.assertEquals(
+        (long) (index * 2),
+        c.getByteOffsetObservable().value());
       Assert.assertEquals("[Cursor " + index + "]", c.toString());
     }
   }
