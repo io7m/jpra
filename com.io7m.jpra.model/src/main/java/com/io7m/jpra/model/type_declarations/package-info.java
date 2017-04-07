@@ -18,4 +18,5 @@
  * Type declarations.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.type_declarations;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.model.type_declarations;

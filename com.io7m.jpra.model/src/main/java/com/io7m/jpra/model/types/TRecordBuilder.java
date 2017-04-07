@@ -22,37 +22,37 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jfunctional.Unit;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 final class TRecordBuilder implements TRecordBuilderType
 {
-  private final MutableList<TRecord.FieldType>            type_fields_ordered;
+  private final MutableList<TRecord.FieldType> type_fields_ordered;
   private final MutableMap<FieldName, TRecord.FieldValue> type_fields_named;
-  private final PackageContextType                        package_context;
-  private final IdentifierType                            identifier;
-  private final TypeName                                  name;
-  private final boolean                                   finished;
-  private final MutableSet<IdentifierType>                identifiers;
+  private final PackageContextType package_context;
+  private final IdentifierType identifier;
+  private final TypeName name;
+  private final boolean finished;
+  private final MutableSet<IdentifierType> identifiers;
 
   TRecordBuilder(
     final PackageContextType in_package,
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    this.package_context = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_ident);
+    this.package_context = NullCheck.notNull(in_package, "Package");
+    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
+    this.name = NullCheck.notNull(in_ident, "Type name");
 
     this.type_fields_ordered = Lists.mutable.empty();
     this.type_fields_named = Maps.mutable.empty();
@@ -62,25 +62,27 @@ final class TRecordBuilder implements TRecordBuilderType
     this.finished = false;
   }
 
-  @Override public void addPaddingOctets(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+  @Override
+  public void addPaddingOctets(
+    final Optional<LexicalPosition<Path>> lex,
     final Size<SizeUnitOctetsType> size)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
     final TRecord.FieldPaddingOctets v =
       new TRecord.FieldPaddingOctets(size, lex);
     this.type_fields_ordered.add(v);
   }
 
-  @Override public void addField(
+  @Override
+  public void addField(
     final FieldName in_name,
     final IdentifierType in_id,
     final TType in_type)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.identifiers.contains(in_id), "Identifiers cannot be reused");
 
     final TRecord.FieldValue v = new TRecord.FieldValue(in_name, in_type);
@@ -89,9 +91,10 @@ final class TRecordBuilder implements TRecordBuilderType
     this.identifiers.add(in_id);
   }
 
-  @Override public TRecord build()
+  @Override
+  public TRecord build()
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
 
     final TRecord tr = new TRecord(
@@ -105,14 +108,16 @@ final class TRecordBuilder implements TRecordBuilderType
       f.matchField(
         new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(
+          @Override
+          public Unit matchFieldValue(
             final TRecord.FieldValue f)
           {
             f.setOwner(tr);
             return Unit.unit();
           }
 
-          @Override public Unit matchFieldPaddingOctets(
+          @Override
+          public Unit matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
             f.setOwner(tr);

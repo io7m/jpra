@@ -19,7 +19,8 @@ package com.io7m.jpra.model.types;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
@@ -28,7 +29,6 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jranges.RangeInclusiveB;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -40,13 +40,13 @@ import java.util.Optional;
 
 public final class TPacked implements TType, TypeUserDefinedType
 {
-  private final TypeName                            name;
-  private final Size<SizeUnitBitsType>              size_bits;
+  private final TypeName name;
+  private final Size<SizeUnitBitsType> size_bits;
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType>            fields_by_order;
-  private final PackageContextType                  package_ctx;
-  private final IdentifierType                      identifier;
-  private final Size<SizeUnitOctetsType>            size_octets;
+  private final ImmutableList<FieldType> fields_by_order;
+  private final PackageContextType package_ctx;
+  private final IdentifierType identifier;
+  private final Size<SizeUnitOctetsType> size_octets;
 
   TPacked(
     final PackageContextType in_package,
@@ -55,25 +55,32 @@ public final class TPacked implements TType, TypeUserDefinedType
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
-    this.package_ctx = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_name);
-    this.fields_by_name = NullCheck.notNull(in_fields_by_name);
-    this.fields_by_order = NullCheck.notNull(in_fields_by_order);
+    this.package_ctx =
+      NullCheck.notNull(in_package, "Package");
+    this.identifier =
+      NullCheck.notNull(in_identifier, "Identifier");
+    this.fields_by_name =
+      NullCheck.notNull(in_fields_by_name, "Fields by name");
+    this.name =
+      NullCheck.notNull(in_name, "Type name");
+    this.fields_by_order =
+      NullCheck.notNull(in_fields_by_order, "Fields in order");
 
-    Assertive.require(
-      this.fields_by_order.size() >= this.fields_by_name.size());
+    Preconditions.checkPreconditionV(
+      this.fields_by_order.size() >= this.fields_by_name.size(),
+      "Ordered field count %d must be >= named field count %d",
+      Integer.valueOf(this.fields_by_order.size()),
+      Integer.valueOf(this.fields_by_name.size()));
 
     this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
       (Procedure<FieldValue>) f -> {
         final FieldName f_name = f.getName();
-        Assertive.require(
-          this.fields_by_name.containsKey(f_name),
-          "Fields must contain %s (%s)",
-          f,
-          this.fields_by_name);
+        Preconditions.checkPreconditionV(
+          this.fields_by_name.containsKey(f.name),
+          "Named fields must contain %s", f.name);
         final FieldValue fr = this.fields_by_name.get(f_name);
-        Assertive.require(fr.equals(f));
+        Preconditions.checkPrecondition(
+          fr.equals(f), "Field value must match");
       });
 
     this.size_bits = this.fields_by_order.injectInto(
@@ -81,10 +88,9 @@ public final class TPacked implements TType, TypeUserDefinedType
 
     final BigInteger sv = this.size_bits.getValue();
     final BigInteger b8 = BigInteger.valueOf(8L);
-    Assertive.ensure(
+    Preconditions.checkPreconditionV(
       sv.remainder(b8).equals(BigInteger.ZERO),
-      "Size %s must be divisible by 8",
-      sv);
+      "Size %s must be divisible by 8", sv);
     this.size_octets = new Size<>(sv.divide(b8));
   }
 
@@ -93,7 +99,7 @@ public final class TPacked implements TType, TypeUserDefinedType
    *
    * @param in_package    The package context
    * @param in_identifier The type's identifier
-   * @param in_ident      The type's name
+   * @param in_type_name  The type's name
    *
    * @return A new builder
    */
@@ -101,12 +107,12 @@ public final class TPacked implements TType, TypeUserDefinedType
   public static TPackedBuilderType newBuilder(
     final PackageContextType in_package,
     final IdentifierType in_identifier,
-    final TypeName in_ident)
+    final TypeName in_type_name)
   {
-    NullCheck.notNull(in_package);
-    NullCheck.notNull(in_identifier);
-    NullCheck.notNull(in_ident);
-    return new TPackedBuilder(in_package, in_identifier, in_ident);
+    NullCheck.notNull(in_package, "Package");
+    NullCheck.notNull(in_identifier, "Identifier");
+    NullCheck.notNull(in_type_name, "Type name");
+    return new TPackedBuilder(in_package, in_identifier, in_type_name);
   }
 
   /**
@@ -127,7 +133,8 @@ public final class TPacked implements TType, TypeUserDefinedType
     return this.fields_by_order;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
@@ -140,34 +147,39 @@ public final class TPacked implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
   }
 
-  @Override public TypeName getName()
+  @Override
+  public TypeName getName()
   {
     return this.name;
   }
 
-  @Override public IdentifierType getIdentifier()
+  @Override
+  public IdentifierType getIdentifier()
   {
     return this.identifier;
   }
 
-  @Override public PackageContextType getPackageContext()
+  @Override
+  public PackageContextType getPackageContext()
   {
     return this.package_ctx;
   }
 
-  @Override public <A, E extends Exception> A matchTypeUserDefined(
+  @Override
+  public <A, E extends Exception> A matchTypeUserDefined(
     final TypeUserDefinedMatcherType<A, E> m)
     throws E
   {
     return m.matchPacked(this);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[packed ");
     sb.append(this.name);
@@ -271,37 +283,39 @@ public final class TPacked implements TType, TypeUserDefinedType
 
   public static final class FieldValue implements FieldType
   {
-    private final     FieldName       name;
-    private final     TIntegerType    type;
-    private @Nullable TPacked         owner;
+    private final FieldName name;
+    private final TIntegerType type;
+    private @Nullable TPacked owner;
     private @Nullable RangeInclusiveB range;
 
     FieldValue(
       final FieldName in_identifier,
       final TIntegerType in_type)
     {
-      this.name = NullCheck.notNull(in_identifier);
-      this.type = NullCheck.notNull(in_type);
+      this.name = NullCheck.notNull(in_identifier, "Identifier");
+      this.type = NullCheck.notNull(in_type, "Type");
     }
 
-    @Override public RangeInclusiveB getBitRange()
+    @Override
+    public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range);
+      return NullCheck.notNull(this.range, "Range");
     }
 
-    @Override public TPacked getOwner()
+    @Override
+    public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range);
+      this.range = NullCheck.notNull(in_range, "Range");
     }
 
     /**
@@ -322,7 +336,8 @@ public final class TPacked implements TType, TypeUserDefinedType
       return this.type;
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override
+    public Size<SizeUnitBitsType> getSize()
     {
       return this.type.getSizeInBits();
     }
@@ -335,12 +350,13 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.name.getLexicalInformation();
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[field ");
       sb.append(this.name);
@@ -357,40 +373,43 @@ public final class TPacked implements TType, TypeUserDefinedType
 
   public static final class FieldPaddingBits implements FieldType
   {
-    private final     Size<SizeUnitBitsType>                       size_bits;
-    private final     Optional<ImmutableLexicalPositionType<Path>> lex;
-    private @Nullable TPacked                                      owner;
-    private @Nullable RangeInclusiveB                              range;
+    private final Size<SizeUnitBitsType> size_bits;
+    private final Optional<LexicalPosition<Path>> lex;
+    private @Nullable TPacked owner;
+    private @Nullable RangeInclusiveB range;
 
     FieldPaddingBits(
       final Size<SizeUnitBitsType> in_size_bits,
-      final Optional<ImmutableLexicalPositionType<Path>> in_lex)
+      final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_bits = NullCheck.notNull(in_size_bits);
-      this.lex = NullCheck.notNull(in_lex);
+      this.size_bits = NullCheck.notNull(in_size_bits, "Size bits");
+      this.lex = NullCheck.notNull(in_lex, "Lexical information");
     }
 
-    @Override public TPacked getOwner()
+    @Override
+    public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
-    @Override public RangeInclusiveB getBitRange()
+    @Override
+    public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range);
+      return NullCheck.notNull(this.range, "Range");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range);
+      this.range = NullCheck.notNull(in_range, "Range");
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override
+    public Size<SizeUnitBitsType> getSize()
     {
       return this.size_bits;
     }
@@ -403,12 +422,13 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.lex;
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[padding-bits ");
       sb.append(this.size_bits.getValue());

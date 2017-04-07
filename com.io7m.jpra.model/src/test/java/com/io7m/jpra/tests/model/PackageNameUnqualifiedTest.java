@@ -16,57 +16,65 @@
 
 package com.io7m.jpra.tests.model;
 
+import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import org.junit.Assert;
 import org.junit.Test;
-import org.valid4j.errors.RequireViolation;
 
 import java.util.Optional;
 
 public final class PackageNameUnqualifiedTest
 {
-  @Test public void testValid0()
+  @Test
+  public void testValid0()
   {
     final PackageNameUnqualified p =
       new PackageNameUnqualified(Optional.empty(), "a");
     Assert.assertEquals("a", p.getValue());
   }
 
-  @Test public void testValid1()
+  @Test
+  public void testValid1()
   {
     final PackageNameUnqualified p =
       new PackageNameUnqualified(Optional.empty(), "a_");
     Assert.assertEquals("a_", p.getValue());
   }
 
-  @Test public void testValid2()
+  @Test
+  public void testValid2()
   {
     final PackageNameUnqualified p =
       new PackageNameUnqualified(Optional.empty(), "a1");
     Assert.assertEquals("a1", p.getValue());
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid0()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid0()
   {
     new PackageNameUnqualified(Optional.empty(), "1");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid1()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid1()
   {
     new PackageNameUnqualified(Optional.empty(), "A");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid2()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid2()
   {
     new PackageNameUnqualified(Optional.empty(), "_");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid3()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid3()
   {
     new PackageNameUnqualified(Optional.empty(), "aA");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid4()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid4()
   {
     new PackageNameUnqualified(Optional.empty(), "");
   }

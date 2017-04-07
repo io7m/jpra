@@ -17,7 +17,7 @@
 package com.io7m.jpra.model.type_expressions;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
@@ -34,10 +34,10 @@ import java.util.Optional;
 
 public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
 {
-  private final SizeExprType<I, T>                           size;
-  private final ImmutableList<FieldName>                     fields;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final T                                            type;
+  private final SizeExprType<I, T> size;
+  private final ImmutableList<FieldName> fields;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final T type;
 
   /**
    * Construct a type expression.
@@ -50,7 +50,7 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
 
   public TypeExprBooleanSet(
     final T in_type,
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
     final SizeExprType<I, T> in_size)
   {
@@ -78,12 +78,14 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
     return this.size;
   }
 
-  @Override public T getType()
+  @Override
+  public T getType()
   {
     return this.type;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
@@ -91,7 +93,7 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

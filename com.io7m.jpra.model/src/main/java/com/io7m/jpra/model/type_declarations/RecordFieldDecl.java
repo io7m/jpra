@@ -47,13 +47,15 @@ public final class RecordFieldDecl
       new RecordFieldDeclMatcherType<I, T, Optional<FieldName>,
         RuntimeException>()
       {
-        @Override public Optional<FieldName> matchPadding(
+        @Override
+        public Optional<FieldName> matchPadding(
           final RecordFieldDeclPaddingOctets<I, T> r)
         {
           return Optional.empty();
         }
 
-        @Override public Optional<FieldName> matchValue(
+        @Override
+        public Optional<FieldName> matchValue(
           final RecordFieldDeclValue<I, T> r)
         {
           return Optional.of(r.getName());

@@ -27,7 +27,8 @@ import java.math.BigInteger;
  * @param <U> The unit of measurement
  */
 
-@Immutable public final class Size<U extends SizeUnitType>
+@Immutable
+public final class Size<U extends SizeUnitType>
 {
   private final BigInteger value;
 
@@ -79,7 +80,8 @@ import java.math.BigInteger;
     return new Size<>(BigInteger.valueOf(x));
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -92,12 +94,14 @@ import java.math.BigInteger;
     return this.getValue().equals(size.getValue());
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.value.toString();
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.getValue().hashCode();
   }

@@ -47,11 +47,11 @@
 
     <dependency>
       <groupId>com.io7m.jnull</groupId>
-      <artifactId>io7m-jnull-core</artifactId>
+      <artifactId>com.io7m.jnull.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.io7m.junreachable</groupId>
-      <artifactId>io7m-junreachable-core</artifactId>
+      <artifactId>com.io7m.junreachable.core</artifactId>
     </dependency>
 
     <dependency>
@@ -99,12 +99,6 @@
                 </transformer>
               </transformers>
               <filters>
-                <filter>
-                  <artifact>org.valid4j:valid4j</artifact>
-                  <includes>
-                    <include>**</include>
-                  </includes>
-                </filter>
               </filters>
             </configuration>
           </execution>

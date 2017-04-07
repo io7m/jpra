@@ -19,7 +19,8 @@ package com.io7m.jpra.model.types;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
@@ -27,7 +28,6 @@ import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -39,13 +39,13 @@ import java.util.Optional;
 
 public final class TRecord implements TType, TypeUserDefinedType
 {
-  private final TypeName                            name;
-  private final Size<SizeUnitBitsType>              size_bits;
+  private final TypeName name;
+  private final Size<SizeUnitBitsType> size_bits;
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType>            fields_by_order;
-  private final PackageContextType                  package_ctx;
-  private final IdentifierType                      identifier;
-  private final Size<SizeUnitOctetsType>            size_octets;
+  private final ImmutableList<FieldType> fields_by_order;
+  private final PackageContextType package_ctx;
+  private final IdentifierType identifier;
+  private final Size<SizeUnitOctetsType> size_octets;
 
   TRecord(
     final PackageContextType in_package,
@@ -54,20 +54,31 @@ public final class TRecord implements TType, TypeUserDefinedType
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
-    this.package_ctx = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.fields_by_name = NullCheck.notNull(in_fields_by_name);
-    this.name = NullCheck.notNull(in_ident);
-    this.fields_by_order = NullCheck.notNull(in_fields_by_order);
+    this.package_ctx =
+      NullCheck.notNull(in_package, "Package");
+    this.identifier =
+      NullCheck.notNull(in_identifier, "Identifier");
+    this.fields_by_name =
+      NullCheck.notNull(in_fields_by_name, "Fields by name");
+    this.name =
+      NullCheck.notNull(in_ident, "Identifier");
+    this.fields_by_order =
+      NullCheck.notNull(in_fields_by_order, "Fields in order");
 
-    Assertive.require(
-      this.fields_by_order.size() >= this.fields_by_name.size());
+    Preconditions.checkPreconditionV(
+      this.fields_by_order.size() >= this.fields_by_name.size(),
+      "Ordered field count %d must be >= named field count %d",
+      Integer.valueOf(this.fields_by_order.size()),
+      Integer.valueOf(this.fields_by_name.size()));
 
     this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
       (Procedure<FieldValue>) f -> {
-        Assertive.require(this.fields_by_name.containsKey(f.name));
+        Preconditions.checkPreconditionV(
+          this.fields_by_name.containsKey(f.name),
+          "Named fields must contain %s", f.name);
         final FieldValue fr = this.fields_by_name.get(f.name);
-        Assertive.require(fr.equals(f));
+        Preconditions.checkPrecondition(
+          fr.equals(f), "Field value must match");
       });
 
     this.size_bits = this.fields_by_order.injectInto(
@@ -75,10 +86,9 @@ public final class TRecord implements TType, TypeUserDefinedType
 
     final BigInteger b8 = BigInteger.valueOf(8L);
     final BigInteger br = this.size_bits.getValue().remainder(b8);
-    Assertive.require(
+    Preconditions.checkPreconditionV(
       br.equals(BigInteger.ZERO),
-      "Size %s must be divisible by 8",
-      this.size_bits);
+      "Size %s must be divisible by 8", this.size_bits);
 
     this.size_octets = new Size<>(this.size_bits.getValue().divide(b8));
   }
@@ -98,23 +108,26 @@ public final class TRecord implements TType, TypeUserDefinedType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    NullCheck.notNull(in_package);
-    NullCheck.notNull(in_identifier);
-    NullCheck.notNull(in_ident);
+    NullCheck.notNull(in_package, "Package context");
+    NullCheck.notNull(in_identifier, "Identifier");
+    NullCheck.notNull(in_ident, "Type name");
     return new TRecordBuilder(in_package, in_identifier, in_ident);
   }
 
-  @Override public TypeName getName()
+  @Override
+  public TypeName getName()
   {
     return this.name;
   }
 
-  @Override public IdentifierType getIdentifier()
+  @Override
+  public IdentifierType getIdentifier()
   {
     return this.identifier;
   }
 
-  @Override public PackageContextType getPackageContext()
+  @Override
+  public PackageContextType getPackageContext()
   {
     return this.package_ctx;
   }
@@ -128,7 +141,8 @@ public final class TRecord implements TType, TypeUserDefinedType
     return this.size_octets;
   }
 
-  @Override public <A, E extends Exception> A matchTypeUserDefined(
+  @Override
+  public <A, E extends Exception> A matchTypeUserDefined(
     final TypeUserDefinedMatcherType<A, E> m)
     throws E
   {
@@ -153,12 +167,14 @@ public final class TRecord implements TType, TypeUserDefinedType
     return this.fields_by_order;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
@@ -166,12 +182,13 @@ public final class TRecord implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[record ");
     sb.append(this.name);
@@ -266,36 +283,39 @@ public final class TRecord implements TType, TypeUserDefinedType
 
   public static final class FieldValue implements FieldType
   {
-    private final     FieldName                name;
-    private final     TType                    type;
-    private final     Size<SizeUnitOctetsType> size_octets;
-    private @Nullable TRecord                  owner;
+    private final FieldName name;
+    private final TType type;
+    private final Size<SizeUnitOctetsType> size_octets;
+    private @Nullable TRecord owner;
 
     FieldValue(
       final FieldName in_name,
       final TType in_type)
     {
-      this.name = NullCheck.notNull(in_name);
-      this.type = NullCheck.notNull(in_type);
+      this.name = NullCheck.notNull(in_name, "Name");
+      this.type = NullCheck.notNull(in_type, "Type");
 
       final Size<SizeUnitBitsType> bits = this.type.getSizeInBits();
       final BigInteger b8 = BigInteger.valueOf(8L);
       final BigInteger br = bits.getValue().remainder(b8);
-      Assertive.require(
-        br.equals(BigInteger.ZERO), "Size %s must be divisible by 8", bits);
+      Preconditions.checkPrecondition(
+        br,
+        br.equals(BigInteger.ZERO),
+        s -> String.format("Size %s must be divisible by 8", s));
 
       this.size_octets = new Size<>(bits.getValue().divide(b8));
     }
 
-    @Override public TRecord getOwner()
+    @Override
+    public TRecord getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(
       final TRecord in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
     /**
@@ -316,12 +336,14 @@ public final class TRecord implements TType, TypeUserDefinedType
       return this.type;
     }
 
-    @Override public Size<SizeUnitBitsType> getSizeInBits()
+    @Override
+    public Size<SizeUnitBitsType> getSizeInBits()
     {
       return this.type.getSizeInBits();
     }
 
-    @Override public <A, E extends Exception> A matchField(
+    @Override
+    public <A, E extends Exception> A matchField(
       final FieldMatcherType<A, E> m)
       throws E
     {
@@ -329,12 +351,13 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.name.getLexicalInformation();
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[field ");
       sb.append(this.name);
@@ -344,7 +367,8 @@ public final class TRecord implements TType, TypeUserDefinedType
       return sb.toString();
     }
 
-    @Override public Size<SizeUnitOctetsType> getSizeInOctets()
+    @Override
+    public Size<SizeUnitOctetsType> getSizeInOctets()
     {
       return this.size_octets;
     }
@@ -356,10 +380,10 @@ public final class TRecord implements TType, TypeUserDefinedType
 
   public static final class FieldPaddingOctets implements FieldType
   {
-    private final     Size<SizeUnitBitsType>                       size_bits;
-    private final     Optional<ImmutableLexicalPositionType<Path>> lex;
-    private final     Size<SizeUnitOctetsType>                     size_octets;
-    private @Nullable TRecord                                      owner;
+    private final Size<SizeUnitBitsType> size_bits;
+    private final Optional<LexicalPosition<Path>> lex;
+    private final Size<SizeUnitOctetsType> size_octets;
+    private @Nullable TRecord owner;
 
     /**
      * Construct a field.
@@ -370,39 +394,43 @@ public final class TRecord implements TType, TypeUserDefinedType
 
     FieldPaddingOctets(
       final Size<SizeUnitOctetsType> in_size_octets,
-      final Optional<ImmutableLexicalPositionType<Path>> in_lex)
+      final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_octets = NullCheck.notNull(in_size_octets);
+      this.size_octets = NullCheck.notNull(in_size_octets, "Size");
       this.size_bits = Size.toBits(this.size_octets);
-      this.lex = NullCheck.notNull(in_lex);
+      this.lex = NullCheck.notNull(in_lex, "Lexical information");
     }
 
     /**
      * @return The owning type
      */
 
-    @Override public TRecord getOwner()
+    @Override
+    public TRecord getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(
       final TRecord in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
-    @Override public Size<SizeUnitBitsType> getSizeInBits()
+    @Override
+    public Size<SizeUnitBitsType> getSizeInBits()
     {
       return this.size_bits;
     }
 
-    @Override public Size<SizeUnitOctetsType> getSizeInOctets()
+    @Override
+    public Size<SizeUnitOctetsType> getSizeInOctets()
     {
       return this.size_octets;
     }
 
-    @Override public <A, E extends Exception> A matchField(
+    @Override
+    public <A, E extends Exception> A matchField(
       final FieldMatcherType<A, E> m)
       throws E
     {
@@ -410,12 +438,13 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.lex;
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[padding-octets ");
       sb.append(this.size_octets.getValue());

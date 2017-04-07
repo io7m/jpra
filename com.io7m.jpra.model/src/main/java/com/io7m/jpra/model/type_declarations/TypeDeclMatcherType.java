@@ -21,7 +21,7 @@ package com.io7m.jpra.model.type_declarations;
  *
  * @param <A> The type of returned values
  * @param <E> The type of raised exceptions
- *               @param <I> The type of identifiers
+ * @param <I> The type of identifiers
  * @param <T> The type of type information
  */
 

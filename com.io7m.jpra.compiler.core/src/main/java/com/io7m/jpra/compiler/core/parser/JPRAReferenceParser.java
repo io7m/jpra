@@ -18,8 +18,8 @@ package com.io7m.jpra.compiler.core.parser;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
@@ -30,7 +30,6 @@ import com.io7m.jpra.model.names.TypeReference;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.valid4j.Assertive;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -108,7 +107,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
 
   private JPRAReferenceParser(final JSXSerializerType in_serial)
   {
-    this.serial = NullCheck.notNull(in_serial);
+    this.serial = NullCheck.notNull(in_serial, "Serializer");
   }
 
   private static JPRACompilerParseException badTypeReference(
@@ -159,12 +158,12 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   }
 
   private static ImmutableList<FieldName> getFieldPath(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+    final Optional<LexicalPosition<Path>> lex,
     final SExpressionSymbolType se,
     final String text)
     throws JPRACompilerParseException
   {
-    Assertive.require(!text.isEmpty());
+    Preconditions.checkPrecondition(!text.isEmpty(), "Text must non-empty");
     final String[] segments = text.split("\\.");
     return Lists.immutable.of(segments)
       .reject(String::isEmpty)
@@ -188,11 +187,11 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(se);
+    NullCheck.notNull(se, "Symbol");
 
-    final String text = se.getText();
-    final Optional<ImmutableLexicalPositionType<Path>> lex =
-      se.getLexicalInformation().map(ImmutableLexicalPosition::newFrom);
+    final String text = se.text();
+    final Optional<LexicalPosition<Path>> lex =
+      se.lexical().map(LexicalPosition::copyOf);
 
     {
       final Matcher m = JPRAReferenceParser.PATTERN_PT.matcher(text);
@@ -219,11 +218,11 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(se);
+    NullCheck.notNull(se, "Symbol");
 
-    final String text = se.getText();
-    final Optional<ImmutableLexicalPositionType<Path>> lex =
-      se.getLexicalInformation().map(ImmutableLexicalPosition::newFrom);
+    final String text = se.text();
+    final Optional<LexicalPosition<Path>> lex =
+      se.lexical().map(LexicalPosition::copyOf);
 
     {
       final Matcher m = JPRAReferenceParser.PATTERN_PTF.matcher(text);

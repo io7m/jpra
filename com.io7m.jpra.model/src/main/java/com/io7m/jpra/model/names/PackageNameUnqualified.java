@@ -16,12 +16,11 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
-import org.valid4j.Assertive;
-import org.valid4j.errors.RequireViolation;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -32,7 +31,8 @@ import java.util.regex.Pattern;
  * An unqualified package name.
  */
 
-@Immutable public final class PackageNameUnqualified implements ModelElementType
+@Immutable
+public final class PackageNameUnqualified implements ModelElementType
 {
   /**
    * The pattern that defines a valid package name.
@@ -46,11 +46,12 @@ import java.util.regex.Pattern;
     PATTERN_TEXT = "[\\p{IsLowercase}][\\p{IsLowercase}\\p{IsDigit}_]*";
     PATTERN = NullCheck.notNull(
       Pattern.compile(
-        PackageNameUnqualified.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS));
+        PackageNameUnqualified.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS),
+      "Pattern");
   }
 
-  private final String                                       value;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final String value;
+  private final Optional<LexicalPosition<Path>> lex;
 
   /**
    * Construct a package name.
@@ -60,17 +61,19 @@ import java.util.regex.Pattern;
    */
 
   public PackageNameUnqualified(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.value = NullCheck.notNull(in_value);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.value = NullCheck.notNull(in_value, "Value");
 
     final Matcher matcher = PackageNameUnqualified.PATTERN.matcher(this.value);
-    Assertive.require(
+    Preconditions.checkPrecondition(
+      in_value,
       matcher.matches(),
-      "Package names must match the pattern '%s'",
-      PackageNameUnqualified.PATTERN_TEXT);
+      s -> String.format(
+        "Package names must match the pattern '%s'",
+        PATTERN_TEXT));
   }
 
   /**
@@ -79,18 +82,16 @@ import java.util.regex.Pattern;
    * @param value The raw string value
    *
    * @return A new name, if valid
-   *
-   * @throws RequireViolation If the name is not valid
    */
 
   public static PackageNameUnqualified of(
     final String value)
-    throws RequireViolation
   {
     return new PackageNameUnqualified(Optional.empty(), value);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.value;
   }
@@ -104,7 +105,8 @@ import java.util.regex.Pattern;
     return this.value;
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -117,13 +119,14 @@ import java.util.regex.Pattern;
     return this.value.equals(that.value);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.value.hashCode();
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

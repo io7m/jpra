@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.type_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
@@ -32,9 +32,9 @@ import java.util.Optional;
 
 public final class TypeExprFloat<I, T> implements TypeExprType<I, T>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I, T>                           size;
-  private final T                                            type;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final SizeExprType<I, T> size;
+  private final T type;
 
   /**
    * Construct an expression.
@@ -46,7 +46,7 @@ public final class TypeExprFloat<I, T> implements TypeExprType<I, T>
 
   public TypeExprFloat(
     final T in_type,
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final SizeExprType<I, T> in_size)
   {
     this.type = NullCheck.notNull(in_type);
@@ -54,20 +54,22 @@ public final class TypeExprFloat<I, T> implements TypeExprType<I, T>
     this.size = NullCheck.notNull(in_size);
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprFloat(this);
   }
 
-  @Override public T getType()
+  @Override
+  public T getType()
   {
     return this.type;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

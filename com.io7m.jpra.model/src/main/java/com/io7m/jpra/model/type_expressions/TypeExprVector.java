@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.type_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
@@ -32,10 +32,10 @@ import java.util.Optional;
 
 public final class TypeExprVector<I, T> implements TypeExprType<I, T>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final SizeExprType<I, T>                           element_count;
-  private final TypeExprType<I, T>                           element_type;
-  private final T                                            type;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final SizeExprType<I, T> element_count;
+  private final TypeExprType<I, T> element_type;
+  private final T type;
 
   /**
    * Construct an expression.
@@ -48,7 +48,7 @@ public final class TypeExprVector<I, T> implements TypeExprType<I, T>
 
   public TypeExprVector(
     final T in_type,
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final SizeExprType<I, T> in_element_count,
     final TypeExprType<I, T> in_element_type)
   {
@@ -58,20 +58,22 @@ public final class TypeExprVector<I, T> implements TypeExprType<I, T>
     this.element_type = NullCheck.notNull(in_element_type);
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchExprVector(this);
   }
 
-  @Override public T getType()
+  @Override
+  public T getType()
   {
     return this.type;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

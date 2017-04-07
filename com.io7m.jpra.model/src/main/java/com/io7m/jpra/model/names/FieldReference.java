@@ -27,8 +27,8 @@ import java.util.Optional;
 public final class FieldReference
 {
   private final Optional<PackageNameUnqualified> pack;
-  private final Optional<TypeName>               type;
-  private final FieldPath                        field_path;
+  private final Optional<TypeName> type;
+  private final FieldPath field_path;
 
   /**
    * Construct a reference.

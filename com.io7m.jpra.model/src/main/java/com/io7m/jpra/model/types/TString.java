@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
@@ -27,13 +27,14 @@ import java.util.Optional;
  * A {@code string} type expression.
  */
 
-@Immutable public final class TString implements TType
+@Immutable
+public final class TString implements TType
 {
-  private final String                                       encoding;
-  private final Size<SizeUnitOctetsType>                     size;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final Size<SizeUnitBitsType>                       size_bits;
-  private final Size<SizeUnitOctetsType>                     length;
+  private final String encoding;
+  private final Size<SizeUnitOctetsType> size;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final Size<SizeUnitBitsType> size_bits;
+  private final Size<SizeUnitOctetsType> length;
 
   /**
    * Construct an expression.
@@ -45,7 +46,7 @@ import java.util.Optional;
    */
 
   public TString(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final String in_encoding,
     final Size<SizeUnitOctetsType> in_size)
   {
@@ -74,12 +75,14 @@ import java.util.Optional;
     return this.encoding;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
@@ -87,12 +90,13 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[string ");
     sb.append(this.size.getValue());

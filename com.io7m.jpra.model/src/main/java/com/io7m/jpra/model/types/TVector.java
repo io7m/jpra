@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
@@ -28,12 +28,13 @@ import java.util.Optional;
  * A {@code vector} type expression.
  */
 
-@Immutable public final class TVector implements TType
+@Immutable
+public final class TVector implements TType
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final TypeScalarType                               type;
-  private final Size<?>                                      size;
-  private final Size<SizeUnitBitsType>                       size_bits;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final TypeScalarType type;
+  private final Size<?> size;
+  private final Size<SizeUnitBitsType> size_bits;
 
   /**
    * Construct a type expression.
@@ -44,7 +45,7 @@ import java.util.Optional;
    */
 
   public TVector(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final Size<?> in_size,
     final TypeScalarType in_type)
   {
@@ -57,7 +58,8 @@ import java.util.Optional;
     this.size_bits = new Size<>(ecv.multiply(etv));
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
@@ -80,7 +82,8 @@ import java.util.Optional;
     return this.type;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
@@ -88,12 +91,13 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[vector ");
     sb.append(this.size.getValue());

@@ -20,7 +20,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.java.JPRAJavaGeneratorType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.GlobalContexts;
@@ -229,7 +229,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -254,7 +254,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordInteger");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -313,7 +313,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordFloat");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -351,7 +351,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordIntegerNormalized");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -410,7 +410,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordPadding");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -437,7 +437,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordBooleanSet");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
@@ -477,7 +477,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
@@ -510,7 +510,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
@@ -544,7 +544,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -569,7 +569,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedAllPadding");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -596,7 +596,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerU4_U4_U4_U4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -638,7 +638,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerU8_U8_U8_U8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -680,7 +680,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerU16_U16_U16_U16");
@@ -723,7 +723,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerU2_U2_U2_U2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -765,7 +765,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerU2_U2_U2_U2_U2_U2_U2_U2");
@@ -825,7 +825,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerS4_S4_S4_S4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -867,7 +867,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerS8_S8_S8_S8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -909,7 +909,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerS16_S16_S16_S16");
@@ -952,7 +952,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerS2_S2_S2_S2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -994,7 +994,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerS2_S2_S2_S2_S2_S2_S2_S2");
@@ -1054,7 +1054,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerUN4_UN4_UN4_UN4");
@@ -1097,7 +1097,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerUN8_UN8_UN8_UN8");
@@ -1140,7 +1140,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerUN16_UN16_UN16_UN16");
@@ -1183,7 +1183,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerUN2_UN2_UN2_UN2");
@@ -1226,7 +1226,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerUN2_UN2_UN2_UN2_UN2_UN2_UN2_UN2");
@@ -1286,7 +1286,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerSN4_SN4_SN4_SN4");
@@ -1329,7 +1329,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerSN8_SN8_SN8_SN8");
@@ -1372,7 +1372,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerSN16_SN16_SN16_SN16");
@@ -1415,7 +1415,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerSN2_SN2_SN2_SN2");
@@ -1458,7 +1458,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name =
       new TypeName(no_lex, "PackedIntegerSN2_SN2_SN2_SN2_SN2_SN2_SN2_SN2");
@@ -1518,7 +1518,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "PackedIntegerU4_S4_UN4_SN4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
@@ -1560,7 +1560,7 @@ public abstract class JPRAJavaGeneratorContract
           PackageNameUnqualified.of("z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
     final TypeName t_name = new TypeName(no_lex, "RecordVector");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);

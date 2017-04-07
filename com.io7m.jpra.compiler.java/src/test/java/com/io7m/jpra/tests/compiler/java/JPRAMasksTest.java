@@ -16,344 +16,395 @@
 
 package com.io7m.jpra.tests.compiler.java;
 
+import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jpra.compiler.java.JPRAMasks;
+import org.hamcrest.core.StringContains;
 import org.hamcrest.core.StringStartsWith;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.valid4j.errors.RequireViolation;
 
 public final class JPRAMasksTest
 {
   @Rule public ExpectedException expected = ExpectedException.none();
 
-  @Test public void testZeroError_0()
+  @Test
+  public void testZeroError_0()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("size"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("size"));
     JPRAMasks.createZeroMask(-1, 0, 0);
   }
 
-  @Test public void testZeroError_1()
+  @Test
+  public void testZeroError_1()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("size"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("size"));
     JPRAMasks.createZeroMask(0, 0, 0);
   }
 
-  @Test public void testZeroError_2()
+  @Test
+  public void testZeroError_2()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("lsb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("lsb"));
     JPRAMasks.createZeroMask(1, -1, 0);
   }
 
-  @Test public void testZeroError_3()
+  @Test
+  public void testZeroError_3()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("msb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("msb"));
     JPRAMasks.createZeroMask(1, 0, 1);
   }
 
-  @Test public void testZeroError_4()
+  @Test
+  public void testZeroError_4()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("lsb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("lsb"));
     JPRAMasks.createZeroMask(2, 1, 0);
   }
 
-  @Test public void testZero8_4msb()
+  @Test
+  public void testZero8_4msb()
   {
     Assert.assertEquals("0b11110000", JPRAMasks.createZeroMask(8, 0, 3));
   }
 
-  @Test public void testZero8_4lsb()
+  @Test
+  public void testZero8_4lsb()
   {
     Assert.assertEquals("0b00001111", JPRAMasks.createZeroMask(8, 4, 7));
   }
 
-  @Test public void testZero8_0()
+  @Test
+  public void testZero8_0()
   {
     Assert.assertEquals("0b00000000", JPRAMasks.createZeroMask(8, 0, 7));
   }
 
-  @Test public void testZero16_0()
+  @Test
+  public void testZero16_0()
   {
     Assert.assertEquals(
       "0b00000000_00000000", JPRAMasks.createZeroMask(16, 0, 15));
   }
 
-  @Test public void testZero16_1()
+  @Test
+  public void testZero16_1()
   {
     Assert.assertEquals(
       "0b00000000_11111111", JPRAMasks.createZeroMask(16, 8, 15));
   }
 
-  @Test public void testZero16_2()
+  @Test
+  public void testZero16_2()
   {
     Assert.assertEquals(
       "0b11111111_00000000", JPRAMasks.createZeroMask(16, 0, 7));
   }
 
-  @Test public void testZero32_0()
+  @Test
+  public void testZero32_0()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000",
       JPRAMasks.createZeroMask(32, 0, 31));
   }
 
-  @Test public void testZero32_1()
+  @Test
+  public void testZero32_1()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_00000000",
       JPRAMasks.createZeroMask(32, 0, 7));
   }
 
-  @Test public void testZero32_2()
+  @Test
+  public void testZero32_2()
   {
     Assert.assertEquals(
       "0b11111111_11111111_00000000_11111111",
       JPRAMasks.createZeroMask(32, 8, 15));
   }
 
-  @Test public void testZero32_3()
+  @Test
+  public void testZero32_3()
   {
     Assert.assertEquals(
       "0b11111111_00000000_11111111_11111111",
       JPRAMasks.createZeroMask(32, 16, 23));
   }
 
-  @Test public void testZero32_4()
+  @Test
+  public void testZero32_4()
   {
     Assert.assertEquals(
       "0b00000000_11111111_11111111_11111111",
       JPRAMasks.createZeroMask(32, 24, 31));
   }
 
-  @Test public void testZero64_0()
+  @Test
+  public void testZero64_0()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_00000000L",
       JPRAMasks.createZeroMask(64, 0, 63));
   }
 
-  @Test public void testZero64_1()
+  @Test
+  public void testZero64_1()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_00000000L",
       JPRAMasks.createZeroMask(64, 0, 7));
   }
 
-  @Test public void testZero64_2()
+  @Test
+  public void testZero64_2()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111_11111111_11111111_00000000_11111111L",
       JPRAMasks.createZeroMask(64, 8, 15));
   }
 
-  @Test public void testZero64_3()
+  @Test
+  public void testZero64_3()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111_11111111_00000000_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 16, 23));
   }
 
-  @Test public void testZero64_4()
+  @Test
+  public void testZero64_4()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111_00000000_11111111_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 24, 31));
   }
 
-  @Test public void testZero64_5()
+  @Test
+  public void testZero64_5()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_00000000_11111111_11111111_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 32, 39));
   }
 
-  @Test public void testZero64_6()
+  @Test
+  public void testZero64_6()
   {
     Assert.assertEquals(
       "0b11111111_11111111_00000000_11111111_11111111_11111111_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 40, 47));
   }
 
-  @Test public void testZero64_7()
+  @Test
+  public void testZero64_7()
   {
     Assert.assertEquals(
       "0b11111111_00000000_11111111_11111111_11111111_11111111_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 48, 55));
   }
 
-  @Test public void testZero64_8()
+  @Test
+  public void testZero64_8()
   {
     Assert.assertEquals(
       "0b00000000_11111111_11111111_11111111_11111111_11111111_11111111_11111111L",
       JPRAMasks.createZeroMask(64, 56, 63));
   }
 
-  @Test public void testOneError_0()
+  @Test
+  public void testOneError_0()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("size"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("size"));
     JPRAMasks.createOneMask(-1, 0, 0);
   }
 
-  @Test public void testOneError_1()
+  @Test
+  public void testOneError_1()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("size"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("size"));
     JPRAMasks.createOneMask(0, 0, 0);
   }
 
-  @Test public void testOneError_2()
+  @Test
+  public void testOneError_2()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("lsb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("lsb"));
     JPRAMasks.createOneMask(1, -1, 0);
   }
 
-  @Test public void testOneError_3()
+  @Test
+  public void testOneError_3()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("msb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("msb"));
     JPRAMasks.createOneMask(1, 0, 1);
   }
 
-  @Test public void testOneError_4()
+  @Test
+  public void testOneError_4()
   {
-    this.expected.expect(RequireViolation.class);
-    this.expected.expectMessage(new StringStartsWith("lsb"));
+    this.expected.expect(PreconditionViolationException.class);
+    this.expected.expectMessage(new StringContains("lsb"));
     JPRAMasks.createOneMask(2, 1, 0);
   }
 
-  @Test public void testOne8_4msb()
+  @Test
+  public void testOne8_4msb()
   {
     Assert.assertEquals("0b00001111", JPRAMasks.createOneMask(8, 0, 3));
   }
 
-  @Test public void testOne8_4lsb()
+  @Test
+  public void testOne8_4lsb()
   {
     Assert.assertEquals("0b11110000", JPRAMasks.createOneMask(8, 4, 7));
   }
 
-  @Test public void testOne8_0()
+  @Test
+  public void testOne8_0()
   {
     Assert.assertEquals("0b11111111", JPRAMasks.createOneMask(8, 0, 7));
   }
 
-  @Test public void testOne16_0()
+  @Test
+  public void testOne16_0()
   {
     Assert.assertEquals(
       "0b11111111_11111111", JPRAMasks.createOneMask(16, 0, 15));
   }
 
-  @Test public void testOne16_1()
+  @Test
+  public void testOne16_1()
   {
     Assert.assertEquals(
       "0b11111111_00000000", JPRAMasks.createOneMask(16, 8, 15));
   }
 
-  @Test public void testOne16_2()
+  @Test
+  public void testOne16_2()
   {
     Assert.assertEquals(
       "0b00000000_11111111", JPRAMasks.createOneMask(16, 0, 7));
   }
 
-  @Test public void testOne32_0()
+  @Test
+  public void testOne32_0()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111",
       JPRAMasks.createOneMask(32, 0, 31));
   }
 
-  @Test public void testOne32_1()
+  @Test
+  public void testOne32_1()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_11111111",
       JPRAMasks.createOneMask(32, 0, 7));
   }
 
-  @Test public void testOne32_2()
+  @Test
+  public void testOne32_2()
   {
     Assert.assertEquals(
       "0b00000000_00000000_11111111_00000000",
       JPRAMasks.createOneMask(32, 8, 15));
   }
 
-  @Test public void testOne32_3()
+  @Test
+  public void testOne32_3()
   {
     Assert.assertEquals(
       "0b00000000_11111111_00000000_00000000",
       JPRAMasks.createOneMask(32, 16, 23));
   }
 
-  @Test public void testOne32_4()
+  @Test
+  public void testOne32_4()
   {
     Assert.assertEquals(
       "0b11111111_00000000_00000000_00000000",
       JPRAMasks.createOneMask(32, 24, 31));
   }
 
-  @Test public void testOne64_0()
+  @Test
+  public void testOne64_0()
   {
     Assert.assertEquals(
       "0b11111111_11111111_11111111_11111111_11111111_11111111_11111111_11111111L",
       JPRAMasks.createOneMask(64, 0, 63));
   }
 
-  @Test public void testOne64_1()
+  @Test
+  public void testOne64_1()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_11111111L",
       JPRAMasks.createOneMask(64, 0, 7));
   }
 
-  @Test public void testOne64_2()
+  @Test
+  public void testOne64_2()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000_00000000_00000000_11111111_00000000L",
       JPRAMasks.createOneMask(64, 8, 15));
   }
 
-  @Test public void testOne64_3()
+  @Test
+  public void testOne64_3()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000_00000000_11111111_00000000_00000000L",
       JPRAMasks.createOneMask(64, 16, 23));
   }
 
-  @Test public void testOne64_4()
+  @Test
+  public void testOne64_4()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_00000000_11111111_00000000_00000000_00000000L",
       JPRAMasks.createOneMask(64, 24, 31));
   }
 
-  @Test public void testOne64_5()
+  @Test
+  public void testOne64_5()
   {
     Assert.assertEquals(
       "0b00000000_00000000_00000000_11111111_00000000_00000000_00000000_00000000L",
       JPRAMasks.createOneMask(64, 32, 39));
   }
 
-  @Test public void testOne64_6()
+  @Test
+  public void testOne64_6()
   {
     Assert.assertEquals(
       "0b00000000_00000000_11111111_00000000_00000000_00000000_00000000_00000000L",
       JPRAMasks.createOneMask(64, 40, 47));
   }
 
-  @Test public void testOne64_7()
+  @Test
+  public void testOne64_7()
   {
     Assert.assertEquals(
       "0b00000000_11111111_00000000_00000000_00000000_00000000_00000000_00000000L",
       JPRAMasks.createOneMask(64, 48, 55));
   }
 
-  @Test public void testOne64_8()
+  @Test
+  public void testOne64_8()
   {
     Assert.assertEquals(
       "0b11111111_00000000_00000000_00000000_00000000_00000000_00000000_00000000L",

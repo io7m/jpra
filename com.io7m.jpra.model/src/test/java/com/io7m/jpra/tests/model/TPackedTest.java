@@ -17,7 +17,7 @@
 package com.io7m.jpra.tests.model;
 
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.GlobalContexts;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -42,7 +42,7 @@ public final class TPackedTest
   @Test public void testLSBMSBRanges_0()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     final GlobalContextType gc =
@@ -63,7 +63,7 @@ public final class TPackedTest
   @Test public void testLSBMSBRanges_1()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     final GlobalContextType gc =
@@ -134,7 +134,7 @@ public final class TPackedTest
   @Test public void testLSBMSBRanges_2()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     final GlobalContextType gc =

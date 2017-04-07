@@ -16,10 +16,10 @@
 
 package com.io7m.jpra.compiler.core.driver;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
@@ -57,7 +57,6 @@ import com.io7m.jsx.parser.JSXParser;
 import com.io7m.jsx.serializer.JSXSerializerTrivial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,8 +149,8 @@ public final class JPRADriver implements JPRADriverType
       final Path in_base,
       final JPRACheckerCapabilitiesType in_caps)
     {
-      this.source_directory = NullCheck.notNull(in_base);
-      this.caps = NullCheck.notNull(in_caps);
+      this.source_directory = NullCheck.notNull(in_base, "Path");
+      this.caps = NullCheck.notNull(in_caps, "Capabilities");
     }
 
     private Path fileForPackage(final PackageNameQualified p)
@@ -189,16 +188,15 @@ public final class JPRADriver implements JPRADriverType
       try (final InputStream is = Files.newInputStream(file)) {
         final JSXParserType sxp = JPRADriver.newJSXParser(is, file);
 
-        Optional<ImmutableLexicalPositionType<Path>> lex = Optional.empty();
+        Optional<LexicalPosition<Path>> lex = Optional.empty();
         boolean done = false;
         while (!done) {
           try {
             final Optional<SExpressionType> e_opt = sxp.parseExpressionOrEOF();
             if (e_opt.isPresent()) {
               final SExpressionType s = e_opt.get();
-              final Optional<LexicalPositionType<Path>> lex_opt =
-                s.getLexicalInformation();
-              lex = lex_opt.map(ImmutableLexicalPosition::newFrom);
+              final Optional<LexicalPositionType<Path>> lex_opt = s.lexical();
+              lex = lex_opt.map(LexicalPosition::copyOf);
 
               /**
                * The resolver is configured to only accept packages named
@@ -207,7 +205,8 @@ public final class JPRADriver implements JPRADriverType
 
               final Optional<PackageContextType> pr = pipe.onExpression(s);
               if (pr.isPresent()) {
-                Assertive.require(!pack_opt.isPresent());
+                Preconditions.checkPrecondition(
+                  !pack_opt.isPresent(), "Package must be present");
                 pack_opt = pr;
               }
             } else {
@@ -239,7 +238,8 @@ public final class JPRADriver implements JPRADriverType
           String.format("Could not load package %s", p));
       }
 
-      Assertive.require(pack_opt.isPresent());
+      Preconditions.checkPrecondition(
+        pack_opt.isPresent(), "Package must be present");
       return pack_opt.get();
     }
   }

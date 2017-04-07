@@ -66,42 +66,50 @@ public final class TRecords
     return rt.matchType(
       new TypeMatcherType<TypeLookupType, UnreachableCodeException>()
       {
-        @Override public TypeLookupType matchArray(final TArray t)
+        @Override
+        public TypeLookupType matchArray(final TArray t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchString(final TString t)
+        @Override
+        public TypeLookupType matchString(final TString t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchBooleanSet(final TBooleanSet t)
+        @Override
+        public TypeLookupType matchBooleanSet(final TBooleanSet t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchInteger(final TIntegerType t)
+        @Override
+        public TypeLookupType matchInteger(final TIntegerType t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchFloat(final TFloat t)
+        @Override
+        public TypeLookupType matchFloat(final TFloat t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchVector(final TVector t)
+        @Override
+        public TypeLookupType matchVector(final TVector t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchMatrix(final TMatrix t)
+        @Override
+        public TypeLookupType matchMatrix(final TMatrix t)
         {
           return new TypeLookupFailed(t, name, rest);
         }
 
-        @Override public TypeLookupType matchRecord(final TRecord t)
+        @Override
+        public TypeLookupType matchRecord(final TRecord t)
         {
           final ImmutableMap<FieldName, TRecord.FieldValue> by_name =
             t.getFieldsByName();
@@ -116,7 +124,8 @@ public final class TRecords
             f.getType(), next, rest.drop(1));
         }
 
-        @Override public TypeLookupType matchPacked(final TPacked t)
+        @Override
+        public TypeLookupType matchPacked(final TPacked t)
         {
           final ImmutableMap<FieldName, TPacked.FieldValue> by_name =
             t.getFieldsByName();
@@ -164,8 +173,8 @@ public final class TRecords
 
   public static final class TypeLookupFailed implements TypeLookupType
   {
-    private final TType                    end;
-    private final FieldName                name;
+    private final TType end;
+    private final FieldName name;
     private final ImmutableList<FieldName> rest;
 
     /**
@@ -186,7 +195,8 @@ public final class TRecords
       this.rest = NullCheck.notNull(in_rest);
     }
 
-    @Override public <A, E extends Exception> A matchTypeLookup(
+    @Override
+    public <A, E extends Exception> A matchTypeLookup(
       final PartialFunctionType<TypeLookupSucceeded, A, E> success,
       final PartialFunctionType<TypeLookupFailed, A, E> failure)
       throws E
@@ -215,7 +225,8 @@ public final class TRecords
       this.result = NullCheck.notNull(in_result);
     }
 
-    @Override public <A, E extends Exception> A matchTypeLookup(
+    @Override
+    public <A, E extends Exception> A matchTypeLookup(
       final PartialFunctionType<TypeLookupSucceeded, A, E> success,
       final PartialFunctionType<TypeLookupFailed, A, E> failure)
       throws E

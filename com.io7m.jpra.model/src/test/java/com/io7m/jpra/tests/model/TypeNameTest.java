@@ -16,60 +16,69 @@
 
 package com.io7m.jpra.tests.model;
 
+import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jpra.model.names.TypeName;
 import org.junit.Assert;
 import org.junit.Test;
-import org.valid4j.errors.RequireViolation;
 
 import java.util.Optional;
 
 public final class TypeNameTest
 {
-  @Test public void testValid0()
+  @Test
+  public void testValid0()
   {
     final TypeName p = new TypeName(Optional.empty(), "A");
     Assert.assertEquals("A", p.getValue());
   }
 
-  @Test public void testValid1()
+  @Test
+  public void testValid1()
   {
     final TypeName p = new TypeName(Optional.empty(), "A_");
     Assert.assertEquals("A_", p.getValue());
   }
 
-  @Test public void testValid2()
+  @Test
+  public void testValid2()
   {
     final TypeName p = new TypeName(Optional.empty(), "A1");
     Assert.assertEquals("A1", p.getValue());
   }
 
-  @Test public void testValid3()
+  @Test
+  public void testValid3()
   {
     final TypeName p = new TypeName(Optional.empty(), "AA");
     Assert.assertEquals("AA", p.getValue());
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid0()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid0()
   {
     new TypeName(Optional.empty(), "1");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid1()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid1()
   {
     new TypeName(Optional.empty(), "a");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid2()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid2()
   {
     new TypeName(Optional.empty(), "_");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid3()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid3()
   {
     new TypeName(Optional.empty(), "aA");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid4()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid4()
   {
     new TypeName(Optional.empty(), "");
   }

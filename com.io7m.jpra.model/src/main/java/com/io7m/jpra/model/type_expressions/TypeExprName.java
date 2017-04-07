@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.type_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.TypeReference;
 
@@ -32,9 +32,9 @@ import java.util.Optional;
 
 public final class TypeExprName<I, T> implements TypeExprType<I, T>
 {
-  private final I             identifier;
+  private final I identifier;
   private final TypeReference ref;
-  private final T             type;
+  private final T type;
 
   /**
    * Construct an expression.
@@ -54,7 +54,8 @@ public final class TypeExprName<I, T> implements TypeExprType<I, T>
     this.ref = NullCheck.notNull(in_ref);
   }
 
-  @Override public T getType()
+  @Override
+  public T getType()
   {
     return this.type;
   }
@@ -77,7 +78,8 @@ public final class TypeExprName<I, T> implements TypeExprType<I, T>
     return this.identifier;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
@@ -85,7 +87,7 @@ public final class TypeExprName<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.ref.getType().getLexicalInformation();
   }

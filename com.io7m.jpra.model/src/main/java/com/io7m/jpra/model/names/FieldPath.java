@@ -17,8 +17,8 @@
 package com.io7m.jpra.model.names;
 
 import com.gs.collections.api.list.ImmutableList;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
-import org.valid4j.Assertive;
 
 /**
  * A path to a field.
@@ -27,13 +27,14 @@ import org.valid4j.Assertive;
 public final class FieldPath
 {
   private final ImmutableList<FieldName> path;
-  private final String                   image;
+  private final String image;
 
   private FieldPath(
     final ImmutableList<FieldName> in_path)
   {
-    this.path = NullCheck.notNull(in_path);
-    Assertive.require(!in_path.isEmpty(), "Field path cannot be empty");
+    this.path = NullCheck.notNull(in_path, "Path");
+    Preconditions.checkPrecondition(
+      !in_path.isEmpty(), "Field path cannot be empty");
     this.image = in_path.makeString(".");
   }
 
@@ -51,7 +52,8 @@ public final class FieldPath
     return new FieldPath(in_elements);
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -64,12 +66,14 @@ public final class FieldPath
     return this.image.equals(fp.image);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.image.hashCode();
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.image;
   }

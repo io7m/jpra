@@ -19,8 +19,8 @@ package com.io7m.jpra.tests.compiler.core.pipeline;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.compiler.core.checker.JPRAChecker;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
@@ -97,7 +97,7 @@ public final class JPRAPipelineDemo
       }
 
       @Override
-      public Optional<ImmutableLexicalPositionType<Path>>
+      public Optional<LexicalPosition<Path>>
       getLexicalInformation()
       {
         return Optional.empty();
@@ -117,7 +117,7 @@ public final class JPRAPipelineDemo
     final JPRAPipelineType pipe =
       JPRAPipeline.newPipeline(parser, resolver, checker);
 
-    Optional<ImmutableLexicalPositionType<Path>> lex = Optional.empty();
+    Optional<LexicalPosition<Path>> lex = Optional.empty();
     boolean done = false;
     while (!done) {
       try {
@@ -125,8 +125,7 @@ public final class JPRAPipelineDemo
         final Optional<SExpressionType> opt = sexpr.parseExpressionOrEOF();
         if (opt.isPresent()) {
           final SExpressionType s = opt.get();
-          lex =
-            s.getLexicalInformation().map(ImmutableLexicalPosition::newFrom);
+          lex = s.lexical().map(LexicalPosition::copyOf);
           pipe.onExpression(s);
         } else {
           done = true;
@@ -137,11 +136,11 @@ public final class JPRAPipelineDemo
           "{}: {}", e.getLexicalInformation(), e.getMessage());
         System.out.println();
       } catch (final JPRACompilerException e) {
-        final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+        final Optional<LexicalPosition<Path>> lex_opt =
           e.getLexicalInformation();
         final String error_name = e.getClass().getSimpleName();
         if (lex_opt.isPresent()) {
-          final ImmutableLexicalPositionType<Path> elex = lex_opt.get();
+          final LexicalPosition<Path> elex = lex_opt.get();
           JPRAPipelineDemo.LOG.error(
             "{}: {}: {}", error_name, elex, e.getMessage());
         } else {

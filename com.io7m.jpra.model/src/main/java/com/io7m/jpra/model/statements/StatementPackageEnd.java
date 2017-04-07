@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.statements;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 
@@ -33,7 +33,7 @@ import java.util.Optional;
 public final class StatementPackageEnd<I, T>
   implements ModelElementType, StatementType<I, T>
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final Optional<LexicalPosition<Path>> lex;
 
   /**
    * Construct a statement.
@@ -42,18 +42,19 @@ public final class StatementPackageEnd<I, T>
    */
 
   public StatementPackageEnd(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex)
+    final Optional<LexicalPosition<Path>> in_lex)
   {
     this.lex = NullCheck.notNull(in_lex);
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }
 
-  @Override public <A, E extends Exception> A matchStatement(
+  @Override
+  public <A, E extends Exception> A matchStatement(
     final StatementMatcherType<I, T, A, E> m)
     throws E
   {

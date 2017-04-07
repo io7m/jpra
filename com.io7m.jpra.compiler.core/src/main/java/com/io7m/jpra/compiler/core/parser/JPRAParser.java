@@ -22,8 +22,9 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jaffirm.core.PreconditionViolationException;
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalPositionType;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
@@ -71,8 +72,6 @@ import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
-import org.valid4j.errors.RequireViolation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -101,33 +100,33 @@ public final class JPRAParser implements JPRAParserType
   private static final Set<String> PACKED_FIELD_KEYWORDS;
 
   private static final String PACKAGE_BEGIN = "package-begin";
-  private static final String PACKAGE_END   = "package-end";
-  private static final String IMPORT        = "import";
-  private static final String RECORD        = "record";
-  private static final String PACKED        = "packed";
-  private static final String COMMAND_TYPE  = ":type";
-  private static final String COMMAND_SIZE  = ":size";
+  private static final String PACKAGE_END = "package-end";
+  private static final String IMPORT = "import";
+  private static final String RECORD = "record";
+  private static final String PACKED = "packed";
+  private static final String COMMAND_TYPE = ":type";
+  private static final String COMMAND_SIZE = ":size";
 
-  private static final String INTEGER                     = "integer";
-  private static final String INTEGER_SIGNED              = "signed";
-  private static final String INTEGER_UNSIGNED            = "unsigned";
-  private static final String INTEGER_SIGNED_NORMALIZED   = "signed-normalized";
+  private static final String INTEGER = "integer";
+  private static final String INTEGER_SIGNED = "signed";
+  private static final String INTEGER_UNSIGNED = "unsigned";
+  private static final String INTEGER_SIGNED_NORMALIZED = "signed-normalized";
   private static final String INTEGER_UNSIGNED_NORMALIZED =
     "unsigned-normalized";
 
   private static final String SIZE_IN_OCTETS = "size-in-octets";
-  private static final String SIZE_IN_BITS   = "size-in-bits";
+  private static final String SIZE_IN_BITS = "size-in-bits";
 
-  private static final String FLOAT       = "float";
-  private static final String VECTOR      = "vector";
-  private static final String MATRIX      = "matrix";
-  private static final String ARRAY       = "array";
-  private static final String STRING      = "string";
+  private static final String FLOAT = "float";
+  private static final String VECTOR = "vector";
+  private static final String MATRIX = "matrix";
+  private static final String ARRAY = "array";
+  private static final String STRING = "string";
   private static final String BOOLEAN_SET = "boolean-set";
 
-  private static final String FIELD          = "field";
+  private static final String FIELD = "field";
   private static final String PADDING_OCTETS = "padding-octets";
-  private static final String PADDING_BITS   = "padding-bits";
+  private static final String PADDING_BITS = "padding-bits";
 
   static {
     KEYWORDS = new HashSet<>(16);
@@ -171,15 +170,15 @@ public final class JPRAParser implements JPRAParserType
     LOG = LoggerFactory.getLogger(JPRAParser.class);
   }
 
-  private final JSXSerializerType       serial;
+  private final JSXSerializerType serial;
   private final JPRAReferenceParserType ref_parser;
 
   private JPRAParser(
     final JSXSerializerType in_serial,
     final JPRAReferenceParserType in_ref_parser)
   {
-    this.serial = NullCheck.notNull(in_serial);
-    this.ref_parser = NullCheck.notNull(in_ref_parser);
+    this.serial = NullCheck.notNull(in_serial, "Serializer");
+    this.ref_parser = NullCheck.notNull(in_ref_parser, "Parser");
   }
 
   /**
@@ -211,7 +210,8 @@ public final class JPRAParser implements JPRAParserType
           throw JPRACompilerParseException.expectedSymbolGotList(le);
         }
 
-        @Override public SExpressionSymbolType quotedString(
+        @Override
+        public SExpressionSymbolType quotedString(
           final SExpressionQuotedStringType qe)
           throws JPRACompilerParseException
         {
@@ -230,10 +230,10 @@ public final class JPRAParser implements JPRAParserType
   private static void checkKeyword(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.KEYWORDS.contains(se.getText())) {
+    if (!JPRAParser.KEYWORDS.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized keyword '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("  Expected one of: ");
@@ -246,10 +246,10 @@ public final class JPRAParser implements JPRAParserType
   private static void checkType(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.TYPES.contains(se.getText())) {
+    if (!JPRAParser.TYPES.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized type keyword '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("  Expected one of: ");
@@ -260,20 +260,19 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  private static Optional<ImmutableLexicalPositionType<Path>>
+  private static Optional<LexicalPosition<Path>>
   getExpressionLexical(final SExpressionType q)
   {
-    final Optional<LexicalPositionType<Path>> lex = q.getLexicalInformation();
-    return lex.map(ImmutableLexicalPosition::newFrom);
+    return q.lexical().map(LexicalPosition::copyOf);
   }
 
   private static void checkIntegerTypeKeyword(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.INTEGER_TYPES.contains(se.getText())) {
+    if (!JPRAParser.INTEGER_TYPES.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized integer type keyword '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("  Expected one of: ");
@@ -287,10 +286,10 @@ public final class JPRAParser implements JPRAParserType
   private static void checkSizeFunction(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.SIZE_FUNCTIONS.contains(se.getText())) {
+    if (!JPRAParser.SIZE_FUNCTIONS.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized size function '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("  Expected one of: ");
@@ -323,8 +322,8 @@ public final class JPRAParser implements JPRAParserType
             final FieldName name;
             try {
               name = new FieldName(
-                JPRAParser.getExpressionLexical(si), si.getText());
-            } catch (final RequireViolation x) {
+                JPRAParser.getExpressionLexical(si), si.text());
+            } catch (final PreconditionViolationException x) {
               throw JPRACompilerParseException.badFieldName(si, x.getMessage());
             }
 
@@ -349,7 +348,8 @@ public final class JPRAParser implements JPRAParserType
           return rx.toImmutable();
         }
 
-        @Override public ImmutableList<FieldName> quotedString(
+        @Override
+        public ImmutableList<FieldName> quotedString(
           final SExpressionQuotedStringType e)
           throws JPRACompilerParseException
         {
@@ -369,11 +369,11 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType name)
     throws JPRACompilerParseException
   {
-    final String text = name.getText();
-    Assertive.require(!text.isEmpty());
+    final String text = name.text();
+    Preconditions.checkPrecondition(!text.isEmpty(), "Text must not be empty");
     final String[] segments = text.split("\\.");
 
-    final Optional<ImmutableLexicalPositionType<Path>> ilex =
+    final Optional<LexicalPosition<Path>> ilex =
       JPRAParser.getExpressionLexical(name);
 
     final MutableList<PackageNameUnqualified> names_base = new FastList<>();
@@ -381,7 +381,7 @@ public final class JPRAParser implements JPRAParserType
       final String raw = segments[index];
       try {
         names_base.add(new PackageNameUnqualified(ilex, raw));
-      } catch (final RequireViolation e) {
+      } catch (final PreconditionViolationException e) {
         throw JPRACompilerParseException.badPackageName(name, e.getMessage());
       }
     }
@@ -397,8 +397,8 @@ public final class JPRAParser implements JPRAParserType
   {
     try {
       return new PackageNameUnqualified(
-        JPRAParser.getExpressionLexical(s), s.getText());
-    } catch (final RequireViolation e) {
+        JPRAParser.getExpressionLexical(s), s.text());
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badPackageName(s, e.getMessage());
     }
   }
@@ -410,13 +410,15 @@ public final class JPRAParser implements JPRAParserType
       new SExpressionMatcherType<SExpressionListType,
         JPRACompilerParseException>()
       {
-        @Override public SExpressionListType list(final SExpressionListType le)
+        @Override
+        public SExpressionListType list(final SExpressionListType le)
           throws JPRACompilerParseException
         {
           return le;
         }
 
-        @Override public SExpressionListType quotedString(
+        @Override
+        public SExpressionListType quotedString(
           final SExpressionQuotedStringType qe)
           throws JPRACompilerParseException
         {
@@ -437,8 +439,8 @@ public final class JPRAParser implements JPRAParserType
   {
     try {
       return new TypeName(
-        JPRAParser.getExpressionLexical(name), name.getText());
-    } catch (final RequireViolation e) {
+        JPRAParser.getExpressionLexical(name), name.text());
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badTypeName(name, e.getMessage());
     }
   }
@@ -446,10 +448,10 @@ public final class JPRAParser implements JPRAParserType
   private static void checkRecordFieldKeyword(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.RECORD_FIELD_KEYWORDS.contains(se.getText())) {
+    if (!JPRAParser.RECORD_FIELD_KEYWORDS.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized record field keyword '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("Expected one of: ");
@@ -463,10 +465,10 @@ public final class JPRAParser implements JPRAParserType
   private static void checkPackedFieldKeyword(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    if (!JPRAParser.PACKED_FIELD_KEYWORDS.contains(se.getText())) {
+    if (!JPRAParser.PACKED_FIELD_KEYWORDS.contains(se.text())) {
       final StringBuilder sb = new StringBuilder(256);
       sb.append("Unrecognized packed field keyword '");
-      sb.append(se.getText());
+      sb.append(se.text());
       sb.append("'");
       sb.append(System.lineSeparator());
       sb.append("  Expected one of: ");
@@ -482,8 +484,8 @@ public final class JPRAParser implements JPRAParserType
   {
     try {
       return new FieldName(
-        JPRAParser.getExpressionLexical(name), name.getText());
-    } catch (final RequireViolation e) {
+        JPRAParser.getExpressionLexical(name), name.text());
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badFieldName(name, e.getMessage());
     }
   }
@@ -493,7 +495,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.IMPORT.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.IMPORT.equals(se.text()),
+      "Text must be %s",
+      IMPORT);
 
     if (le.size() == 4) {
       final SExpressionType q_name = le.get(1);
@@ -501,9 +506,9 @@ public final class JPRAParser implements JPRAParserType
       final SExpressionType u_name = le.get(3);
 
       if (q_name instanceof SExpressionSymbolType
-          && u_name instanceof SExpressionSymbolType
-          && as instanceof SExpressionSymbolType
-          && "as".equals(((SExpressionSymbolType) as).getText())) {
+        && u_name instanceof SExpressionSymbolType
+        && as instanceof SExpressionSymbolType
+        && "as".equals(((SExpressionSymbolType) as).text())) {
         final SExpressionSymbolType q_sym = (SExpressionSymbolType) q_name;
         final SExpressionSymbolType u_sym = (SExpressionSymbolType) u_name;
 
@@ -523,7 +528,7 @@ public final class JPRAParser implements JPRAParserType
       sb.append(System.lineSeparator());
       sb.append(
         "  Expected: (import <package-name-qualified> as "
-        + "<package-name-unqualified)");
+          + "<package-name-unqualified)");
       sb.append(System.lineSeparator());
       sb.append("Got: ");
       sb.append(bao.toString(StandardCharsets.UTF_8.name()));
@@ -533,11 +538,12 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  @Override public StatementType<Unresolved, Untyped> parseStatement(
+  @Override
+  public StatementType<Unresolved, Untyped> parseStatement(
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(expr);
+    NullCheck.notNull(expr, "Expression");
 
     final SExpressionListType le = JPRAParser.requireList(expr);
     if (le.size() == 0) {
@@ -547,7 +553,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se = JPRAParser.requireSymbol(le.get(0));
     JPRAParser.checkKeyword(se);
 
-    switch (se.getText()) {
+    switch (se.text()) {
       case JPRAParser.PACKAGE_BEGIN:
         return this.parsePackageBegin(le, se);
       case JPRAParser.PACKAGE_END:
@@ -572,7 +578,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.COMMAND_TYPE.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.COMMAND_TYPE.equals(se.text()),
+      "Text must be %s",
+      COMMAND_TYPE);
 
     if (le.size() == 2) {
       return new StatementCommandType<>(this.parseTypeExpression(le.get(1)));
@@ -598,7 +607,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.COMMAND_SIZE.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.COMMAND_SIZE.equals(se.text()),
+      "Text must be %s",
+      COMMAND_SIZE);
 
     if (le.size() == 2) {
       return new StatementCommandSize<>(this.parseSizeExpression(le.get(1)));
@@ -624,14 +636,17 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKED.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKED.equals(se.text()),
+      "Text must be %s",
+      PACKED);
 
     if (le.size() == 3) {
       final SExpressionType n_expr = le.get(1);
       final SExpressionType f_expr = le.get(2);
 
       if (n_expr instanceof SExpressionSymbolType
-          && f_expr instanceof SExpressionListType) {
+        && f_expr instanceof SExpressionListType) {
 
         final TypeName t_name =
           JPRAParser.parseTypeName((SExpressionSymbolType) n_expr);
@@ -686,7 +701,7 @@ public final class JPRAParser implements JPRAParserType
       JPRAParser.checkPackedFieldKeyword(k);
 
       final int e_count = l_expr.size();
-      switch (k.getText()) {
+      switch (k.text()) {
         case JPRAParser.FIELD: {
           final PackedFieldDeclValue<Unresolved, Untyped> f =
             this.parsePackedFieldValue(l_expr, e_count);
@@ -781,14 +796,17 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.RECORD.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.RECORD.equals(se.text()),
+      "Text must be %s",
+      RECORD);
 
     if (le.size() == 3) {
       final SExpressionType n_expr = le.get(1);
       final SExpressionType f_expr = le.get(2);
 
       if (n_expr instanceof SExpressionSymbolType
-          && f_expr instanceof SExpressionListType) {
+        && f_expr instanceof SExpressionListType) {
 
         final TypeName t_name =
           JPRAParser.parseTypeName((SExpressionSymbolType) n_expr);
@@ -843,7 +861,7 @@ public final class JPRAParser implements JPRAParserType
       JPRAParser.checkRecordFieldKeyword(k);
 
       final int e_count = l_expr.size();
-      switch (k.getText()) {
+      switch (k.text()) {
         case JPRAParser.FIELD: {
           final RecordFieldDeclValue<Unresolved, Untyped> f =
             this.parseRecordFieldValue(l_expr, e_count);
@@ -938,7 +956,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKAGE_END.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKAGE_END.equals(se.text()),
+      "Text must be %s",
+      PACKAGE_END);
 
     if (le.size() == 1) {
       return new StatementPackageEnd<>(JPRAParser.getExpressionLexical(se));
@@ -964,7 +985,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKAGE_BEGIN.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKAGE_BEGIN.equals(se.text()),
+      "Text must be %s",
+      PACKAGE_BEGIN);
 
     if (le.size() == 2) {
       final SExpressionType e_name = le.get(1);
@@ -991,7 +1015,8 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  @Override public TypeExprType<Unresolved, Untyped> parseTypeExpression(
+  @Override
+  public TypeExprType<Unresolved, Untyped> parseTypeExpression(
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
@@ -1001,7 +1026,8 @@ public final class JPRAParser implements JPRAParserType
       new SExpressionMatcherType<TypeExprType<Unresolved, Untyped>,
         JPRACompilerParseException>()
       {
-        @Override public TypeExprType<Unresolved, Untyped> list(
+        @Override
+        public TypeExprType<Unresolved, Untyped> list(
           final SExpressionListType le)
           throws JPRACompilerParseException
         {
@@ -1012,7 +1038,7 @@ public final class JPRAParser implements JPRAParserType
           final SExpressionSymbolType se = JPRAParser.requireSymbol(le.get(0));
           JPRAParser.checkType(se);
 
-          switch (se.getText()) {
+          switch (se.text()) {
             case JPRAParser.INTEGER: {
               return JPRAParser.this.parseTypeInteger(le, se);
             }
@@ -1039,7 +1065,8 @@ public final class JPRAParser implements JPRAParserType
           throw new UnreachableCodeException();
         }
 
-        @Override public TypeExprType<Unresolved, Untyped> quotedString(
+        @Override
+        public TypeExprType<Unresolved, Untyped> quotedString(
           final SExpressionQuotedStringType qe)
           throws JPRACompilerParseException
         {
@@ -1047,7 +1074,8 @@ public final class JPRAParser implements JPRAParserType
             qe);
         }
 
-        @Override public TypeExprType<Unresolved, Untyped> symbol(
+        @Override
+        public TypeExprType<Unresolved, Untyped> symbol(
           final SExpressionSymbolType se)
           throws JPRACompilerParseException
         {
@@ -1060,7 +1088,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    final Optional<ImmutableLexicalPositionType<Path>> lex =
+    final Optional<LexicalPosition<Path>> lex =
       JPRAParser.getExpressionLexical(se);
     return new TypeExprName<>(
       Unresolved.get(), Untyped.get(), this.ref_parser.parseTypeReference(se));
@@ -1071,7 +1099,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.BOOLEAN_SET.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.BOOLEAN_SET.equals(se.text()),
+      "Text must be %s",
+      BOOLEAN_SET);
 
     if (le.size() == 3) {
       final SExpressionType s_expr = le.get(1);
@@ -1080,7 +1111,7 @@ public final class JPRAParser implements JPRAParserType
         this.parseSizeExpression(s_expr);
 
       final ImmutableList<FieldName> fields = JPRAParser.parseFieldSet(f_expr);
-      final Optional<ImmutableLexicalPositionType<Path>> lex =
+      final Optional<LexicalPosition<Path>> lex =
         JPRAParser.getExpressionLexical(s_expr);
       return new TypeExprBooleanSet<>(Untyped.get(), lex, fields, size);
     }
@@ -1107,7 +1138,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.STRING.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.STRING.equals(se.text()),
+      "Text must be %s",
+      STRING);
 
     if (le.size() == 3) {
       final SExpressionType s_expr = le.get(1);
@@ -1122,7 +1156,7 @@ public final class JPRAParser implements JPRAParserType
           Untyped.get(),
           JPRAParser.getExpressionLexical(le),
           size,
-          qe.getText());
+          qe.text());
       }
     }
 
@@ -1148,7 +1182,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.ARRAY.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.ARRAY.equals(se.text()),
+      "Text must be %s",
+      ARRAY);
 
     if (le.size() == 3) {
       final SExpressionType t_expr = le.get(1);
@@ -1182,7 +1219,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.MATRIX.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.MATRIX.equals(se.text()),
+      "Text must be %s",
+      MATRIX);
 
     if (le.size() == 4) {
       final SExpressionType t_expr = le.get(1);
@@ -1226,16 +1266,18 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.VECTOR.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.VECTOR.equals(se.text()),
+      "Text must be %s",
+      VECTOR);
 
     if (le.size() == 3) {
-      final Optional<LexicalPositionType<Path>> lex =
-        le.getLexicalInformation();
+      final Optional<LexicalPositionType<Path>> lex = le.lexical();
       final SExpressionType t_expr = le.get(1);
       final SExpressionType s_expr = le.get(2);
       return new TypeExprVector<>(
         Untyped.get(),
-        lex.map(ImmutableLexicalPosition::newFrom),
+        lex.map(LexicalPosition::copyOf),
         this.parseSizeExpression(s_expr),
         this.parseTypeExpression(t_expr));
     }
@@ -1260,7 +1302,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.FLOAT.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.FLOAT.equals(se.text()),
+      "Text must be %s",
+      FLOAT);
 
     if (le.size() == 2) {
       final SExpressionType s_expr = le.get(1);
@@ -1290,7 +1335,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.INTEGER.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.INTEGER.equals(se.text()),
+      "Text must be %s",
+      INTEGER);
 
     if (le.size() == 3) {
       final SExpressionType t_expr = le.get(1);
@@ -1303,7 +1351,7 @@ public final class JPRAParser implements JPRAParserType
         final SizeExprType<Unresolved, Untyped> size =
           this.parseSizeExpression(s_expr);
 
-        switch (t_name.getText()) {
+        switch (t_name.text()) {
           case JPRAParser.INTEGER_SIGNED: {
             return new TypeExprIntegerSigned<>(
               Untyped.get(), JPRAParser.getExpressionLexical(s_expr), size);
@@ -1341,7 +1389,8 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  @Override public SizeExprType<Unresolved, Untyped> parseSizeExpression(
+  @Override
+  public SizeExprType<Unresolved, Untyped> parseSizeExpression(
     final SExpressionType e)
     throws JPRACompilerParseException
   {
@@ -1349,7 +1398,8 @@ public final class JPRAParser implements JPRAParserType
       new SExpressionMatcherType<SizeExprType<Unresolved, Untyped>,
         JPRACompilerParseException>()
       {
-        @Override public SizeExprType<Unresolved, Untyped> list(
+        @Override
+        public SizeExprType<Unresolved, Untyped> list(
           final SExpressionListType le)
           throws JPRACompilerParseException
         {
@@ -1360,7 +1410,7 @@ public final class JPRAParser implements JPRAParserType
           final SExpressionSymbolType se = JPRAParser.requireSymbol(le.get(0));
           JPRAParser.checkSizeFunction(se);
 
-          switch (se.getText()) {
+          switch (se.text()) {
             case JPRAParser.SIZE_IN_BITS: {
               return JPRAParser.this.parseSizeInBits(le, se);
             }
@@ -1372,7 +1422,8 @@ public final class JPRAParser implements JPRAParserType
           throw new UnreachableCodeException();
         }
 
-        @Override public SizeExprType<Unresolved, Untyped> quotedString(
+        @Override
+        public SizeExprType<Unresolved, Untyped> quotedString(
           final SExpressionQuotedStringType qe)
           throws JPRACompilerParseException
         {
@@ -1380,14 +1431,15 @@ public final class JPRAParser implements JPRAParserType
             qe);
         }
 
-        @Override public SizeExprType<Unresolved, Untyped> symbol(
+        @Override
+        public SizeExprType<Unresolved, Untyped> symbol(
           final SExpressionSymbolType se)
           throws JPRACompilerParseException
         {
           try {
             return new SizeExprConstant<>(
               JPRAParser.getExpressionLexical(se),
-              new BigInteger(se.getText()));
+              new BigInteger(se.text()));
           } catch (final NumberFormatException x) {
             throw JPRACompilerParseException.invalidIntegerConstant(se);
           }
@@ -1395,11 +1447,12 @@ public final class JPRAParser implements JPRAParserType
       });
   }
 
-  @Override public void parseEOF(
-    final Optional<ImmutableLexicalPositionType<Path>> lex)
+  @Override
+  public void parseEOF(
+    final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(lex);
+    NullCheck.notNull(lex, "Lexical information");
   }
 
   private SizeExprType<Unresolved, Untyped> parseSizeInBits(
@@ -1407,7 +1460,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.SIZE_IN_BITS.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.SIZE_IN_BITS.equals(se.text()),
+      "Text must be %s",
+      SIZE_IN_BITS);
 
     if (le.size() == 2) {
       return new SizeExprInBits<>(this.parseTypeExpression(le.get(1)));
@@ -1433,7 +1489,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.SIZE_IN_OCTETS.equals(se.getText()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.SIZE_IN_OCTETS.equals(se.text()),
+      "Text must be %s",
+      SIZE_IN_OCTETS);
 
     if (le.size() == 2) {
       return new SizeExprInOctets<>(this.parseTypeExpression(le.get(1)));
