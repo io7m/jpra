@@ -24,14 +24,14 @@
     <module>com.io7m.jpra.checkstyle</module>
     <module>com.io7m.jpra.compiler.core</module>
     <module>com.io7m.jpra.compiler.frontend</module>
-    <module>com.io7m.jpra.compiler.java.tests</module>
     <module>com.io7m.jpra.compiler.java</module>
     <module>com.io7m.jpra.core</module>
     <module>com.io7m.jpra.documentation</module>
-    <module>com.io7m.jpra.specification</module>
     <module>com.io7m.jpra.maven.plugin</module>
     <module>com.io7m.jpra.model</module>
     <module>com.io7m.jpra.runtime.java</module>
+    <module>com.io7m.jpra.specification</module>
+    <module>com.io7m.jpra.tests</module>
   </modules>
 
   <properties>
@@ -274,6 +274,11 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.12</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>1.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
