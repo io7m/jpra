@@ -20,7 +20,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
@@ -33,10 +33,11 @@ import java.util.Optional;
  * A fully qualified package name.
  */
 
-@Immutable public final class PackageNameQualified implements ModelElementType
+@Immutable
+public final class PackageNameQualified implements ModelElementType
 {
   private final ImmutableList<PackageNameUnqualified> value;
-  private final String                                image;
+  private final String image;
 
   /**
    * Construct a name.
@@ -100,7 +101,8 @@ import java.util.Optional;
     return new PackageNameQualified(names);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.image;
   }
@@ -114,7 +116,8 @@ import java.util.Optional;
     return this.value;
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -127,13 +130,14 @@ import java.util.Optional;
     return this.image.equals(that.image);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.image.hashCode();
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.value.get(0).getLexicalInformation();
   }

@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
  * A type name.
  */
 
-@Immutable public final class TypeName implements ModelElementType
+@Immutable
+public final class TypeName implements ModelElementType
 {
   /**
    * The pattern that defines a valid type name.
@@ -48,8 +49,8 @@ import java.util.regex.Pattern;
         TypeName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS));
   }
 
-  private final String                                       value;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final String value;
+  private final Optional<LexicalPosition<Path>> lex;
 
   /**
    * Construct a type name.
@@ -59,7 +60,7 @@ import java.util.regex.Pattern;
    */
 
   public TypeName(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
     this.lex = NullCheck.notNull(in_lex);
@@ -81,12 +82,14 @@ import java.util.regex.Pattern;
     return this.value;
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.value;
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -99,13 +102,14 @@ import java.util.regex.Pattern;
     return this.value.equals(other.value);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.value.hashCode();
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

@@ -18,8 +18,7 @@ package com.io7m.jpra.compiler.core.parser;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
@@ -159,7 +158,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   }
 
   private static ImmutableList<FieldName> getFieldPath(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+    final Optional<LexicalPosition<Path>> lex,
     final SExpressionSymbolType se,
     final String text)
     throws JPRACompilerParseException
@@ -190,9 +189,9 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   {
     NullCheck.notNull(se);
 
-    final String text = se.getText();
-    final Optional<ImmutableLexicalPositionType<Path>> lex =
-      se.getLexicalInformation().map(ImmutableLexicalPosition::newFrom);
+    final String text = se.text();
+    final Optional<LexicalPosition<Path>> lex =
+      se.lexical().map(LexicalPosition::copyOf);
 
     {
       final Matcher m = JPRAReferenceParser.PATTERN_PT.matcher(text);
@@ -221,9 +220,9 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   {
     NullCheck.notNull(se);
 
-    final String text = se.getText();
-    final Optional<ImmutableLexicalPositionType<Path>> lex =
-      se.getLexicalInformation().map(ImmutableLexicalPosition::newFrom);
+    final String text = se.text();
+    final Optional<LexicalPosition<Path>> lex =
+      se.lexical().map(LexicalPosition::copyOf);
 
     {
       final Matcher m = JPRAReferenceParser.PATTERN_PTF.matcher(text);

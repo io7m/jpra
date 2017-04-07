@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
@@ -31,10 +31,11 @@ import java.util.regex.Pattern;
  * The name of a union case.
  */
 
-@Immutable public final class UnionCaseName implements ModelElementType
+@Immutable
+public final class UnionCaseName implements ModelElementType
 {
   private static final Pattern PATTERN;
-  private static final String  PATTERN_TEXT;
+  private static final String PATTERN_TEXT;
 
   static {
     PATTERN_TEXT = "[\\p{IsUppercase}][\\p{IsAlphabetic}\\p{IsDigit}_]*";
@@ -43,8 +44,8 @@ import java.util.regex.Pattern;
         UnionCaseName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS));
   }
 
-  private final String                                       value;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final String value;
+  private final Optional<LexicalPosition<Path>> lex;
 
   /**
    * Construct a case name.
@@ -54,7 +55,7 @@ import java.util.regex.Pattern;
    */
 
   public UnionCaseName(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
     this.lex = NullCheck.notNull(in_lex);
@@ -76,7 +77,8 @@ import java.util.regex.Pattern;
     return this.value;
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -89,13 +91,14 @@ import java.util.regex.Pattern;
     return this.value.equals(other.value);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.value.hashCode();
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

@@ -18,5 +18,6 @@
  * Type expressions.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.type_expressions;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.model.type_expressions;
 

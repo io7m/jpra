@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
@@ -28,13 +28,14 @@ import java.util.Optional;
  * A {@code matrix} type expression.
  */
 
-@Immutable public final class TMatrix implements TType
+@Immutable
+public final class TMatrix implements TType
 {
-  private final TypeScalarType                               type;
-  private final Size<?>                                      size_width;
-  private final Size<?>                                      size_height;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final Size<SizeUnitBitsType>                       size_bits;
+  private final TypeScalarType type;
+  private final Size<?> size_width;
+  private final Size<?> size_height;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final Size<SizeUnitBitsType> size_bits;
 
   /**
    * Construct an {@code integer unsigned} type expression.
@@ -48,7 +49,7 @@ import java.util.Optional;
    */
 
   public TMatrix(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final Size<?> in_size_width,
     final Size<?> in_size_height,
     final TypeScalarType in_type)
@@ -91,12 +92,14 @@ import java.util.Optional;
     return this.type;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
@@ -104,12 +107,13 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[matrix ");
     sb.append(this.type);

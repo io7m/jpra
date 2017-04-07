@@ -16,8 +16,7 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
-import com.io7m.jlexing.core.ImmutableLexicalPosition;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.names.PackageNameQualified;
@@ -44,7 +43,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public JPRACompilerResolverException(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final JPRAResolverErrorCode in_code,
     final String message)
   {
@@ -61,7 +60,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public JPRACompilerResolverException(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final JPRAResolverErrorCode in_code,
     final Exception e)
   {
@@ -88,9 +87,9 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Name: ");
     sb.append(name);
 
-    final Optional<ImmutableLexicalPositionType<Path>> curr_lex_opt =
+    final Optional<LexicalPosition<Path>> curr_lex_opt =
       name.getLexicalInformation();
-    final Optional<ImmutableLexicalPositionType<Path>> orig_lex_opt =
+    final Optional<LexicalPosition<Path>> orig_lex_opt =
       name.getLexicalInformation();
 
     if (curr_lex_opt.isPresent() && orig_lex_opt.isPresent()) {
@@ -116,13 +115,13 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public static JPRACompilerResolverException noCurrentPackage(
-    final Optional<ImmutableLexicalPositionType<Path>> lex)
+    final Optional<LexicalPosition<Path>> lex)
   {
     return new JPRACompilerResolverException(
       lex,
       JPRAResolverErrorCode.NO_CURRENT_PACKAGE,
       "A package must be in the process of being declared to perform this "
-      + "action.");
+        + "action.");
   }
 
   /**
@@ -137,7 +136,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
-      name.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
+      name.getLexicalInformation().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.PACKAGE_NESTED,
       "Nested packages are not allowed.");
   }
@@ -161,7 +160,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Original: Name ");
     sb.append(existing_name);
 
-    final Optional<ImmutableLexicalPositionType<Path>> lex_orig_opt =
+    final Optional<LexicalPosition<Path>> lex_orig_opt =
       existing_name.getLexicalInformation();
     if (lex_orig_opt.isPresent()) {
       sb.append(" at ");
@@ -169,7 +168,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     }
 
     return new JPRACompilerResolverException(
-      new_name.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
+      new_name.getLexicalInformation().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.PACKAGE_IMPORT_CONFLICT,
       sb.toString());
   }
@@ -193,7 +192,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Original: Name ");
     sb.append(original);
 
-    final Optional<ImmutableLexicalPositionType<Path>> lex_orig_opt =
+    final Optional<LexicalPosition<Path>> lex_orig_opt =
       original.getLexicalInformation();
     if (lex_orig_opt.isPresent()) {
       sb.append(" at ");
@@ -201,7 +200,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     }
 
     return new JPRACompilerResolverException(
-      current.getLexicalInformation().map(ImmutableLexicalPosition::newFrom),
+      current.getLexicalInformation().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.TYPE_DUPLICATE,
       sb.toString());
   }
@@ -240,7 +239,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Error: ");
     sb.append(name);
 
-    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+    final Optional<LexicalPosition<Path>> lex_opt =
       name.getLexicalInformation();
     lex_opt.ifPresent(
       lex -> {
@@ -249,7 +248,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
       });
 
     return new JPRACompilerResolverException(
-      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      lex_opt.map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT,
       sb.toString());
   }
@@ -281,7 +280,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Type: ");
     sb.append(t_name);
 
-    final Optional<ImmutableLexicalPositionType<Path>> lex_opt =
+    final Optional<LexicalPosition<Path>> lex_opt =
       t_name.getLexicalInformation();
     lex_opt.ifPresent(
       lex -> {
@@ -290,7 +289,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
       });
 
     return new JPRACompilerResolverException(
-      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      lex_opt.map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.TYPE_NONEXISTENT,
       sb.toString());
   }
@@ -304,10 +303,10 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public static JPRACompilerResolverException unexpectedEOF(
-    final Optional<ImmutableLexicalPositionType<Path>> lex_opt)
+    final Optional<LexicalPosition<Path>> lex_opt)
   {
     return new JPRACompilerResolverException(
-      lex_opt.map(ImmutableLexicalPosition::newFrom),
+      lex_opt.map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.UNEXPECTED_EOF,
       "Unexpected EOF.");
   }

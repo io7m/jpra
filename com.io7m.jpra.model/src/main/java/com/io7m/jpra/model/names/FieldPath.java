@@ -27,7 +27,7 @@ import org.valid4j.Assertive;
 public final class FieldPath
 {
   private final ImmutableList<FieldName> path;
-  private final String                   image;
+  private final String image;
 
   private FieldPath(
     final ImmutableList<FieldName> in_path)
@@ -51,7 +51,8 @@ public final class FieldPath
     return new FieldPath(in_elements);
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -64,12 +65,14 @@ public final class FieldPath
     return this.image.equals(fp.image);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.image.hashCode();
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.image;
   }

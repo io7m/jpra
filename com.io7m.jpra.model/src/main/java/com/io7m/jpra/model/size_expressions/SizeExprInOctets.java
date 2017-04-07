@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.size_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import net.jcip.annotations.Immutable;
@@ -31,7 +31,8 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable public final class SizeExprInOctets<I, T>
+@Immutable
+public final class SizeExprInOctets<I, T>
   implements SizeExprType<I, T>
 {
   private final TypeExprType<I, T> expression;
@@ -57,7 +58,8 @@ import java.util.Optional;
     return this.expression;
   }
 
-  @Override public <A, E extends Exception> A matchSizeExpression(
+  @Override
+  public <A, E extends Exception> A matchSizeExpression(
     final SizeExprMatcherType<I, T, A, E> m)
     throws E
   {
@@ -65,7 +67,7 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.expression.getLexicalInformation();
   }

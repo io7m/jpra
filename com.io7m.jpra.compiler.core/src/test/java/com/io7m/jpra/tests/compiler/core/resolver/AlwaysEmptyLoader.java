@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core.resolver;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
@@ -54,7 +54,7 @@ public final class AlwaysEmptyLoader implements JPRAPackageLoaderType
       }
 
       @Override
-      public Optional<ImmutableLexicalPositionType<Path>>
+      public Optional<LexicalPosition<Path>>
       getLexicalInformation()
       {
         return p.getLexicalInformation();

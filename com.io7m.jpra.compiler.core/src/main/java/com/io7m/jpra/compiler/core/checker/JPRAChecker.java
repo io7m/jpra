@@ -23,7 +23,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jfunctional.Unit;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.GlobalContextType;
@@ -1002,7 +1002,7 @@ public final class JPRAChecker implements JPRACheckerType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.name.getLexicalInformation();
     }

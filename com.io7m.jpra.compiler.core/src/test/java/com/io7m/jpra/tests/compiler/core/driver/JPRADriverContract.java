@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core.driver;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.JPRACompilerLexerException;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -96,7 +96,7 @@ public abstract class JPRADriverContract
   @Test public final void testPackageNonexistent()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
@@ -136,7 +136,7 @@ public abstract class JPRADriverContract
   @Test public final void testPackageCircular()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
@@ -196,7 +196,7 @@ public abstract class JPRADriverContract
   @Test public final void testPackageEmpty()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
@@ -238,7 +238,7 @@ public abstract class JPRADriverContract
   @Test public final void testPackageUnparseable()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
@@ -285,7 +285,7 @@ public abstract class JPRADriverContract
   @Test public final void testPackageTwice()
     throws Exception
   {
-    final Optional<ImmutableLexicalPositionType<Path>> no_lex =
+    final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {

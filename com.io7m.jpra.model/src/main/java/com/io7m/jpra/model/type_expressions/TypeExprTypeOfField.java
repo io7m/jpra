@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.type_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
@@ -33,9 +33,9 @@ import java.util.Optional;
 
 public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
 {
-  private final I              identifier;
+  private final I identifier;
   private final FieldReference field_reference;
-  private final T              type;
+  private final T type;
 
   /**
    * Construct an expression.
@@ -55,7 +55,8 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
     this.type = NullCheck.notNull(in_type);
   }
 
-  @Override public T getType()
+  @Override
+  public T getType()
   {
     return this.type;
   }
@@ -78,7 +79,8 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
     return this.identifier;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeExprMatcherType<I, T, A, E> m)
     throws E
   {
@@ -86,7 +88,7 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     final FieldPath path = this.field_reference.getFieldPath();
     return path.getElements().get(0).getLexicalInformation();

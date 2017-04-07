@@ -27,7 +27,7 @@ import java.util.Optional;
 public final class TypeReference
 {
   private final Optional<PackageNameUnqualified> pack;
-  private final TypeName                         type;
+  private final TypeName type;
 
   /**
    * Construct a reference.

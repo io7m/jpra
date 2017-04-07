@@ -17,7 +17,7 @@
 package com.io7m.jpra.compiler.core;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.checker.JPRACompilerCheckerException;
 import com.io7m.jpra.compiler.core.parser.JPRACompilerParseException;
 import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
@@ -55,18 +55,18 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
 
   private static void printLex(
     final PrintWriter w,
-    final Optional<ImmutableLexicalPositionType<Path>> lex)
+    final Optional<LexicalPosition<Path>> lex)
   {
     lex.ifPresent(
       p -> {
-        p.getFile().ifPresent(
+        p.file().ifPresent(
           f -> {
             w.print(f);
             w.print(":");
           });
-        w.print(p.getLine() + 1);
+        w.print(p.line() + 1);
         w.print(":");
-        w.print(p.getColumn());
+        w.print(p.column());
         w.print(": ");
       });
   }
@@ -121,25 +121,26 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
       w.print(i.getTo());
       w.print(" at ");
 
-      final Optional<ImmutableLexicalPositionType<Path>> lex =
+      final Optional<LexicalPosition<Path>> lex =
         i.getTo().getLexicalInformation();
       lex.ifPresent(
         p -> {
-          p.getFile().ifPresent(
+          p.file().ifPresent(
             f -> {
               w.print(f);
               w.print(": ");
             });
-          w.print(p.getLine() + 1);
+          w.print(p.line() + 1);
           w.print(":");
-          w.print(p.getColumn());
+          w.print(p.column());
           w.print("");
         });
       w.println();
     }
   }
 
-  @Override public void onJPRAException(
+  @Override
+  public void onJPRAException(
     final OutputStream os,
     final JPRAException e)
   {

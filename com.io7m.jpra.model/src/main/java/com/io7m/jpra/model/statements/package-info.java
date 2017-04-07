@@ -18,5 +18,6 @@
  * Statements.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model.statements;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.model.statements;
 

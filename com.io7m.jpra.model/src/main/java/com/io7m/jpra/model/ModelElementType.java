@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -35,5 +35,5 @@ public interface ModelElementType
    * @return The original lexical information, if any
    */
 
-  Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation();
+  Optional<LexicalPosition<Path>> getLexicalInformation();
 }

@@ -19,7 +19,7 @@ package com.io7m.jpra.model.types;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
@@ -40,13 +40,13 @@ import java.util.Optional;
 
 public final class TPacked implements TType, TypeUserDefinedType
 {
-  private final TypeName                            name;
-  private final Size<SizeUnitBitsType>              size_bits;
+  private final TypeName name;
+  private final Size<SizeUnitBitsType> size_bits;
   private final ImmutableMap<FieldName, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType>            fields_by_order;
-  private final PackageContextType                  package_ctx;
-  private final IdentifierType                      identifier;
-  private final Size<SizeUnitOctetsType>            size_octets;
+  private final ImmutableList<FieldType> fields_by_order;
+  private final PackageContextType package_ctx;
+  private final IdentifierType identifier;
+  private final Size<SizeUnitOctetsType> size_octets;
 
   TPacked(
     final PackageContextType in_package,
@@ -127,7 +127,8 @@ public final class TPacked implements TType, TypeUserDefinedType
     return this.fields_by_order;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
@@ -140,34 +141,39 @@ public final class TPacked implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
   }
 
-  @Override public TypeName getName()
+  @Override
+  public TypeName getName()
   {
     return this.name;
   }
 
-  @Override public IdentifierType getIdentifier()
+  @Override
+  public IdentifierType getIdentifier()
   {
     return this.identifier;
   }
 
-  @Override public PackageContextType getPackageContext()
+  @Override
+  public PackageContextType getPackageContext()
   {
     return this.package_ctx;
   }
 
-  @Override public <A, E extends Exception> A matchTypeUserDefined(
+  @Override
+  public <A, E extends Exception> A matchTypeUserDefined(
     final TypeUserDefinedMatcherType<A, E> m)
     throws E
   {
     return m.matchPacked(this);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     final StringBuilder sb = new StringBuilder("[packed ");
     sb.append(this.name);
@@ -271,9 +277,9 @@ public final class TPacked implements TType, TypeUserDefinedType
 
   public static final class FieldValue implements FieldType
   {
-    private final     FieldName       name;
-    private final     TIntegerType    type;
-    private @Nullable TPacked         owner;
+    private final FieldName name;
+    private final TIntegerType type;
+    private @Nullable TPacked owner;
     private @Nullable RangeInclusiveB range;
 
     FieldValue(
@@ -284,12 +290,14 @@ public final class TPacked implements TType, TypeUserDefinedType
       this.type = NullCheck.notNull(in_type);
     }
 
-    @Override public RangeInclusiveB getBitRange()
+    @Override
+    public RangeInclusiveB getBitRange()
     {
       return NullCheck.notNull(this.range);
     }
 
-    @Override public TPacked getOwner()
+    @Override
+    public TPacked getOwner()
     {
       return NullCheck.notNull(this.owner);
     }
@@ -322,7 +330,8 @@ public final class TPacked implements TType, TypeUserDefinedType
       return this.type;
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override
+    public Size<SizeUnitBitsType> getSize()
     {
       return this.type.getSizeInBits();
     }
@@ -335,12 +344,13 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.name.getLexicalInformation();
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[field ");
       sb.append(this.name);
@@ -357,20 +367,21 @@ public final class TPacked implements TType, TypeUserDefinedType
 
   public static final class FieldPaddingBits implements FieldType
   {
-    private final     Size<SizeUnitBitsType>                       size_bits;
-    private final     Optional<ImmutableLexicalPositionType<Path>> lex;
-    private @Nullable TPacked                                      owner;
-    private @Nullable RangeInclusiveB                              range;
+    private final Size<SizeUnitBitsType> size_bits;
+    private final Optional<LexicalPosition<Path>> lex;
+    private @Nullable TPacked owner;
+    private @Nullable RangeInclusiveB range;
 
     FieldPaddingBits(
       final Size<SizeUnitBitsType> in_size_bits,
-      final Optional<ImmutableLexicalPositionType<Path>> in_lex)
+      final Optional<LexicalPosition<Path>> in_lex)
     {
       this.size_bits = NullCheck.notNull(in_size_bits);
       this.lex = NullCheck.notNull(in_lex);
     }
 
-    @Override public TPacked getOwner()
+    @Override
+    public TPacked getOwner()
     {
       return NullCheck.notNull(this.owner);
     }
@@ -380,7 +391,8 @@ public final class TPacked implements TType, TypeUserDefinedType
       this.owner = NullCheck.notNull(in_owner);
     }
 
-    @Override public RangeInclusiveB getBitRange()
+    @Override
+    public RangeInclusiveB getBitRange()
     {
       return NullCheck.notNull(this.range);
     }
@@ -390,7 +402,8 @@ public final class TPacked implements TType, TypeUserDefinedType
       this.range = NullCheck.notNull(in_range);
     }
 
-    @Override public Size<SizeUnitBitsType> getSize()
+    @Override
+    public Size<SizeUnitBitsType> getSize()
     {
       return this.size_bits;
     }
@@ -403,12 +416,13 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> getLexicalInformation()
     {
       return this.lex;
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
       final StringBuilder sb = new StringBuilder("[padding-bits ");
       sb.append(this.size_bits.getValue());

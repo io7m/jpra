@@ -23,7 +23,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.io7m.jfunctional.Unit;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
@@ -48,13 +48,13 @@ final class TPackedBuilder implements TPackedBuilderType
     LOG = LoggerFactory.getLogger(TPackedBuilder.class);
   }
 
-  private final MutableList<TPacked.FieldType>            type_fields_ordered;
+  private final MutableList<TPacked.FieldType> type_fields_ordered;
   private final MutableMap<FieldName, TPacked.FieldValue> type_fields_named;
-  private final PackageContextType                        package_context;
-  private final IdentifierType                            identifier;
-  private final TypeName                                  name;
-  private final boolean                                   finished;
-  private final MutableSet<IdentifierType>                identifiers;
+  private final PackageContextType package_context;
+  private final IdentifierType identifier;
+  private final TypeName name;
+  private final boolean finished;
+  private final MutableSet<IdentifierType> identifiers;
 
   TPackedBuilder(
     final PackageContextType in_package,
@@ -73,8 +73,9 @@ final class TPackedBuilder implements TPackedBuilderType
     this.finished = false;
   }
 
-  @Override public void addPaddingBits(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+  @Override
+  public void addPaddingBits(
+    final Optional<LexicalPosition<Path>> lex,
     final Size<SizeUnitBitsType> size)
   {
     Assertive.require(
@@ -83,7 +84,8 @@ final class TPackedBuilder implements TPackedBuilderType
     this.type_fields_ordered.add(v);
   }
 
-  @Override public void addField(
+  @Override
+  public void addField(
     final FieldName in_name,
     final IdentifierType in_id,
     final TIntegerType in_type)
@@ -99,13 +101,15 @@ final class TPackedBuilder implements TPackedBuilderType
     this.identifiers.add(in_id);
   }
 
-  @Override public Size<SizeUnitBitsType> getCurrentSize()
+  @Override
+  public Size<SizeUnitBitsType> getCurrentSize()
   {
     return this.type_fields_ordered.injectInto(
       Size.zero(), (s, f) -> s.add(f.getSize()));
   }
 
-  @Override public TPacked build()
+  @Override
+  public TPacked build()
   {
     Assertive.require(
       !this.finished, "Builder must not have already finished");
@@ -125,7 +129,8 @@ final class TPackedBuilder implements TPackedBuilderType
       f.matchField(
         new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(
+          @Override
+          public Unit matchFieldValue(
             final TPacked.FieldValue f)
           {
             f.setOwner(tr);
@@ -140,7 +145,8 @@ final class TPackedBuilder implements TPackedBuilderType
             return Unit.unit();
           }
 
-          @Override public Unit matchFieldPaddingBits(
+          @Override
+          public Unit matchFieldPaddingBits(
             final TPacked.FieldPaddingBits f)
           {
             f.setOwner(tr);

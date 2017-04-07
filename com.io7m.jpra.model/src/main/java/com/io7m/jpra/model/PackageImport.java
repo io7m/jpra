@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import net.jcip.annotations.Immutable;
@@ -28,16 +28,17 @@ import java.util.Optional;
  * A package import declaration.
  */
 
-@Immutable public final class PackageImport implements ModelElementType
+@Immutable
+public final class PackageImport implements ModelElementType
 {
-  private final PackageNameQualified   from;
-  private final PackageNameQualified   to;
+  private final PackageNameQualified from;
+  private final PackageNameQualified to;
 
   /**
    * Construct a package import declaration.
    *
-   * @param in_from  The importing package
-   * @param in_to    The imported package
+   * @param in_from The importing package
+   * @param in_to   The imported package
    */
 
   public PackageImport(
@@ -66,7 +67,8 @@ import java.util.Optional;
     return this.to;
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -77,10 +79,11 @@ import java.util.Optional;
 
     final PackageImport that = (PackageImport) o;
     return this.from.equals(that.from)
-           && this.to.equals(that.to);
+      && this.to.equals(that.to);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     int result = this.from.hashCode();
     result = 31 * result + this.to.hashCode();
@@ -88,7 +91,7 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.from.getLexicalInformation();
   }

@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
@@ -27,9 +27,10 @@ import java.util.Optional;
  * A floating point type expression.
  */
 
-@Immutable public final class TFloat implements TypeScalarType
+@Immutable
+public final class TFloat implements TypeScalarType
 {
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final Optional<LexicalPosition<Path>> lex;
   private final Size<SizeUnitBitsType> size;
 
   /**
@@ -40,7 +41,7 @@ import java.util.Optional;
    */
 
   public TFloat(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final Size<SizeUnitBitsType> in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
@@ -51,19 +52,22 @@ import java.util.Optional;
    * @return An expression denoting the size in bits of the type
    */
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
     return m.matchFloat(this);
   }
 
-  @Override public <A, E extends Exception> A matchTypeScalar(
+  @Override
+  public <A, E extends Exception> A matchTypeScalar(
     final TypeScalarMatcherType<A, E> m)
     throws E
   {
@@ -71,7 +75,7 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

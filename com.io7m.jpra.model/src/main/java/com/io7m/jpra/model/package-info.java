@@ -18,5 +18,6 @@
  * Types and functions implementing the <tt>jpra</tt> type_model.
  */
 
-@com.io7m.jnull.NonNullByDefault package com.io7m.jpra.model;
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jpra.model;
 

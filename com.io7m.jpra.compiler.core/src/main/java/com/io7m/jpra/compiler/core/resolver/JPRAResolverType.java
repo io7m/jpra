@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.IdentifierType;
@@ -160,6 +160,6 @@ public interface JPRAResolverType
    */
 
   void resolveEOF(
-    Optional<ImmutableLexicalPositionType<Path>> lex)
+    Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerResolverException;
 }

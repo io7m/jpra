@@ -23,7 +23,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
@@ -753,7 +753,7 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   @Override public void resolveEOF(
-    final Optional<ImmutableLexicalPositionType<Path>> lex)
+    final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerResolverException
   {
     if (this.current_package.isPresent()) {

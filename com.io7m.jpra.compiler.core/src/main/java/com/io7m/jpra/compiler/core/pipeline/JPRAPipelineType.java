@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.compiler.core.pipeline;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jsx.SExpressionType;
@@ -53,6 +53,6 @@ public interface JPRAPipelineType
    * @throws JPRACompilerException If any of the stages raise an exception
    */
 
-  void onEOF(Optional<ImmutableLexicalPositionType<Path>> lex)
+  void onEOF(Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerException;
 }

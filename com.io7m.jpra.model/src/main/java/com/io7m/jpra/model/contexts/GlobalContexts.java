@@ -56,12 +56,12 @@ public final class GlobalContexts implements GlobalContextType
   private final DirectedAcyclicGraph<PackageNameQualified, PackageImport> graph;
 
   private final MutableMap<PackageNameQualified, PackageContextType> packages;
-  private final JPRAPackageLoaderType                                loader;
-  private final MutableMap<IdentifierType, TypeUserDefinedType>      types;
+  private final JPRAPackageLoaderType loader;
+  private final MutableMap<IdentifierType, TypeUserDefinedType> types;
 
-  private final Queue<JPRAException>           error_queue;
-  private       BigInteger                     id_pool;
-  private       Optional<PackageNameQualified> loading;
+  private final Queue<JPRAException> error_queue;
+  private BigInteger id_pool;
+  private Optional<PackageNameQualified> loading;
 
   GlobalContexts(final JPRAPackageLoaderType in_loader)
   {
@@ -88,24 +88,28 @@ public final class GlobalContexts implements GlobalContextType
     return new GlobalContexts(in_loader);
   }
 
-  @Override public Queue<JPRAException> getErrorQueue()
+  @Override
+  public Queue<JPRAException> getErrorQueue()
   {
     return this.error_queue;
   }
 
-  @Override public IdentifierType getFreshIdentifier()
+  @Override
+  public IdentifierType getFreshIdentifier()
   {
     this.id_pool = this.id_pool.add(BigInteger.ONE);
     GlobalContexts.LOG.trace("fresh identifier: {}", this.id_pool);
     return new Identifier(this.id_pool);
   }
 
-  @Override public Map<PackageNameQualified, PackageContextType> getPackages()
+  @Override
+  public Map<PackageNameQualified, PackageContextType> getPackages()
   {
     return this.packages.asUnmodifiable();
   }
 
-  @Override public PackageContextType loadPackage(
+  @Override
+  public PackageContextType loadPackage(
     final PackageNameQualified p)
     throws JPRAModelLoadingException
   {
@@ -168,7 +172,8 @@ public final class GlobalContexts implements GlobalContextType
     }
   }
 
-  @Override public void putType(final TypeUserDefinedType t)
+  @Override
+  public void putType(final TypeUserDefinedType t)
   {
     NullCheck.notNull(t);
     final IdentifierType id = t.getIdentifier();
@@ -176,7 +181,8 @@ public final class GlobalContexts implements GlobalContextType
     this.types.put(id, t);
   }
 
-  @Override public TypeUserDefinedType getType(final IdentifierType id)
+  @Override
+  public TypeUserDefinedType getType(final IdentifierType id)
   {
     NullCheck.notNull(id);
     Assertive.require(this.types.containsKey(id));

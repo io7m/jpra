@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.type_declarations;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
@@ -32,12 +32,13 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable public final class RecordFieldDeclValue<I, T>
+@Immutable
+public final class RecordFieldDeclValue<I, T>
   implements RecordFieldDeclType<I, T>
 {
-  private final FieldName          name;
+  private final FieldName name;
   private final TypeExprType<I, T> type;
-  private final I                  data;
+  private final I data;
 
   /**
    * Construct a field declaration.
@@ -75,7 +76,8 @@ import java.util.Optional;
     return this.type;
   }
 
-  @Override public <A, E extends Exception> A matchRecordFieldDeclaration(
+  @Override
+  public <A, E extends Exception> A matchRecordFieldDeclaration(
     final RecordFieldDeclMatcherType<I, T, A, E> m)
     throws E
   {
@@ -92,7 +94,7 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.name.getLexicalInformation();
   }

@@ -19,7 +19,7 @@ package com.io7m.jpra.compiler.core.checker;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.io7m.jfunctional.Pair;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.Untyped;
@@ -61,7 +61,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public JPRACompilerCheckerException(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final JPRACheckerErrorCode in_code,
     final String message)
   {
@@ -78,7 +78,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public JPRACompilerCheckerException(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final JPRACheckerErrorCode in_code,
     final Exception e)
   {
@@ -654,7 +654,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public static JPRACompilerCheckerException paddingSizeInvalid(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+    final Optional<LexicalPosition<Path>> lex,
     final BigInteger value)
   {
     final StringBuilder sb = new StringBuilder(128);

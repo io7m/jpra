@@ -23,7 +23,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.io7m.jfunctional.Unit;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
@@ -37,13 +37,13 @@ import java.util.Optional;
 
 final class TRecordBuilder implements TRecordBuilderType
 {
-  private final MutableList<TRecord.FieldType>            type_fields_ordered;
+  private final MutableList<TRecord.FieldType> type_fields_ordered;
   private final MutableMap<FieldName, TRecord.FieldValue> type_fields_named;
-  private final PackageContextType                        package_context;
-  private final IdentifierType                            identifier;
-  private final TypeName                                  name;
-  private final boolean                                   finished;
-  private final MutableSet<IdentifierType>                identifiers;
+  private final PackageContextType package_context;
+  private final IdentifierType identifier;
+  private final TypeName name;
+  private final boolean finished;
+  private final MutableSet<IdentifierType> identifiers;
 
   TRecordBuilder(
     final PackageContextType in_package,
@@ -62,8 +62,9 @@ final class TRecordBuilder implements TRecordBuilderType
     this.finished = false;
   }
 
-  @Override public void addPaddingOctets(
-    final Optional<ImmutableLexicalPositionType<Path>> lex,
+  @Override
+  public void addPaddingOctets(
+    final Optional<LexicalPosition<Path>> lex,
     final Size<SizeUnitOctetsType> size)
   {
     Assertive.require(
@@ -73,7 +74,8 @@ final class TRecordBuilder implements TRecordBuilderType
     this.type_fields_ordered.add(v);
   }
 
-  @Override public void addField(
+  @Override
+  public void addField(
     final FieldName in_name,
     final IdentifierType in_id,
     final TType in_type)
@@ -89,7 +91,8 @@ final class TRecordBuilder implements TRecordBuilderType
     this.identifiers.add(in_id);
   }
 
-  @Override public TRecord build()
+  @Override
+  public TRecord build()
   {
     Assertive.require(
       !this.finished, "Builder must not have already finished");
@@ -105,14 +108,16 @@ final class TRecordBuilder implements TRecordBuilderType
       f.matchField(
         new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
         {
-          @Override public Unit matchFieldValue(
+          @Override
+          public Unit matchFieldValue(
             final TRecord.FieldValue f)
           {
             f.setOwner(tr);
             return Unit.unit();
           }
 
-          @Override public Unit matchFieldPaddingOctets(
+          @Override
+          public Unit matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
             f.setOwner(tr);

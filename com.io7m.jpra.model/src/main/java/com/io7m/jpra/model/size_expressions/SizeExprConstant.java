@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.size_expressions;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
@@ -31,11 +31,12 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable public final class SizeExprConstant<I, T>
+@Immutable
+public final class SizeExprConstant<I, T>
   implements SizeExprType<I, T>
 {
-  private final BigInteger                                   value;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
+  private final BigInteger value;
+  private final Optional<LexicalPosition<Path>> lex;
 
   /**
    * Construct a size expression.
@@ -45,7 +46,7 @@ import java.util.Optional;
    */
 
   public SizeExprConstant(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final BigInteger in_size)
   {
     this.lex = NullCheck.notNull(in_lex);
@@ -61,20 +62,22 @@ import java.util.Optional;
     return this.value;
   }
 
-  @Override public <A, E extends Exception> A matchSizeExpression(
+  @Override
+  public <A, E extends Exception> A matchSizeExpression(
     final SizeExprMatcherType<I, T, A, E> m)
     throws E
   {
     return m.matchConstant(this);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.value.toString();
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

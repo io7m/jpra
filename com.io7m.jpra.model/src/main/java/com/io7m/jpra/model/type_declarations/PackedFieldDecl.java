@@ -47,13 +47,15 @@ public final class PackedFieldDecl
       new PackedFieldDeclMatcherType<I, T, Optional<FieldName>,
         RuntimeException>()
       {
-        @Override public Optional<FieldName> matchPaddingBits(
+        @Override
+        public Optional<FieldName> matchPaddingBits(
           final PackedFieldDeclPaddingBits<I, T> r)
         {
           return Optional.empty();
         }
 
-        @Override public Optional<FieldName> matchValue(
+        @Override
+        public Optional<FieldName> matchValue(
           final PackedFieldDeclValue<I, T> r)
         {
           return Optional.of(r.getName());

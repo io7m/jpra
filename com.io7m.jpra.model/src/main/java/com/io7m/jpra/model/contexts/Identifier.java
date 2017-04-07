@@ -31,12 +31,14 @@ final class Identifier implements IdentifierType
     this.value = NullCheck.notNull(in_value);
   }
 
-  @Override public String toString()
+  @Override
+  public String toString()
   {
     return this.value.toString();
   }
 
-  @Override public boolean equals(final Object o)
+  @Override
+  public boolean equals(final Object o)
   {
     if (this == o) {
       return true;
@@ -49,7 +51,8 @@ final class Identifier implements IdentifierType
     return this.value.equals(that.value);
   }
 
-  @Override public int hashCode()
+  @Override
+  public int hashCode()
   {
     return this.value.hashCode();
   }

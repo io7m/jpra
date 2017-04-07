@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 
@@ -37,7 +37,7 @@ public interface TPackedBuilderType
    */
 
   void addPaddingBits(
-    Optional<ImmutableLexicalPositionType<Path>> lex,
+    Optional<LexicalPosition<Path>> lex,
     Size<SizeUnitBitsType> size);
 
   /**

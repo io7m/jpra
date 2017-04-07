@@ -17,7 +17,7 @@
 package com.io7m.jpra.model.types;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import net.jcip.annotations.Immutable;
@@ -29,12 +29,13 @@ import java.util.Optional;
  * A {@code boolean-set} type.
  */
 
-@Immutable public final class TBooleanSet implements TType
+@Immutable
+public final class TBooleanSet implements TType
 {
-  private final Size<SizeUnitOctetsType>                     size;
-  private final ImmutableList<FieldName>                     fields;
-  private final Optional<ImmutableLexicalPositionType<Path>> lex;
-  private final Size<SizeUnitBitsType>                       size_bits;
+  private final Size<SizeUnitOctetsType> size;
+  private final ImmutableList<FieldName> fields;
+  private final Optional<LexicalPosition<Path>> lex;
+  private final Size<SizeUnitBitsType> size_bits;
 
   /**
    * Construct a boolean set type.
@@ -45,7 +46,7 @@ import java.util.Optional;
    */
 
   public TBooleanSet(
-    final Optional<ImmutableLexicalPositionType<Path>> in_lex,
+    final Optional<LexicalPosition<Path>> in_lex,
     final ImmutableList<FieldName> in_fields,
     final Size<SizeUnitOctetsType> in_size)
   {
@@ -73,12 +74,14 @@ import java.util.Optional;
     return this.fields;
   }
 
-  @Override public Size<SizeUnitBitsType> getSizeInBits()
+  @Override
+  public Size<SizeUnitBitsType> getSizeInBits()
   {
     return this.size_bits;
   }
 
-  @Override public <A, E extends Exception> A matchType(
+  @Override
+  public <A, E extends Exception> A matchType(
     final TypeMatcherType<A, E> m)
     throws E
   {
@@ -86,7 +89,7 @@ import java.util.Optional;
   }
 
   @Override
-  public Optional<ImmutableLexicalPositionType<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> getLexicalInformation()
   {
     return this.lex;
   }

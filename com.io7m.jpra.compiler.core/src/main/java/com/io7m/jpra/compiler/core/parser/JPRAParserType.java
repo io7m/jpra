@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.io7m.jlexing.core.ImmutableLexicalPositionType;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
@@ -83,6 +83,6 @@ public interface JPRAParserType
    */
 
   void parseEOF(
-    Optional<ImmutableLexicalPositionType<Path>> lex)
+    Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerParseException;
 }
