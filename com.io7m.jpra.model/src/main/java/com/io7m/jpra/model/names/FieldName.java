@@ -16,11 +16,11 @@
 
 package com.io7m.jpra.model.names;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -46,7 +46,7 @@ public final class FieldName implements ModelElementType
     PATTERN_TEXT = "[\\p{IsLowercase}][\\p{IsLowercase}\\p{IsDigit}_]*";
     PATTERN = NullCheck.notNull(
       Pattern.compile(
-        FieldName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS));
+        FieldName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS), "Pattern");
   }
 
   private final String value;
@@ -63,14 +63,16 @@ public final class FieldName implements ModelElementType
     final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.value = NullCheck.notNull(in_value);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.value = NullCheck.notNull(in_value, "Value");
 
     final Matcher matcher = FieldName.PATTERN.matcher(this.value);
-    Assertive.require(
+    Preconditions.checkPrecondition(
+      in_value,
       matcher.matches(),
-      "Field names must match the pattern '%s'",
-      FieldName.PATTERN_TEXT);
+      s -> String.format(
+        "Field names must match the pattern '%s'",
+        PATTERN_TEXT));
   }
 
   @Override

@@ -42,8 +42,8 @@ public abstract class JPRACompilerException extends JPRAException
     final Optional<LexicalPosition<Path>> in_lex,
     final String message)
   {
-    super(NullCheck.notNull(message));
-    this.lex = NullCheck.notNull(in_lex);
+    super(NullCheck.notNull(message, "Message"));
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
   }
 
   /**
@@ -57,8 +57,8 @@ public abstract class JPRACompilerException extends JPRAException
     final Optional<LexicalPosition<Path>> in_lex,
     final Exception cause)
   {
-    super(NullCheck.notNull(cause));
-    this.lex = NullCheck.notNull(in_lex);
+    super(NullCheck.notNull(cause, "Cause"));
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
   }
 
   /**

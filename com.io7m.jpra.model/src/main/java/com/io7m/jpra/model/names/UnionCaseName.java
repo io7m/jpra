@@ -16,11 +16,11 @@
 
 package com.io7m.jpra.model.names;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -41,7 +41,8 @@ public final class UnionCaseName implements ModelElementType
     PATTERN_TEXT = "[\\p{IsUppercase}][\\p{IsAlphabetic}\\p{IsDigit}_]*";
     PATTERN = NullCheck.notNull(
       Pattern.compile(
-        UnionCaseName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS));
+        UnionCaseName.PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS),
+      "Pattern");
   }
 
   private final String value;
@@ -58,11 +59,11 @@ public final class UnionCaseName implements ModelElementType
     final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
-    this.lex = NullCheck.notNull(in_lex);
-    this.value = NullCheck.notNull(in_value);
+    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    this.value = NullCheck.notNull(in_value, "Value");
 
     final Matcher matcher = UnionCaseName.PATTERN.matcher(this.value);
-    Assertive.require(
+    Preconditions.checkPreconditionV(
       matcher.matches(),
       "Type names must match the pattern '%s'",
       UnionCaseName.PATTERN_TEXT);

@@ -23,6 +23,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
@@ -75,7 +76,6 @@ import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.junreachable.UnimplementedCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -94,30 +94,25 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   private final GlobalContextType context;
-
-  private final MutableBiMap<PackageNameUnqualified, PackageNameQualified>
-                                                                     import_names;
+  private final MutableBiMap<PackageNameUnqualified, PackageNameQualified> import_names;
   private final MutableMap<PackageNameQualified, PackageContextType> imports;
-
-  private final MutableMap<TypeName, TypeDeclType<IdentifierType, Untyped>>
-    current_types;
-  private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType,
-    Untyped>>
-    current_record_fields;
-  private final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType,
-    Untyped>>
-    current_packed_fields;
+  private final MutableMap<TypeName, TypeDeclType<IdentifierType, Untyped>> current_types;
+  private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>> current_record_fields;
+  private final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>> current_packed_fields;
 
   private final Optional<PackageNameQualified> expected_package;
-  private       boolean                        expected_received;
-  private       Optional<PackageNameQualified> current_package;
+  private boolean expected_received;
+  private Optional<PackageNameQualified> current_package;
 
   private JPRAResolver(
     final GlobalContextType c,
     final Optional<PackageNameQualified> in_expected_package)
   {
-    this.context = NullCheck.notNull(c);
-    this.expected_package = NullCheck.notNull(in_expected_package);
+    this.context =
+      NullCheck.notNull(c, "Context");
+    this.expected_package =
+      NullCheck.notNull(in_expected_package, "Expected package");
+
     this.expected_received = false;
     this.current_package = Optional.empty();
     this.current_record_fields = Maps.mutable.empty();
@@ -144,7 +139,8 @@ public final class JPRAResolver implements JPRAResolverType
     return new JPRAResolver(c, in_expected_package);
   }
 
-  @Override public Optional<PackageNameQualified> resolveGetCurrentPackage()
+  @Override
+  public Optional<PackageNameQualified> resolveGetCurrentPackage()
   {
     return this.current_package;
   }
@@ -165,11 +161,21 @@ public final class JPRAResolver implements JPRAResolverType
       throw JPRACompilerResolverException.nestedPackage(s.getPackageName());
     }
 
-    Assertive.ensure(this.current_types.isEmpty());
-    Assertive.ensure(this.current_record_fields.isEmpty());
-    Assertive.ensure(this.current_packed_fields.isEmpty());
-    Assertive.ensure(this.imports.isEmpty());
-    Assertive.ensure(this.import_names.isEmpty());
+    Preconditions.checkPrecondition(
+      this.current_types.isEmpty(),
+      "Types must be empty");
+    Preconditions.checkPrecondition(
+      this.current_record_fields.isEmpty(),
+      "Record fields must be empty");
+    Preconditions.checkPrecondition(
+      this.current_packed_fields.isEmpty(),
+      "Packed fields must be empty");
+    Preconditions.checkPrecondition(
+      this.imports.isEmpty(),
+      "Imports must be empty");
+    Preconditions.checkPrecondition(
+      this.import_names.isEmpty(),
+      "Import names must be empty");
 
     if (this.expected_package.isPresent()) {
       final PackageNameQualified got = s.getPackageName();
@@ -212,7 +218,9 @@ public final class JPRAResolver implements JPRAResolverType
       final MutableBiMap<PackageNameQualified, PackageNameUnqualified> ini =
         this.import_names.inverse();
 
-      Assertive.require(ini.containsKey(q_existing));
+      Preconditions.checkPreconditionV(
+        ini.containsKey(q_existing),
+        "Import names must contain %s", q_existing);
       final PackageNameUnqualified s_existing = ini.get(q_existing);
       throw JPRACompilerResolverException.packageImportConflict(
         s_existing, s_new);
@@ -254,7 +262,8 @@ public final class JPRAResolver implements JPRAResolverType
     return new StatementPackageEnd<>(s.getLexicalInformation());
   }
 
-  @Override public TypeDeclType<IdentifierType, Untyped> resolveTypeDeclaration(
+  @Override
+  public TypeDeclType<IdentifierType, Untyped> resolveTypeDeclaration(
     final TypeDeclType<Unresolved, Untyped> expr)
     throws JPRACompilerResolverException
   {
@@ -263,8 +272,12 @@ public final class JPRAResolver implements JPRAResolverType
         expr.getLexicalInformation());
     }
 
-    Assertive.ensure(this.current_packed_fields.isEmpty());
-    Assertive.ensure(this.current_record_fields.isEmpty());
+    Preconditions.checkPreconditionV(
+      this.current_packed_fields.isEmpty(),
+      "Packed fields must be empty");
+    Preconditions.checkPreconditionV(
+      this.current_record_fields.isEmpty(),
+      "Record fields must be empty");
 
     try {
       final TypeDeclType<IdentifierType, Untyped> rv =
@@ -273,14 +286,16 @@ public final class JPRAResolver implements JPRAResolverType
             TypeDeclType<IdentifierType, Untyped>,
             JPRACompilerResolverException>()
           {
-            @Override public TypeDeclType<IdentifierType, Untyped> matchRecord(
+            @Override
+            public TypeDeclType<IdentifierType, Untyped> matchRecord(
               final TypeDeclRecord<Unresolved, Untyped> t)
               throws JPRACompilerResolverException
             {
               return JPRAResolver.this.resolveTypeDeclarationRecord(t);
             }
 
-            @Override public TypeDeclType<IdentifierType, Untyped> matchPacked(
+            @Override
+            public TypeDeclType<IdentifierType, Untyped> matchPacked(
               final TypeDeclPacked<Unresolved, Untyped> t)
               throws JPRACompilerResolverException
             {
@@ -457,7 +472,8 @@ public final class JPRAResolver implements JPRAResolverType
     return v;
   }
 
-  @Override public TypeExprType<IdentifierType, Untyped> resolveTypeExpression(
+  @Override
+  public TypeExprType<IdentifierType, Untyped> resolveTypeExpression(
     final TypeExprType<Unresolved, Untyped> expr)
     throws JPRACompilerResolverException
   {
@@ -499,49 +515,56 @@ public final class JPRAResolver implements JPRAResolverType
           return JPRAResolver.this.resolveTypeExprIntegerUnsignedNormalized(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchExprArray(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprArray(
           final TypeExprArray<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprArray(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchExprFloat(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprFloat(
           final TypeExprFloat<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprFloat(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchExprVector(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprVector(
           final TypeExprVector<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprVector(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchExprMatrix(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprMatrix(
           final TypeExprMatrix<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprMatrix(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchExprString(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchExprString(
           final TypeExprString<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprString(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchName(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchName(
           final TypeExprName<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveTypeExprName(e);
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchTypeOfField(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchTypeOfField(
           final TypeExprTypeOfField<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
@@ -549,7 +572,8 @@ public final class JPRAResolver implements JPRAResolverType
           throw new UnimplementedCodeException();
         }
 
-        @Override public TypeExprType<IdentifierType, Untyped> matchBooleanSet(
+        @Override
+        public TypeExprType<IdentifierType, Untyped> matchBooleanSet(
           final TypeExprBooleanSet<Unresolved, Untyped> e)
           throws JPRACompilerResolverException
         {
@@ -689,7 +713,10 @@ public final class JPRAResolver implements JPRAResolverType
       }
 
       final PackageNameQualified q_name = this.import_names.get(p_name);
-      Assertive.require(this.imports.containsKey(q_name));
+      Preconditions.checkPreconditionV(
+        this.imports.containsKey(q_name),
+        "Imports must contain %s",
+        q_name);
 
       final PackageContextType p = this.imports.get(q_name);
       final Map<TypeName, TypeUserDefinedType> pt = p.getTypes();
@@ -712,7 +739,8 @@ public final class JPRAResolver implements JPRAResolverType
     return this.current_types.get(t_name).getIdentifier();
   }
 
-  @Override public SizeExprType<IdentifierType, Untyped> resolveSizeExpression(
+  @Override
+  public SizeExprType<IdentifierType, Untyped> resolveSizeExpression(
     final SizeExprType<Unresolved, Untyped> expr)
     throws JPRACompilerResolverException
   {
@@ -720,21 +748,24 @@ public final class JPRAResolver implements JPRAResolverType
       new SizeExprMatcherType<Unresolved, Untyped,
         SizeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>()
       {
-        @Override public SizeExprType<IdentifierType, Untyped> matchConstant(
+        @Override
+        public SizeExprType<IdentifierType, Untyped> matchConstant(
           final SizeExprConstant<Unresolved, Untyped> s)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveSizeExprConstant(s);
         }
 
-        @Override public SizeExprType<IdentifierType, Untyped> matchInOctets(
+        @Override
+        public SizeExprType<IdentifierType, Untyped> matchInOctets(
           final SizeExprInOctets<Unresolved, Untyped> s)
           throws JPRACompilerResolverException
         {
           return JPRAResolver.this.resolveSizeExprInOctets(s);
         }
 
-        @Override public SizeExprType<IdentifierType, Untyped> matchInBits(
+        @Override
+        public SizeExprType<IdentifierType, Untyped> matchInBits(
           final SizeExprInBits<Unresolved, Untyped> s)
           throws JPRACompilerResolverException
         {
@@ -752,7 +783,8 @@ public final class JPRAResolver implements JPRAResolverType
       this.resolveTypeExpression(s.getExpression()));
   }
 
-  @Override public void resolveEOF(
+  @Override
+  public void resolveEOF(
     final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerResolverException
   {

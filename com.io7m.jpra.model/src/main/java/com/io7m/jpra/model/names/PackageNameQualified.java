@@ -20,11 +20,11 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -48,9 +48,10 @@ public final class PackageNameQualified implements ModelElementType
   public PackageNameQualified(
     final ImmutableList<PackageNameUnqualified> in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = NullCheck.notNull(in_value, "Value");
 
-    Assertive.require(
+    Preconditions.checkPreconditionV(
+      Integer.valueOf(in_value.size()),
       in_value.size() > 0,
       "Name length %d must be > 0",
       Integer.valueOf(in_value.size()));

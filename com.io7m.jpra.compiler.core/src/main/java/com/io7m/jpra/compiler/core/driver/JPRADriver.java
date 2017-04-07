@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.compiler.core.driver;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jlexing.core.LexicalPosition;
@@ -56,7 +57,6 @@ import com.io7m.jsx.parser.JSXParser;
 import com.io7m.jsx.serializer.JSXSerializerTrivial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -149,8 +149,8 @@ public final class JPRADriver implements JPRADriverType
       final Path in_base,
       final JPRACheckerCapabilitiesType in_caps)
     {
-      this.source_directory = NullCheck.notNull(in_base);
-      this.caps = NullCheck.notNull(in_caps);
+      this.source_directory = NullCheck.notNull(in_base, "Path");
+      this.caps = NullCheck.notNull(in_caps, "Capabilities");
     }
 
     private Path fileForPackage(final PackageNameQualified p)
@@ -205,7 +205,8 @@ public final class JPRADriver implements JPRADriverType
 
               final Optional<PackageContextType> pr = pipe.onExpression(s);
               if (pr.isPresent()) {
-                Assertive.require(!pack_opt.isPresent());
+                Preconditions.checkPrecondition(
+                  !pack_opt.isPresent(), "Package must be present");
                 pack_opt = pr;
               }
             } else {
@@ -237,7 +238,8 @@ public final class JPRADriver implements JPRADriverType
           String.format("Could not load package %s", p));
       }
 
-      Assertive.require(pack_opt.isPresent());
+      Preconditions.checkPrecondition(
+        pack_opt.isPresent(), "Package must be present");
       return pack_opt.get();
     }
   }

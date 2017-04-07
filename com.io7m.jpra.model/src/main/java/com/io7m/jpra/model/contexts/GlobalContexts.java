@@ -19,6 +19,7 @@ package com.io7m.jpra.model.contexts;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
@@ -32,7 +33,6 @@ import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.util.ArrayDeque;
@@ -67,7 +67,7 @@ public final class GlobalContexts implements GlobalContextType
   {
     this.id_pool = BigInteger.ZERO;
     this.packages = Maps.mutable.empty();
-    this.loader = NullCheck.notNull(in_loader);
+    this.loader = NullCheck.notNull(in_loader, "Loader");
     this.types = Maps.mutable.empty();
     this.loading = Optional.empty();
     this.error_queue = new ArrayDeque<>(128);
@@ -113,7 +113,7 @@ public final class GlobalContexts implements GlobalContextType
     final PackageNameQualified p)
     throws JPRAModelLoadingException
   {
-    NullCheck.notNull(p);
+    NullCheck.notNull(p, "Package name");
 
     GlobalContexts.LOG.debug("get package: {}", p);
 
@@ -175,17 +175,19 @@ public final class GlobalContexts implements GlobalContextType
   @Override
   public void putType(final TypeUserDefinedType t)
   {
-    NullCheck.notNull(t);
+    NullCheck.notNull(t, "Type");
     final IdentifierType id = t.getIdentifier();
-    Assertive.require(!this.types.containsKey(id));
+    Preconditions.checkPreconditionV(
+      id, !this.types.containsKey(id), "Types must not contain %s", id);
     this.types.put(id, t);
   }
 
   @Override
   public TypeUserDefinedType getType(final IdentifierType id)
   {
-    NullCheck.notNull(id);
-    Assertive.require(this.types.containsKey(id));
+    NullCheck.notNull(id, "Identifier");
+    Preconditions.checkPreconditionV(
+      id, this.types.containsKey(id), "Types must contain %s", id);
     return this.types.get(id);
   }
 }

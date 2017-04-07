@@ -22,6 +22,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
@@ -33,7 +34,6 @@ import com.io7m.jranges.RangeInclusiveB;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -61,9 +61,9 @@ final class TPackedBuilder implements TPackedBuilderType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    this.package_context = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_ident);
+    this.package_context = NullCheck.notNull(in_package, "Package");
+    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
+    this.name = NullCheck.notNull(in_ident, "Type name");
 
     this.type_fields_ordered = Lists.mutable.empty();
     this.type_fields_named = Maps.mutable.empty();
@@ -78,7 +78,7 @@ final class TPackedBuilder implements TPackedBuilderType
     final Optional<LexicalPosition<Path>> lex,
     final Size<SizeUnitBitsType> size)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
     final TPacked.FieldPaddingBits v = new TPacked.FieldPaddingBits(size, lex);
     this.type_fields_ordered.add(v);
@@ -90,9 +90,9 @@ final class TPackedBuilder implements TPackedBuilderType
     final IdentifierType in_id,
     final TIntegerType in_type)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.identifiers.contains(in_id), "Identifiers cannot be reused");
 
     final TPacked.FieldValue v = new TPacked.FieldValue(in_name, in_type);
@@ -111,7 +111,7 @@ final class TPackedBuilder implements TPackedBuilderType
   @Override
   public TPacked build()
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
 
     final TPacked tr = new TPacked(

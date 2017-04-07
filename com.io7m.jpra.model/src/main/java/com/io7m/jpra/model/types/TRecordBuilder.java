@@ -22,6 +22,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
@@ -30,7 +31,6 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -50,9 +50,9 @@ final class TRecordBuilder implements TRecordBuilderType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    this.package_context = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_ident);
+    this.package_context = NullCheck.notNull(in_package, "Package");
+    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
+    this.name = NullCheck.notNull(in_ident, "Type name");
 
     this.type_fields_ordered = Lists.mutable.empty();
     this.type_fields_named = Maps.mutable.empty();
@@ -67,7 +67,7 @@ final class TRecordBuilder implements TRecordBuilderType
     final Optional<LexicalPosition<Path>> lex,
     final Size<SizeUnitOctetsType> size)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
     final TRecord.FieldPaddingOctets v =
       new TRecord.FieldPaddingOctets(size, lex);
@@ -80,9 +80,9 @@ final class TRecordBuilder implements TRecordBuilderType
     final IdentifierType in_id,
     final TType in_type)
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.identifiers.contains(in_id), "Identifiers cannot be reused");
 
     final TRecord.FieldValue v = new TRecord.FieldValue(in_name, in_type);
@@ -94,7 +94,7 @@ final class TRecordBuilder implements TRecordBuilderType
   @Override
   public TRecord build()
   {
-    Assertive.require(
+    Preconditions.checkPrecondition(
       !this.finished, "Builder must not have already finished");
 
     final TRecord tr = new TRecord(

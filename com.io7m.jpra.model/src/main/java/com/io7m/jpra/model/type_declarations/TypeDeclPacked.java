@@ -19,13 +19,13 @@ package com.io7m.jpra.model.type_declarations;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.statements.StatementMatcherType;
 import net.jcip.annotations.Immutable;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -64,13 +64,18 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
     final TypeName in_name,
     final ImmutableList<PackedFieldDeclType<I, T>> in_fields_order)
   {
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.type = NullCheck.notNull(in_type);
-    this.fields_name = NullCheck.notNull(in_fields_name);
-    this.name = NullCheck.notNull(in_name);
-    this.fields_order = NullCheck.notNull(in_fields_order);
+    this.identifier =
+      NullCheck.notNull(in_identifier, "Identifier");
+    this.type =
+      NullCheck.notNull(in_type, "Type");
+    this.fields_name =
+      NullCheck.notNull(in_fields_name, "Field name");
+    this.name =
+      NullCheck.notNull(in_name, "Type name");
+    this.fields_order =
+      NullCheck.notNull(in_fields_order, "Fields ordered");
 
-    Assertive.require(
+    Preconditions.checkPreconditionV(
       this.fields_name.size() <= this.fields_order.size(),
       "Fields-by-name size %d > Fields-ordered size %d",
       Integer.valueOf(this.fields_name.size()),
@@ -81,8 +86,9 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
         final Optional<FieldName> r_name = PackedFieldDecl.name(r);
         if (r_name.isPresent()) {
           final FieldName rn = r_name.get();
-          Assertive.require(
-            this.fields_name.containsKey(rn), "Fields must contain %s", rn);
+          Preconditions.checkPreconditionV(
+            this.fields_name.containsKey(rn),
+            "Fields must contain %s", rn);
         }
       });
   }

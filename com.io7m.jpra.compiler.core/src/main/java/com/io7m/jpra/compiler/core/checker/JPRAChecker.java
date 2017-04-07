@@ -22,6 +22,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jfunctional.Unit;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
@@ -92,7 +93,6 @@ import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.jranges.RangeInclusiveB;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -112,18 +112,18 @@ public final class JPRAChecker implements JPRACheckerType
       BigInteger.ONE, BigInteger.valueOf(128L));
   }
 
-  private final GlobalContextType              context;
-  private final JPRACheckerCapabilitiesType    caps;
-  private       PackageContext                 package_ctx;
-  private       Optional<PackageNameQualified> current_package;
-  private       TypeExpressionContext          type_context;
+  private final GlobalContextType context;
+  private final JPRACheckerCapabilitiesType caps;
+  private PackageContext package_ctx;
+  private Optional<PackageNameQualified> current_package;
+  private TypeExpressionContext type_context;
 
   private JPRAChecker(
     final GlobalContextType c,
     final JPRACheckerCapabilitiesType in_caps)
   {
-    this.context = NullCheck.notNull(c);
-    this.caps = NullCheck.notNull(in_caps);
+    this.context = NullCheck.notNull(c, "Context");
+    this.caps = NullCheck.notNull(in_caps, "Capabilities");
     this.type_context = TypeExpressionContext.NONE;
   }
 
@@ -141,44 +141,49 @@ public final class JPRAChecker implements JPRACheckerType
     return new JPRAChecker(c, caps);
   }
 
-  @Override public void checkPackageBegin(
+  @Override
+  public void checkPackageBegin(
     final StatementPackageBegin<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException
   {
-    NullCheck.notNull(s);
+    NullCheck.notNull(s, "Statement");
     final PackageNameQualified name = s.getPackageName();
     this.current_package = Optional.of(name);
     this.package_ctx = new PackageContext(this.context, name);
   }
 
-  @Override public PackageContextType checkPackageEnd(
+  @Override
+  public PackageContextType checkPackageEnd(
     final StatementPackageEnd<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException
   {
-    NullCheck.notNull(s);
+    NullCheck.notNull(s, "Statement");
     this.current_package = Optional.empty();
     return this.package_ctx;
   }
 
-  @Override public TypeDeclType<IdentifierType, TType> checkTypeDeclaration(
+  @Override
+  public TypeDeclType<IdentifierType, TType> checkTypeDeclaration(
     final TypeDeclType<IdentifierType, Untyped> decl)
     throws JPRACompilerCheckerException
   {
-    NullCheck.notNull(decl);
+    NullCheck.notNull(decl, "Declaration");
 
     try {
       final TypeDeclType<IdentifierType, TType> rv = decl.matchTypeDeclaration(
         new TypeDeclMatcherType<IdentifierType, Untyped,
           TypeDeclType<IdentifierType, TType>, JPRACompilerCheckerException>()
         {
-          @Override public TypeDeclType<IdentifierType, TType> matchRecord(
+          @Override
+          public TypeDeclType<IdentifierType, TType> matchRecord(
             final TypeDeclRecord<IdentifierType, Untyped> t)
             throws JPRACompilerCheckerException
           {
             return JPRAChecker.this.checkTypeDeclRecord(t);
           }
 
-          @Override public TypeDeclType<IdentifierType, TType> matchPacked(
+          @Override
+          public TypeDeclType<IdentifierType, TType> matchPacked(
             final TypeDeclPacked<IdentifierType, Untyped> t)
             throws JPRACompilerCheckerException
           {
@@ -187,7 +192,10 @@ public final class JPRAChecker implements JPRACheckerType
         });
 
       final TType tt = rv.getType();
-      Assertive.require(tt instanceof TypeUserDefinedType);
+      Preconditions.checkPreconditionV(
+        tt instanceof TypeUserDefinedType,
+        "Type must be an instance of %s",
+        TypeUserDefinedType.class);
       this.context.putType((TypeUserDefinedType) tt);
       this.package_ctx.putType((TypeUserDefinedType) tt);
       return rv;
@@ -240,10 +248,21 @@ public final class JPRAChecker implements JPRACheckerType
         });
     }
 
-    Assertive.require(fields_ordered.size() == orig_ordered.size());
-    Assertive.require(fields_named.size() == orig_named.size());
+    Preconditions.checkPreconditionV(
+      fields_ordered.size() == orig_ordered.size(),
+      "%d == %d",
+      Integer.valueOf(fields_ordered.size()),
+      Integer.valueOf(orig_ordered.size()));
+    Preconditions.checkPreconditionV(
+      fields_named.size() == orig_named.size(), "%d == %d",
+      Integer.valueOf(fields_named.size()),
+      Integer.valueOf(orig_named.size()));
+
     fields_named.forEachKey(
-      k -> Assertive.require(orig_named.containsKey(k)));
+      k -> Preconditions.checkPreconditionV(
+        orig_named.containsKey(k),
+        "Names must contain %s",
+        k));
 
     final BigInteger sv = b.getCurrentSize().getValue();
     if (!this.caps.isPackedSizeBitsSupported(sv)) {
@@ -252,11 +271,23 @@ public final class JPRAChecker implements JPRACheckerType
     }
 
     final TPacked type = b.build();
-    Assertive.require(
-      type.getFieldsInDeclarationOrder().size() == orig_ordered.size());
-    Assertive.require(type.getFieldsByName().size() == orig_named.size());
+    Preconditions.checkPreconditionV(
+      type.getFieldsInDeclarationOrder().size() == orig_ordered.size(),
+      "%d == %d",
+      Integer.valueOf(type.getFieldsInDeclarationOrder().size()),
+      Integer.valueOf(orig_ordered.size()));
+
+    Preconditions.checkPreconditionV(
+      type.getFieldsByName().size() == orig_named.size(),
+      "%d == %d",
+      Integer.valueOf(type.getFieldsByName().size()),
+      Integer.valueOf(orig_named.size()));
+
     type.getFieldsByName().forEachKey(
-      k -> Assertive.require(orig_named.containsKey(k)));
+      k -> Preconditions.checkPreconditionV(
+        orig_named.containsKey(k),
+        "Names must contain %s",
+        k));
 
     return new TypeDeclPacked<>(
       t.getIdentifier(),
@@ -379,17 +410,32 @@ public final class JPRAChecker implements JPRACheckerType
         });
     }
 
-    Assertive.require(fields_ordered.size() == orig_ordered.size());
-    Assertive.require(fields_named.size() == orig_named.size());
+    Preconditions.checkPreconditionV(
+      fields_ordered.size() == orig_ordered.size(), "%d == %d",
+      Integer.valueOf(fields_ordered.size()),
+      Integer.valueOf(orig_ordered.size()));
+    Preconditions.checkPreconditionV(
+      fields_named.size() == orig_named.size(), "%d == %d",
+      Integer.valueOf(fields_named.size()),
+      Integer.valueOf(orig_named.size()));
     fields_named.forEachKey(
-      k -> Assertive.require(orig_named.containsKey(k)));
+      k -> Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k));
 
     final TRecord type = b.build();
-    Assertive.require(
-      type.getFieldsInDeclarationOrder().size() == orig_ordered.size());
-    Assertive.require(type.getFieldsByName().size() == orig_named.size());
+    Preconditions.checkPreconditionV(
+      type.getFieldsInDeclarationOrder().size() == orig_ordered.size(),
+      "%d == %d",
+      Integer.valueOf(type.getFieldsInDeclarationOrder().size()),
+      Integer.valueOf(orig_ordered.size()));
+    Preconditions.checkPreconditionV(
+      type.getFieldsByName().size() == orig_named.size(),
+      "%d == %d",
+      Integer.valueOf(type.getFieldsByName().size()),
+      Integer.valueOf(orig_named.size()));
     type.getFieldsByName().forEachKey(
-      k -> Assertive.require(orig_named.containsKey(k)));
+      k -> Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k));
 
     return new TypeDeclRecord<>(
       t.getIdentifier(),
@@ -461,11 +507,12 @@ public final class JPRAChecker implements JPRACheckerType
     return new RecordFieldDeclPaddingOctets<>(r.getLexicalInformation(), size);
   }
 
-  @Override public TypeExprType<IdentifierType, TType> checkTypeExpression(
+  @Override
+  public TypeExprType<IdentifierType, TType> checkTypeExpression(
     final TypeExprType<IdentifierType, Untyped> expr)
     throws JPRACompilerCheckerException
   {
-    NullCheck.notNull(expr);
+    NullCheck.notNull(expr, "Expression");
     return expr.matchType(
       new TypeExprMatcherType<IdentifierType, Untyped,
         TypeExprType<IdentifierType, TType>, JPRACompilerCheckerException>()
@@ -504,49 +551,56 @@ public final class JPRAChecker implements JPRACheckerType
           return JPRAChecker.this.checkTypeExprIntegerUnsignedNormalized(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchExprArray(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchExprArray(
           final TypeExprArray<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprArray(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchExprFloat(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchExprFloat(
           final TypeExprFloat<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprFloat(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchExprVector(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchExprVector(
           final TypeExprVector<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprVector(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchExprMatrix(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchExprMatrix(
           final TypeExprMatrix<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprMatrix(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchExprString(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchExprString(
           final TypeExprString<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprString(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchName(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchName(
           final TypeExprName<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkTypeExprName(e);
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchTypeOfField(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchTypeOfField(
           final TypeExprTypeOfField<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
@@ -554,7 +608,8 @@ public final class JPRAChecker implements JPRACheckerType
           throw new UnimplementedCodeException();
         }
 
-        @Override public TypeExprType<IdentifierType, TType> matchBooleanSet(
+        @Override
+        public TypeExprType<IdentifierType, TType> matchBooleanSet(
           final TypeExprBooleanSet<IdentifierType, Untyped> e)
           throws JPRACompilerCheckerException
         {
@@ -563,7 +618,8 @@ public final class JPRAChecker implements JPRACheckerType
       });
   }
 
-  @Override public StatementCommandType<IdentifierType, TType> checkCommandType(
+  @Override
+  public StatementCommandType<IdentifierType, TType> checkCommandType(
     final StatementCommandType<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException
   {
@@ -608,7 +664,8 @@ public final class JPRAChecker implements JPRACheckerType
     te_type.matchTypeScalar(
       new TypeScalarMatcherType<Unit, JPRACompilerCheckerException>()
       {
-        @Override public Unit matchScalarInteger(
+        @Override
+        public Unit matchScalarInteger(
           final TIntegerType t)
           throws JPRACompilerCheckerException
         {
@@ -620,7 +677,8 @@ public final class JPRAChecker implements JPRACheckerType
           return Unit.unit();
         }
 
-        @Override public Unit matchScalarFloat(
+        @Override
+        public Unit matchScalarFloat(
           final TFloat t)
           throws JPRACompilerCheckerException
         {
@@ -662,7 +720,8 @@ public final class JPRAChecker implements JPRACheckerType
     t_type.matchTypeScalar(
       new TypeScalarMatcherType<Unit, JPRACompilerCheckerException>()
       {
-        @Override public Unit matchScalarInteger(
+        @Override
+        public Unit matchScalarInteger(
           final TIntegerType t)
           throws JPRACompilerCheckerException
         {
@@ -674,7 +733,8 @@ public final class JPRAChecker implements JPRACheckerType
           return Unit.unit();
         }
 
-        @Override public Unit matchScalarFloat(
+        @Override
+        public Unit matchScalarFloat(
           final TFloat t)
           throws JPRACompilerCheckerException
         {
@@ -881,20 +941,23 @@ public final class JPRAChecker implements JPRACheckerType
       new SizeExprMatcherType<IdentifierType, TType, Size<T>,
         UnreachableCodeException>()
       {
-        @Override public Size<T> matchConstant(
+        @Override
+        public Size<T> matchConstant(
           final SizeExprConstant<IdentifierType, TType> s)
         {
           return new Size<>(s.getValue());
         }
 
-        @Override public Size<T> matchInOctets(
+        @Override
+        public Size<T> matchInOctets(
           final SizeExprInOctets<IdentifierType, TType> s)
         {
           // TODO: Generated method stub!
           throw new UnimplementedCodeException();
         }
 
-        @Override public Size<T> matchInBits(
+        @Override
+        public Size<T> matchInBits(
           final SizeExprInBits<IdentifierType, TType> s)
         {
           // TODO: Generated method stub!
@@ -911,21 +974,24 @@ public final class JPRAChecker implements JPRACheckerType
       new SizeExprMatcherType<IdentifierType, Untyped,
         SizeExprType<IdentifierType, TType>, JPRACompilerCheckerException>()
       {
-        @Override public SizeExprType<IdentifierType, TType> matchConstant(
+        @Override
+        public SizeExprType<IdentifierType, TType> matchConstant(
           final SizeExprConstant<IdentifierType, Untyped> s)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkSizeExprConstant(s);
         }
 
-        @Override public SizeExprType<IdentifierType, TType> matchInOctets(
+        @Override
+        public SizeExprType<IdentifierType, TType> matchInOctets(
           final SizeExprInOctets<IdentifierType, Untyped> s)
           throws JPRACompilerCheckerException
         {
           return JPRAChecker.this.checkSizeExprInOctets(s);
         }
 
-        @Override public SizeExprType<IdentifierType, TType> matchInBits(
+        @Override
+        public SizeExprType<IdentifierType, TType> matchInBits(
           final SizeExprInBits<IdentifierType, Untyped> s)
           throws JPRACompilerCheckerException
         {
@@ -965,9 +1031,9 @@ public final class JPRAChecker implements JPRACheckerType
 
   private static final class PackageContext implements PackageContextType
   {
-    private final GlobalContextType                         context;
+    private final GlobalContextType context;
     private final MutableMap<TypeName, TypeUserDefinedType> types;
-    private final PackageNameQualified                      name;
+    private final PackageNameQualified name;
     private final MutableMap<TypeName, TypeUserDefinedType> types_view;
 
     PackageContext(
@@ -982,21 +1048,27 @@ public final class JPRAChecker implements JPRACheckerType
 
     void putType(final TypeUserDefinedType t)
     {
-      Assertive.require(!this.types.contains(t.getName()));
+      Preconditions.checkPreconditionV(
+        !this.types.contains(t.getName()),
+        "Types must not contain %s",
+        t.getName());
       this.types.put(t.getName(), t);
     }
 
-    @Override public GlobalContextType getGlobalContext()
+    @Override
+    public GlobalContextType getGlobalContext()
     {
       return this.context;
     }
 
-    @Override public Map<TypeName, TypeUserDefinedType> getTypes()
+    @Override
+    public Map<TypeName, TypeUserDefinedType> getTypes()
     {
       return this.types_view;
     }
 
-    @Override public PackageNameQualified getName()
+    @Override
+    public PackageNameQualified getName()
     {
       return this.name;
     }

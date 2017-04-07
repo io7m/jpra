@@ -16,8 +16,8 @@
 
 package com.io7m.jpra.compiler.java;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 
@@ -48,14 +48,20 @@ public final class JPRAMasks
     final int lsb,
     final int msb)
   {
-    Assertive.require(size > 0, "size %d > 0", Integer.valueOf(size));
-    Assertive.require(lsb >= 0, "lsb %d >= 0", Integer.valueOf(lsb));
-    Assertive.require(
+    Preconditions.checkPreconditionV(
+      size > 0,
+      "size %d > 0",
+      Integer.valueOf(size));
+    Preconditions.checkPreconditionV(
+      lsb >= 0,
+      "lsb %d >= 0",
+      Integer.valueOf(lsb));
+    Preconditions.checkPreconditionV(
       msb < size,
       "msb %d < size %d",
       Integer.valueOf(msb),
       Integer.valueOf(size));
-    Assertive.require(
+    Preconditions.checkPreconditionV(
       lsb <= msb,
       "lsb %d <= msb %d",
       Integer.valueOf(lsb),
@@ -98,14 +104,20 @@ public final class JPRAMasks
     final int lsb,
     final int msb)
   {
-    Assertive.require(size > 0, "size %d > 0", Integer.valueOf(size));
-    Assertive.require(lsb >= 0, "lsb %d >= 0", Integer.valueOf(lsb));
-    Assertive.require(
+    Preconditions.checkPreconditionV(
+      size > 0,
+      "size %d > 0",
+      Integer.valueOf(size));
+    Preconditions.checkPreconditionV(
+      lsb >= 0,
+      "lsb %d >= 0",
+      Integer.valueOf(lsb));
+    Preconditions.checkPreconditionV(
       msb < size,
       "msb %d < size %d",
       Integer.valueOf(msb),
       Integer.valueOf(size));
-    Assertive.require(
+    Preconditions.checkPreconditionV(
       lsb <= msb,
       "lsb %d <= msb %d",
       Integer.valueOf(lsb),

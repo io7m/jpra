@@ -17,10 +17,10 @@
 package com.io7m.jpra.model.loading;
 
 import com.gs.collections.api.list.ImmutableList;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
-import org.valid4j.Assertive;
 
 /**
  * An exception encountered due to a circular import.
@@ -42,8 +42,10 @@ public final class JPRAModelCircularImportException extends JPRAException
     final ImmutableList<PackageImport> in_imports)
   {
     super(message);
-    this.imports = NullCheck.notNull(in_imports);
-    Assertive.require(!this.imports.isEmpty());
+    this.imports = NullCheck.notNull(in_imports, "Imports");
+    Preconditions.checkPrecondition(
+      !this.imports.isEmpty(),
+      "Imports must not be empty");
   }
 
   /**

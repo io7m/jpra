@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
@@ -23,7 +24,6 @@ import com.io7m.jsx.SExpressionListType;
 import com.io7m.jsx.SExpressionQuotedStringType;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.SExpressionType;
-import org.valid4j.Assertive;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -42,7 +42,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     super(in_lex, message);
-    this.code = NullCheck.notNull(in_code);
+    this.code = NullCheck.notNull(in_code, "Error code");
   }
 
   /**
@@ -62,7 +62,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A quoted string '");
     mb.append(e.text());
     mb.append("'");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING,
@@ -86,7 +86,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A symbol '");
     mb.append(e.text());
     mb.append("'");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL,
@@ -108,7 +108,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Expected: A symbol");
     mb.append(System.lineSeparator());
     mb.append("  Got: A list");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_LIST,
@@ -132,7 +132,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A quoted string '");
     mb.append(e.text());
     mb.append("'");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_QUOTED_STRING,
@@ -169,13 +169,13 @@ public final class JPRACompilerParseException extends JPRACompilerException
   public static JPRACompilerParseException expectedNonEmptyList(
     final SExpressionListType e)
   {
-    Assertive.require(e.size() == 0);
+    Preconditions.checkPrecondition(e.size() == 0, "Size must be zero");
 
     final StringBuilder mb = new StringBuilder(256);
     mb.append("  Expected: A non-empty list");
     mb.append(System.lineSeparator());
     mb.append("  Got: An empty list");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST,
@@ -275,7 +275,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A quoted string '");
     mb.append(e.text());
     mb.append("'");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING,
@@ -299,7 +299,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A symbol '");
     mb.append(e.text());
     mb.append("'");
-    final String m = NullCheck.notNull(mb.toString());
+    final String m = NullCheck.notNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
       e.lexical().map(LexicalPosition::copyOf),
       JPRAParseErrorCode.INVALID_INTEGER_CONSTANT,

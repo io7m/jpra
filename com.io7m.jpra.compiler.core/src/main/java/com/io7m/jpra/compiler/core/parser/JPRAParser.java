@@ -22,6 +22,8 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.io7m.jaffirm.core.PreconditionViolationException;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalPositionType;
 import com.io7m.jnull.NullCheck;
@@ -70,8 +72,6 @@ import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.valid4j.Assertive;
-import org.valid4j.errors.RequireViolation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -177,8 +177,8 @@ public final class JPRAParser implements JPRAParserType
     final JSXSerializerType in_serial,
     final JPRAReferenceParserType in_ref_parser)
   {
-    this.serial = NullCheck.notNull(in_serial);
-    this.ref_parser = NullCheck.notNull(in_ref_parser);
+    this.serial = NullCheck.notNull(in_serial, "Serializer");
+    this.ref_parser = NullCheck.notNull(in_ref_parser, "Parser");
   }
 
   /**
@@ -323,7 +323,7 @@ public final class JPRAParser implements JPRAParserType
             try {
               name = new FieldName(
                 JPRAParser.getExpressionLexical(si), si.text());
-            } catch (final RequireViolation x) {
+            } catch (final PreconditionViolationException x) {
               throw JPRACompilerParseException.badFieldName(si, x.getMessage());
             }
 
@@ -370,7 +370,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     final String text = name.text();
-    Assertive.require(!text.isEmpty());
+    Preconditions.checkPrecondition(!text.isEmpty(), "Text must not be empty");
     final String[] segments = text.split("\\.");
 
     final Optional<LexicalPosition<Path>> ilex =
@@ -381,7 +381,7 @@ public final class JPRAParser implements JPRAParserType
       final String raw = segments[index];
       try {
         names_base.add(new PackageNameUnqualified(ilex, raw));
-      } catch (final RequireViolation e) {
+      } catch (final PreconditionViolationException e) {
         throw JPRACompilerParseException.badPackageName(name, e.getMessage());
       }
     }
@@ -398,7 +398,7 @@ public final class JPRAParser implements JPRAParserType
     try {
       return new PackageNameUnqualified(
         JPRAParser.getExpressionLexical(s), s.text());
-    } catch (final RequireViolation e) {
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badPackageName(s, e.getMessage());
     }
   }
@@ -440,7 +440,7 @@ public final class JPRAParser implements JPRAParserType
     try {
       return new TypeName(
         JPRAParser.getExpressionLexical(name), name.text());
-    } catch (final RequireViolation e) {
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badTypeName(name, e.getMessage());
     }
   }
@@ -485,7 +485,7 @@ public final class JPRAParser implements JPRAParserType
     try {
       return new FieldName(
         JPRAParser.getExpressionLexical(name), name.text());
-    } catch (final RequireViolation e) {
+    } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badFieldName(name, e.getMessage());
     }
   }
@@ -495,7 +495,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.IMPORT.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.IMPORT.equals(se.text()),
+      "Text must be %s",
+      IMPORT);
 
     if (le.size() == 4) {
       final SExpressionType q_name = le.get(1);
@@ -540,7 +543,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(expr);
+    NullCheck.notNull(expr, "Expression");
 
     final SExpressionListType le = JPRAParser.requireList(expr);
     if (le.size() == 0) {
@@ -575,7 +578,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.COMMAND_TYPE.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.COMMAND_TYPE.equals(se.text()),
+      "Text must be %s",
+      COMMAND_TYPE);
 
     if (le.size() == 2) {
       return new StatementCommandType<>(this.parseTypeExpression(le.get(1)));
@@ -601,7 +607,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.COMMAND_SIZE.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.COMMAND_SIZE.equals(se.text()),
+      "Text must be %s",
+      COMMAND_SIZE);
 
     if (le.size() == 2) {
       return new StatementCommandSize<>(this.parseSizeExpression(le.get(1)));
@@ -627,7 +636,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKED.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKED.equals(se.text()),
+      "Text must be %s",
+      PACKED);
 
     if (le.size() == 3) {
       final SExpressionType n_expr = le.get(1);
@@ -784,7 +796,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.RECORD.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.RECORD.equals(se.text()),
+      "Text must be %s",
+      RECORD);
 
     if (le.size() == 3) {
       final SExpressionType n_expr = le.get(1);
@@ -941,7 +956,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKAGE_END.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKAGE_END.equals(se.text()),
+      "Text must be %s",
+      PACKAGE_END);
 
     if (le.size() == 1) {
       return new StatementPackageEnd<>(JPRAParser.getExpressionLexical(se));
@@ -967,7 +985,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.PACKAGE_BEGIN.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.PACKAGE_BEGIN.equals(se.text()),
+      "Text must be %s",
+      PACKAGE_BEGIN);
 
     if (le.size() == 2) {
       final SExpressionType e_name = le.get(1);
@@ -1078,7 +1099,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.BOOLEAN_SET.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.BOOLEAN_SET.equals(se.text()),
+      "Text must be %s",
+      BOOLEAN_SET);
 
     if (le.size() == 3) {
       final SExpressionType s_expr = le.get(1);
@@ -1114,7 +1138,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.STRING.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.STRING.equals(se.text()),
+      "Text must be %s",
+      STRING);
 
     if (le.size() == 3) {
       final SExpressionType s_expr = le.get(1);
@@ -1155,7 +1182,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.ARRAY.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.ARRAY.equals(se.text()),
+      "Text must be %s",
+      ARRAY);
 
     if (le.size() == 3) {
       final SExpressionType t_expr = le.get(1);
@@ -1189,7 +1219,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.MATRIX.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.MATRIX.equals(se.text()),
+      "Text must be %s",
+      MATRIX);
 
     if (le.size() == 4) {
       final SExpressionType t_expr = le.get(1);
@@ -1233,7 +1266,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.VECTOR.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.VECTOR.equals(se.text()),
+      "Text must be %s",
+      VECTOR);
 
     if (le.size() == 3) {
       final Optional<LexicalPositionType<Path>> lex = le.lexical();
@@ -1266,7 +1302,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.FLOAT.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.FLOAT.equals(se.text()),
+      "Text must be %s",
+      FLOAT);
 
     if (le.size() == 2) {
       final SExpressionType s_expr = le.get(1);
@@ -1296,7 +1335,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.INTEGER.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.INTEGER.equals(se.text()),
+      "Text must be %s",
+      INTEGER);
 
     if (le.size() == 3) {
       final SExpressionType t_expr = le.get(1);
@@ -1410,7 +1452,7 @@ public final class JPRAParser implements JPRAParserType
     final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(lex);
+    NullCheck.notNull(lex, "Lexical information");
   }
 
   private SizeExprType<Unresolved, Untyped> parseSizeInBits(
@@ -1418,7 +1460,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.SIZE_IN_BITS.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.SIZE_IN_BITS.equals(se.text()),
+      "Text must be %s",
+      SIZE_IN_BITS);
 
     if (le.size() == 2) {
       return new SizeExprInBits<>(this.parseTypeExpression(le.get(1)));
@@ -1444,7 +1489,10 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    Assertive.require(JPRAParser.SIZE_IN_OCTETS.equals(se.text()));
+    Preconditions.checkPreconditionV(
+      JPRAParser.SIZE_IN_OCTETS.equals(se.text()),
+      "Text must be %s",
+      SIZE_IN_OCTETS);
 
     if (le.size() == 2) {
       return new SizeExprInOctets<>(this.parseTypeExpression(le.get(1)));

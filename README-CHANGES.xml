@@ -10,6 +10,12 @@
       <c:type-code-change/>
       <c:summary>Use primogenitor, renaming all modules to the new OSGi conventions.</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2017-04-07</c:date>
+      <c:type-code-change/>
+      <c:ticket>24</c:ticket>
+      <c:summary>Use new core io7m packages. Eliminate valid4j.</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.github.io7m.jpra">

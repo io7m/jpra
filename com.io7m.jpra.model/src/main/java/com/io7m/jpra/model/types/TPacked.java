@@ -19,6 +19,7 @@ package com.io7m.jpra.model.types;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
@@ -28,7 +29,6 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jranges.RangeInclusiveB;
-import org.valid4j.Assertive;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -55,25 +55,32 @@ public final class TPacked implements TType, TypeUserDefinedType
     final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
     final ImmutableList<FieldType> in_fields_by_order)
   {
-    this.package_ctx = NullCheck.notNull(in_package);
-    this.identifier = NullCheck.notNull(in_identifier);
-    this.name = NullCheck.notNull(in_name);
-    this.fields_by_name = NullCheck.notNull(in_fields_by_name);
-    this.fields_by_order = NullCheck.notNull(in_fields_by_order);
+    this.package_ctx =
+      NullCheck.notNull(in_package, "Package");
+    this.identifier =
+      NullCheck.notNull(in_identifier, "Identifier");
+    this.fields_by_name =
+      NullCheck.notNull(in_fields_by_name, "Fields by name");
+    this.name =
+      NullCheck.notNull(in_name, "Type name");
+    this.fields_by_order =
+      NullCheck.notNull(in_fields_by_order, "Fields in order");
 
-    Assertive.require(
-      this.fields_by_order.size() >= this.fields_by_name.size());
+    Preconditions.checkPreconditionV(
+      this.fields_by_order.size() >= this.fields_by_name.size(),
+      "Ordered field count %d must be >= named field count %d",
+      Integer.valueOf(this.fields_by_order.size()),
+      Integer.valueOf(this.fields_by_name.size()));
 
     this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
       (Procedure<FieldValue>) f -> {
         final FieldName f_name = f.getName();
-        Assertive.require(
-          this.fields_by_name.containsKey(f_name),
-          "Fields must contain %s (%s)",
-          f,
-          this.fields_by_name);
+        Preconditions.checkPreconditionV(
+          this.fields_by_name.containsKey(f.name),
+          "Named fields must contain %s", f.name);
         final FieldValue fr = this.fields_by_name.get(f_name);
-        Assertive.require(fr.equals(f));
+        Preconditions.checkPrecondition(
+          fr.equals(f), "Field value must match");
       });
 
     this.size_bits = this.fields_by_order.injectInto(
@@ -81,10 +88,9 @@ public final class TPacked implements TType, TypeUserDefinedType
 
     final BigInteger sv = this.size_bits.getValue();
     final BigInteger b8 = BigInteger.valueOf(8L);
-    Assertive.ensure(
+    Preconditions.checkPreconditionV(
       sv.remainder(b8).equals(BigInteger.ZERO),
-      "Size %s must be divisible by 8",
-      sv);
+      "Size %s must be divisible by 8", sv);
     this.size_octets = new Size<>(sv.divide(b8));
   }
 
@@ -93,7 +99,7 @@ public final class TPacked implements TType, TypeUserDefinedType
    *
    * @param in_package    The package context
    * @param in_identifier The type's identifier
-   * @param in_ident      The type's name
+   * @param in_type_name  The type's name
    *
    * @return A new builder
    */
@@ -101,12 +107,12 @@ public final class TPacked implements TType, TypeUserDefinedType
   public static TPackedBuilderType newBuilder(
     final PackageContextType in_package,
     final IdentifierType in_identifier,
-    final TypeName in_ident)
+    final TypeName in_type_name)
   {
-    NullCheck.notNull(in_package);
-    NullCheck.notNull(in_identifier);
-    NullCheck.notNull(in_ident);
-    return new TPackedBuilder(in_package, in_identifier, in_ident);
+    NullCheck.notNull(in_package, "Package");
+    NullCheck.notNull(in_identifier, "Identifier");
+    NullCheck.notNull(in_type_name, "Type name");
+    return new TPackedBuilder(in_package, in_identifier, in_type_name);
   }
 
   /**
@@ -286,30 +292,30 @@ public final class TPacked implements TType, TypeUserDefinedType
       final FieldName in_identifier,
       final TIntegerType in_type)
     {
-      this.name = NullCheck.notNull(in_identifier);
-      this.type = NullCheck.notNull(in_type);
+      this.name = NullCheck.notNull(in_identifier, "Identifier");
+      this.type = NullCheck.notNull(in_type, "Type");
     }
 
     @Override
     public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range);
+      return NullCheck.notNull(this.range, "Range");
     }
 
     @Override
     public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range);
+      this.range = NullCheck.notNull(in_range, "Range");
     }
 
     /**
@@ -376,30 +382,30 @@ public final class TPacked implements TType, TypeUserDefinedType
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_bits = NullCheck.notNull(in_size_bits);
-      this.lex = NullCheck.notNull(in_lex);
+      this.size_bits = NullCheck.notNull(in_size_bits, "Size bits");
+      this.lex = NullCheck.notNull(in_lex, "Lexical information");
     }
 
     @Override
     public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner);
+      return NullCheck.notNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner);
+      this.owner = NullCheck.notNull(in_owner, "Owner");
     }
 
     @Override
     public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range);
+      return NullCheck.notNull(this.range, "Range");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range);
+      this.range = NullCheck.notNull(in_range, "Range");
     }
 
     @Override

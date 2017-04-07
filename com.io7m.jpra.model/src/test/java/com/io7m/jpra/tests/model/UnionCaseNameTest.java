@@ -16,60 +16,69 @@
 
 package com.io7m.jpra.tests.model;
 
+import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jpra.model.names.UnionCaseName;
 import org.junit.Assert;
 import org.junit.Test;
-import org.valid4j.errors.RequireViolation;
 
 import java.util.Optional;
 
 public final class UnionCaseNameTest
 {
-  @Test public void testValid0()
+  @Test
+  public void testValid0()
   {
     final UnionCaseName p = new UnionCaseName(Optional.empty(), "A");
     Assert.assertEquals("A", p.getValue());
   }
 
-  @Test public void testValid1()
+  @Test
+  public void testValid1()
   {
     final UnionCaseName p = new UnionCaseName(Optional.empty(), "A_");
     Assert.assertEquals("A_", p.getValue());
   }
 
-  @Test public void testValid2()
+  @Test
+  public void testValid2()
   {
     final UnionCaseName p = new UnionCaseName(Optional.empty(), "A1");
     Assert.assertEquals("A1", p.getValue());
   }
 
-  @Test public void testValid3()
+  @Test
+  public void testValid3()
   {
     final UnionCaseName p = new UnionCaseName(Optional.empty(), "AA");
     Assert.assertEquals("AA", p.getValue());
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid0()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid0()
   {
     new UnionCaseName(Optional.empty(), "1");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid1()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid1()
   {
     new UnionCaseName(Optional.empty(), "a");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid2()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid2()
   {
     new UnionCaseName(Optional.empty(), "_");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid3()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid3()
   {
     new UnionCaseName(Optional.empty(), "aA");
   }
 
-  @Test(expected = RequireViolation.class) public void testInvalid4()
+  @Test(expected = PreconditionViolationException.class)
+  public void testInvalid4()
   {
     new UnionCaseName(Optional.empty(), "");
   }
