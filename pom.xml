@@ -159,17 +159,17 @@
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.core</artifactId>
-        <version>[8.0.0-SNAPSHOT, 9.0.0)</version>
+        <version>8.0.0-beta0001</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.storage.api</artifactId>
-        <version>[8.0.0-SNAPSHOT, 9.0.0)</version>
+        <version>8.0.0-beta0001</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.storage.bytebuffered</artifactId>
-        <version>[8.0.0-SNAPSHOT, 9.0.0)</version>
+        <version>8.0.0-beta0001</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.mutable.numbers</groupId>
