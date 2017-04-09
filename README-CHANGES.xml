@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
-  <c:project>io7m-jpra</c:project>
+  <c:project>com.io7m.jpra</c:project>
+
+  <c:release c:ticket-system="com.github.io7m.jpra">
+    <c:date>2017-04-03</c:date>
+    <c:version>0.6.0</c:version>
+    <c:item>
+      <c:date>2017-04-03</c:date>
+      <c:type-code-change/>
+      <c:summary>Use primogenitor, renaming all modules to the new OSGi conventions.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2017-04-07</c:date>
+      <c:type-code-change/>
+      <c:ticket>24</c:ticket>
+      <c:ticket>21</c:ticket>
+      <c:summary>Use new core io7m packages. Eliminate valid4j.</c:summary>
+    </c:item>
+  </c:release>
 
   <c:release c:ticket-system="com.github.io7m.jpra">
     <c:date>2016-08-05</c:date>
