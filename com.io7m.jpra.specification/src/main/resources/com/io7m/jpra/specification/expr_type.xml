@@ -552,7 +552,7 @@ string_expression =
       <s:paragraph>
         An expression <s:term s:type="expression">[string s e]</s:term>
         describes a string that may contain at most
-        <s:term s:type="expression">s</s:term> characters. The string
+        <s:term s:type="expression">s</s:term> octets. The string
         is encoded using encoding <s:term s:type="expression">e</s:term>.
       </s:paragraph>
       <s:paragraph>
