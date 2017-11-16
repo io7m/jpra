@@ -48,12 +48,13 @@ public final class JPRACheckerStandardCapabilities
 
   private JPRACheckerStandardCapabilities()
   {
+    final BigInteger b1 = BigInteger.valueOf(1L);
     final BigInteger b2 = BigInteger.valueOf(2L);
     final BigInteger b64 = BigInteger.valueOf(64L);
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b2, b64));
+      s.add(new RangeInclusiveB(b1, b64));
       this.packed_integer_sizes = List.ofAll(s);
     }
 
