@@ -23,9 +23,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jfunctional.Unit;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
@@ -37,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -61,9 +60,9 @@ final class TPackedBuilder implements TPackedBuilderType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    this.package_context = NullCheck.notNull(in_package, "Package");
-    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
-    this.name = NullCheck.notNull(in_ident, "Type name");
+    this.package_context = Objects.requireNonNull(in_package, "Package");
+    this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
+    this.name = Objects.requireNonNull(in_ident, "Type name");
 
     this.type_fields_ordered = Lists.mutable.empty();
     this.type_fields_named = Maps.mutable.empty();
@@ -127,10 +126,10 @@ final class TPackedBuilder implements TPackedBuilderType
 
     for (final TPacked.FieldType f : this.type_fields_ordered) {
       f.matchField(
-        new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(
+          public Void matchFieldValue(
             final TPacked.FieldValue f)
           {
             f.setOwner(tr);
@@ -142,11 +141,11 @@ final class TPackedBuilder implements TPackedBuilderType
             LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
             f.setRange(new RangeInclusiveB(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
-            return Unit.unit();
+            return null;
           }
 
           @Override
-          public Unit matchFieldPaddingBits(
+          public Void matchFieldPaddingBits(
             final TPacked.FieldPaddingBits f)
           {
             f.setOwner(tr);
@@ -158,7 +157,7 @@ final class TPackedBuilder implements TPackedBuilderType
             LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
             f.setRange(new RangeInclusiveB(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
-            return Unit.unit();
+            return null;
           }
         });
     }

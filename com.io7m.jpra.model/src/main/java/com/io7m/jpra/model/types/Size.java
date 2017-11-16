@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.model.types;
 
-import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
@@ -41,7 +40,7 @@ public final class Size<U extends SizeUnitType>
 
   public Size(final BigInteger in_value)
   {
-    this.value = NullCheck.notNull(in_value, "Value");
+    this.value = Objects.requireNonNull(in_value, "Value");
   }
 
   /**

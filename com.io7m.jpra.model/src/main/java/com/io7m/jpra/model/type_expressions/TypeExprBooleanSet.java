@@ -18,11 +18,11 @@ package com.io7m.jpra.model.type_expressions;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -54,10 +54,10 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
     final ImmutableList<FieldName> in_fields,
     final SizeExprType<I, T> in_size)
   {
-    this.type = NullCheck.notNull(in_type, "Type");
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.fields = NullCheck.notNull(in_fields, "Fields");
-    this.size = NullCheck.notNull(in_size, "Size");
+    this.type = Objects.requireNonNull(in_type, "Type");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.fields = Objects.requireNonNull(in_fields, "Fields");
+    this.size = Objects.requireNonNull(in_size, "Size");
   }
 
   /**

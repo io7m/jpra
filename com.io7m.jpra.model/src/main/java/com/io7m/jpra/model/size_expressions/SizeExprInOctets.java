@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.size_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -46,7 +46,7 @@ public final class SizeExprInOctets<I, T>
   public SizeExprInOctets(
     final TypeExprType<I, T> in_expression)
   {
-    this.expression = NullCheck.notNull(in_expression, "Expression");
+    this.expression = Objects.requireNonNull(in_expression, "Expression");
   }
 
   /**

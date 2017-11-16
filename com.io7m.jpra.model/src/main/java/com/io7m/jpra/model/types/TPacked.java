@@ -21,7 +21,6 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -57,15 +56,15 @@ public final class TPacked implements TType, TypeUserDefinedType
     final ImmutableList<FieldType> in_fields_by_order)
   {
     this.package_ctx =
-      NullCheck.notNull(in_package, "Package");
+      Objects.requireNonNull(in_package, "Package");
     this.identifier =
-      NullCheck.notNull(in_identifier, "Identifier");
+      Objects.requireNonNull(in_identifier, "Identifier");
     this.fields_by_name =
-      NullCheck.notNull(in_fields_by_name, "Fields by name");
+      Objects.requireNonNull(in_fields_by_name, "Fields by name");
     this.name =
-      NullCheck.notNull(in_name, "Type name");
+      Objects.requireNonNull(in_name, "Type name");
     this.fields_by_order =
-      NullCheck.notNull(in_fields_by_order, "Fields in order");
+      Objects.requireNonNull(in_fields_by_order, "Fields in order");
 
     Preconditions.checkPreconditionV(
       this.fields_by_order.size() >= this.fields_by_name.size(),
@@ -110,9 +109,9 @@ public final class TPacked implements TType, TypeUserDefinedType
     final IdentifierType in_identifier,
     final TypeName in_type_name)
   {
-    NullCheck.notNull(in_package, "Package");
-    NullCheck.notNull(in_identifier, "Identifier");
-    NullCheck.notNull(in_type_name, "Type name");
+    Objects.requireNonNull(in_package, "Package");
+    Objects.requireNonNull(in_identifier, "Identifier");
+    Objects.requireNonNull(in_type_name, "Type name");
     return new TPackedBuilder(in_package, in_identifier, in_type_name);
   }
 
@@ -238,7 +237,7 @@ public final class TPacked implements TType, TypeUserDefinedType
      */
 
     <A, E extends Exception> A matchField(
-      final FieldMatcherType<A, E> m)
+      FieldMatcherType<A, E> m)
       throws E;
   }
 
@@ -293,30 +292,30 @@ public final class TPacked implements TType, TypeUserDefinedType
       final FieldName in_identifier,
       final TIntegerType in_type)
     {
-      this.name = NullCheck.notNull(in_identifier, "Identifier");
-      this.type = NullCheck.notNull(in_type, "Type");
+      this.name = Objects.requireNonNull(in_identifier, "Identifier");
+      this.type = Objects.requireNonNull(in_type, "Type");
     }
 
     @Override
     public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range, "Range");
+      return Objects.requireNonNull(this.range, "Range");
     }
 
     @Override
     public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner, "Owner");
+      return Objects.requireNonNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner, "Owner");
+      this.owner = Objects.requireNonNull(in_owner, "Owner");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range, "Range");
+      this.range = Objects.requireNonNull(in_range, "Range");
     }
 
     /**
@@ -383,30 +382,30 @@ public final class TPacked implements TType, TypeUserDefinedType
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_bits = NullCheck.notNull(in_size_bits, "Size bits");
-      this.lex = NullCheck.notNull(in_lex, "Lexical information");
+      this.size_bits = Objects.requireNonNull(in_size_bits, "Size bits");
+      this.lex = Objects.requireNonNull(in_lex, "Lexical information");
     }
 
     @Override
     public TPacked getOwner()
     {
-      return NullCheck.notNull(this.owner, "Owner");
+      return Objects.requireNonNull(this.owner, "Owner");
     }
 
     void setOwner(final TPacked in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner, "Owner");
+      this.owner = Objects.requireNonNull(in_owner, "Owner");
     }
 
     @Override
     public RangeInclusiveB getBitRange()
     {
-      return NullCheck.notNull(this.range, "Range");
+      return Objects.requireNonNull(this.range, "Range");
     }
 
     void setRange(final RangeInclusiveB in_range)
     {
-      this.range = NullCheck.notNull(in_range, "Range");
+      this.range = Objects.requireNonNull(in_range, "Range");
     }
 
     @Override

@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.model.contexts;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.IdentifierType;
 
 import java.math.BigInteger;
@@ -29,7 +28,7 @@ final class Identifier implements IdentifierType
   Identifier(
     final BigInteger in_value)
   {
-    this.value = NullCheck.notNull(in_value, "Value");
+    this.value = Objects.requireNonNull(in_value, "Value");
   }
 
   @Override

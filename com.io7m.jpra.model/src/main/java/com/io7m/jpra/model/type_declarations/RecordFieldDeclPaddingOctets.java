@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -50,8 +50,8 @@ public final class RecordFieldDeclPaddingOctets<I, T>
     final Optional<LexicalPosition<Path>> in_lex,
     final SizeExprType<I, T> in_size)
   {
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.size = NullCheck.notNull(in_size, "Size");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.size = Objects.requireNonNull(in_size, "Size");
   }
 
   /**

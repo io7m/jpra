@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.statements;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -45,7 +45,7 @@ public final class StatementPackageBegin<I, T>
   public StatementPackageBegin(
     final PackageNameQualified in_pack)
   {
-    this.pack = NullCheck.notNull(in_pack, "Pack");
+    this.pack = Objects.requireNonNull(in_pack, "Pack");
   }
 
   /**

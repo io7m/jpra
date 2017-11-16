@@ -35,7 +35,7 @@ public interface JPRATypeModelType
     int sizeInBits();
 
     <A, E extends Exception> A matchScalar(
-      final JPRAScalarMatcherType<A, E> m)
+      JPRAScalarMatcherType<A, E> m)
       throws E;
   }
 
@@ -121,7 +121,7 @@ public interface JPRATypeModelType
   interface JPRATypeType
   {
     <A, E extends Exception> A matchType(
-      final JPRATypeMatcherType<A, E> m)
+      JPRATypeMatcherType<A, E> m)
       throws E;
   }
 

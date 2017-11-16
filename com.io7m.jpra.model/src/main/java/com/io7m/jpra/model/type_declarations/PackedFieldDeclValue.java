@@ -17,12 +17,12 @@
 package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -53,9 +53,9 @@ public final class PackedFieldDeclValue<I, T>
     final FieldName in_name,
     final TypeExprType<I, T> in_type)
   {
-    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
-    this.name = NullCheck.notNull(in_name, "Name");
-    this.type = NullCheck.notNull(in_type, "Type");
+    this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
+    this.name = Objects.requireNonNull(in_name, "Name");
+    this.type = Objects.requireNonNull(in_type, "Type");
   }
 
   /**

@@ -18,8 +18,6 @@ package com.io7m.jpra.compiler.java;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.ieee754b16.Binary16;
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
@@ -44,6 +42,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces implementation methods for a given record
@@ -51,7 +50,7 @@ import java.math.BigInteger;
  */
 
 final class RecordFieldImplementationProcessor
-  implements TypeMatcherType<Unit, UnreachableCodeException>
+  implements TypeMatcherType<Void, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
   private final BigInteger offset;
@@ -62,9 +61,11 @@ final class RecordFieldImplementationProcessor
     final BigInteger in_offset,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.offset = NullCheck.notNull(in_offset, "Offset");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.offset = Objects.requireNonNull(in_offset, "Offset");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
 
     this.metaMethods();
   }
@@ -142,7 +143,7 @@ final class RecordFieldImplementationProcessor
   }
 
   @Override
-  public Unit matchArray(
+  public Void matchArray(
     final TArray t)
   {
     this.generateFieldOffsetConstant();
@@ -151,7 +152,7 @@ final class RecordFieldImplementationProcessor
   }
 
   @Override
-  public Unit matchString(
+  public Void matchString(
     final TString t)
   {
     this.generateFieldOffsetConstant();
@@ -177,11 +178,11 @@ final class RecordFieldImplementationProcessor
     write_b.addStatement("return this.$N", f_name);
     this.class_builder.addMethod(write_b.build());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchBooleanSet(
+  public Void matchBooleanSet(
     final TBooleanSet t)
   {
     this.generateFieldOffsetConstant();
@@ -238,11 +239,11 @@ final class RecordFieldImplementationProcessor
       setb.addStatement("this.buffer.put(i, (byte) (q & 0xff))");
       this.class_builder.addMethod(setb.build());
     }
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchInteger(
+  public Void matchInteger(
     final TIntegerType t)
   {
     this.generateFieldOffsetConstant();
@@ -253,7 +254,7 @@ final class RecordFieldImplementationProcessor
   }
 
   @Override
-  public Unit matchFloat(
+  public Void matchFloat(
     final TFloat t)
   {
     this.generateFieldOffsetConstant();
@@ -377,11 +378,11 @@ final class RecordFieldImplementationProcessor
       this.class_builder.addMethod(setb.build());
     }
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchVector(
+  public Void matchVector(
     final TVector t)
   {
     this.generateFieldOffsetConstant();
@@ -409,11 +410,11 @@ final class RecordFieldImplementationProcessor
     write_b.addStatement("return this.$N", f_name);
     this.class_builder.addMethod(write_b.build());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchMatrix(
+  public Void matchMatrix(
     final TMatrix t)
   {
     this.generateFieldOffsetConstant();
@@ -441,16 +442,16 @@ final class RecordFieldImplementationProcessor
     write_b.addStatement("return this.$N", f_name);
     this.class_builder.addMethod(write_b.build());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchRecord(
+  public Void matchRecord(
     final TRecord t)
   {
     this.generateFieldOffsetConstant();
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 
   /**
@@ -498,12 +499,12 @@ final class RecordFieldImplementationProcessor
   }
 
   @Override
-  public Unit matchPacked(
+  public Void matchPacked(
     final TPacked t)
   {
     this.generateFieldOffsetConstant();
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 
   /**

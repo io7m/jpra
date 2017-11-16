@@ -17,10 +17,10 @@
 package com.io7m.jpra.compiler.core;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.core.JPRAException;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -42,8 +42,8 @@ public abstract class JPRACompilerException extends JPRAException
     final Optional<LexicalPosition<Path>> in_lex,
     final String message)
   {
-    super(NullCheck.notNull(message, "Message"));
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    super(Objects.requireNonNull(message, "Message"));
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
   }
 
   /**
@@ -57,8 +57,8 @@ public abstract class JPRACompilerException extends JPRAException
     final Optional<LexicalPosition<Path>> in_lex,
     final Exception cause)
   {
-    super(NullCheck.notNull(cause, "Cause"));
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
+    super(Objects.requireNonNull(cause, "Cause"));
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
   }
 
   /**

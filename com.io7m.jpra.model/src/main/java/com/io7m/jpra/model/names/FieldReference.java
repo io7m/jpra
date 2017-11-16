@@ -16,8 +16,7 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jnull.NullCheck;
-
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -43,9 +42,9 @@ public final class FieldReference
     final Optional<TypeName> in_type,
     final FieldPath in_field_path)
   {
-    this.pack = NullCheck.notNull(in_pack, "Package");
-    this.type = NullCheck.notNull(in_type, "Type");
-    this.field_path = NullCheck.notNull(in_field_path, "Field path");
+    this.pack = Objects.requireNonNull(in_pack, "Package");
+    this.type = Objects.requireNonNull(in_type, "Type");
+    this.field_path = Objects.requireNonNull(in_field_path, "Field path");
   }
 
   /**

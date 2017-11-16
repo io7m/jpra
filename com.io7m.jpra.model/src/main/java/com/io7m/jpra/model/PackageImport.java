@@ -17,7 +17,6 @@
 package com.io7m.jpra.model;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import net.jcip.annotations.Immutable;
 
@@ -46,8 +45,8 @@ public final class PackageImport implements ModelElementType
     final PackageNameQualified in_from,
     final PackageNameQualified in_to)
   {
-    this.from = NullCheck.notNull(in_from, "From");
-    this.to = NullCheck.notNull(in_to, "To");
+    this.from = Objects.requireNonNull(in_from, "From");
+    this.to = Objects.requireNonNull(in_to, "To");
   }
 
   /**

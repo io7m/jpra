@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.types.Size;
@@ -71,22 +69,24 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     for (final TRecord.FieldType f : t.getFieldsInDeclarationOrder()) {
       final BigInteger o = offset;
       f.matchField(
-        new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TRecord.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(
+          public Void matchFieldValue(
             final TRecord.FieldValue f)
           {
             final TType t = f.getType();
-            return t.matchType(
-              new RecordFieldImplementationProcessor(f, o, jcb));
+            return t.matchType(new RecordFieldImplementationProcessor(
+              f,
+              o,
+              jcb));
           }
 
           @Override
-          public Unit matchFieldPaddingOctets(
+          public Void matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
-            return Unit.unit();
+            return null;
           }
         });
       offset = offset.add(f.getSizeInOctets().getValue());
@@ -275,10 +275,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
     for (final TRecord.FieldType f : t.getFieldsInDeclarationOrder()) {
       f.matchField(
-        new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TRecord.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(
+          public Void matchFieldValue(
             final TRecord.FieldValue f)
           {
             final TType t = f.getType();
@@ -288,10 +288,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
           }
 
           @Override
-          public Unit matchFieldPaddingOctets(
+          public Void matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
-            return Unit.unit();
+            return null;
           }
         });
     }
@@ -391,10 +391,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
       final String tn =
@@ -439,10 +439,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName tn = t.getName();
       final String name = this.getRecordInterfaceReadableName(tn);
@@ -457,24 +457,24 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
       for (final TRecord.FieldType f : t.getFieldsInDeclarationOrder()) {
         f.matchField(
-          new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
+          new TRecord.FieldMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchFieldValue(
+            public Void matchFieldValue(
               final TRecord.FieldValue f)
             {
               final TType t = f.getType();
               t.matchType(
                 new RecordFieldInterfaceProcessor(
                   f, jcb, MethodSelection.GETTERS));
-              return Unit.unit();
+              return null;
             }
 
             @Override
-            public Unit matchFieldPaddingOctets(
+            public Void matchFieldPaddingOctets(
               final TRecord.FieldPaddingOctets f)
             {
-              return Unit.unit();
+              return null;
             }
           });
       }
@@ -492,10 +492,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final String tn = this.getRecordInterfaceWritableName(t.getName());
 
@@ -508,24 +508,24 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
       for (final TRecord.FieldType f : t.getFieldsInDeclarationOrder()) {
         f.matchField(
-          new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
+          new TRecord.FieldMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchFieldValue(
+            public Void matchFieldValue(
               final TRecord.FieldValue f)
             {
               final TType t = f.getType();
               t.matchType(
                 new RecordFieldInterfaceProcessor(
                   f, jcb, MethodSelection.SETTERS));
-              return Unit.unit();
+              return null;
             }
 
             @Override
-            public Unit matchFieldPaddingOctets(
+            public Void matchFieldPaddingOctets(
               final TRecord.FieldPaddingOctets f)
             {
-              return Unit.unit();
+              return null;
             }
           });
       }
@@ -544,10 +544,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
       final String pack_name = tp.getName().toString();
@@ -579,10 +579,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
       final String tn =
@@ -620,22 +620,24 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
       for (final TPacked.FieldType f : t.getFieldsInDeclarationOrder()) {
         final BigInteger o = offset;
         f.matchField(
-          new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+          new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchFieldValue(
+            public Void matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
-              t.matchType(new PackedFieldImplementationProcessor(f, o, jcb));
-              return Unit.unit();
+              return t.matchType(new PackedFieldImplementationProcessor(
+                f,
+                o,
+                jcb));
             }
 
             @Override
-            public Unit matchFieldPaddingBits(
+            public Void matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
-              return Unit.unit();
+              return null;
             }
           });
         offset = offset.add(f.getSize().getValue());
@@ -656,10 +658,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName tn = t.getName();
       final String name = this.getPackedInterfaceReadableName(tn);
@@ -674,24 +676,23 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
       for (final TPacked.FieldType f : t.getFieldsInDeclarationOrder()) {
         f.matchField(
-          new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+          new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchFieldValue(
+            public Void matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
-              t.matchType(
+              return t.matchType(
                 new PackedFieldInterfaceProcessor(
                   f, jcb, MethodSelection.GETTERS));
-              return Unit.unit();
             }
 
             @Override
-            public Unit matchFieldPaddingBits(
+            public Void matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
-              return Unit.unit();
+              return null;
             }
           });
       }
@@ -709,10 +710,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final String tn = this.getPackedInterfaceWritableName(t.getName());
       final String pack_name = tp.getName().toString();
@@ -726,24 +727,23 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
 
       for (final TPacked.FieldType f : t.getFieldsInDeclarationOrder()) {
         f.matchField(
-          new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+          new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchFieldValue(
+            public Void matchFieldValue(
               final TPacked.FieldValue f)
             {
               final TType t = f.getType();
-              t.matchType(
+              return t.matchType(
                 new PackedFieldInterfaceProcessor(
                   f, jcb, MethodSelection.SETTERS));
-              return Unit.unit();
             }
 
             @Override
-            public Unit matchFieldPaddingBits(
+            public Void matchFieldPaddingBits(
               final TPacked.FieldPaddingBits f)
             {
-              return Unit.unit();
+              return null;
             }
           });
       }
@@ -764,10 +764,10 @@ public final class JPRAJavaGenerator implements JPRAJavaGeneratorType
     final OutputStream os)
     throws IOException
   {
-    NullCheck.notNull(t, "t");
-    NullCheck.notNull(os, "os");
+    Objects.requireNonNull(t, "t");
+    Objects.requireNonNull(os, "os");
 
-    try (final OutputStreamWriter out = new OutputStreamWriter(os)) {
+    try (OutputStreamWriter out = new OutputStreamWriter(os)) {
       final PackageContextType tp = t.getPackageContext();
       final TypeName t_name = t.getName();
       final String pack_name = tp.getName().toString();

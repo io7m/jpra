@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -54,10 +54,10 @@ public final class TMatrix implements TType
     final Size<?> in_size_height,
     final TypeScalarType in_type)
   {
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.size_width = NullCheck.notNull(in_size_width, "Size width");
-    this.size_height = NullCheck.notNull(in_size_height, "Size height");
-    this.type = NullCheck.notNull(in_type, "Type");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.size_width = Objects.requireNonNull(in_size_width, "Size width");
+    this.size_height = Objects.requireNonNull(in_size_height, "Size height");
+    this.type = Objects.requireNonNull(in_type, "Type");
 
     final BigInteger sw = this.size_width.getValue();
     final BigInteger sh = this.size_height.getValue();

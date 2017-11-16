@@ -17,7 +17,6 @@
 package com.io7m.jpra.compiler.core.pipeline;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerType;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
@@ -38,6 +37,7 @@ import com.io7m.jsx.SExpressionType;
 import com.io7m.junreachable.UnimplementedCodeException;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -55,9 +55,9 @@ public final class JPRAPipeline implements JPRAPipelineType
     final JPRAResolverType in_resolver,
     final JPRACheckerType in_checker)
   {
-    this.checker = NullCheck.notNull(in_checker, "Checker");
-    this.parser = NullCheck.notNull(in_parser, "Parser");
-    this.resolver = NullCheck.notNull(in_resolver, "Resolver");
+    this.checker = Objects.requireNonNull(in_checker, "Checker");
+    this.parser = Objects.requireNonNull(in_parser, "Parser");
+    this.resolver = Objects.requireNonNull(in_resolver, "Resolver");
   }
 
   /**

@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -50,9 +50,11 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
     final T in_type,
     final FieldReference in_field_reference)
   {
-    this.field_reference = NullCheck.notNull(in_field_reference, "Field reference");
-    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
-    this.type = NullCheck.notNull(in_type, "Type");
+    this.field_reference = Objects.requireNonNull(
+      in_field_reference,
+      "Field reference");
+    this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
+    this.type = Objects.requireNonNull(in_type, "Type");
   }
 
   @Override

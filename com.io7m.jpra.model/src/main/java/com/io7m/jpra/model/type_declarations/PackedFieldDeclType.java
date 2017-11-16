@@ -40,6 +40,6 @@ public interface PackedFieldDeclType<I, T> extends ModelElementType
    */
 
   <A, E extends Exception> A matchPackedFieldDeclaration(
-    final PackedFieldDeclMatcherType<I, T, A, E> m)
+    PackedFieldDeclMatcherType<I, T, A, E> m)
     throws E;
 }

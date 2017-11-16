@@ -17,12 +17,6 @@
   <description>Packed record access (Unit tests)</description>
   <url>http://github.com/io7m/jpra</url>
 
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
-
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -77,14 +71,6 @@
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
       <artifactId>com.io7m.jtensors.storage.bytebuffered</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>com.io7m.jnull.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jfunctional</groupId>
-      <artifactId>com.io7m.jfunctional.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.io7m.jranges</groupId>

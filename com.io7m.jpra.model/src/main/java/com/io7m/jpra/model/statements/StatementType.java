@@ -38,6 +38,6 @@ public interface StatementType<I, T>
    */
 
   <A, E extends Exception> A matchStatement(
-    final StatementMatcherType<I, T, A, E> m)
+    StatementMatcherType<I, T, A, E> m)
     throws E;
 }

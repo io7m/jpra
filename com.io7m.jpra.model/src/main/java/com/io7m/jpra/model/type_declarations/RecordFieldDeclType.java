@@ -40,6 +40,6 @@ public interface RecordFieldDeclType<I, T> extends ModelElementType
    */
 
   <A, E extends Exception> A matchRecordFieldDeclaration(
-    final RecordFieldDeclMatcherType<I, T, A, E> m)
+    RecordFieldDeclMatcherType<I, T, A, E> m)
     throws E;
 }

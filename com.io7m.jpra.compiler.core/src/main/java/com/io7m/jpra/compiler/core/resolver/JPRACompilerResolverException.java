@@ -17,13 +17,13 @@
 package com.io7m.jpra.compiler.core.resolver;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -48,7 +48,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final String message)
   {
     super(in_lex, message);
-    this.code = NullCheck.notNull(in_code, "Code");
+    this.code = Objects.requireNonNull(in_code, "Code");
   }
 
   /**
@@ -65,7 +65,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final Exception e)
   {
     super(in_lex, e);
-    this.code = NullCheck.notNull(in_code, "Code");
+    this.code = Objects.requireNonNull(in_code, "Code");
   }
 
   /**

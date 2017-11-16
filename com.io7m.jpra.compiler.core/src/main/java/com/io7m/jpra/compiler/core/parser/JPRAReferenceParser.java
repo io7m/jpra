@@ -20,7 +20,6 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
@@ -35,6 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -107,7 +107,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
 
   private JPRAReferenceParser(final JSXSerializerType in_serial)
   {
-    this.serial = NullCheck.notNull(in_serial, "Serializer");
+    this.serial = Objects.requireNonNull(in_serial, "Serializer");
   }
 
   private static JPRACompilerParseException badTypeReference(
@@ -115,7 +115,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Unparseable type reference.");
@@ -136,7 +136,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final JSXSerializerType serial,
     final SExpressionSymbolType se)
   {
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Unparseable field reference.");
@@ -187,7 +187,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(se, "Symbol");
+    Objects.requireNonNull(se, "Symbol");
 
     final String text = se.text();
     final Optional<LexicalPosition<Path>> lex =
@@ -218,7 +218,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(se, "Symbol");
+    Objects.requireNonNull(se, "Symbol");
 
     final String text = se.text();
     final Optional<LexicalPosition<Path>> lex =

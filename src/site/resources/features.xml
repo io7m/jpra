@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<div xmlns="http://www.w3.org/1999/xhtml">
+  <ul>
+    <li>Generate <tt>ByteBuffer</tt>-backed record types in Java, using a cursor abstraction for allocation-free access to large off-heap arrays.</li>
+    <li>Simple command-line frontend for checking schemas and producing Java sources.</li>
+    <li>Maven plugin for producing Java sources during Maven builds.</li>
+    <li>ISC license.</li>
+  </ul>
+</div>

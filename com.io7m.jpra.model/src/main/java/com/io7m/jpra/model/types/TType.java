@@ -43,6 +43,6 @@ public interface TType extends ModelElementType
    */
 
   <A, E extends Exception> A matchType(
-    final TypeMatcherType<A, E> m)
+    TypeMatcherType<A, E> m)
     throws E;
 }

@@ -292,10 +292,10 @@ public final class VectorsTest
       final double z = (index * 30.0) + 3.0;
       final double w = (index * 40.0) + 4.0;
 
-      Assert.assertEquals(x, k.x(), 0.0);
-      Assert.assertEquals(y, k.y(), 0.0);
-      Assert.assertEquals(z, k.z(), 0.0);
-      Assert.assertEquals(w, k.w(), 0.0);
+      Assert.assertEquals(x, k.x(), 0.001);
+      Assert.assertEquals(y, k.y(), 0.001);
+      Assert.assertEquals(z, k.z(), 0.001);
+      Assert.assertEquals(w, k.w(), 0.001);
     }
   }
 
@@ -401,9 +401,9 @@ public final class VectorsTest
       final double y = (index * 20.0) + 2.0;
       final double z = (index * 30.0) + 3.0;
 
-      Assert.assertEquals(x, k.x(), 0.0);
-      Assert.assertEquals(y, k.y(), 0.0);
-      Assert.assertEquals(z, k.z(), 0.0);
+      Assert.assertEquals(x, k.x(), 0.001);
+      Assert.assertEquals(y, k.y(), 0.001);
+      Assert.assertEquals(z, k.z(), 0.001);
     }
   }
 
@@ -504,8 +504,8 @@ public final class VectorsTest
       final double x = (index * 10.0) + 1.0;
       final double y = (index * 20.0) + 2.0;
 
-      Assert.assertEquals(x, k.x(), 0.0);
-      Assert.assertEquals(y, k.y(), 0.0);
+      Assert.assertEquals(x, k.x(), 0.001);
+      Assert.assertEquals(y, k.y(), 0.001);
     }
   }
 

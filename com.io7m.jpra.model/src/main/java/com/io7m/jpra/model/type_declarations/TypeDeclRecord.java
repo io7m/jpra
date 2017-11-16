@@ -21,13 +21,13 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.statements.StatementMatcherType;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -64,15 +64,15 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
     final ImmutableList<RecordFieldDeclType<I, T>> in_fields_order)
   {
     this.identifier =
-      NullCheck.notNull(in_identifier, "Identifier");
+      Objects.requireNonNull(in_identifier, "Identifier");
     this.type =
-      NullCheck.notNull(in_type, "Type");
+      Objects.requireNonNull(in_type, "Type");
     this.fields_name =
-      NullCheck.notNull(in_fields_name, "Fields by name");
+      Objects.requireNonNull(in_fields_name, "Fields by name");
     this.name =
-      NullCheck.notNull(in_name, "Type name");
+      Objects.requireNonNull(in_name, "Type name");
     this.fields_order =
-      NullCheck.notNull(in_fields_order, "Fields in order");
+      Objects.requireNonNull(in_fields_order, "Fields in order");
 
     Preconditions.checkPreconditionV(
       this.fields_name.size() <= this.fields_order.size(),

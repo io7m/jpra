@@ -19,10 +19,10 @@ package com.io7m.jpra.tests.compiler.core.checker;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.factory.Lists;
-import com.io7m.jfunctional.Pair;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
 import com.io7m.jranges.RangeInclusiveB;
+import io.vavr.Tuple2;
 
 import java.math.BigInteger;
 
@@ -33,7 +33,7 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   CapsSupportingIntegerMatrices(
     final JPRACheckerCapabilitiesType in_delegate)
   {
-    this.delegate = NullCheck.notNull(in_delegate);
+    this.delegate = Objects.requireNonNull(in_delegate);
   }
 
   @Override
@@ -75,7 +75,7 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   }
 
   @Override
-  public ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
+  public ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported()
   {
     return this.delegate.getMatrixSizeElementsSupported();

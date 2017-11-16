@@ -17,19 +17,6 @@
   <description>Packed record access (Core)</description>
   <url>http://github.com/io7m/jpra</url>
 
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>com.io7m.jnull.core</artifactId>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
       <!-- Check style -->

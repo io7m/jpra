@@ -16,8 +16,7 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jnull.NullCheck;
-
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -40,8 +39,8 @@ public final class TypeReference
     final Optional<PackageNameUnqualified> in_pack,
     final TypeName in_type)
   {
-    this.type = NullCheck.notNull(in_type, "Type");
-    this.pack = NullCheck.notNull(in_pack, "Pack");
+    this.type = Objects.requireNonNull(in_type, "Type");
+    this.pack = Objects.requireNonNull(in_pack, "Pack");
   }
 
   /**

@@ -25,7 +25,6 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.GlobalContextType;
@@ -110,9 +109,9 @@ public final class JPRAResolver implements JPRAResolverType
     final Optional<PackageNameQualified> in_expected_package)
   {
     this.context =
-      NullCheck.notNull(c, "Context");
+      Objects.requireNonNull(c, "Context");
     this.expected_package =
-      NullCheck.notNull(in_expected_package, "Expected package");
+      Objects.requireNonNull(in_expected_package, "Expected package");
 
     this.expected_received = false;
     this.current_package = Optional.empty();
@@ -760,7 +759,7 @@ public final class JPRAResolver implements JPRAResolverType
           final SizeExprConstant<Unresolved, Untyped> s)
           throws JPRACompilerResolverException
         {
-          return JPRAResolver.resolveSizeExprConstant(s);
+          return resolveSizeExprConstant(s);
         }
 
         @Override

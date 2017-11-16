@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core.parser;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jpra.compiler.core.parser.JPRACompilerParseException;
 import com.io7m.jpra.compiler.core.parser.JPRAParseErrorCode;
 import org.hamcrest.Description;
@@ -37,7 +37,7 @@ public final class JPRACompilerParseExceptionMatcher
 
   public JPRACompilerParseExceptionMatcher(final JPRAParseErrorCode in_code)
   {
-    this.code = NullCheck.notNull(in_code);
+    this.code = Objects.requireNonNull(in_code);
   }
 
   @Override

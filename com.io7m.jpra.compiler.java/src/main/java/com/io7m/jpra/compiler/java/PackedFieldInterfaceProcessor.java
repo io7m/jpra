@@ -17,8 +17,6 @@
 package com.io7m.jpra.compiler.java;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.types.TArray;
 import com.io7m.jpra.model.types.TBooleanSet;
@@ -42,14 +40,15 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces interface methods for packed fields.
  */
 
 public final class PackedFieldInterfaceProcessor
-  implements TypeMatcherType<Unit, UnreachableCodeException>,
-  TypeIntegerMatcherType<Unit, UnreachableCodeException>
+  implements TypeMatcherType<Void, UnreachableCodeException>,
+  TypeIntegerMatcherType<Void, UnreachableCodeException>
 {
   private final TPacked.FieldValue field;
   private final TypeSpec.Builder class_builder;
@@ -60,9 +59,11 @@ public final class PackedFieldInterfaceProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSelection in_methods)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
-    this.methods = NullCheck.notNull(in_methods, "Methods");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
+    this.methods = Objects.requireNonNull(in_methods, "Methods");
   }
 
   /**
@@ -108,31 +109,31 @@ public final class PackedFieldInterfaceProcessor
 
     for (final TPacked.FieldType f : ordered) {
       f.matchField(
-        new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(final TPacked.FieldValue f)
+          public Void matchFieldValue(final TPacked.FieldValue f)
           {
             final FieldName f_name = f.getName();
             setb.addJavadoc(
               "@param $L The value for field {@code $L}\n", f_name, f_name);
-            return Unit.unit();
+            return null;
           }
 
           @Override
-          public Unit matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+          public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
           {
-            return Unit.unit();
+            return null;
           }
         });
     }
 
     for (final TPacked.FieldType f : ordered) {
       f.matchField(
-        new TPacked.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(final TPacked.FieldValue f)
+          public Void matchFieldValue(final TPacked.FieldValue f)
           {
             final BigInteger f_size = f.getSize().getValue();
             final FieldName f_name = f.getName();
@@ -172,13 +173,13 @@ public final class PackedFieldInterfaceProcessor
                 }
               });
             setb.addParameter(f_type, f_name.getValue(), Modifier.FINAL);
-            return Unit.unit();
+            return null;
           }
 
           @Override
-          public Unit matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+          public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
           {
-            return Unit.unit();
+            return null;
           }
         });
     }
@@ -188,88 +189,88 @@ public final class PackedFieldInterfaceProcessor
   }
 
   @Override
-  public Unit matchArray(final TArray t)
+  public Void matchArray(final TArray t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchString(final TString t)
+  public Void matchString(final TString t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchBooleanSet(final TBooleanSet t)
+  public Void matchBooleanSet(final TBooleanSet t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchInteger(final TIntegerType t)
+  public Void matchInteger(final TIntegerType t)
   {
     return t.matchTypeInteger(this);
   }
 
   @Override
-  public Unit matchFloat(final TFloat t)
+  public Void matchFloat(final TFloat t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchVector(final TVector t)
+  public Void matchVector(final TVector t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchMatrix(final TMatrix t)
+  public Void matchMatrix(final TMatrix t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchRecord(final TRecord t)
+  public Void matchRecord(final TRecord t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchPacked(final TPacked t)
+  public Void matchPacked(final TPacked t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchIntegerUnsigned(
+  public Void matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerSigned(
+  public Void matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerSignedNormalized(
+  public Void matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerUnsignedNormalized(
+  public Void matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
-  private Unit onInteger(final BigInteger size)
+  private Void onInteger(final BigInteger size)
   {
     final String getter_name =
       JPRAGeneratedNames.getGetterName(this.field.getName());
@@ -301,10 +302,10 @@ public final class PackedFieldInterfaceProcessor
       setb.returns(void.class);
       this.class_builder.addMethod(setb.build());
     }
-    return Unit.unit();
+    return null;
   }
 
-  private Unit onIntegerNormalized(
+  private Void onIntegerNormalized(
     final BigInteger size)
   {
     final String getter_norm_name =
@@ -370,6 +371,6 @@ public final class PackedFieldInterfaceProcessor
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 }

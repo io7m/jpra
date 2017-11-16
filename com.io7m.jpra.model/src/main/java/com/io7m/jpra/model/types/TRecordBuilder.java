@@ -23,9 +23,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jfunctional.Unit;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
@@ -33,6 +31,7 @@ import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 final class TRecordBuilder implements TRecordBuilderType
@@ -50,9 +49,9 @@ final class TRecordBuilder implements TRecordBuilderType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    this.package_context = NullCheck.notNull(in_package, "Package");
-    this.identifier = NullCheck.notNull(in_identifier, "Identifier");
-    this.name = NullCheck.notNull(in_ident, "Type name");
+    this.package_context = Objects.requireNonNull(in_package, "Package");
+    this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
+    this.name = Objects.requireNonNull(in_ident, "Type name");
 
     this.type_fields_ordered = Lists.mutable.empty();
     this.type_fields_named = Maps.mutable.empty();
@@ -106,22 +105,22 @@ final class TRecordBuilder implements TRecordBuilderType
 
     for (final TRecord.FieldType f : this.type_fields_ordered) {
       f.matchField(
-        new TRecord.FieldMatcherType<Unit, UnreachableCodeException>()
+        new TRecord.FieldMatcherType<Void, UnreachableCodeException>()
         {
           @Override
-          public Unit matchFieldValue(
+          public Void matchFieldValue(
             final TRecord.FieldValue f)
           {
             f.setOwner(tr);
-            return Unit.unit();
+            return null;
           }
 
           @Override
-          public Unit matchFieldPaddingOctets(
+          public Void matchFieldPaddingOctets(
             final TRecord.FieldPaddingOctets f)
           {
             f.setOwner(tr);
-            return Unit.unit();
+            return null;
           }
         });
     }

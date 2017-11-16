@@ -18,5 +18,5 @@
  * Types.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jpra.model.types;

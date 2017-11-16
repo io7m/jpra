@@ -17,10 +17,10 @@
 package com.io7m.jpra.model.type_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -55,11 +55,11 @@ public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
     final SizeExprType<I, T> in_height,
     final TypeExprType<I, T> in_element_type)
   {
-    this.type = NullCheck.notNull(in_type, "Type");
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.width = NullCheck.notNull(in_width, "Width");
-    this.height = NullCheck.notNull(in_height, "Height");
-    this.element_type = NullCheck.notNull(in_element_type, "Element type");
+    this.type = Objects.requireNonNull(in_type, "Type");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.width = Objects.requireNonNull(in_width, "Width");
+    this.height = Objects.requireNonNull(in_height, "Height");
+    this.element_type = Objects.requireNonNull(in_element_type, "Element type");
   }
 
   @Override

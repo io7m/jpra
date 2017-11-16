@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -49,9 +49,9 @@ public final class TArray implements TType
     final Size<?> in_size,
     final TType in_type)
   {
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.element_count = NullCheck.notNull(in_size, "Size");
-    this.element_type = NullCheck.notNull(in_type, "Type");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.element_count = Objects.requireNonNull(in_size, "Size");
+    this.element_type = Objects.requireNonNull(in_type, "Type");
 
     final BigInteger ecv = this.element_count.getValue();
     final BigInteger etv = this.element_type.getSizeInBits().getValue();

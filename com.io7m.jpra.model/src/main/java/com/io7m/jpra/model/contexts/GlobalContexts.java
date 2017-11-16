@@ -20,7 +20,6 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
 import com.io7m.jpra.model.loading.JPRAModelCircularImportException;
@@ -29,15 +28,17 @@ import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
-import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 
@@ -54,7 +55,6 @@ public final class GlobalContexts implements GlobalContextType
   }
 
   private final DirectedAcyclicGraph<PackageNameQualified, PackageImport> graph;
-
   private final MutableMap<PackageNameQualified, PackageContextType> packages;
   private final JPRAPackageLoaderType loader;
   private final MutableMap<IdentifierType, TypeUserDefinedType> types;
@@ -67,7 +67,7 @@ public final class GlobalContexts implements GlobalContextType
   {
     this.id_pool = BigInteger.ZERO;
     this.packages = Maps.mutable.empty();
-    this.loader = NullCheck.notNull(in_loader, "Loader");
+    this.loader = Objects.requireNonNull(in_loader, "Loader");
     this.types = Maps.mutable.empty();
     this.loading = Optional.empty();
     this.error_queue = new ArrayDeque<>(128);
@@ -113,7 +113,7 @@ public final class GlobalContexts implements GlobalContextType
     final PackageNameQualified p)
     throws JPRAModelLoadingException
   {
-    NullCheck.notNull(p, "Package name");
+    Objects.requireNonNull(p, "Package name");
 
     LOG.debug("get package: {}", p);
 
@@ -147,18 +147,19 @@ public final class GlobalContexts implements GlobalContextType
       try {
         this.graph.addVertex(previous);
         this.graph.addVertex(current);
-        this.graph.addDagEdge(previous, current);
-      } catch (final DirectedAcyclicGraph.CycleFoundException e) {
+        this.graph.addEdge(previous, current);
+      } catch (final IllegalArgumentException e) {
 
         /*
-          Because a cycle as occurred on an insertion of edge A → B, then
-          there must be some path B → A already in the graph. Use a
-          shortest path algorithm to determine that path.
+         * Because a cycle as occurred on an insertion of edge A → B, then
+         * there must be some path B → A already in the graph. Use a
+         * shortest path algorithm to determine that path.
          */
 
         final DijkstraShortestPath<PackageNameQualified, PackageImport> djp =
-          new DijkstraShortestPath<>(this.graph, current, previous);
-        final List<PackageImport> path = djp.getPathEdgeList();
+          new DijkstraShortestPath<>(this.graph);
+        final List<PackageImport> path =
+          new ArrayList<>(djp.getPath(current, previous).getEdgeList());
         path.add(new PackageImport(previous, current));
 
         final JPRAModelCircularImportException ex =
@@ -175,7 +176,7 @@ public final class GlobalContexts implements GlobalContextType
   @Override
   public void putType(final TypeUserDefinedType t)
   {
-    NullCheck.notNull(t, "Type");
+    Objects.requireNonNull(t, "Type");
     final IdentifierType id = t.getIdentifier();
     Preconditions.checkPreconditionV(
       id, !this.types.containsKey(id), "Types must not contain %s", id);
@@ -185,7 +186,7 @@ public final class GlobalContexts implements GlobalContextType
   @Override
   public TypeUserDefinedType getType(final IdentifierType id)
   {
-    NullCheck.notNull(id, "Identifier");
+    Objects.requireNonNull(id, "Identifier");
     Preconditions.checkPreconditionV(
       id, this.types.containsKey(id), "Types must contain %s", id);
     return this.types.get(id);

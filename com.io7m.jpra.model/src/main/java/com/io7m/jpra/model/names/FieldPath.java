@@ -18,7 +18,6 @@ package com.io7m.jpra.model.names;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jnull.NullCheck;
 
 import java.util.Objects;
 
@@ -34,7 +33,7 @@ public final class FieldPath
   private FieldPath(
     final ImmutableList<FieldName> in_path)
   {
-    this.path = NullCheck.notNull(in_path, "Path");
+    this.path = Objects.requireNonNull(in_path, "Path");
     Preconditions.checkPrecondition(
       !in_path.isEmpty(), "Field path cannot be empty");
     this.image = in_path.makeString(".");

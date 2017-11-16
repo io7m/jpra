@@ -18,7 +18,6 @@ package com.io7m.jpra.model.names;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import net.jcip.annotations.Immutable;
 
@@ -40,10 +39,8 @@ public final class UnionCaseName implements ModelElementType
 
   static {
     PATTERN_TEXT = "[\\p{IsUppercase}][\\p{IsAlphabetic}\\p{IsDigit}_]*";
-    PATTERN = NullCheck.notNull(
-      Pattern.compile(
-        PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS),
-      "Pattern");
+    PATTERN = Objects.requireNonNull(Pattern.compile(
+      PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS), "Pattern");
   }
 
   private final String value;
@@ -60,8 +57,8 @@ public final class UnionCaseName implements ModelElementType
     final Optional<LexicalPosition<Path>> in_lex,
     final String in_value)
   {
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.value = NullCheck.notNull(in_value, "Value");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.value = Objects.requireNonNull(in_value, "Value");
 
     final Matcher matcher = PATTERN.matcher(this.value);
     Preconditions.checkPreconditionV(

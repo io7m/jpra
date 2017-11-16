@@ -18,5 +18,5 @@
  * Tests against the generated code.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jpra.tests.compiler.java.output;

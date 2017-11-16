@@ -35,6 +35,6 @@ public interface TypeScalarType extends TType
    */
 
   <A, E extends Exception> A matchTypeScalar(
-    final TypeScalarMatcherType<A, E> m)
+    TypeScalarMatcherType<A, E> m)
     throws E;
 }

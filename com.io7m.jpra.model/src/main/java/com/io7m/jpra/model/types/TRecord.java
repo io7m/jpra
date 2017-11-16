@@ -21,7 +21,6 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -56,15 +55,15 @@ public final class TRecord implements TType, TypeUserDefinedType
     final ImmutableList<FieldType> in_fields_by_order)
   {
     this.package_ctx =
-      NullCheck.notNull(in_package, "Package");
+      Objects.requireNonNull(in_package, "Package");
     this.identifier =
-      NullCheck.notNull(in_identifier, "Identifier");
+      Objects.requireNonNull(in_identifier, "Identifier");
     this.fields_by_name =
-      NullCheck.notNull(in_fields_by_name, "Fields by name");
+      Objects.requireNonNull(in_fields_by_name, "Fields by name");
     this.name =
-      NullCheck.notNull(in_ident, "Identifier");
+      Objects.requireNonNull(in_ident, "Identifier");
     this.fields_by_order =
-      NullCheck.notNull(in_fields_by_order, "Fields in order");
+      Objects.requireNonNull(in_fields_by_order, "Fields in order");
 
     Preconditions.checkPreconditionV(
       this.fields_by_order.size() >= this.fields_by_name.size(),
@@ -109,9 +108,9 @@ public final class TRecord implements TType, TypeUserDefinedType
     final IdentifierType in_identifier,
     final TypeName in_ident)
   {
-    NullCheck.notNull(in_package, "Package context");
-    NullCheck.notNull(in_identifier, "Identifier");
-    NullCheck.notNull(in_ident, "Type name");
+    Objects.requireNonNull(in_package, "Package context");
+    Objects.requireNonNull(in_identifier, "Identifier");
+    Objects.requireNonNull(in_ident, "Type name");
     return new TRecordBuilder(in_package, in_identifier, in_ident);
   }
 
@@ -238,7 +237,7 @@ public final class TRecord implements TType, TypeUserDefinedType
      */
 
     <A, E extends Exception> A matchField(
-      final FieldMatcherType<A, E> m)
+      FieldMatcherType<A, E> m)
       throws E;
   }
 
@@ -293,8 +292,8 @@ public final class TRecord implements TType, TypeUserDefinedType
       final FieldName in_name,
       final TType in_type)
     {
-      this.name = NullCheck.notNull(in_name, "Name");
-      this.type = NullCheck.notNull(in_type, "Type");
+      this.name = Objects.requireNonNull(in_name, "Name");
+      this.type = Objects.requireNonNull(in_type, "Type");
 
       final Size<SizeUnitBitsType> bits = this.type.getSizeInBits();
       final BigInteger b8 = BigInteger.valueOf(8L);
@@ -310,13 +309,13 @@ public final class TRecord implements TType, TypeUserDefinedType
     @Override
     public TRecord getOwner()
     {
-      return NullCheck.notNull(this.owner, "Owner");
+      return Objects.requireNonNull(this.owner, "Owner");
     }
 
     void setOwner(
       final TRecord in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner, "Owner");
+      this.owner = Objects.requireNonNull(in_owner, "Owner");
     }
 
     /**
@@ -397,9 +396,9 @@ public final class TRecord implements TType, TypeUserDefinedType
       final Size<SizeUnitOctetsType> in_size_octets,
       final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_octets = NullCheck.notNull(in_size_octets, "Size");
+      this.size_octets = Objects.requireNonNull(in_size_octets, "Size");
       this.size_bits = Size.toBits(this.size_octets);
-      this.lex = NullCheck.notNull(in_lex, "Lexical information");
+      this.lex = Objects.requireNonNull(in_lex, "Lexical information");
     }
 
     /**
@@ -409,13 +408,13 @@ public final class TRecord implements TType, TypeUserDefinedType
     @Override
     public TRecord getOwner()
     {
-      return NullCheck.notNull(this.owner, "Owner");
+      return Objects.requireNonNull(this.owner, "Owner");
     }
 
     void setOwner(
       final TRecord in_owner)
     {
-      this.owner = NullCheck.notNull(in_owner, "Owner");
+      this.owner = Objects.requireNonNull(in_owner, "Owner");
     }
 
     @Override

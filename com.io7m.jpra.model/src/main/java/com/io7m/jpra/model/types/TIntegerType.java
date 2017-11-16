@@ -35,6 +35,6 @@ public interface TIntegerType extends TypeScalarType
    */
 
   <A, E extends Exception> A matchTypeInteger(
-    final TypeIntegerMatcherType<A, E> m)
+    TypeIntegerMatcherType<A, E> m)
     throws E;
 }

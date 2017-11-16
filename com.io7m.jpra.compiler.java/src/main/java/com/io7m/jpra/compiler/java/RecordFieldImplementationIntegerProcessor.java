@@ -16,12 +16,10 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jfunctional.Unit;
 import com.io7m.jnfp.core.NFPSignedDoubleInt;
 import com.io7m.jnfp.core.NFPSignedDoubleLong;
 import com.io7m.jnfp.core.NFPUnsignedDoubleInt;
 import com.io7m.jnfp.core.NFPUnsignedDoubleLong;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TIntegerSignedNormalized;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
@@ -43,7 +41,7 @@ import java.util.Objects;
  */
 
 final class RecordFieldImplementationIntegerProcessor
-  implements TypeIntegerMatcherType<Unit, UnreachableCodeException>
+  implements TypeIntegerMatcherType<Void, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
   private final TypeSpec.Builder class_builder;
@@ -52,19 +50,21 @@ final class RecordFieldImplementationIntegerProcessor
     final TRecord.FieldValue in_field,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
   }
 
   @Override
-  public Unit matchIntegerUnsigned(
+  public Void matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerSigned(
+  public Void matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
@@ -76,7 +76,7 @@ final class RecordFieldImplementationIntegerProcessor
    * @param size The size of the integer
    */
 
-  private Unit onInteger(final BigInteger size)
+  private Void onInteger(final BigInteger size)
   {
     final String offset_constant =
       JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
@@ -117,7 +117,7 @@ final class RecordFieldImplementationIntegerProcessor
 
     this.integerGetter(offset_constant, getter_name, iget, itype);
     this.integerSetter(offset_constant, setter_name, iput, itype);
-    return Unit.unit();
+    return null;
   }
 
   /**
@@ -179,12 +179,12 @@ final class RecordFieldImplementationIntegerProcessor
   }
 
   @Override
-  public Unit matchIntegerSignedNormalized(
+  public Void matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     final BigInteger size = t.getSizeInBits().getValue();
     this.onIntegerNormalized(size, true);
-    return Unit.unit();
+    return null;
   }
 
   /**
@@ -353,11 +353,11 @@ final class RecordFieldImplementationIntegerProcessor
   }
 
   @Override
-  public Unit matchIntegerUnsignedNormalized(
+  public Void matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     final BigInteger size = t.getSizeInBits().getValue();
     this.onIntegerNormalized(size, false);
-    return Unit.unit();
+    return null;
   }
 }

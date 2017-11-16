@@ -26,7 +26,6 @@ import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalPositionType;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.FieldName;
@@ -178,8 +177,8 @@ public final class JPRAParser implements JPRAParserType
     final JSXSerializerType in_serial,
     final JPRAReferenceParserType in_ref_parser)
   {
-    this.serial = NullCheck.notNull(in_serial, "Serializer");
-    this.ref_parser = NullCheck.notNull(in_ref_parser, "Parser");
+    this.serial = Objects.requireNonNull(in_serial, "Serializer");
+    this.ref_parser = Objects.requireNonNull(in_ref_parser, "Parser");
   }
 
   /**
@@ -522,7 +521,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -544,7 +543,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(expr, "Expression");
+    Objects.requireNonNull(expr, "Expression");
 
     final SExpressionListType le = requireList(expr);
     if (le.size() == 0) {
@@ -588,7 +587,7 @@ public final class JPRAParser implements JPRAParserType
       return new StatementCommandType<>(this.parseTypeExpression(le.get(1)));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -617,7 +616,7 @@ public final class JPRAParser implements JPRAParserType
       return new StatementCommandSize<>(this.parseSizeExpression(le.get(1)));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -669,7 +668,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -749,7 +748,7 @@ public final class JPRAParser implements JPRAParserType
         getExpressionLexical(l_expr), s);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(l_expr, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -778,7 +777,7 @@ public final class JPRAParser implements JPRAParserType
       return new PackedFieldDeclValue<>(Unresolved.get(), name, te);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(l_expr, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -830,7 +829,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -909,7 +908,7 @@ public final class JPRAParser implements JPRAParserType
         getExpressionLexical(l_expr), s);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(l_expr, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -938,7 +937,7 @@ public final class JPRAParser implements JPRAParserType
       return new RecordFieldDeclValue<>(Unresolved.get(), name, te);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(l_expr, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -967,7 +966,7 @@ public final class JPRAParser implements JPRAParserType
       return new StatementPackageEnd<>(getExpressionLexical(se));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1002,7 +1001,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1022,7 +1021,7 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionType expr)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(expr, "expr");
+    Objects.requireNonNull(expr, "expr");
 
     return expr.matchExpression(
       new SExpressionMatcherType<TypeExprType<Unresolved, Untyped>,
@@ -1118,7 +1117,7 @@ public final class JPRAParser implements JPRAParserType
       return new TypeExprBooleanSet<>(Untyped.get(), lex, fields, size);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1162,7 +1161,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1200,7 +1199,7 @@ public final class JPRAParser implements JPRAParserType
         Untyped.get(), getExpressionLexical(le), size, type);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1246,7 +1245,7 @@ public final class JPRAParser implements JPRAParserType
         type);
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1284,7 +1283,7 @@ public final class JPRAParser implements JPRAParserType
         this.parseTypeExpression(t_expr));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(se, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1317,7 +1316,7 @@ public final class JPRAParser implements JPRAParserType
         this.parseSizeExpression(s_expr));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1376,7 +1375,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1454,7 +1453,7 @@ public final class JPRAParser implements JPRAParserType
     final Optional<LexicalPosition<Path>> lex)
     throws JPRACompilerParseException
   {
-    NullCheck.notNull(lex, "Lexical information");
+    Objects.requireNonNull(lex, "Lexical information");
   }
 
   private SizeExprType<Unresolved, Untyped> parseSizeInBits(
@@ -1471,7 +1470,7 @@ public final class JPRAParser implements JPRAParserType
       return new SizeExprInBits<>(this.parseTypeExpression(le.get(1)));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");
@@ -1500,7 +1499,7 @@ public final class JPRAParser implements JPRAParserType
       return new SizeExprInOctets<>(this.parseTypeExpression(le.get(1)));
     }
 
-    try (final ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
+    try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
       this.serial.serialize(le, bao);
       final StringBuilder sb = new StringBuilder(128);
       sb.append("Syntax error.");

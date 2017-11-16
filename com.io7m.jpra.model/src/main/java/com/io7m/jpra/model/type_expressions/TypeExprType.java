@@ -46,6 +46,6 @@ public interface TypeExprType<I, T> extends ModelElementType
    */
 
   <A, E extends Exception> A matchType(
-    final TypeExprMatcherType<I, T, A, E> m)
+    TypeExprMatcherType<I, T, A, E> m)
     throws E;
 }

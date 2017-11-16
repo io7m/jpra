@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.types.TArray;
 import com.io7m.jpra.model.types.TBooleanSet;
 import com.io7m.jpra.model.types.TFloat;
@@ -78,6 +77,8 @@ import com.io7m.jtensors.storage.bytebuffered.VectorByteBufferedIntegral4s64;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
 
+import java.util.Objects;
+
 /**
  * Functions to return sets of classes for a given type.
  */
@@ -92,7 +93,7 @@ final class JPRAClasses
   static VectorsClasses getVectorClassesFor(
     final TVector v)
   {
-    NullCheck.notNull(v, "v");
+    Objects.requireNonNull(v, "v");
     final TypeScalarType e_type = v.getElementType();
     final int e_count = v.getElementCount().getValue().intValue();
     return e_type.matchTypeScalar(new VectorClassMatcher(e_count));
@@ -100,7 +101,7 @@ final class JPRAClasses
 
   public static MatrixClasses getMatrixClassesFor(final TMatrix t)
   {
-    NullCheck.notNull(t, "t");
+    Objects.requireNonNull(t, "t");
     final TypeScalarType e_type = t.getElementType();
     final int e_width = t.getWidth().getValue().intValue();
     return e_type.matchTypeScalar(new MatrixClassMatcher(e_width, e_width));
@@ -250,10 +251,12 @@ final class JPRAClasses
       final Class<?> in_buffered_cons,
       final Class<?> in_buffered)
     {
-      this.base_interface = NullCheck.notNull(in_base, "Base");
-      this.base_readable = NullCheck.notNull(in_readable, "Readable");
-      this.buffered_constructors = NullCheck.notNull(in_buffered_cons, "Buffered_cons");
-      this.buffered_interface = NullCheck.notNull(in_buffered, "Buffered");
+      this.base_interface = Objects.requireNonNull(in_base, "Base");
+      this.base_readable = Objects.requireNonNull(in_readable, "Readable");
+      this.buffered_constructors = Objects.requireNonNull(
+        in_buffered_cons,
+        "Buffered_cons");
+      this.buffered_interface = Objects.requireNonNull(in_buffered, "Buffered");
     }
 
     public Class<?> getBaseInterface()
@@ -290,10 +293,12 @@ final class JPRAClasses
       final Class<?> in_buffered_cons,
       final Class<?> in_buffered)
     {
-      this.base_interface = NullCheck.notNull(in_base, "Base");
-      this.base_readable = NullCheck.notNull(in_readable, "Readable");
-      this.buffered_constructors = NullCheck.notNull(in_buffered_cons, "Buffered_cons");
-      this.buffered_interface = NullCheck.notNull(in_buffered, "Buffered");
+      this.base_interface = Objects.requireNonNull(in_base, "Base");
+      this.base_readable = Objects.requireNonNull(in_readable, "Readable");
+      this.buffered_constructors = Objects.requireNonNull(
+        in_buffered_cons,
+        "Buffered_cons");
+      this.buffered_interface = Objects.requireNonNull(in_buffered, "Buffered");
     }
 
     public Class<?> getBaseInterface()

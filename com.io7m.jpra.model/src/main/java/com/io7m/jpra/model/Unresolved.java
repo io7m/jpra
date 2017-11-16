@@ -17,8 +17,8 @@
 package com.io7m.jpra.model;
 
 /**
- * A type indicating that parsing but no name resolution or type checking
- * has been performed.
+ * A type indicating that parsing but no name resolution or type checking has
+ * been performed.
  */
 
 public final class Unresolved

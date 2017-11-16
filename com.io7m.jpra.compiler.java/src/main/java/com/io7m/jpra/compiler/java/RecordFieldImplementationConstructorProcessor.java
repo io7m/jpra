@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.PackageNameQualified;
@@ -42,6 +40,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 /**
  * A type matcher that produces constructor field assignment statements for a
@@ -49,7 +48,7 @@ import java.nio.charset.Charset;
  */
 
 final class RecordFieldImplementationConstructorProcessor
-  implements TypeMatcherType<Unit, UnreachableCodeException>
+  implements TypeMatcherType<Void, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
   private final TypeSpec.Builder class_builder;
@@ -60,19 +59,23 @@ final class RecordFieldImplementationConstructorProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSpec.Builder in_constructor_builder)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
-    this.constructor_builder = NullCheck.notNull(in_constructor_builder, "Constructor builder");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
+    this.constructor_builder = Objects.requireNonNull(
+      in_constructor_builder,
+      "Constructor builder");
   }
 
   @Override
-  public Unit matchArray(final TArray t)
+  public Void matchArray(final TArray t)
   {
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchString(final TString t)
+  public Void matchString(final TString t)
   {
     final FieldName f_name = this.field.getName();
     final String field_name = JPRAGeneratedNames.getFieldName(f_name);
@@ -114,11 +117,11 @@ final class RecordFieldImplementationConstructorProcessor
       c,
       t.getMaximumStringLength().getValue(), t.getEncoding());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchBooleanSet(final TBooleanSet t)
+  public Void matchBooleanSet(final TBooleanSet t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -142,11 +145,11 @@ final class RecordFieldImplementationConstructorProcessor
       c,
       t.getSizeInOctets().getValue());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchInteger(final TIntegerType t)
+  public Void matchInteger(final TIntegerType t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -169,11 +172,11 @@ final class RecordFieldImplementationConstructorProcessor
       c_name,
       t.getSizeInBits().getValue());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchFloat(final TFloat t)
+  public Void matchFloat(final TFloat t)
   {
     /*
       Construct a meta type field, and assign a value to it.
@@ -196,11 +199,11 @@ final class RecordFieldImplementationConstructorProcessor
       c_name,
       t.getSizeInBits().getValue());
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchVector(final TVector t)
+  public Void matchVector(final TVector t)
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
 
@@ -248,11 +251,11 @@ final class RecordFieldImplementationConstructorProcessor
       t.getElementCount().getValue());
     this.constructor_builder.endControlFlow();
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchMatrix(final TMatrix t)
+  public Void matchMatrix(final TMatrix t)
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
 
@@ -302,14 +305,14 @@ final class RecordFieldImplementationConstructorProcessor
       t.getHeight().getValue());
     this.constructor_builder.endControlFlow();
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchRecord(final TRecord t)
+  public Void matchRecord(final TRecord t)
   {
     this.recordOrPackedField(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 
   private void recordOrPackedField(
@@ -360,9 +363,9 @@ final class RecordFieldImplementationConstructorProcessor
   }
 
   @Override
-  public Unit matchPacked(final TPacked t)
+  public Void matchPacked(final TPacked t)
   {
     this.recordOrPackedField(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 }

@@ -18,8 +18,8 @@ package com.io7m.jpra.compiler.core.checker;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.set.ImmutableSet;
-import com.io7m.jfunctional.Pair;
 import com.io7m.jranges.RangeInclusiveB;
+import io.vavr.Tuple2;
 
 import java.math.BigInteger;
 
@@ -134,7 +134,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported matrix sizes
    */
 
-  ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
+  ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported();
 
   /**

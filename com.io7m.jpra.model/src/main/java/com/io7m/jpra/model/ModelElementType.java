@@ -22,7 +22,8 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * A marker interface indicating that something is an element of the type_model.
+ * A marker interface indicating that something is an element of the
+ * type_model.
  */
 
 public interface ModelElementType

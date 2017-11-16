@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor</artifactId>
-    <version>1.0.2</version>
+    <version>2.0.0-beta0014</version>
   </parent>
 
   <groupId>com.io7m.jpra</groupId>
@@ -40,6 +40,7 @@
     <io7m.checkstyle.artifact>com.io7m.jpra.checkstyle</io7m.checkstyle.artifact>
     <io7m.checkstyle.path>/com/io7m/jpra/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>0.6.0</io7m.api.previousVersion>
+    <io7m.org.immutables.version>2.6.0-alpha1</io7m.org.immutables.version>
   </properties>
 
   <licenses>
@@ -91,7 +92,7 @@
   </ciManagement>
 
   <prerequisites>
-    <maven>3.0.4</maven>
+    <maven>3.5.0</maven>
   </prerequisites>
 
   <dependencyManagement>
@@ -99,32 +100,22 @@
       <dependency>
         <groupId>com.io7m.jaffirm</groupId>
         <artifactId>com.io7m.jaffirm.core</artifactId>
-        <version>[1.1.0, 2.0.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>com.io7m.jnull</groupId>
-        <artifactId>com.io7m.jnull.core</artifactId>
-        <version>[1.0.0, 2.0.0)</version>
-      </dependency>
-      <dependency>
-        <groupId>com.io7m.jfunctional</groupId>
-        <artifactId>com.io7m.jfunctional.core</artifactId>
-        <version>[1.0.0, 2.0.0)</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jranges</groupId>
         <artifactId>com.io7m.jranges.core</artifactId>
-        <version>[2.0.0, 3.0.0)</version>
+        <version>2.0.4</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.junreachable</groupId>
         <artifactId>com.io7m.junreachable.core</artifactId>
-        <version>[1.0.0, 2.0.0)</version>
+        <version>2.0.0-beta0004</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jlexing</groupId>
         <artifactId>com.io7m.jlexing.core</artifactId>
-        <version>0.2.1</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jsx</groupId>
@@ -144,7 +135,7 @@
       <dependency>
         <groupId>com.io7m.jeucreader</groupId>
         <artifactId>com.io7m.jeucreader.core</artifactId>
-        <version>[1.1.1, 2.0.0)</version>
+        <version>2.0.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jnfp</groupId>
@@ -154,43 +145,43 @@
       <dependency>
         <groupId>com.io7m.ieee754b16</groupId>
         <artifactId>com.io7m.ieee754b16.core</artifactId>
-        <version>[1.0.0, 2.0.0)</version>
+        <version>1.0.4</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.core</artifactId>
-        <version>8.0.0-beta0001</version>
+        <version>8.2.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.storage.api</artifactId>
-        <version>8.0.0-beta0001</version>
+        <version>8.2.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.storage.bytebuffered</artifactId>
-        <version>8.0.0-beta0001</version>
+        <version>8.2.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.mutable.numbers</groupId>
         <artifactId>com.io7m.mutable.numbers.core</artifactId>
-        <version>0.0.2</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
-        <groupId>com.io7m.jcip</groupId>
-        <artifactId>jcip-annotations</artifactId>
-        <version>1.0.2</version>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>0.9.1</version>
       </dependency>
 
       <dependency>
         <groupId>org.jgrapht</groupId>
         <artifactId>jgrapht-core</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.21</version>
+        <version>1.8.0-beta0</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
@@ -210,65 +201,65 @@
       <dependency>
         <groupId>com.squareup</groupId>
         <artifactId>javapoet</artifactId>
-        <version>1.8.0</version>
+        <version>1.9.0</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.5</version>
+        <version>3.7</version>
       </dependency>
       <dependency>
         <groupId>io.airlift</groupId>
         <artifactId>airline</artifactId>
-        <version>0.7</version>
+        <version>0.8</version>
       </dependency>
       <dependency>
         <groupId>org.immutables</groupId>
         <artifactId>value</artifactId>
-        <version>2.4.6</version>
+        <version>${io7m.org.immutables.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-api</artifactId>
-        <version>3.3.3</version>
+        <version>3.5.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
-        <version>3.3.3</version>
+        <version>3.5.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-compat</artifactId>
-        <version>3.3.3</version>
+        <version>3.5.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.plugin-tools</groupId>
         <artifactId>maven-plugin-annotations</artifactId>
-        <version>3.4</version>
+        <version>3.5</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.plugin-tools</groupId>
         <artifactId>maven-plugin-tools-api</artifactId>
-        <version>3.4</version>
+        <version>3.5</version>
       </dependency>
       <dependency>
         <groupId>io.takari.maven.plugins</groupId>
         <artifactId>takari-plugin-testing</artifactId>
-        <version>2.9.1</version>
+        <version>2.9.2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>3.0.24</version>
+        <version>3.1.0</version>
       </dependency>
 
       <dependency>
         <groupId>com.github.marschall</groupId>
         <artifactId>memoryfilesystem</artifactId>
-        <version>0.9.1</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -286,14 +277,14 @@
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Require JDK >= 1.8 -->
+        <!-- Require JDK >= 9 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
-            <optimize>true</optimize>
+            <source>9</source>
+            <target>9</target>
+            <release>9</release>
           </configuration>
         </plugin>
 
@@ -315,8 +306,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.4</version>
+          <version>3.5</version>
         </plugin>
+
         <plugin>
           <groupId>io.takari.maven.plugins</groupId>
           <artifactId>takari-lifecycle-plugin</artifactId>

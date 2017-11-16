@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
@@ -32,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * The default implementation of the {@link JPRAJavaWriterType} interface.
@@ -50,7 +49,7 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
   private JPRAJavaWriter(
     final JPRAJavaGeneratorType in_generator)
   {
-    this.generator = NullCheck.notNull(in_generator, "Generator");
+    this.generator = Objects.requireNonNull(in_generator, "Generator");
   }
 
   /**
@@ -92,8 +91,8 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     final TypeUserDefinedType t)
     throws IOException
   {
-    NullCheck.notNull(path, "path");
-    NullCheck.notNull(t, "t");
+    Objects.requireNonNull(path, "path");
+    Objects.requireNonNull(t, "t");
 
     final TypeName t_name = t.getName();
     final PackageNameQualified p_name = t.getPackageContext().getName();
@@ -104,10 +103,10 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
 
     final JPRAJavaGeneratorType g = this.generator;
     t.matchTypeUserDefined(
-      new TypeUserDefinedMatcherType<Unit, IOException>()
+      new TypeUserDefinedMatcherType<Void, IOException>()
       {
         @Override
-        public Unit matchRecord(final TRecord r)
+        public Void matchRecord(final TRecord r)
           throws IOException
         {
           final Path c_file = pkg_path.resolve(
@@ -120,27 +119,27 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
             pkg_path.resolve(g.getRecordInterfaceName(t_name) + ".java");
 
           LOG.debug("writing {}", c_file);
-          try (final OutputStream w = Files.newOutputStream(c_file)) {
+          try (OutputStream w = Files.newOutputStream(c_file)) {
             g.generateRecordImplementation(r, w);
           }
           LOG.debug("writing {}", r_file);
-          try (final OutputStream w = Files.newOutputStream(r_file)) {
+          try (OutputStream w = Files.newOutputStream(r_file)) {
             g.generateRecordInterfaceReadable(r, w);
           }
           LOG.debug("writing {}", w_file);
-          try (final OutputStream w = Files.newOutputStream(w_file)) {
+          try (OutputStream w = Files.newOutputStream(w_file)) {
             g.generateRecordInterfaceWritable(r, w);
           }
           LOG.debug("writing {}", i_file);
-          try (final OutputStream w = Files.newOutputStream(i_file)) {
+          try (OutputStream w = Files.newOutputStream(i_file)) {
             g.generateRecordInterface(r, w);
           }
 
-          return Unit.unit();
+          return null;
         }
 
         @Override
-        public Unit matchPacked(final TPacked r)
+        public Void matchPacked(final TPacked r)
           throws IOException
         {
           final Path c_file = pkg_path.resolve(
@@ -153,23 +152,23 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
             pkg_path.resolve(g.getPackedInterfaceName(t_name) + ".java");
 
           LOG.debug("writing {}", c_file);
-          try (final OutputStream w = Files.newOutputStream(c_file)) {
+          try (OutputStream w = Files.newOutputStream(c_file)) {
             g.generatePackedImplementation(r, w);
           }
           LOG.debug("writing {}", r_file);
-          try (final OutputStream w = Files.newOutputStream(r_file)) {
+          try (OutputStream w = Files.newOutputStream(r_file)) {
             g.generatePackedInterfaceReadable(r, w);
           }
           LOG.debug("writing {}", w_file);
-          try (final OutputStream w = Files.newOutputStream(w_file)) {
+          try (OutputStream w = Files.newOutputStream(w_file)) {
             g.generatePackedInterfaceWritable(r, w);
           }
           LOG.debug("writing {}", i_file);
-          try (final OutputStream w = Files.newOutputStream(i_file)) {
+          try (OutputStream w = Files.newOutputStream(i_file)) {
             g.generatePackedInterface(r, w);
           }
 
-          return Unit.unit();
+          return null;
         }
       });
   }

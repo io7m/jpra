@@ -76,7 +76,8 @@ public final class FloatsTest
     for (int index = 0; index < 8; ++index) {
       Assert.assertEquals(
         ((double) index + 1.0), Binary16.unpackDouble(
-          buf.getChar(offset + 0)), 0.0);
+          buf.getChar(offset + 0)),
+        0.001);
 
       Assert.assertEquals(0L, (long) buf.get(offset + 2));
       Assert.assertEquals(0L, (long) buf.get(offset + 3));
@@ -97,7 +98,7 @@ public final class FloatsTest
 
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
-      Assert.assertEquals((double) index + 1.0, v.getF16(), 0.0);
+      Assert.assertEquals((double) index + 1.0, v.getF16(), 0.001);
     }
   }
 

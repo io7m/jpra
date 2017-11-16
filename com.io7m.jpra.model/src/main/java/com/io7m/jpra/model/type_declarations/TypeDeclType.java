@@ -61,6 +61,6 @@ public interface TypeDeclType<I, T>
    */
 
   <A, E extends Exception> A matchTypeDeclaration(
-    final TypeDeclMatcherType<I, T, A, E> m)
+    TypeDeclMatcherType<I, T, A, E> m)
     throws E;
 }

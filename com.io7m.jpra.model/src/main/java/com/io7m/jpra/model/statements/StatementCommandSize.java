@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.statements;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -45,7 +45,7 @@ public final class StatementCommandSize<I, T>
   public StatementCommandSize(
     final SizeExprType<I, T> e)
   {
-    this.expr = NullCheck.notNull(e, "Expression");
+    this.expr = Objects.requireNonNull(e, "Expression");
   }
 
   /**

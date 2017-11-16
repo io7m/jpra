@@ -16,7 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
@@ -28,7 +28,7 @@ public final class TypeSafeDiagnosingMatcherWith<T extends Throwable>
   public TypeSafeDiagnosingMatcherWith(
     final Runnable in_after)
   {
-    this.after = NullCheck.notNull(in_after);
+    this.after = Objects.requireNonNull(in_after);
   }
 
   @Override

@@ -17,12 +17,12 @@
 package com.io7m.jpra.model.statements;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -49,8 +49,8 @@ public final class StatementPackageImport<I, T>
     final PackageNameQualified in_pack,
     final PackageNameUnqualified in_using)
   {
-    this.pack = NullCheck.notNull(in_pack, "Pack");
-    this.using = NullCheck.notNull(in_using, "Using");
+    this.pack = Objects.requireNonNull(in_pack, "Pack");
+    this.using = Objects.requireNonNull(in_using, "Using");
   }
 
   /**

@@ -18,9 +18,7 @@ package com.io7m.jpra.compiler.core.checker;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.set.ImmutableSet;
-import com.io7m.jfunctional.Pair;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.IdentifierType;
@@ -39,6 +37,7 @@ import com.io7m.jpra.model.types.TFloat;
 import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TType;
 import com.io7m.jranges.RangeInclusiveB;
+import io.vavr.Tuple2;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -67,7 +66,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final String message)
   {
     super(in_lex, message);
-    this.code = NullCheck.notNull(in_code, "Code");
+    this.code = Objects.requireNonNull(in_code, "Code");
   }
 
   /**
@@ -84,7 +83,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final Exception e)
   {
     super(in_lex, e);
-    this.code = NullCheck.notNull(in_code, "Code");
+    this.code = Objects.requireNonNull(in_code, "Code");
   }
 
   /**
@@ -466,7 +465,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final TypeExprMatrix<IdentifierType, Untyped> e,
     final BigInteger tw,
     final BigInteger th,
-    final ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>> supported)
+    final ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix size not supported.");
@@ -480,9 +479,9 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
 
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
-      final Pair<RangeInclusiveB, RangeInclusiveB> rp = supported.get(index);
-      final RangeInclusiveB l = rp.getLeft();
-      final RangeInclusiveB r = rp.getRight();
+      final Tuple2<RangeInclusiveB, RangeInclusiveB> rp = supported.get(index);
+      final RangeInclusiveB l = rp._1();
+      final RangeInclusiveB r = rp._2();
 
       {
         final BigInteger lo = l.getLower();

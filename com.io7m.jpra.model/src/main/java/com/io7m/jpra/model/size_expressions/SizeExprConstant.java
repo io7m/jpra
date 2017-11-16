@@ -17,11 +17,11 @@
 package com.io7m.jpra.model.size_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.NullCheck;
 import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -49,8 +49,8 @@ public final class SizeExprConstant<I, T>
     final Optional<LexicalPosition<Path>> in_lex,
     final BigInteger in_size)
   {
-    this.lex = NullCheck.notNull(in_lex, "Lexical information");
-    this.value = NullCheck.notNull(in_size, "Size");
+    this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+    this.value = Objects.requireNonNull(in_size, "Size");
   }
 
   /**

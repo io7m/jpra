@@ -18,6 +18,6 @@
  * Unresolved name types.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jpra.model.names;
 

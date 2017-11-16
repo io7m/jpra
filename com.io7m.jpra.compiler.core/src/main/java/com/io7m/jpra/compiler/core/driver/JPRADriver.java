@@ -21,7 +21,6 @@ import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jlexing.core.LexicalPositionType;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.compiler.core.JPRACompilerLexerException;
 import com.io7m.jpra.compiler.core.checker.JPRAChecker;
@@ -64,6 +63,7 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 
@@ -149,8 +149,8 @@ public final class JPRADriver implements JPRADriverType
       final Path in_base,
       final JPRACheckerCapabilitiesType in_caps)
     {
-      this.source_directory = NullCheck.notNull(in_base, "Path");
-      this.caps = NullCheck.notNull(in_caps, "Capabilities");
+      this.source_directory = Objects.requireNonNull(in_base, "Path");
+      this.caps = Objects.requireNonNull(in_caps, "Capabilities");
     }
 
     private Path fileForPackage(final PackageNameQualified p)
@@ -185,7 +185,7 @@ public final class JPRADriver implements JPRADriverType
       LOG.debug("loading package {} from {}", p, file);
 
       boolean error = false;
-      try (final InputStream is = Files.newInputStream(file)) {
+      try (InputStream is = Files.newInputStream(file)) {
         final JSXParserType sxp = newJSXParser(is, file);
 
         Optional<LexicalPosition<Path>> lex = Optional.empty();

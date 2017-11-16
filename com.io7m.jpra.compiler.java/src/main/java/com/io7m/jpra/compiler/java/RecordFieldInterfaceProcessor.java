@@ -17,8 +17,6 @@
 package com.io7m.jpra.compiler.java;
 
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
@@ -42,13 +40,14 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces interface methods for record fields.
  */
 
 final class RecordFieldInterfaceProcessor
-  implements TypeMatcherType<Unit, UnreachableCodeException>
+  implements TypeMatcherType<Void, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
   private final TypeSpec.Builder class_builder;
@@ -59,9 +58,11 @@ final class RecordFieldInterfaceProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSelection in_methods)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
-    this.methods = NullCheck.notNull(in_methods, "Methods");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
+    this.methods = Objects.requireNonNull(in_methods, "Methods");
 
     if (this.methods.wantGetters()) {
       this.metaMethods();
@@ -111,14 +112,14 @@ final class RecordFieldInterfaceProcessor
   }
 
   @Override
-  public Unit matchArray(final TArray t)
+  public Void matchArray(final TArray t)
   {
     // TODO: Generated method stub!
     throw new UnimplementedCodeException();
   }
 
   @Override
-  public Unit matchString(final TString t)
+  public Void matchString(final TString t)
   {
     if (this.methods.wantGetters()) {
       final String getter_name =
@@ -146,11 +147,11 @@ final class RecordFieldInterfaceProcessor
       this.class_builder.addMethod(setb.build());
     }
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchBooleanSet(final TBooleanSet t)
+  public Void matchBooleanSet(final TBooleanSet t)
   {
     final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
     for (final FieldName f : ordered) {
@@ -181,11 +182,11 @@ final class RecordFieldInterfaceProcessor
         this.class_builder.addMethod(setb.build());
       }
     }
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchInteger(final TIntegerType t)
+  public Void matchInteger(final TIntegerType t)
   {
     final RecordFieldInterfaceIntegerProcessor p =
       new RecordFieldInterfaceIntegerProcessor(
@@ -194,7 +195,7 @@ final class RecordFieldInterfaceProcessor
   }
 
   @Override
-  public Unit matchFloat(final TFloat t)
+  public Void matchFloat(final TFloat t)
   {
     final BigInteger size = t.getSizeInBits().getValue();
 
@@ -272,11 +273,11 @@ final class RecordFieldInterfaceProcessor
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchVector(final TVector t)
+  public Void matchVector(final TVector t)
   {
     final JPRAClasses.VectorsClasses c = JPRAClasses.getVectorClassesFor(t);
 
@@ -306,11 +307,11 @@ final class RecordFieldInterfaceProcessor
       this.class_builder.addMethod(setb.build());
     }
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchMatrix(final TMatrix t)
+  public Void matchMatrix(final TMatrix t)
   {
     final JPRAClasses.MatrixClasses c = JPRAClasses.getMatrixClassesFor(t);
 
@@ -340,14 +341,14 @@ final class RecordFieldInterfaceProcessor
       this.class_builder.addMethod(setb.build());
     }
 
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchRecord(final TRecord t)
+  public Void matchRecord(final TRecord t)
   {
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 
   /**
@@ -400,9 +401,9 @@ final class RecordFieldInterfaceProcessor
   }
 
   @Override
-  public Unit matchPacked(final TPacked t)
+  public Void matchPacked(final TPacked t)
   {
     this.recordOrPackedMethods(t.getName(), t.getPackageContext());
-    return Unit.unit();
+    return null;
   }
 }

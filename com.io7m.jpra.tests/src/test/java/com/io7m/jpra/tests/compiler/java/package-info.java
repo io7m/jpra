@@ -18,5 +18,5 @@
  * Functions to generate code for the Java backend test suite.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jpra.tests.compiler.java;

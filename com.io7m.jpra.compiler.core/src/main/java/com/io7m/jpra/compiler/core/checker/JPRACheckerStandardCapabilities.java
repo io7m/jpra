@@ -21,8 +21,9 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
-import com.io7m.jfunctional.Pair;
 import com.io7m.jranges.RangeInclusiveB;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 
 import java.math.BigInteger;
 
@@ -42,8 +43,7 @@ public final class JPRACheckerStandardCapabilities
   private final ImmutableList<RangeInclusiveB> vector_sizes;
   private final ImmutableList<RangeInclusiveB> vector_float_sizes;
   private final ImmutableList<RangeInclusiveB> vector_integer_sizes;
-  private final ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
-    matrix_sizes;
+  private final ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> matrix_sizes;
   private final ImmutableList<RangeInclusiveB> matrix_float_sizes;
   private final ImmutableList<RangeInclusiveB> packed_sizes;
 
@@ -108,15 +108,15 @@ public final class JPRACheckerStandardCapabilities
     }
 
     {
-      final MutableList<Pair<RangeInclusiveB, RangeInclusiveB>> s =
+      final MutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> s =
         Lists.mutable.empty();
 
       final RangeInclusiveB r2 = new RangeInclusiveB(b2, b2);
-      s.add(Pair.pair(r2, r2));
+      s.add(Tuple.of(r2, r2));
       final RangeInclusiveB r3 = new RangeInclusiveB(b3, b3);
-      s.add(Pair.pair(r3, r3));
+      s.add(Tuple.of(r3, r3));
       final RangeInclusiveB r4 = new RangeInclusiveB(b4, b4);
-      s.add(Pair.pair(r4, r4));
+      s.add(Tuple.of(r4, r4));
       this.matrix_sizes = s.toImmutable();
     }
 
@@ -177,8 +177,8 @@ public final class JPRACheckerStandardCapabilities
   {
     return this.matrix_sizes.anySatisfy(
       p -> {
-        final RangeInclusiveB l = p.getLeft();
-        final RangeInclusiveB r = p.getRight();
+        final RangeInclusiveB l = p._1;
+        final RangeInclusiveB r = p._2;
         return l.includesValue(width) && r.includesValue(height);
       });
   }
@@ -232,7 +232,7 @@ public final class JPRACheckerStandardCapabilities
   }
 
   @Override
-  public ImmutableList<Pair<RangeInclusiveB, RangeInclusiveB>>
+  public ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported()
   {
     return this.matrix_sizes;

@@ -21,8 +21,8 @@ import com.io7m.jpra.core.JPRAException;
 import java.io.OutputStream;
 
 /**
- * The type of formatters that produce friendly error messages
- * for compiler exceptions.
+ * The type of formatters that produce friendly error messages for compiler
+ * exceptions.
  */
 
 public interface JPRAProblemFormatterType

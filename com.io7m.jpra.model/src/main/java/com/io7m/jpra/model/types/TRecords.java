@@ -18,11 +18,11 @@ package com.io7m.jpra.model.types;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
-import com.io7m.jfunctional.PartialFunctionType;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.util.Objects;
 
 /**
  * Functions over record types.
@@ -48,8 +48,8 @@ public final class TRecords
     final TRecord t,
     final FieldPath p)
   {
-    NullCheck.notNull(t, "Record");
-    NullCheck.notNull(p, "Field path");
+    Objects.requireNonNull(t, "Record");
+    Objects.requireNonNull(p, "Field path");
 
     final ImmutableList<FieldName> es = p.getElements();
     final FieldName first = es.get(0);
@@ -143,6 +143,31 @@ public final class TRecords
   }
 
   /**
+   * The type of partial functions.
+   *
+   * @param <A> The type of domain values
+   * @param <B> The type of codomain values
+   * @param <E> The type of raised exceptions
+   */
+
+  @FunctionalInterface
+  public interface PartialFunctionType<A, B, E extends Exception>
+  {
+    /**
+     * Apply the function
+     *
+     * @param x The input
+     *
+     * @return The output
+     *
+     * @throws E If required
+     */
+
+    B apply(A x)
+      throws E;
+  }
+
+  /**
    * The type of lookup results.
    */
 
@@ -190,9 +215,9 @@ public final class TRecords
       final FieldName in_name,
       final ImmutableList<FieldName> in_rest)
     {
-      this.end = NullCheck.notNull(in_t, "Type");
-      this.name = NullCheck.notNull(in_name, "Field name");
-      this.rest = NullCheck.notNull(in_rest, "Field names");
+      this.end = Objects.requireNonNull(in_t, "Type");
+      this.name = Objects.requireNonNull(in_name, "Field name");
+      this.rest = Objects.requireNonNull(in_rest, "Field names");
     }
 
     @Override
@@ -201,7 +226,7 @@ public final class TRecords
       final PartialFunctionType<TypeLookupFailed, A, E> failure)
       throws E
     {
-      return failure.call(this);
+      return failure.apply(this);
     }
   }
 
@@ -222,7 +247,7 @@ public final class TRecords
     public TypeLookupSucceeded(
       final TType in_result)
     {
-      this.result = NullCheck.notNull(in_result, "Type");
+      this.result = Objects.requireNonNull(in_result, "Type");
     }
 
     @Override
@@ -231,7 +256,7 @@ public final class TRecords
       final PartialFunctionType<TypeLookupFailed, A, E> failure)
       throws E
     {
-      return success.call(this);
+      return success.apply(this);
     }
   }
 

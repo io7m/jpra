@@ -78,5 +78,5 @@ public interface GlobalContextType
    * @param t The type
    */
 
-  void putType(final TypeUserDefinedType t);
+  void putType(TypeUserDefinedType t);
 }

@@ -17,12 +17,6 @@
   <description>Packed record access (Compiler core)</description>
   <url>http://github.com/io7m/jpra</url>
 
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
-
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -56,14 +50,6 @@
       <artifactId>com.io7m.jeucreader.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>com.io7m.jnull.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jfunctional</groupId>
-      <artifactId>com.io7m.jfunctional.core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.io7m.jranges</groupId>
       <artifactId>com.io7m.jranges.core</artifactId>
     </dependency>
@@ -76,6 +62,10 @@
       <artifactId>com.io7m.jlexing.core</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>

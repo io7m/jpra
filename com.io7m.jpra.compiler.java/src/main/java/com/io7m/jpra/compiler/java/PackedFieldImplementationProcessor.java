@@ -18,12 +18,10 @@ package com.io7m.jpra.compiler.java;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.io7m.jfunctional.Unit;
 import com.io7m.jnfp.core.NFPSignedDoubleInt;
 import com.io7m.jnfp.core.NFPSignedDoubleLong;
 import com.io7m.jnfp.core.NFPUnsignedDoubleInt;
 import com.io7m.jnfp.core.NFPUnsignedDoubleLong;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.types.Size;
 import com.io7m.jpra.model.types.SizeUnitBitsType;
@@ -60,8 +58,8 @@ import java.util.Objects;
  */
 
 public final class PackedFieldImplementationProcessor
-  implements TypeMatcherType<Unit, UnreachableCodeException>,
-  TypeIntegerMatcherType<Unit, UnreachableCodeException>
+  implements TypeMatcherType<Void, UnreachableCodeException>,
+  TypeIntegerMatcherType<Void, UnreachableCodeException>
 {
   private static final Logger LOG;
 
@@ -78,9 +76,11 @@ public final class PackedFieldImplementationProcessor
     final BigInteger in_offset_bits,
     final TypeSpec.Builder in_class_builder)
   {
-    this.field = NullCheck.notNull(in_field, "in_field");
-    this.offset_bits = NullCheck.notNull(in_offset_bits, "Offset_bits");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
+    this.field = Objects.requireNonNull(in_field, "in_field");
+    this.offset_bits = Objects.requireNonNull(in_offset_bits, "Offset_bits");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
   }
 
   /**
@@ -174,42 +174,42 @@ public final class PackedFieldImplementationProcessor
         final BigInteger shift = fv.getBitRange().getLower();
 
         f_type.matchTypeInteger(
-          new TypeIntegerMatcherType<Unit, UnreachableCodeException>()
+          new TypeIntegerMatcherType<Void, UnreachableCodeException>()
           {
             @Override
-            public Unit matchIntegerUnsigned(
+            public Void matchIntegerUnsigned(
               final TIntegerUnsigned t)
             {
-              PackedFieldImplementationProcessor.onInteger(
+              onInteger(
                 setb, arith_type, f_name_text, mask, shift);
-              return Unit.unit();
+              return null;
             }
 
             @Override
-            public Unit matchIntegerSigned(
+            public Void matchIntegerSigned(
               final TIntegerSigned t)
             {
-              PackedFieldImplementationProcessor.onInteger(
+              onInteger(
                 setb, arith_type, f_name_text, mask, shift);
-              return Unit.unit();
+              return null;
             }
 
             @Override
-            public Unit matchIntegerSignedNormalized(
+            public Void matchIntegerSignedNormalized(
               final TIntegerSignedNormalized t)
             {
-              PackedFieldImplementationProcessor.onNormalized(
+              onNormalized(
                 true, field_size, setb, arith_type, f_name_text, mask, shift);
-              return Unit.unit();
+              return null;
             }
 
             @Override
-            public Unit matchIntegerUnsignedNormalized(
+            public Void matchIntegerUnsignedNormalized(
               final TIntegerUnsignedNormalized t)
             {
-              PackedFieldImplementationProcessor.onNormalized(
+              onNormalized(
                 false, field_size, setb, arith_type, f_name_text, mask, shift);
-              return Unit.unit();
+              return null;
             }
           });
       });
@@ -378,13 +378,13 @@ public final class PackedFieldImplementationProcessor
   }
 
   @Override
-  public Unit matchIntegerUnsigned(
+  public Void matchIntegerUnsigned(
     final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits());
   }
 
-  private Unit onInteger(final Size<SizeUnitBitsType> size)
+  private Void onInteger(final Size<SizeUnitBitsType> size)
   {
     final BigInteger container_size =
       this.field.getOwner().getSizeInBits().getValue();
@@ -403,7 +403,7 @@ public final class PackedFieldImplementationProcessor
       setter_name);
   }
 
-  private Unit integerGetterSetter(
+  private Void integerGetterSetter(
     final TPacked t,
     final BigInteger container_size,
     final BigInteger field_size,
@@ -515,24 +515,24 @@ public final class PackedFieldImplementationProcessor
       this.field.getOwner(), setb, container_type, iput, "w_valu");
 
     this.class_builder.addMethod(setb.build());
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchIntegerSigned(
+  public Void matchIntegerSigned(
     final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits());
   }
 
   @Override
-  public Unit matchIntegerSignedNormalized(
+  public Void matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue(), true);
   }
 
-  private Unit onIntegerNormalized(
+  private Void onIntegerNormalized(
     final BigInteger field_size,
     final boolean signed)
   {
@@ -580,66 +580,66 @@ public final class PackedFieldImplementationProcessor
     setb.addStatement(
       "this.$N($T.$N($N))", setter_norm_raw_name, nfp_class, m_to, "x");
     this.class_builder.addMethod(setb.build());
-    return Unit.unit();
+    return null;
   }
 
   @Override
-  public Unit matchIntegerUnsignedNormalized(
+  public Void matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue(), false);
   }
 
   @Override
-  public Unit matchArray(final TArray t)
+  public Void matchArray(final TArray t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchString(final TString t)
+  public Void matchString(final TString t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchBooleanSet(final TBooleanSet t)
+  public Void matchBooleanSet(final TBooleanSet t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchInteger(final TIntegerType t)
+  public Void matchInteger(final TIntegerType t)
   {
     return t.matchTypeInteger(this);
   }
 
   @Override
-  public Unit matchFloat(final TFloat t)
+  public Void matchFloat(final TFloat t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchVector(final TVector t)
+  public Void matchVector(final TVector t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchMatrix(final TMatrix t)
+  public Void matchMatrix(final TMatrix t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchRecord(final TRecord t)
+  public Void matchRecord(final TRecord t)
   {
     throw new UnreachableCodeException();
   }
 
   @Override
-  public Unit matchPacked(final TPacked t)
+  public Void matchPacked(final TPacked t)
   {
     throw new UnreachableCodeException();
   }

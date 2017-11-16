@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TIntegerSignedNormalized;
 import com.io7m.jpra.model.types.TIntegerUnsigned;
@@ -31,6 +29,7 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * A type matcher that produces interface methods for a given integer type
@@ -38,7 +37,7 @@ import java.math.BigInteger;
  */
 
 final class RecordFieldInterfaceIntegerProcessor
-  implements TypeIntegerMatcherType<Unit, UnreachableCodeException>
+  implements TypeIntegerMatcherType<Void, UnreachableCodeException>
 {
   private final TRecord.FieldValue field;
   private final TypeSpec.Builder class_builder;
@@ -49,38 +48,40 @@ final class RecordFieldInterfaceIntegerProcessor
     final TypeSpec.Builder in_class_builder,
     final MethodSelection in_methods)
   {
-    this.field = NullCheck.notNull(in_field, "Field");
-    this.class_builder = NullCheck.notNull(in_class_builder, "Class builder");
-    this.methods = NullCheck.notNull(in_methods, "Methods");
+    this.field = Objects.requireNonNull(in_field, "Field");
+    this.class_builder = Objects.requireNonNull(
+      in_class_builder,
+      "Class builder");
+    this.methods = Objects.requireNonNull(in_methods, "Methods");
   }
 
   @Override
-  public Unit matchIntegerUnsigned(final TIntegerUnsigned t)
+  public Void matchIntegerUnsigned(final TIntegerUnsigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerSigned(final TIntegerSigned t)
+  public Void matchIntegerSigned(final TIntegerSigned t)
   {
     return this.onInteger(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerSignedNormalized(
+  public Void matchIntegerSignedNormalized(
     final TIntegerSignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
   @Override
-  public Unit matchIntegerUnsignedNormalized(
+  public Void matchIntegerUnsignedNormalized(
     final TIntegerUnsignedNormalized t)
   {
     return this.onIntegerNormalized(t.getSizeInBits().getValue());
   }
 
-  private Unit onInteger(final BigInteger size)
+  private Void onInteger(final BigInteger size)
   {
     final String getter_name =
       JPRAGeneratedNames.getGetterName(this.field.getName());
@@ -125,10 +126,10 @@ final class RecordFieldInterfaceIntegerProcessor
       setb.returns(void.class);
       this.class_builder.addMethod(setb.build());
     }
-    return Unit.unit();
+    return null;
   }
 
-  private Unit onIntegerNormalized(
+  private Void onIntegerNormalized(
     final BigInteger size)
   {
     final String getter_norm_name =
@@ -207,6 +208,6 @@ final class RecordFieldInterfaceIntegerProcessor
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 }

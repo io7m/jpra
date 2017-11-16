@@ -71,8 +71,8 @@ public abstract class JPRADriverContract
   {
     final Class<JPRADriverContract> c = JPRADriverContract.class;
 
-    try (final OutputStream os = Files.newOutputStream(file)) {
-      try (final InputStream is = c.getResourceAsStream(s)) {
+    try (OutputStream os = Files.newOutputStream(file)) {
+      try (InputStream is = c.getResourceAsStream(s)) {
         final byte[] buffer = new byte[8192];
         while (true) {
           final int r = is.read(buffer);
@@ -101,7 +101,7 @@ public abstract class JPRADriverContract
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
-      final Path base = JPRADriverContract.getFirstRoot(fs);
+      final Path base = getFirstRoot(fs);
       final JPRACheckerCapabilitiesType caps =
         JPRACheckerStandardCapabilities.newCapabilities();
 
@@ -112,7 +112,7 @@ public abstract class JPRADriverContract
           () -> {
             final GlobalContextType c = d.getGlobalContext();
             final Queue<JPRAException> q = c.getErrorQueue();
-            JPRADriverContract.LOG.error("{}", q);
+            LOG.error("{}", q);
 
             Assert.assertEquals(1L, (long) q.size());
 
@@ -142,13 +142,13 @@ public abstract class JPRADriverContract
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
-      final Path base = JPRADriverContract.getFirstRoot(fs);
+      final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
       Files.createDirectories(dir);
       final Path file_0 = dir.resolve("a.jpr");
-      JPRADriverContract.createFileFromResource(file_0, "a.jpr");
+      createFileFromResource(file_0, "a.jpr");
       final Path file_1 = dir.resolve("b.jpr");
-      JPRADriverContract.createFileFromResource(file_1, "b.jpr");
+      createFileFromResource(file_1, "b.jpr");
 
       final JPRACheckerCapabilitiesType caps =
         JPRACheckerStandardCapabilities.newCapabilities();
@@ -160,7 +160,7 @@ public abstract class JPRADriverContract
           () -> {
             final GlobalContextType c = d.getGlobalContext();
             final Queue<JPRAException> q = c.getErrorQueue();
-            JPRADriverContract.LOG.error("{}", q);
+            LOG.error("{}", q);
 
             Assert.assertEquals(3L, (long) q.size());
 
@@ -203,7 +203,7 @@ public abstract class JPRADriverContract
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
-      final Path base = JPRADriverContract.getFirstRoot(fs);
+      final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
       Files.createDirectories(dir);
       Files.createFile(dir.resolve("z.jpr"));
@@ -218,7 +218,7 @@ public abstract class JPRADriverContract
           () -> {
             final GlobalContextType c = d.getGlobalContext();
             final Queue<JPRAException> q = c.getErrorQueue();
-            JPRADriverContract.LOG.error("{}", q);
+            LOG.error("{}", q);
 
             {
               final JPRACompilerResolverException e =
@@ -246,11 +246,11 @@ public abstract class JPRADriverContract
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
-      final Path base = JPRADriverContract.getFirstRoot(fs);
+      final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
       Files.createDirectories(dir);
       final Path file = dir.resolve("z.jpr");
-      JPRADriverContract.createFileFromResource(file, "badlex.jpr");
+      createFileFromResource(file, "badlex.jpr");
 
       final JPRACheckerCapabilitiesType caps =
         JPRACheckerStandardCapabilities.newCapabilities();
@@ -261,7 +261,7 @@ public abstract class JPRADriverContract
           () -> {
             final GlobalContextType c = d.getGlobalContext();
             final Queue<JPRAException> q = c.getErrorQueue();
-            JPRADriverContract.LOG.error("{}", q);
+            LOG.error("{}", q);
 
             {
               final JPRACompilerLexerException e =
@@ -294,11 +294,11 @@ public abstract class JPRADriverContract
       Optional.empty();
 
     try (final FileSystem fs = this.getFilesystem()) {
-      final Path base = JPRADriverContract.getFirstRoot(fs);
+      final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
       Files.createDirectories(dir);
       final Path file = dir.resolve("z.jpr");
-      JPRADriverContract.createFileFromResource(file, "z.jpr");
+      createFileFromResource(file, "z.jpr");
 
       final JPRACheckerCapabilitiesType caps =
         JPRACheckerStandardCapabilities.newCapabilities();
@@ -334,7 +334,7 @@ public abstract class JPRADriverContract
       final T item,
       final Description mismatchDescription)
     {
-      JPRADriverContract.LOG.error("cause ", item);
+      LOG.error("cause ", item);
       return true;
     }
   }

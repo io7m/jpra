@@ -1,153 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
-  <c:project>com.io7m.jpra</c:project>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2017-04-03</c:date>
-    <c:version>0.6.0</c:version>
-    <c:item>
-      <c:date>2017-04-03</c:date>
-      <c:type-code-change/>
-      <c:summary>Use primogenitor, renaming all modules to the new OSGi conventions.</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2017-04-07</c:date>
-      <c:type-code-change/>
-      <c:ticket>24</c:ticket>
-      <c:ticket>21</c:ticket>
-      <c:summary>Use new core io7m packages. Eliminate valid4j.</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2016-08-05</c:date>
-    <c:version>0.5.0</c:version>
-    <c:item>
-      <c:date>2016-08-05</c:date>
-      <c:type-code-fix/>
-      <c:summary>Update Maven plugins</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2016-08-05</c:date>
-      <c:type-code-change/>
-      <c:summary>Update to latest version of all dependencies (changes API)</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2016-08-05</c:date>
-      <c:type-code-fix/>
-      <c:summary>The runtime jar is now an OSGi bundle</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2016-01-17</c:date>
-    <c:version>0.4.1</c:version>
-    <c:item>
-      <c:date>2016-01-17</c:date>
-      <c:type-code-fix/>
-      <c:ticket>19</c:ticket>
-      <c:summary>Fix bit/byte ordering of packed types</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-12-11</c:date>
-    <c:version>0.4.0</c:version>
-    <c:item>
-      <c:date>2015-12-11</c:date>
-      <c:type-code-new/>
-      <c:ticket>18</c:ticket>
-      <c:summary>Add static size and offset methods to generated types</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2015-12-11</c:date>
-      <c:type-code-fix/>
-      <c:ticket>14</c:ticket>
-      <c:summary>Reduce size of jpra-c frontend jar</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-12-06</c:date>
-    <c:version>0.3.2</c:version>
-    <c:item>
-      <c:date>2015-12-06</c:date>
-      <c:type-code-fix/>
-      <c:ticket>13</c:ticket>
-      <c:ticket>12</c:ticket>
-      <c:ticket>11</c:ticket>
-      <c:summary>Specification clarifications and improvements</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2015-12-06</c:date>
-      <c:type-code-fix/>
-      <c:ticket>16</c:ticket>
-      <c:ticket>15</c:ticket>
-      <c:summary>Correct JavaDoc for packed 'set' methods</c:summary>
-    </c:item>
-    <c:item>
-      <c:date>2015-12-04</c:date>
-      <c:type-code-fix/>
-      <c:summary>Use immutables 2.1.2</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-12-04</c:date>
-    <c:version>0.3.1</c:version>
-    <c:item>
-      <c:date>2015-12-04</c:date>
-      <c:type-code-fix/>
-      <c:summary>Minor fixes for metadata and site</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-11-24</c:date>
-    <c:version>0.3.0</c:version>
-    <c:item>
-      <c:date>2015-11-24</c:date>
-      <c:ticket>10</c:ticket>
-      <c:type-code-fix/>
-      <c:summary>Expose type metadata at run-time</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-11-21</c:date>
-    <c:version>0.2.1</c:version>
-    <c:item>
-      <c:date>2015-11-21</c:date>
-      <c:type-code-fix/>
-      <c:summary>Correct API documentation links</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-11-21</c:date>
-    <c:version>0.2.0</c:version>
-    <c:item>
-      <c:date>2015-11-21</c:date>
-      <c:type-code-new/>
-      <c:ticket>2</c:ticket>
-      <c:ticket>6</c:ticket>
-      <c:ticket>7</c:ticket>
-      <c:summary>Implement more of the language</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:release c:ticket-system="com.github.io7m.jpra">
-    <c:date>2015-11-16</c:date>
-    <c:version>0.1.0</c:version>
-    <c:item>
-      <c:date>2015-11-16</c:date>
-      <c:type-code-new/>
-      <c:summary>Initial release.</c:summary>
-    </c:item>
-  </c:release>
-
-  <c:ticket-system xml:id="com.github.io7m.jpra">
-    <c:ticket-url>https://github.com/io7m/jpra/issues/</c:ticket-url>
-  </c:ticket-system>
-
+<c:changelog xmlns:c="urn:com.io7m.changelog:4.0" project="com.io7m.jpra">
+  <c:releases>
+    <c:release date="2015-11-16T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.1.0">
+      <c:changes>
+        <c:change date="2015-11-16T00:00:00+00:00" summary="Initial release."/>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-11-21T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.2.0">
+      <c:changes>
+        <c:change date="2015-11-21T00:00:00+00:00" summary="Implement more of the language">
+          <c:tickets>
+            <c:ticket id="2"/>
+            <c:ticket id="6"/>
+            <c:ticket id="7"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-11-21T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.2.1">
+      <c:changes>
+        <c:change date="2015-11-21T00:00:00+00:00" summary="Correct API documentation links"/>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-11-24T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.3.0">
+      <c:changes>
+        <c:change date="2015-11-24T00:00:00+00:00" summary="Expose type metadata at run-time">
+          <c:tickets>
+            <c:ticket id="10"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-12-04T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.3.1">
+      <c:changes>
+        <c:change date="2015-12-04T00:00:00+00:00" summary="Minor fixes for metadata and site"/>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-12-06T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.3.2">
+      <c:changes>
+        <c:change date="2015-12-06T00:00:00+00:00" summary="Specification clarifications and improvements">
+          <c:tickets>
+            <c:ticket id="13"/>
+            <c:ticket id="12"/>
+            <c:ticket id="11"/>
+          </c:tickets>
+        </c:change>
+        <c:change date="2015-12-06T00:00:00+00:00" summary="Correct JavaDoc for packed 'set' methods">
+          <c:tickets>
+            <c:ticket id="16"/>
+            <c:ticket id="15"/>
+          </c:tickets>
+        </c:change>
+        <c:change date="2015-12-04T00:00:00+00:00" summary="Use immutables 2.1.2"/>
+      </c:changes>
+    </c:release>
+    <c:release date="2015-12-11T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.4.0">
+      <c:changes>
+        <c:change date="2015-12-11T00:00:00+00:00" summary="Add static size and offset methods to generated types">
+          <c:tickets>
+            <c:ticket id="18"/>
+          </c:tickets>
+        </c:change>
+        <c:change date="2015-12-11T00:00:00+00:00" summary="Reduce size of jpra-c frontend jar">
+          <c:tickets>
+            <c:ticket id="14"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
+    <c:release date="2016-01-17T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.4.1">
+      <c:changes>
+        <c:change date="2016-01-17T00:00:00+00:00" summary="Fix bit/byte ordering of packed types">
+          <c:tickets>
+            <c:ticket id="19"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
+    <c:release date="2016-08-05T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.5.0">
+      <c:changes>
+        <c:change date="2016-08-05T00:00:00+00:00" summary="Update Maven plugins"/>
+        <c:change compatible="false" date="2016-08-05T00:00:00+00:00" summary="Update to latest version of all dependencies (changes API)"/>
+        <c:change date="2016-08-05T00:00:00+00:00" summary="The runtime jar is now an OSGi bundle"/>
+      </c:changes>
+    </c:release>
+    <c:release date="2017-04-03T00:00:00+00:00" ticket-system="com.github.io7m.jpra" version="0.6.0">
+      <c:changes>
+        <c:change compatible="false" date="2017-04-03T00:00:00+00:00" summary="Use primogenitor, renaming all modules to the new OSGi conventions."/>
+        <c:change compatible="false" date="2017-04-07T00:00:00+00:00" summary="Use new core io7m packages. Eliminate valid4j.">
+          <c:tickets>
+            <c:ticket id="24"/>
+            <c:ticket id="21"/>
+          </c:tickets>
+        </c:change>
+      </c:changes>
+    </c:release>
+    <c:release date="2017-11-16T18:14:42+00:00" ticket-system="com.github.io7m.jpra" version="0.7.0">
+      <c:changes>
+        <c:change compatible="false" date="2017-11-16T00:00:00+00:00" summary="All modules are now Java 9 modules. JDK 9 is now required."/>
+        <c:change compatible="false" date="2017-11-16T18:14:42+00:00" summary="Removed dependency on com.io7m.jnull."/>
+      </c:changes>
+    </c:release>
+  </c:releases>
+  <c:ticket-systems>
+    <c:ticket-system default="true" id="com.github.io7m.jpra" url="https://github.com/io7m/jpra/issues/"/>
+  </c:ticket-systems>
 </c:changelog>

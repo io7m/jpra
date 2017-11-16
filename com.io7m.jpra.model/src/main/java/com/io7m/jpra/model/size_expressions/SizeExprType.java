@@ -40,6 +40,6 @@ public interface SizeExprType<I, T> extends ModelElementType
    */
 
   <A, E extends Exception> A matchSizeExpression(
-    final SizeExprMatcherType<I, T, A, E> m)
+    SizeExprMatcherType<I, T, A, E> m)
     throws E;
 }

@@ -17,19 +17,6 @@
   <description>Packed record access (Language specification)</description>
   <url>http://github.com/io7m/jpra</url>
 
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>com.io7m.jnull.core</artifactId>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
       <!-- Copy specification resources into build directory -->
@@ -161,7 +148,7 @@
         </executions>
       </plugin>
 
-      <!-- Unpack the specification archive to the parent's generated site staging directory. -->
+      <!-- Unpack the specification archive to the parent's generated site minisite directory. -->
       <!-- This is arguably abusive, but there appears to be no other way to achieve it. -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -178,7 +165,7 @@
               <verbose>true</verbose>
               <fileset>
                 <directory>${project.build.directory}/${project.name}-${project.version}.zip/${project.name}-${project.version}/</directory>
-                <outputDirectory>${project.parent.build.directory}/staging/specification/</outputDirectory>
+                <outputDirectory>${project.parent.build.directory}/minisite/specification/</outputDirectory>
               </fileset>
             </configuration>
           </execution>

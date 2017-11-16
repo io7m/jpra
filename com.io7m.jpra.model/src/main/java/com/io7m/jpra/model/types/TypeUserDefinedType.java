@@ -57,6 +57,6 @@ public interface TypeUserDefinedType
    */
 
   <A, E extends Exception> A matchTypeUserDefined(
-    final TypeUserDefinedMatcherType<A, E> m)
+    TypeUserDefinedMatcherType<A, E> m)
     throws E;
 }
