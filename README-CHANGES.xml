@@ -95,7 +95,7 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2017-11-16T20:29:40+00:00" ticket-system="com.github.io7m.jpra" version="0.7.0">
+    <c:release date="2017-11-16T20:37:34+00:00" ticket-system="com.github.io7m.jpra" version="0.7.0">
       <c:changes>
         <c:change compatible="false" date="2017-11-16T00:00:00+00:00" summary="All modules are now Java 9 modules. JDK 9 is now required."/>
         <c:change compatible="false" date="2017-11-16T00:00:00+00:00" summary="Removed dependency on com.io7m.jnull."/>
@@ -104,9 +104,14 @@
             <c:ticket id="25"/>
           </c:tickets>
         </c:change>
-        <c:change compatible="false" date="2017-11-16T20:29:40+00:00" summary="Replace airline with jcommander">
+        <c:change compatible="false" date="2017-11-16T00:00:00+00:00" summary="Replace airline with jcommander">
           <c:tickets>
             <c:ticket id="9"/>
+          </c:tickets>
+        </c:change>
+        <c:change compatible="false" date="2017-11-16T20:37:34+00:00" summary="Replace commons-lang3 with commons-text">
+          <c:tickets>
+            <c:ticket id="26"/>
           </c:tickets>
         </c:change>
       </c:changes>
