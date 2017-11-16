@@ -209,25 +209,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
       // VectorsTest.checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable4DType k = v.getV4dReadable();
       final double x = (index * 10.0) + 1.0;
@@ -266,25 +266,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
       // VectorsTest.checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable4DType k = v.getV4hReadable();
       final double x = (index * 10.0) + 1.0;
@@ -322,25 +322,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
+      checkV2DZero(v.getV2dReadable());
       // VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable3DType k = v.getV3dReadable();
       final double x = (index * 10.0) + 1.0;
@@ -376,25 +376,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
+      checkV2DZero(v.getV2hReadable());
       // VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable3DType k = v.getV3hReadable();
       final double x = (index * 10.0) + 1.0;
@@ -429,25 +429,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
       // VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable2DType k = v.getV2dReadable();
       final double x = (index * 10.0) + 1.0;
@@ -481,24 +481,24 @@ public final class VectorsTest
       c.setElementIndex(index);
 
       // VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable2DType k = v.getV2hReadable();
       final double x = (index * 10.0) + 1.0;
@@ -533,25 +533,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
       // VectorsTest.checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable4DType k = v.getV4fReadable();
       final float x = (index * 10.0f) + 1.0f;
@@ -589,25 +589,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
+      checkV2FZero(v.getV2fReadable());
       // VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable3DType k = v.getV3fReadable();
       final float x = (index * 10.0f) + 1.0f;
@@ -642,25 +642,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
       // VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable2DType k = v.getV2fReadable();
       final float x = (index * 10.0f) + 1.0f;
@@ -695,25 +695,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
       // VectorsTest.checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable4LType k = v.getV4lReadable();
       final long x = (index * 10) + 1;
@@ -751,25 +751,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
+      checkV2LZero(v.getV2lReadable());
       // VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable3LType k = v.getV3lReadable();
       final long x = (index * 10) + 1;
@@ -804,25 +804,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
       // VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable2LType k = v.getV2lReadable();
       final long x = (index * 10) + 1;
@@ -857,24 +857,24 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
+      checkV2IZero(v.getV2iReadable());
+      checkV3IZero(v.getV3iReadable());
       // VectorsTest.checkV4IZero(v.getV4iReadable());
 
       final VectorReadable4LType k = v.getV4iReadable();
@@ -913,25 +913,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
-      VectorsTest.checkV2IZero(v.getV2iReadable());
+      checkV2IZero(v.getV2iReadable());
       // VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable3LType k = v.getV3iReadable();
       final int x = (index * 10) + 1;
@@ -966,25 +966,25 @@ public final class VectorsTest
     for (int index = 0; index < 8; ++index) {
       c.setElementIndex(index);
 
-      VectorsTest.checkV2DZero(v.getV2hReadable());
-      VectorsTest.checkV3DZero(v.getV3hReadable());
-      VectorsTest.checkV4DZero(v.getV4hReadable());
+      checkV2DZero(v.getV2hReadable());
+      checkV3DZero(v.getV3hReadable());
+      checkV4DZero(v.getV4hReadable());
 
-      VectorsTest.checkV2DZero(v.getV2dReadable());
-      VectorsTest.checkV3DZero(v.getV3dReadable());
-      VectorsTest.checkV4DZero(v.getV4dReadable());
+      checkV2DZero(v.getV2dReadable());
+      checkV3DZero(v.getV3dReadable());
+      checkV4DZero(v.getV4dReadable());
 
-      VectorsTest.checkV2FZero(v.getV2fReadable());
-      VectorsTest.checkV3FZero(v.getV3fReadable());
-      VectorsTest.checkV4FZero(v.getV4fReadable());
+      checkV2FZero(v.getV2fReadable());
+      checkV3FZero(v.getV3fReadable());
+      checkV4FZero(v.getV4fReadable());
 
-      VectorsTest.checkV2LZero(v.getV2lReadable());
-      VectorsTest.checkV3LZero(v.getV3lReadable());
-      VectorsTest.checkV4LZero(v.getV4lReadable());
+      checkV2LZero(v.getV2lReadable());
+      checkV3LZero(v.getV3lReadable());
+      checkV4LZero(v.getV4lReadable());
 
       // VectorsTest.checkV2IZero(v.getV2iReadable());
-      VectorsTest.checkV3IZero(v.getV3iReadable());
-      VectorsTest.checkV4IZero(v.getV4iReadable());
+      checkV3IZero(v.getV3iReadable());
+      checkV4IZero(v.getV4iReadable());
 
       final VectorReadable2LType k = v.getV2iReadable();
       final int x = (index * 10) + 1;

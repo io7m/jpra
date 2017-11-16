@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.tests.model;
 
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.contexts.GlobalContextType;
 import com.io7m.jpra.model.contexts.GlobalContexts;
@@ -30,6 +29,7 @@ import com.io7m.jpra.model.types.TIntegerSigned;
 import com.io7m.jpra.model.types.TPacked;
 import com.io7m.jpra.model.types.TPackedBuilderType;
 import com.io7m.jranges.RangeInclusiveB;
+import io.vavr.collection.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,7 +50,7 @@ public final class TPackedTest
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -72,7 +72,7 @@ public final class TPackedTest
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -144,7 +144,7 @@ public final class TPackedTest
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));

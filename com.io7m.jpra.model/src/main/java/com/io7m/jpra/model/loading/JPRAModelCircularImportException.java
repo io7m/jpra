@@ -16,10 +16,10 @@
 
 package com.io7m.jpra.model.loading;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
+import io.vavr.collection.List;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public final class JPRAModelCircularImportException extends JPRAException
 {
-  private final ImmutableList<PackageImport> imports;
+  private final List<PackageImport> imports;
 
   /**
    * Construct a type_model loading exception.
@@ -40,7 +40,7 @@ public final class JPRAModelCircularImportException extends JPRAException
 
   public JPRAModelCircularImportException(
     final String message,
-    final ImmutableList<PackageImport> in_imports)
+    final List<PackageImport> in_imports)
   {
     super(message);
     this.imports = Objects.requireNonNull(in_imports, "Imports");
@@ -53,7 +53,7 @@ public final class JPRAModelCircularImportException extends JPRAException
    * @return The circular import path
    */
 
-  public ImmutableList<PackageImport> getImports()
+  public List<PackageImport> getImports()
   {
     return this.imports;
   }

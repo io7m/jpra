@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.java.generation;
 
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatter;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatterType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -39,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +82,7 @@ public final class CodeGenerationMain
     LOG.debug("source directory: {}", source_directory);
     LOG.debug("target directory: {}", target_directory);
 
-    final List<PackageNameQualified> pack_names = Lists.mutable.empty();
+    final List<PackageNameQualified> pack_names = new ArrayList<>();
     pack_names.add(
       PackageNameQualified.valueOf(
         "com.io7m.jpra.tests.compiler.java.generation.code"));

@@ -16,12 +16,6 @@
 
 package com.io7m.jpra.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.Untyped;
@@ -91,9 +85,13 @@ import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.jranges.RangeInclusiveB;
 import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -247,14 +245,14 @@ public final class JPRAChecker implements JPRACheckerType
   {
     this.type_context = TypeExpressionContext.PACKED;
 
-    final ImmutableMap<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>>
+    final io.vavr.collection.Map<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>>
       orig_named = t.getFieldsByName();
-    final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
-      fields_named = Maps.mutable.empty();
-    final ImmutableList<PackedFieldDeclType<IdentifierType, Untyped>>
+    final java.util.HashMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+      fields_named = new java.util.HashMap<>();
+    final List<PackedFieldDeclType<IdentifierType, Untyped>>
       orig_ordered = t.getFieldsInDeclarationOrder();
-    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
-      fields_ordered = Lists.mutable.empty();
+    final ArrayList<PackedFieldDeclType<IdentifierType, TType>>
+      fields_ordered = new ArrayList<>();
 
     final TPackedBuilderType b =
       TPacked.newBuilder(this.package_ctx, t.getIdentifier(), t.getName());
@@ -295,11 +293,10 @@ public final class JPRAChecker implements JPRACheckerType
       Integer.valueOf(fields_named.size()),
       Integer.valueOf(orig_named.size()));
 
-    fields_named.forEachKey(
-      k -> Preconditions.checkPreconditionV(
-        orig_named.containsKey(k),
-        "Names must contain %s",
-        k));
+    fields_named.forEach((k, value) -> {
+      Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k);
+    });
 
     final BigInteger sv = b.getCurrentSize().getValue();
     if (!this.caps.isPackedSizeBitsSupported(sv)) {
@@ -320,26 +317,25 @@ public final class JPRAChecker implements JPRACheckerType
       Integer.valueOf(type.getFieldsByName().size()),
       Integer.valueOf(orig_named.size()));
 
-    type.getFieldsByName().forEachKey(
-      k -> Preconditions.checkPreconditionV(
-        orig_named.containsKey(k),
-        "Names must contain %s",
-        k));
+    type.getFieldsByName().forEach((k, value) -> {
+      Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k);
+    });
 
     return new TypeDeclPacked<>(
       t.getIdentifier(),
       type,
-      fields_named.toImmutable(),
+      HashMap.ofAll(fields_named),
       t.getName(),
-      fields_ordered.toImmutable());
+      List.ofAll(fields_ordered));
   }
 
   private PackedFieldDeclType<IdentifierType, TType>
   checkTypeDeclPackedFieldValue(
     final PackedFieldDeclValue<IdentifierType, Untyped> r,
-    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
+    final ArrayList<PackedFieldDeclType<IdentifierType, TType>>
       fields_ordered,
-    final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+    final java.util.HashMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
       fields_named,
     final TPackedBuilderType b)
     throws JPRACompilerCheckerException
@@ -372,7 +368,7 @@ public final class JPRAChecker implements JPRACheckerType
   private PackedFieldDeclType<IdentifierType, TType>
   checkTypeDeclPackedFieldPaddingBits(
     final PackedFieldDeclPaddingBits<IdentifierType, Untyped> r,
-    final MutableList<PackedFieldDeclType<IdentifierType, TType>>
+    final ArrayList<PackedFieldDeclType<IdentifierType, TType>>
       fields_ordered,
     final TPackedBuilderType b)
     throws JPRACompilerCheckerException
@@ -408,14 +404,14 @@ public final class JPRAChecker implements JPRACheckerType
   {
     this.type_context = TypeExpressionContext.RECORD;
 
-    final ImmutableMap<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>>
+    final io.vavr.collection.Map<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>>
       orig_named = t.getFieldsByName();
-    final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
-      fields_named = Maps.mutable.empty();
-    final ImmutableList<RecordFieldDeclType<IdentifierType, Untyped>>
+    final java.util.HashMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
+      fields_named = new java.util.HashMap<>();
+    final List<RecordFieldDeclType<IdentifierType, Untyped>>
       orig_ordered = t.getFieldsInDeclarationOrder();
-    final MutableList<RecordFieldDeclType<IdentifierType, TType>>
-      fields_ordered = Lists.mutable.empty();
+    final ArrayList<RecordFieldDeclType<IdentifierType, TType>>
+      fields_ordered = new ArrayList<>();
 
     final TRecordBuilderType b =
       TRecord.newBuilder(this.package_ctx, t.getIdentifier(), t.getName());
@@ -454,9 +450,11 @@ public final class JPRAChecker implements JPRACheckerType
       fields_named.size() == orig_named.size(), "%d == %d",
       Integer.valueOf(fields_named.size()),
       Integer.valueOf(orig_named.size()));
-    fields_named.forEachKey(
-      k -> Preconditions.checkPreconditionV(
-        orig_named.containsKey(k), "Names must contain %s", k));
+
+    fields_named.forEach((k, value) -> {
+      Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k);
+    });
 
     final TRecord type = b.build();
     Preconditions.checkPreconditionV(
@@ -469,24 +467,26 @@ public final class JPRAChecker implements JPRACheckerType
       "%d == %d",
       Integer.valueOf(type.getFieldsByName().size()),
       Integer.valueOf(orig_named.size()));
-    type.getFieldsByName().forEachKey(
-      k -> Preconditions.checkPreconditionV(
-        orig_named.containsKey(k), "Names must contain %s", k));
+
+    type.getFieldsByName().forEach((k, value) -> {
+      Preconditions.checkPreconditionV(
+        orig_named.containsKey(k), "Names must contain %s", k);
+    });
 
     return new TypeDeclRecord<>(
       t.getIdentifier(),
       type,
-      fields_named.toImmutable(),
+      HashMap.ofAll(fields_named),
       t.getName(),
-      fields_ordered.toImmutable());
+      List.ofAll(fields_ordered));
   }
 
   private RecordFieldDeclType<IdentifierType, TType>
   checkTypeDeclRecordFieldValue(
     final RecordFieldDeclValue<IdentifierType, Untyped> r,
-    final MutableList<RecordFieldDeclType<IdentifierType, TType>>
+    final ArrayList<RecordFieldDeclType<IdentifierType, TType>>
       fields_ordered,
-    final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
+    final java.util.HashMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
       fields_named,
     final TRecordBuilderType b)
     throws JPRACompilerCheckerException
@@ -504,7 +504,7 @@ public final class JPRAChecker implements JPRACheckerType
   private RecordFieldDeclType<IdentifierType, TType>
   checkTypeDeclRecordFieldPaddingOctets(
     final RecordFieldDeclPaddingOctets<IdentifierType, Untyped> r,
-    final MutableList<RecordFieldDeclType<IdentifierType, TType>>
+    final ArrayList<RecordFieldDeclType<IdentifierType, TType>>
       fields_ordered,
     final TRecordBuilderType b)
     throws JPRACompilerCheckerException
@@ -1031,24 +1031,25 @@ public final class JPRAChecker implements JPRACheckerType
   private static final class PackageContext implements PackageContextType
   {
     private final GlobalContextType context;
-    private final MutableMap<TypeName, TypeUserDefinedType> types;
+    private final java.util.HashMap<TypeName, TypeUserDefinedType> types;
     private final PackageNameQualified name;
-    private final MutableMap<TypeName, TypeUserDefinedType> types_view;
+    private final Map<TypeName, TypeUserDefinedType> types_view;
 
     PackageContext(
       final GlobalContextType c,
       final PackageNameQualified in_name)
     {
       this.context = Objects.requireNonNull(c, "Context");
-      this.types = Maps.mutable.empty();
-      this.types_view = this.types.asUnmodifiable();
+      this.types = new java.util.HashMap<>();
+      this.types_view = Collections.unmodifiableMap(this.types);
       this.name = Objects.requireNonNull(in_name, "Name");
     }
 
-    void putType(final TypeUserDefinedType t)
+    void putType(
+      final TypeUserDefinedType t)
     {
       Preconditions.checkPreconditionV(
-        !this.types.contains(t.getName()),
+        !this.types.containsKey(t.getName()),
         "Types must not contain %s",
         t.getName());
       this.types.put(t.getName(), t);

@@ -16,12 +16,7 @@
 
 package com.io7m.jpra.model.types;
 
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
-import com.gs.collections.impl.factory.Sets;
+
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -29,20 +24,24 @@ import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 
 final class TRecordBuilder implements TRecordBuilderType
 {
-  private final MutableList<TRecord.FieldType> type_fields_ordered;
-  private final MutableMap<FieldName, TRecord.FieldValue> type_fields_named;
+  private final ArrayList<TRecord.FieldType> type_fields_ordered;
+  private final HashMap<FieldName, TRecord.FieldValue> type_fields_named;
   private final PackageContextType package_context;
   private final IdentifierType identifier;
   private final TypeName name;
   private final boolean finished;
-  private final MutableSet<IdentifierType> identifiers;
+  private final HashSet<IdentifierType> identifiers;
 
   TRecordBuilder(
     final PackageContextType in_package,
@@ -53,9 +52,9 @@ final class TRecordBuilder implements TRecordBuilderType
     this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
     this.name = Objects.requireNonNull(in_ident, "Type name");
 
-    this.type_fields_ordered = Lists.mutable.empty();
-    this.type_fields_named = Maps.mutable.empty();
-    this.identifiers = Sets.mutable.empty();
+    this.type_fields_ordered = new ArrayList<>();
+    this.type_fields_named = new HashMap<>();
+    this.identifiers = new HashSet<>();
 
     this.identifiers.add(this.identifier);
     this.finished = false;
@@ -100,8 +99,8 @@ final class TRecordBuilder implements TRecordBuilderType
       this.package_context,
       this.identifier,
       this.name,
-      this.type_fields_named.toImmutable(),
-      this.type_fields_ordered.toImmutable());
+      io.vavr.collection.HashMap.ofAll(this.type_fields_named),
+      List.ofAll(this.type_fields_ordered));
 
     for (final TRecord.FieldType f : this.type_fields_ordered) {
       f.matchField(

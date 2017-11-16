@@ -16,14 +16,13 @@
 
 package com.io7m.jpra.model.type_declarations;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.statements.StatementMatcherType;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -41,8 +40,8 @@ import java.util.Optional;
 public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
 {
   private final TypeName name;
-  private final ImmutableList<RecordFieldDeclType<I, T>> fields_order;
-  private final ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> fields_name;
+  private final List<RecordFieldDeclType<I, T>> fields_order;
+  private final Map<FieldName, RecordFieldDeclValue<I, T>> fields_name;
   private final I identifier;
   private final T type;
 
@@ -59,9 +58,9 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
   public TypeDeclRecord(
     final I in_identifier,
     final T in_type,
-    final ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> in_fields_name,
+    final Map<FieldName, RecordFieldDeclValue<I, T>> in_fields_name,
     final TypeName in_name,
-    final ImmutableList<RecordFieldDeclType<I, T>> in_fields_order)
+    final List<RecordFieldDeclType<I, T>> in_fields_order)
   {
     this.identifier =
       Objects.requireNonNull(in_identifier, "Identifier");
@@ -80,21 +79,20 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
       Integer.valueOf(this.fields_name.size()),
       Integer.valueOf(this.fields_order.size()));
 
-    this.fields_order.forEach(
-      (Procedure<RecordFieldDeclType<I, T>>) r -> {
-        final Optional<FieldName> r_name_opt = RecordFieldDecl.name(r);
-        r_name_opt.ifPresent(r_name -> Preconditions.checkPreconditionV(
-          this.fields_name.containsKey(r_name),
-          "Fields must contain %s",
-          r_name));
-      });
+    this.fields_order.forEach(r -> {
+      final Optional<FieldName> r_name_opt = RecordFieldDecl.name(r);
+      r_name_opt.ifPresent(r_name -> Preconditions.checkPreconditionV(
+        this.fields_name.containsKey(r_name),
+        "Fields must contain %s",
+        r_name));
+    });
   }
 
   /**
    * @return The fields by name
    */
 
-  public ImmutableMap<FieldName, RecordFieldDeclValue<I, T>> getFieldsByName()
+  public Map<FieldName, RecordFieldDeclValue<I, T>> getFieldsByName()
   {
     return this.fields_name;
   }
@@ -103,7 +101,7 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
    * @return The fields in declaration order
    */
 
-  public ImmutableList<RecordFieldDeclType<I, T>> getFieldsInDeclarationOrder()
+  public List<RecordFieldDeclType<I, T>> getFieldsInDeclarationOrder()
   {
     return this.fields_order;
   }

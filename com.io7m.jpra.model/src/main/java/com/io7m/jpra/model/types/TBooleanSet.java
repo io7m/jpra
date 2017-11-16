@@ -16,9 +16,9 @@
 
 package com.io7m.jpra.model.types;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
+import io.vavr.collection.List;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -33,7 +33,7 @@ import java.util.Optional;
 public final class TBooleanSet implements TType
 {
   private final Size<SizeUnitOctetsType> size;
-  private final ImmutableList<FieldName> fields;
+  private final List<FieldName> fields;
   private final Optional<LexicalPosition<Path>> lex;
   private final Size<SizeUnitBitsType> size_bits;
 
@@ -47,7 +47,7 @@ public final class TBooleanSet implements TType
 
   public TBooleanSet(
     final Optional<LexicalPosition<Path>> in_lex,
-    final ImmutableList<FieldName> in_fields,
+    final List<FieldName> in_fields,
     final Size<SizeUnitOctetsType> in_size)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
@@ -69,7 +69,7 @@ public final class TBooleanSet implements TType
    * @return The fields in declaration order
    */
 
-  public ImmutableList<FieldName> getFieldsInDeclarationOrder()
+  public List<FieldName> getFieldsInDeclarationOrder()
   {
     return this.fields;
   }

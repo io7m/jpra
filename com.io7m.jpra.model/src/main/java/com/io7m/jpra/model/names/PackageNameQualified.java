@@ -16,13 +16,10 @@
 
 package com.io7m.jpra.model.names;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.ModelElementType;
+import io.vavr.collection.List;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -36,7 +33,7 @@ import java.util.Optional;
 @Immutable
 public final class PackageNameQualified implements ModelElementType
 {
-  private final ImmutableList<PackageNameUnqualified> value;
+  private final List<PackageNameUnqualified> value;
   private final String image;
 
   /**
@@ -46,7 +43,7 @@ public final class PackageNameQualified implements ModelElementType
    */
 
   public PackageNameQualified(
-    final ImmutableList<PackageNameUnqualified> in_value)
+    final List<PackageNameUnqualified> in_value)
   {
     this.value = Objects.requireNonNull(in_value, "Value");
 
@@ -76,7 +73,7 @@ public final class PackageNameQualified implements ModelElementType
 
   public static PackageNameQualified of(final PackageNameUnqualified... p)
   {
-    return new PackageNameQualified(Lists.immutable.of(p));
+    return new PackageNameQualified(List.of(p));
   }
 
   /**
@@ -90,16 +87,9 @@ public final class PackageNameQualified implements ModelElementType
   public static PackageNameQualified valueOf(final String text)
   {
     final String[] segments = text.split("\\.");
-
-    final MutableList<PackageNameUnqualified> names_base = new FastList<>();
-    for (int index = 0; index < segments.length; ++index) {
-      final String raw = segments[index];
-      names_base.add(new PackageNameUnqualified(Optional.empty(), raw));
-    }
-
-    final ImmutableList<PackageNameUnqualified> names =
-      names_base.toImmutable();
-    return new PackageNameQualified(names);
+    return new PackageNameQualified(
+      List.of(segments)
+        .map(raw -> new PackageNameUnqualified(Optional.empty(), raw)));
   }
 
   @Override
@@ -112,7 +102,7 @@ public final class PackageNameQualified implements ModelElementType
    * @return The raw name segments
    */
 
-  public ImmutableList<PackageNameUnqualified> getValue()
+  public List<PackageNameUnqualified> getValue()
   {
     return this.value;
   }

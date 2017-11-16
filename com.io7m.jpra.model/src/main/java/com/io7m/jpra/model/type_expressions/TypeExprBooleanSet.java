@@ -16,10 +16,10 @@
 
 package com.io7m.jpra.model.type_expressions;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
+import io.vavr.collection.List;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -35,7 +35,7 @@ import java.util.Optional;
 public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
 {
   private final SizeExprType<I, T> size;
-  private final ImmutableList<FieldName> fields;
+  private final List<FieldName> fields;
   private final Optional<LexicalPosition<Path>> lex;
   private final T type;
 
@@ -51,7 +51,7 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
   public TypeExprBooleanSet(
     final T in_type,
     final Optional<LexicalPosition<Path>> in_lex,
-    final ImmutableList<FieldName> in_fields,
+    final List<FieldName> in_fields,
     final SizeExprType<I, T> in_size)
   {
     this.type = Objects.requireNonNull(in_type, "Type");
@@ -64,7 +64,7 @@ public final class TypeExprBooleanSet<I, T> implements TypeExprType<I, T>
    * @return The fields in declaration order
    */
 
-  public ImmutableList<FieldName> getFieldsInDeclarationOrder()
+  public List<FieldName> getFieldsInDeclarationOrder()
   {
     return this.fields;
   }

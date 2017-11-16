@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.maven;
 
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatter;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatterType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -43,6 +42,7 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,14 +58,19 @@ public final class JPRACodeGeneratorMojo extends AbstractMojo
    * The list of packages that will be exported to Java source code.
    */
 
-  @Parameter private final List<String> packages = Lists.mutable.empty();
-  @Parameter(defaultValue = "${project}") private MavenProject project;
+  @Parameter
+  private final ArrayList<String> packages = new ArrayList<>();
+
+  @Parameter(defaultValue = "${project}")
+  private MavenProject project;
+
   /**
    * The directory that will contain source files.
    */
 
-  @Parameter(defaultValue = "${project.basedir}/src/main/jpra") private File
-    sourceDirectory;
+  @Parameter(defaultValue = "${project.basedir}/src/main/jpra")
+  private File sourceDirectory;
+
   /**
    * The directory that will contain generated Java files.
    */

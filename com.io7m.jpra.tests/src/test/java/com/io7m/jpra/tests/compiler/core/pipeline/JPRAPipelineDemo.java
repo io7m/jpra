@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.core.pipeline;
 
-import com.gs.collections.impl.factory.Maps;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jlexing.core.LexicalPosition;
@@ -58,6 +57,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -88,7 +88,7 @@ public final class JPRAPipelineDemo
       @Override
       public Map<TypeName, TypeUserDefinedType> getTypes()
       {
-        return Maps.mutable.empty();
+        return new HashMap<>();
       }
 
       @Override
@@ -105,7 +105,7 @@ public final class JPRAPipelineDemo
       }
     };
 
-    final JSXParserType sexpr = JPRAPipelineDemo.newJSXParser(System.in);
+    final JSXParserType sexpr = newJSXParser(System.in);
     final GlobalContextType c = GlobalContexts.newContext(loader);
     final JSXSerializerType serial = JSXSerializerTrivial.newSerializer();
     final JPRAReferenceParserType ref = JPRAReferenceParser.newParser(serial);
@@ -133,7 +133,7 @@ public final class JPRAPipelineDemo
           pipe.onEOF(lex);
         }
       } catch (final JSXParserException e) {
-        JPRAPipelineDemo.LOG.error(
+        LOG.error(
           "{}: {}", e.getLexicalInformation(), e.getMessage());
         System.out.println();
       } catch (final JPRACompilerException e) {
@@ -142,10 +142,10 @@ public final class JPRAPipelineDemo
         final String error_name = e.getClass().getSimpleName();
         if (lex_opt.isPresent()) {
           final LexicalPosition<Path> elex = lex_opt.get();
-          JPRAPipelineDemo.LOG.error(
+          LOG.error(
             "{}: {}: {}", error_name, elex, e.getMessage());
         } else {
-          JPRAPipelineDemo.LOG.error("{}: {}", error_name, e.getMessage());
+          LOG.error("{}: {}", error_name, e.getMessage());
         }
         System.out.println();
       }

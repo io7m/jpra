@@ -71,7 +71,7 @@ public final class JPRAParserTest extends JPRAParserContract
   {
     try {
       final InputStream s = JPRAParserTest.class.getResourceAsStream(name);
-      final JSXParserType p = JPRAParserTest.newJSXParser(s);
+      final JSXParserType p = newJSXParser(s);
       return p.parseExpression();
     } catch (final JSXParserException | IOException e) {
       throw new UnreachableCodeException(e);
@@ -83,7 +83,7 @@ public final class JPRAParserTest extends JPRAParserContract
   {
     try {
       final InputStream s = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-      final JSXParserType p = JPRAParserTest.newJSXParser(s);
+      final JSXParserType p = newJSXParser(s);
       return p.parseExpression();
     } catch (final JSXParserException | IOException e) {
       throw new UnreachableCodeException(e);

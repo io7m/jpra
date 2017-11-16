@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
@@ -29,6 +27,7 @@ import com.io7m.jpra.model.names.TypeReference;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -157,7 +156,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     }
   }
 
-  private static ImmutableList<FieldName> getFieldPath(
+  private static List<FieldName> getFieldPath(
     final Optional<LexicalPosition<Path>> lex,
     final SExpressionSymbolType se,
     final String text)
@@ -165,9 +164,9 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   {
     Preconditions.checkPrecondition(!text.isEmpty(), "Text must non-empty");
     final String[] segments = text.split("\\.");
-    return Lists.immutable.of(segments)
-      .reject(String::isEmpty)
-      .collect(x -> new FieldName(lex, x));
+    return List.of(segments)
+      .filter(s -> !s.isEmpty())
+      .map(s -> new FieldName(lex, s));
   }
 
   /**
@@ -230,7 +229,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
         final PackageNameUnqualified p_name =
           new PackageNameUnqualified(lex, m.group(1));
         final TypeName t_name = new TypeName(lex, m.group(2));
-        final ImmutableList<FieldName> fields =
+        final List<FieldName> fields =
           getFieldPath(lex, se, m.group(3));
         return new FieldReference(
           Optional.of(p_name), Optional.of(t_name), FieldPath.ofList(fields));
@@ -241,7 +240,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       final Matcher m = PATTERN_TF.matcher(text);
       if (m.matches()) {
         final TypeName t_name = new TypeName(lex, m.group(1));
-        final ImmutableList<FieldName> fields =
+        final List<FieldName> fields =
           getFieldPath(lex, se, m.group(2));
         return new FieldReference(
           Optional.empty(), Optional.of(t_name), FieldPath.ofList(fields));
@@ -251,7 +250,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final Matcher m = PATTERN_F.matcher(text);
       if (m.matches()) {
-        final ImmutableList<FieldName> fields =
+        final List<FieldName> fields =
           getFieldPath(lex, se, text);
         return new FieldReference(
           Optional.empty(), Optional.empty(), FieldPath.ofList(fields));

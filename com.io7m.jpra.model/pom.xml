@@ -40,17 +40,14 @@
       <groupId>com.io7m.junreachable</groupId>
       <artifactId>com.io7m.junreachable.core</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.jgrapht</groupId>
       <artifactId>jgrapht-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.goldmansachs</groupId>
-      <artifactId>gs-collections-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.goldmansachs</groupId>
-      <artifactId>gs-collections</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

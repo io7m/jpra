@@ -90,7 +90,7 @@ public final class JPRAResolverTest extends JPRAResolverContract
   {
     try {
       final InputStream s = new ByteArrayInputStream(expr.getBytes("UTF-8"));
-      final JSXParserType p = JPRAResolverTest.newJSXParser(s);
+      final JSXParserType p = newJSXParser(s);
       return p.parseExpression();
     } catch (final JSXParserException | IOException e) {
       throw new UnreachableCodeException(e);

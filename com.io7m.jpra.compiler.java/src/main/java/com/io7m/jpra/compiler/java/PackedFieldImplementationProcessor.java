@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jnfp.core.NFPSignedDoubleInt;
 import com.io7m.jnfp.core.NFPSignedDoubleLong;
 import com.io7m.jnfp.core.NFPUnsignedDoubleInt;
@@ -45,6 +43,7 @@ import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +93,7 @@ public final class PackedFieldImplementationProcessor
     final TypeSpec.Builder class_builder,
     final TPacked t)
   {
-    final ImmutableList<TPacked.FieldType> ordered =
+    final List<TPacked.FieldType> ordered =
       t.getFieldsInDeclarationOrder();
     final BigInteger container_size = t.getSizeInBits().getValue();
 
@@ -126,8 +125,10 @@ public final class PackedFieldImplementationProcessor
 
     setb.addStatement("$T result = 0", arith_type);
 
-    ordered.selectInstancesOf(TPacked.FieldValue.class).forEach(
-      (Procedure<TPacked.FieldValue>) fv -> {
+    ordered.filter(x -> x instanceof TPacked.FieldValue)
+      .map(x -> (TPacked.FieldValue) x)
+      .forEach(fv -> {
+
         final BigInteger f_size = fv.getSize().getValue();
         final FieldName f_name = fv.getName();
         final TIntegerType f_type = fv.getType();

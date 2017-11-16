@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.set.ImmutableSet;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.Untyped;
@@ -38,6 +36,8 @@ import com.io7m.jpra.model.types.TIntegerType;
 import com.io7m.jpra.model.types.TType;
 import com.io7m.jranges.RangeInclusiveB;
 import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -101,7 +101,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   integerSizeNotSupported(
     final TypeExprType<IdentifierType, Untyped> e,
     final Size<T> size,
-    final ImmutableList<RangeInclusiveB> sizes)
+    final List<RangeInclusiveB> sizes)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Integer size not supported for record fields.");
@@ -150,7 +150,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException floatSizeNotSupported(
     final TypeExprFloat<IdentifierType, Untyped> e,
     final Size<SizeUnitBitsType> size,
-    final ImmutableList<RangeInclusiveB> sizes)
+    final List<RangeInclusiveB> sizes)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Float size not supported for record fields.");
@@ -199,7 +199,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException stringEncodingNotSupported(
     final TypeExprString<IdentifierType, Untyped> e,
     final String encoding,
-    final ImmutableSet<String> encodings)
+    final Set<String> encodings)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("String encoding not supported.");
@@ -296,7 +296,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException vectorSizeNotSupported(
     final TypeExprVector<IdentifierType, Untyped> e,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector size not supported.");
@@ -365,7 +365,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException vectorIntegerSizeNotSupported(
     final TIntegerType e,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector integer element size not supported.");
@@ -414,7 +414,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException vectorFloatSizeNotSupported(
     final TFloat e,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Vector float element size not supported.");
@@ -465,7 +465,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final TypeExprMatrix<IdentifierType, Untyped> e,
     final BigInteger tw,
     final BigInteger th,
-    final ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> supported)
+    final List<Tuple2<RangeInclusiveB, RangeInclusiveB>> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix size not supported.");
@@ -557,7 +557,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException matrixFloatSizeNotSupported(
     final TFloat e,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix float element size not supported.");
@@ -606,7 +606,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException matrixIntegerSizeNotSupported(
     final TIntegerType e,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Matrix integer element size not supported.");
@@ -708,7 +708,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
   public static JPRACompilerCheckerException packedSizeNotSupported(
     final TypeName name,
     final BigInteger size,
-    final ImmutableList<RangeInclusiveB> supported)
+    final List<RangeInclusiveB> supported)
   {
     final StringBuilder sb = new StringBuilder(128);
     sb.append("Packed type size not supported.");

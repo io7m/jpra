@@ -16,14 +16,13 @@
 
 package com.io7m.jpra.model.type_declarations;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.statements.StatementMatcherType;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import net.jcip.annotations.Immutable;
 
 import java.nio.file.Path;
@@ -41,9 +40,8 @@ import java.util.Optional;
 public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
 {
   private final TypeName name;
-  private final ImmutableList<PackedFieldDeclType<I, T>>
-    fields_order;
-  private final ImmutableMap<FieldName, PackedFieldDeclValue<I, T>> fields_name;
+  private final List<PackedFieldDeclType<I, T>> fields_order;
+  private final Map<FieldName, PackedFieldDeclValue<I, T>> fields_name;
   private final I identifier;
   private final T type;
 
@@ -60,9 +58,9 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
   public TypeDeclPacked(
     final I in_identifier,
     final T in_type,
-    final ImmutableMap<FieldName, PackedFieldDeclValue<I, T>> in_fields_name,
+    final Map<FieldName, PackedFieldDeclValue<I, T>> in_fields_name,
     final TypeName in_name,
-    final ImmutableList<PackedFieldDeclType<I, T>> in_fields_order)
+    final List<PackedFieldDeclType<I, T>> in_fields_order)
   {
     this.identifier =
       Objects.requireNonNull(in_identifier, "Identifier");
@@ -81,16 +79,15 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
       Integer.valueOf(this.fields_name.size()),
       Integer.valueOf(this.fields_order.size()));
 
-    this.fields_order.forEach(
-      (Procedure<PackedFieldDeclType<I, T>>) r -> {
-        final Optional<FieldName> r_name = PackedFieldDecl.name(r);
-        if (r_name.isPresent()) {
-          final FieldName rn = r_name.get();
-          Preconditions.checkPreconditionV(
-            this.fields_name.containsKey(rn),
-            "Fields must contain %s", rn);
-        }
-      });
+    this.fields_order.forEach(r -> {
+      final Optional<FieldName> r_name = PackedFieldDecl.name(r);
+      if (r_name.isPresent()) {
+        final FieldName rn = r_name.get();
+        Preconditions.checkPreconditionV(
+          this.fields_name.containsKey(rn),
+          "Fields must contain %s", rn);
+      }
+    });
   }
 
   @Override
@@ -137,7 +134,7 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
    * @return The fields in declaration order
    */
 
-  public ImmutableList<PackedFieldDeclType<I, T>> getFieldsInDeclarationOrder()
+  public List<PackedFieldDeclType<I, T>> getFieldsInDeclarationOrder()
   {
     return this.fields_order;
   }
@@ -146,7 +143,7 @@ public final class TypeDeclPacked<I, T> implements TypeDeclType<I, T>
    * @return The fields by name
    */
 
-  public ImmutableMap<FieldName, PackedFieldDeclValue<I, T>> getFieldsByName()
+  public Map<FieldName, PackedFieldDeclValue<I, T>> getFieldsByName()
   {
     return this.fields_name;
   }

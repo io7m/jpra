@@ -16,11 +16,11 @@
 
 package com.io7m.jpra.model.types;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 
 import java.util.Objects;
 
@@ -51,9 +51,9 @@ public final class TRecords
     Objects.requireNonNull(t, "Record");
     Objects.requireNonNull(p, "Field path");
 
-    final ImmutableList<FieldName> es = p.getElements();
+    final List<FieldName> es = p.getElements();
     final FieldName first = es.get(0);
-    final ImmutableList<FieldName> rest = es.drop(1);
+    final List<FieldName> rest = es.drop(1);
 
     return typeForFieldPathActual(t, first, rest);
   }
@@ -61,7 +61,7 @@ public final class TRecords
   private static TypeLookupType typeForFieldPathActual(
     final TType rt,
     final FieldName name,
-    final ImmutableList<FieldName> rest)
+    final List<FieldName> rest)
   {
     return rt.matchType(
       new TypeMatcherType<TypeLookupType, UnreachableCodeException>()
@@ -111,14 +111,14 @@ public final class TRecords
         @Override
         public TypeLookupType matchRecord(final TRecord t)
         {
-          final ImmutableMap<FieldName, TRecord.FieldValue> by_name =
+          final Map<FieldName, TRecord.FieldValue> by_name =
             t.getFieldsByName();
 
           if (!by_name.containsKey(name)) {
             return new TypeLookupFailed(t, name, rest);
           }
 
-          final TRecord.FieldValue f = by_name.get(name);
+          final TRecord.FieldValue f = by_name.get(name).get();
           final FieldName next = rest.get(0);
           return typeForFieldPathActual(
             f.getType(), next, rest.drop(1));
@@ -127,14 +127,14 @@ public final class TRecords
         @Override
         public TypeLookupType matchPacked(final TPacked t)
         {
-          final ImmutableMap<FieldName, TPacked.FieldValue> by_name =
+          final Map<FieldName, TPacked.FieldValue> by_name =
             t.getFieldsByName();
 
           if (!by_name.containsKey(name)) {
             return new TypeLookupFailed(t, name, rest);
           }
 
-          final TPacked.FieldValue f = by_name.get(name);
+          final TPacked.FieldValue f = by_name.get(name).get();
           final FieldName next = rest.get(0);
           return typeForFieldPathActual(
             f.getType(), next, rest.drop(1));
@@ -200,7 +200,7 @@ public final class TRecords
   {
     private final TType end;
     private final FieldName name;
-    private final ImmutableList<FieldName> rest;
+    private final List<FieldName> rest;
 
     /**
      * Construct a failure.
@@ -213,7 +213,7 @@ public final class TRecords
     public TypeLookupFailed(
       final TType in_t,
       final FieldName in_name,
-      final ImmutableList<FieldName> in_rest)
+      final List<FieldName> in_rest)
     {
       this.end = Objects.requireNonNull(in_t, "Type");
       this.name = Objects.requireNonNull(in_name, "Field name");

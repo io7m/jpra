@@ -16,9 +16,6 @@
 
 package com.io7m.jpra.model.contexts;
 
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jpra.core.JPRAException;
 import com.io7m.jpra.model.PackageImport;
@@ -36,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -55,9 +54,9 @@ public final class GlobalContexts implements GlobalContextType
   }
 
   private final DirectedAcyclicGraph<PackageNameQualified, PackageImport> graph;
-  private final MutableMap<PackageNameQualified, PackageContextType> packages;
+  private final HashMap<PackageNameQualified, PackageContextType> packages;
   private final JPRAPackageLoaderType loader;
-  private final MutableMap<IdentifierType, TypeUserDefinedType> types;
+  private final HashMap<IdentifierType, TypeUserDefinedType> types;
 
   private final Queue<JPRAException> error_queue;
   private BigInteger id_pool;
@@ -66,9 +65,9 @@ public final class GlobalContexts implements GlobalContextType
   GlobalContexts(final JPRAPackageLoaderType in_loader)
   {
     this.id_pool = BigInteger.ZERO;
-    this.packages = Maps.mutable.empty();
+    this.packages = new HashMap<>();
     this.loader = Objects.requireNonNull(in_loader, "Loader");
-    this.types = Maps.mutable.empty();
+    this.types = new HashMap<>();
     this.loading = Optional.empty();
     this.error_queue = new ArrayDeque<>(128);
 
@@ -105,7 +104,7 @@ public final class GlobalContexts implements GlobalContextType
   @Override
   public Map<PackageNameQualified, PackageContextType> getPackages()
   {
-    return this.packages.asUnmodifiable();
+    return Collections.unmodifiableMap(this.packages);
   }
 
   @Override
@@ -164,7 +163,7 @@ public final class GlobalContexts implements GlobalContextType
 
         final JPRAModelCircularImportException ex =
           new JPRAModelCircularImportException(
-            "Circular import detected.", Lists.immutable.ofAll(path));
+            "Circular import detected.", io.vavr.collection.List.ofAll(path));
 
         this.error_queue.add(ex);
         throw new JPRAModelLoadingException(

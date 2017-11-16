@@ -102,14 +102,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.goldmansachs</groupId>
-      <artifactId>gs-collections-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.goldmansachs</groupId>
-      <artifactId>gs-collections</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.ieee754b16.Binary16;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
@@ -39,6 +38,7 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import io.vavr.collection.List;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
@@ -191,7 +191,7 @@ final class RecordFieldImplementationProcessor
       Generate a get and set method for each field of the boolean set.
      */
 
-    final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
+    final List<FieldName> ordered = t.getFieldsInDeclarationOrder();
     for (int index = 0; index < ordered.size(); ++index) {
       final FieldName f = ordered.get(index);
 

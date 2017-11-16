@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.types.TArray;
 import com.io7m.jpra.model.types.TBooleanSet;
@@ -37,6 +36,7 @@ import com.io7m.junreachable.UnimplementedCodeException;
 import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import io.vavr.collection.List;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
@@ -101,7 +101,7 @@ public final class PackedFieldInterfaceProcessor
 
   public static void generatedPackedAllMethodInterface(
     final TypeSpec.Builder class_builder,
-    final ImmutableList<TPacked.FieldType> ordered)
+    final List<TPacked.FieldType> ordered)
   {
     final MethodSpec.Builder setb = MethodSpec.methodBuilder("set");
     setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);

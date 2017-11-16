@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.core;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.checker.JPRACompilerCheckerException;
 import com.io7m.jpra.compiler.core.parser.JPRACompilerParseException;
@@ -26,6 +25,7 @@ import com.io7m.jpra.core.JPRAIOException;
 import com.io7m.jpra.model.PackageImport;
 import com.io7m.jpra.model.loading.JPRAModelCircularImportException;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -108,7 +108,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
     final PrintWriter w,
     final JPRAModelCircularImportException e)
   {
-    final ImmutableList<PackageImport> imports = e.getImports();
+    final List<PackageImport> imports = e.getImports();
 
     printLex(
       w, imports.get(0).getTo().getLexicalInformation());

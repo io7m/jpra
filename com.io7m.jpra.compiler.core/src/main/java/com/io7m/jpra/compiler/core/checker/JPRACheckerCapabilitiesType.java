@@ -16,10 +16,11 @@
 
 package com.io7m.jpra.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.set.ImmutableSet;
+
 import com.io7m.jranges.RangeInclusiveB;
 import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 import java.math.BigInteger;
 
@@ -33,7 +34,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code integer} sizes in records
    */
 
-  ImmutableList<RangeInclusiveB> getRecordIntegerSizeBitsSupported();
+  List<RangeInclusiveB> getRecordIntegerSizeBitsSupported();
 
   /**
    * @param size The size in bits
@@ -77,7 +78,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code float} sizes in records
    */
 
-  ImmutableList<RangeInclusiveB> getRecordFloatSizeBitsSupported();
+  List<RangeInclusiveB> getRecordFloatSizeBitsSupported();
 
   /**
    * @param encoding The encoding
@@ -92,13 +93,13 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported string encodings
    */
 
-  ImmutableSet<String> getStringEncodingsSupported();
+  Set<String> getStringEncodingsSupported();
 
   /**
    * @return The set of supported vector sizes
    */
 
-  ImmutableList<RangeInclusiveB> getVectorSizeSupported();
+  List<RangeInclusiveB> getVectorSizeSupported();
 
   /**
    * @param size The size in bits
@@ -113,7 +114,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code integer} sizes in vectors
    */
 
-  ImmutableList<RangeInclusiveB> getVectorIntegerSizeSupported();
+  List<RangeInclusiveB> getVectorIntegerSizeSupported();
 
   /**
    * @param size The size in bits
@@ -128,13 +129,13 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code float} sizes in vectors
    */
 
-  ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported();
+  List<RangeInclusiveB> getVectorFloatSizeSupported();
 
   /**
    * @return The set of supported matrix sizes
    */
 
-  ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
+  List<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported();
 
   /**
@@ -150,7 +151,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code integer} sizes in matrices
    */
 
-  ImmutableList<RangeInclusiveB> getMatrixIntegerSizeSupported();
+  List<RangeInclusiveB> getMatrixIntegerSizeSupported();
 
   /**
    * @param size The size in bits
@@ -165,13 +166,13 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code float} sizes in matrices
    */
 
-  ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported();
+  List<RangeInclusiveB> getMatrixFloatSizeSupported();
 
   /**
    * @return The set of supported {@code integer} sizes in {@code packed} types
    */
 
-  ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported();
+  List<RangeInclusiveB> getPackedIntegerSizeBitsSupported();
 
   /**
    * @param size The size in bits
@@ -186,7 +187,7 @@ public interface JPRACheckerCapabilitiesType
    * @return The set of supported {@code packed} type sizes
    */
 
-  ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported();
+  List<RangeInclusiveB> getPackedSizeBitsSupported();
 
   /**
    * @param size The size in bits

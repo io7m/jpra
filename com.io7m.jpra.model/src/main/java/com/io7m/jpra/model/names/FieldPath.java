@@ -16,10 +16,11 @@
 
 package com.io7m.jpra.model.names;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jaffirm.core.Preconditions;
+import io.vavr.collection.List;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * A path to a field.
@@ -27,16 +28,20 @@ import java.util.Objects;
 
 public final class FieldPath
 {
-  private final ImmutableList<FieldName> path;
+  private final List<FieldName> path;
   private final String image;
 
   private FieldPath(
-    final ImmutableList<FieldName> in_path)
+    final List<FieldName> in_path)
   {
     this.path = Objects.requireNonNull(in_path, "Path");
+
     Preconditions.checkPrecondition(
       !in_path.isEmpty(), "Field path cannot be empty");
-    this.image = in_path.makeString(".");
+
+    this.image =
+      in_path.map(FieldName::getValue)
+        .collect(Collectors.joining("."));
   }
 
   /**
@@ -48,7 +53,7 @@ public final class FieldPath
    */
 
   public static FieldPath ofList(
-    final ImmutableList<FieldName> in_elements)
+    final List<FieldName> in_elements)
   {
     return new FieldPath(in_elements);
   }
@@ -83,7 +88,7 @@ public final class FieldPath
    * @return The path elements
    */
 
-  public ImmutableList<FieldName> getElements()
+  public List<FieldName> getElements()
   {
     return this.path;
   }

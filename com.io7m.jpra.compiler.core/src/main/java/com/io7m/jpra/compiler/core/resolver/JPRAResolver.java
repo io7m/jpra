@@ -16,15 +16,10 @@
 
 package com.io7m.jpra.compiler.core.resolver;
 
-import com.gs.collections.api.bimap.MutableBiMap;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.factory.BiMaps;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jpra.compiler.core.internal.MutableBiMap;
+import com.io7m.jpra.compiler.core.internal.MutableBiMapType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.GlobalContextType;
@@ -73,10 +68,14 @@ import com.io7m.jpra.model.type_expressions.TypeExprTypeOfField;
 import com.io7m.jpra.model.type_expressions.TypeExprVector;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.junreachable.UnimplementedCodeException;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -94,11 +93,11 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   private final GlobalContextType context;
-  private final MutableBiMap<PackageNameUnqualified, PackageNameQualified> import_names;
-  private final MutableMap<PackageNameQualified, PackageContextType> imports;
-  private final MutableMap<TypeName, TypeDeclType<IdentifierType, Untyped>> current_types;
-  private final MutableMap<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>> current_record_fields;
-  private final MutableMap<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>> current_packed_fields;
+  private final MutableBiMapType<PackageNameUnqualified, PackageNameQualified> import_names;
+  private final HashMap<PackageNameQualified, PackageContextType> imports;
+  private final HashMap<TypeName, TypeDeclType<IdentifierType, Untyped>> current_types;
+  private final HashMap<FieldName, RecordFieldDeclValue<IdentifierType, Untyped>> current_record_fields;
+  private final HashMap<FieldName, PackedFieldDeclValue<IdentifierType, Untyped>> current_packed_fields;
 
   private final Optional<PackageNameQualified> expected_package;
   private boolean expected_received;
@@ -115,11 +114,11 @@ public final class JPRAResolver implements JPRAResolverType
 
     this.expected_received = false;
     this.current_package = Optional.empty();
-    this.current_record_fields = Maps.mutable.empty();
-    this.current_packed_fields = Maps.mutable.empty();
-    this.current_types = Maps.mutable.empty();
-    this.imports = Maps.mutable.empty();
-    this.import_names = BiMaps.mutable.empty();
+    this.current_record_fields = new HashMap<>();
+    this.current_packed_fields = new HashMap<>();
+    this.current_types = new HashMap<>();
+    this.imports = new HashMap<>();
+    this.import_names = MutableBiMap.create();
   }
 
   /**
@@ -155,7 +154,7 @@ public final class JPRAResolver implements JPRAResolverType
   public Map<TypeName, TypeDeclType<IdentifierType, Untyped>>
   resolveGetCurrentTypes()
   {
-    return this.current_types.asUnmodifiable();
+    return Collections.unmodifiableMap(this.current_types);
   }
 
   @Override
@@ -221,15 +220,16 @@ public final class JPRAResolver implements JPRAResolverType
     final PackageNameQualified q_name = s.getPackageName();
     if (this.import_names.containsKey(s_new)) {
       final PackageNameQualified q_existing = this.import_names.get(s_new);
-      final MutableBiMap<PackageNameQualified, PackageNameUnqualified> ini =
+      final MutableBiMapType<PackageNameQualified, PackageNameUnqualified> ini =
         this.import_names.inverse();
 
       Preconditions.checkPreconditionV(
         ini.containsKey(q_existing),
         "Import names must contain %s", q_existing);
+
       final PackageNameUnqualified s_existing = ini.get(q_existing);
-      throw JPRACompilerResolverException.packageImportConflict(
-        s_existing, s_new);
+      throw JPRACompilerResolverException
+        .packageImportConflict(s_existing, s_new);
     }
 
     try {
@@ -328,21 +328,22 @@ public final class JPRAResolver implements JPRAResolverType
     final TypeDeclPacked<Unresolved, Untyped> t)
     throws JPRACompilerResolverException
   {
-    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> o =
+    final List<PackedFieldDeclType<Unresolved, Untyped>> o =
       t.getFieldsInDeclarationOrder();
-    final MutableList<PackedFieldDeclType<IdentifierType, Untyped>> by_order =
-      Lists.mutable.empty();
+    final ArrayList<PackedFieldDeclType<IdentifierType, Untyped>> by_order =
+      new ArrayList<>();
 
     for (int index = 0; index < o.size(); ++index) {
       by_order.add(this.resolveTypeDeclPackedField(o.get(index)));
     }
 
-    final TypeDeclPacked<IdentifierType, Untyped> rv = new TypeDeclPacked<>(
-      this.context.getFreshIdentifier(),
-      Untyped.get(),
-      this.current_packed_fields.toImmutable(),
-      t.getName(),
-      by_order.toImmutable());
+    final TypeDeclPacked<IdentifierType, Untyped> rv =
+      new TypeDeclPacked<>(
+        this.context.getFreshIdentifier(),
+        Untyped.get(),
+        io.vavr.collection.HashMap.ofAll(this.current_packed_fields),
+        t.getName(),
+        List.ofAll(by_order));
 
     this.current_packed_fields.clear();
     return rv;
@@ -405,10 +406,10 @@ public final class JPRAResolver implements JPRAResolverType
     final TypeDeclRecord<Unresolved, Untyped> t)
     throws JPRACompilerResolverException
   {
-    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> o =
+    final List<RecordFieldDeclType<Unresolved, Untyped>> o =
       t.getFieldsInDeclarationOrder();
-    final MutableList<RecordFieldDeclType<IdentifierType, Untyped>> by_order =
-      Lists.mutable.empty();
+    final ArrayList<RecordFieldDeclType<IdentifierType, Untyped>> by_order =
+      new ArrayList<>();
 
     for (int index = 0; index < o.size(); ++index) {
       by_order.add(this.resolveTypeDeclRecordField(o.get(index)));
@@ -417,9 +418,9 @@ public final class JPRAResolver implements JPRAResolverType
     final TypeDeclRecord<IdentifierType, Untyped> rv = new TypeDeclRecord<>(
       this.context.getFreshIdentifier(),
       Untyped.get(),
-      this.current_record_fields.toImmutable(),
+      io.vavr.collection.HashMap.ofAll(this.current_record_fields),
       t.getName(),
-      by_order.toImmutable());
+      List.ofAll(by_order));
 
     this.current_record_fields.clear();
     return rv;

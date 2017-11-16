@@ -16,9 +16,6 @@
 
 package com.io7m.jpra.model.types;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jnull.Nullable;
@@ -27,6 +24,8 @@ import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
@@ -41,8 +40,8 @@ public final class TRecord implements TType, TypeUserDefinedType
 {
   private final TypeName name;
   private final Size<SizeUnitBitsType> size_bits;
-  private final ImmutableMap<FieldName, FieldValue> fields_by_name;
-  private final ImmutableList<FieldType> fields_by_order;
+  private final Map<FieldName, FieldValue> fields_by_name;
+  private final List<FieldType> fields_by_order;
   private final PackageContextType package_ctx;
   private final IdentifierType identifier;
   private final Size<SizeUnitOctetsType> size_octets;
@@ -51,8 +50,8 @@ public final class TRecord implements TType, TypeUserDefinedType
     final PackageContextType in_package,
     final IdentifierType in_identifier,
     final TypeName in_ident,
-    final ImmutableMap<FieldName, FieldValue> in_fields_by_name,
-    final ImmutableList<FieldType> in_fields_by_order)
+    final Map<FieldName, FieldValue> in_fields_by_name,
+    final List<FieldType> in_fields_by_order)
   {
     this.package_ctx =
       Objects.requireNonNull(in_package, "Package");
@@ -71,18 +70,21 @@ public final class TRecord implements TType, TypeUserDefinedType
       Integer.valueOf(this.fields_by_order.size()),
       Integer.valueOf(this.fields_by_name.size()));
 
-    this.fields_by_order.selectInstancesOf(FieldValue.class).forEach(
-      (Procedure<FieldValue>) f -> {
+    this.fields_by_order
+      .filter(x -> x instanceof FieldValue)
+      .map(x -> (FieldValue) x)
+      .forEach(f -> {
         Preconditions.checkPreconditionV(
           this.fields_by_name.containsKey(f.name),
           "Named fields must contain %s", f.name);
-        final FieldValue fr = this.fields_by_name.get(f.name);
+        final FieldValue fr = this.fields_by_name.get(f.name).get();
         Preconditions.checkPrecondition(
           Objects.equals(fr, f), "Field value must match");
       });
 
-    this.size_bits = this.fields_by_order.injectInto(
-      Size.zero(), (s, f) -> s.add(f.getSizeInBits()));
+    this.size_bits = this.fields_by_order
+      .map(FieldType::getSizeInBits)
+      .fold(Size.zero(), Size::add);
 
     final BigInteger b8 = BigInteger.valueOf(8L);
     final BigInteger br = this.size_bits.getValue().remainder(b8);
@@ -153,7 +155,7 @@ public final class TRecord implements TType, TypeUserDefinedType
    * @return The subset of fields that have names
    */
 
-  public ImmutableMap<FieldName, FieldValue> getFieldsByName()
+  public Map<FieldName, FieldValue> getFieldsByName()
   {
     return this.fields_by_name;
   }
@@ -162,7 +164,7 @@ public final class TRecord implements TType, TypeUserDefinedType
    * @return All fields in declaration order
    */
 
-  public ImmutableList<FieldType> getFieldsInDeclarationOrder()
+  public List<FieldType> getFieldsInDeclarationOrder()
   {
     return this.fields_by_order;
   }

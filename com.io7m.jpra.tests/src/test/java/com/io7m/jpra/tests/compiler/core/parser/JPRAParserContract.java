@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.core.parser;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jpra.compiler.core.parser.JPRAParseErrorCode;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.model.Unresolved;
@@ -56,6 +54,8 @@ import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jpra.model.type_expressions.TypeExprVector;
 import com.io7m.jsx.SExpressionType;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -72,10 +72,10 @@ public abstract class JPRAParserContract
   protected abstract JPRAParserType newParser();
 
   protected abstract SExpressionType newFileSExpr(
-    final String name);
+    String name);
 
   protected abstract SExpressionType newStringSExpr(
-    final String expr);
+    String expr);
 
   @Test
   public final void testTypeExprIntegerUnsigned32_Error0()
@@ -1225,9 +1225,9 @@ public abstract class JPRAParserContract
     final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
     final TypeDeclRecord<Unresolved, Untyped> d = TypeDeclRecord.class.cast(s);
 
-    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> field_order =
+    final List<RecordFieldDeclType<Unresolved, Untyped>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+    final Map<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
       field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());
@@ -1235,7 +1235,7 @@ public abstract class JPRAParserContract
 
     final FieldName f_name = new FieldName(Optional.empty(), "f0");
     final RecordFieldDeclValue<Unresolved, Untyped> f0 =
-      field_names.get(f_name);
+      field_names.get(f_name).get();
     final RecordFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
     Assert.assertSame(f0, f1);
 
@@ -1253,9 +1253,9 @@ public abstract class JPRAParserContract
     final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
     final TypeDeclRecord<Unresolved, Untyped> d = TypeDeclRecord.class.cast(s);
 
-    final ImmutableList<RecordFieldDeclType<Unresolved, Untyped>> field_order =
+    final List<RecordFieldDeclType<Unresolved, Untyped>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+    final Map<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
       field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());
@@ -1468,9 +1468,9 @@ public abstract class JPRAParserContract
     final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
     final TypeDeclPacked<Unresolved, Untyped> d = TypeDeclPacked.class.cast(s);
 
-    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> field_order =
+    final List<PackedFieldDeclType<Unresolved, Untyped>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+    final Map<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
       field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());
@@ -1478,7 +1478,7 @@ public abstract class JPRAParserContract
 
     final FieldName f_name = new FieldName(Optional.empty(), "f0");
     final PackedFieldDeclValue<Unresolved, Untyped> f0 =
-      field_names.get(f_name);
+      field_names.get(f_name).get();
     final PackedFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
     Assert.assertSame(f0, f1);
 
@@ -1495,9 +1495,9 @@ public abstract class JPRAParserContract
     final StatementType<Unresolved, Untyped> s = p.parseStatement(e);
     final TypeDeclPacked<Unresolved, Untyped> d = TypeDeclPacked.class.cast(s);
 
-    final ImmutableList<PackedFieldDeclType<Unresolved, Untyped>> field_order =
+    final List<PackedFieldDeclType<Unresolved, Untyped>> field_order =
       d.getFieldsInDeclarationOrder();
-    final ImmutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+    final Map<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
       field_names = d.getFieldsByName();
 
     Assert.assertEquals(1L, (long) field_order.size());

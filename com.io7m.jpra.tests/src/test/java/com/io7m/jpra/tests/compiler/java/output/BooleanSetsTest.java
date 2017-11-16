@@ -127,8 +127,8 @@ public final class BooleanSetsTest
     final BooleanSetsType v = c.getElementView();
 
     for (int index = 0; index < 32; ++index) {
-      BooleanSetsTest.setBit(v, index);
-      BooleanSetsTest.checkBit(v, index);
+      setBit(v, index);
+      checkBit(v, index);
     }
   }
 

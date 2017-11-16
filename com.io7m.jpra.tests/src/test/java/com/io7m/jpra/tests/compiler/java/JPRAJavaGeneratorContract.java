@@ -16,10 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.java;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.java.JPRAJavaGeneratorType;
 import com.io7m.jpra.model.contexts.GlobalContextType;
@@ -42,6 +38,7 @@ import com.io7m.jpra.model.types.TPackedBuilderType;
 import com.io7m.jpra.model.types.TRecord;
 import com.io7m.jpra.model.types.TRecordBuilderType;
 import com.io7m.jpra.model.types.TVector;
+import io.vavr.collection.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -57,6 +54,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
@@ -78,7 +76,7 @@ public abstract class JPRAJavaGeneratorContract
   private static void compilePackeds(
     final Path path,
     final JPRAJavaGeneratorType g,
-    final ImmutableList<TPacked> types)
+    final List<TPacked> types)
     throws IOException
   {
     final JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
@@ -86,42 +84,42 @@ public abstract class JPRAJavaGeneratorContract
     final StandardJavaFileManager fm =
       jc.getStandardFileManager(null, null, null);
 
-    final MutableList<File> files = Lists.mutable.empty();
-    types.forEach(
-      (Procedure<TPacked>) r -> {
-        try {
-          final TypeName t_name = r.getName();
+    final ArrayList<File> files = new ArrayList<>();
 
-          final Path c_file = path.resolve(
-            g.getPackedImplementationByteBufferedName(t_name) + ".java");
-          final Path r_file =
-            path.resolve(g.getPackedInterfaceReadableName(t_name) + ".java");
-          final Path w_file =
-            path.resolve(g.getPackedInterfaceWritableName(t_name) + ".java");
-          final Path i_file =
-            path.resolve(g.getPackedInterfaceName(t_name) + ".java");
+    types.forEach(r -> {
+      try {
+        final TypeName t_name = r.getName();
 
-          try (final OutputStream w = Files.newOutputStream(c_file)) {
-            g.generatePackedImplementation(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(r_file)) {
-            g.generatePackedInterfaceReadable(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(w_file)) {
-            g.generatePackedInterfaceWritable(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(i_file)) {
-            g.generatePackedInterface(r, w);
-          }
+        final Path c_file = path.resolve(
+          g.getPackedImplementationByteBufferedName(t_name) + ".java");
+        final Path r_file =
+          path.resolve(g.getPackedInterfaceReadableName(t_name) + ".java");
+        final Path w_file =
+          path.resolve(g.getPackedInterfaceWritableName(t_name) + ".java");
+        final Path i_file =
+          path.resolve(g.getPackedInterfaceName(t_name) + ".java");
 
-          files.add(c_file.toFile());
-          files.add(r_file.toFile());
-          files.add(w_file.toFile());
-          files.add(i_file.toFile());
-        } catch (final IOException e) {
-          throw new UncheckedIOException(e);
+        try (final OutputStream w = Files.newOutputStream(c_file)) {
+          g.generatePackedImplementation(r, w);
         }
-      });
+        try (final OutputStream w = Files.newOutputStream(r_file)) {
+          g.generatePackedInterfaceReadable(r, w);
+        }
+        try (final OutputStream w = Files.newOutputStream(w_file)) {
+          g.generatePackedInterfaceWritable(r, w);
+        }
+        try (final OutputStream w = Files.newOutputStream(i_file)) {
+          g.generatePackedInterface(r, w);
+        }
+
+        files.add(c_file.toFile());
+        files.add(r_file.toFile());
+        files.add(w_file.toFile());
+        files.add(i_file.toFile());
+      } catch (final IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    });
 
     final String[] options = {"-verbose", "-Werror", "-d", path.toString()};
     final Iterable<? extends JavaFileObject> fm_files =
@@ -137,7 +135,7 @@ public abstract class JPRAJavaGeneratorContract
   private static void compileRecords(
     final Path path,
     final JPRAJavaGeneratorType g,
-    final ImmutableList<TRecord> types)
+    final List<TRecord> types)
     throws IOException
   {
     final JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
@@ -145,42 +143,41 @@ public abstract class JPRAJavaGeneratorContract
     final StandardJavaFileManager fm =
       jc.getStandardFileManager(null, null, null);
 
-    final MutableList<File> files = Lists.mutable.empty();
-    types.forEach(
-      (Procedure<TRecord>) r -> {
-        try {
-          final TypeName t_name = r.getName();
+    final ArrayList<File> files = new ArrayList<>();
+    types.forEach(r -> {
+      try {
+        final TypeName t_name = r.getName();
 
-          final Path c_file = path.resolve(
-            g.getRecordImplementationByteBufferedName(t_name) + ".java");
-          final Path r_file =
-            path.resolve(g.getRecordInterfaceReadableName(t_name) + ".java");
-          final Path w_file =
-            path.resolve(g.getRecordInterfaceWritableName(t_name) + ".java");
-          final Path i_file =
-            path.resolve(g.getRecordInterfaceName(t_name) + ".java");
+        final Path c_file = path.resolve(
+          g.getRecordImplementationByteBufferedName(t_name) + ".java");
+        final Path r_file =
+          path.resolve(g.getRecordInterfaceReadableName(t_name) + ".java");
+        final Path w_file =
+          path.resolve(g.getRecordInterfaceWritableName(t_name) + ".java");
+        final Path i_file =
+          path.resolve(g.getRecordInterfaceName(t_name) + ".java");
 
-          try (final OutputStream w = Files.newOutputStream(c_file)) {
-            g.generateRecordImplementation(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(r_file)) {
-            g.generateRecordInterfaceReadable(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(w_file)) {
-            g.generateRecordInterfaceWritable(r, w);
-          }
-          try (final OutputStream w = Files.newOutputStream(i_file)) {
-            g.generateRecordInterface(r, w);
-          }
-
-          files.add(c_file.toFile());
-          files.add(r_file.toFile());
-          files.add(w_file.toFile());
-          files.add(i_file.toFile());
-        } catch (final IOException e) {
-          throw new UncheckedIOException(e);
+        try (final OutputStream w = Files.newOutputStream(c_file)) {
+          g.generateRecordImplementation(r, w);
         }
-      });
+        try (final OutputStream w = Files.newOutputStream(r_file)) {
+          g.generateRecordInterfaceReadable(r, w);
+        }
+        try (final OutputStream w = Files.newOutputStream(w_file)) {
+          g.generateRecordInterfaceWritable(r, w);
+        }
+        try (final OutputStream w = Files.newOutputStream(i_file)) {
+          g.generateRecordInterface(r, w);
+        }
+
+        files.add(c_file.toFile());
+        files.add(r_file.toFile());
+        files.add(w_file.toFile());
+        files.add(i_file.toFile());
+      } catch (final IOException e) {
+        throw new UncheckedIOException(e);
+      }
+    });
 
     final String[] options = {"-verbose", "-Werror", "-d", path.toString()};
     final Iterable<? extends JavaFileObject> fm_files =
@@ -224,7 +221,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -236,8 +233,8 @@ public abstract class JPRAJavaGeneratorContract
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
     final TRecord r = rb.build();
 
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -249,7 +246,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -295,8 +292,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -308,7 +305,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -333,8 +330,8 @@ public abstract class JPRAJavaGeneratorContract
       new TFloat(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -346,7 +343,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -392,8 +389,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -405,7 +402,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -419,8 +416,8 @@ public abstract class JPRAJavaGeneratorContract
     rb.addPaddingOctets(no_lex, Size.valueOf(100L));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -432,7 +429,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -445,7 +442,7 @@ public abstract class JPRAJavaGeneratorContract
 
     rb.addField(
       new FieldName(no_lex, "bool"), gc.getFreshIdentifier(), new TBooleanSet(
-        no_lex, Lists.immutable.of(
+        no_lex, List.of(
         new FieldName(no_lex, "flag_a"),
         new FieldName(no_lex, "flag_b"),
         new FieldName(no_lex, "flag_c"),
@@ -459,8 +456,7 @@ public abstract class JPRAJavaGeneratorContract
         new FieldName(no_lex, "flag_k")), Size.valueOf(2L)));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -472,7 +468,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -481,7 +477,7 @@ public abstract class JPRAJavaGeneratorContract
     final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
-    final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
+    final Path path = createTemporaryDir();
 
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
@@ -492,8 +488,7 @@ public abstract class JPRAJavaGeneratorContract
     rb.addField(new FieldName(no_lex, "r"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      path, g, Lists.immutable.of(te, r));
+    compileRecords(path, g, List.of(te, r));
   }
 
   @Test
@@ -505,7 +500,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -514,7 +509,7 @@ public abstract class JPRAJavaGeneratorContract
     final Optional<LexicalPosition<Path>> no_lex =
       Optional.empty();
 
-    final Path path = JPRAJavaGeneratorContract.createTemporaryDir();
+    final Path path = createTemporaryDir();
 
     final TypeName t_name = new TypeName(no_lex, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
@@ -526,8 +521,8 @@ public abstract class JPRAJavaGeneratorContract
     rb.addField(new FieldName(no_lex, "r1"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      path, g, Lists.immutable.of(te, r));
+    compileRecords(
+      path, g, List.of(te, r));
   }
 
   @Test
@@ -539,7 +534,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -551,8 +546,8 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
     final TPacked r = rb.build();
 
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -564,7 +559,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -578,8 +573,8 @@ public abstract class JPRAJavaGeneratorContract
     rb.addPaddingBits(no_lex, Size.valueOf(64L));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -591,7 +586,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -620,8 +615,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -633,7 +628,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -662,8 +657,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -675,7 +670,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -705,8 +700,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -718,7 +713,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -747,8 +742,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -760,7 +755,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -807,8 +802,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -820,7 +815,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -849,8 +844,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -862,7 +857,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -891,8 +886,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -904,7 +899,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -934,8 +929,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -947,7 +942,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -976,8 +971,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -989,7 +984,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1036,8 +1031,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1049,7 +1044,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1079,8 +1074,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1092,7 +1087,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1122,8 +1117,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1135,7 +1130,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1165,8 +1160,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1178,7 +1173,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1208,8 +1203,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1221,7 +1216,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1268,8 +1263,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1281,7 +1276,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1311,8 +1306,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1324,7 +1319,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1354,8 +1349,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1367,7 +1362,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1397,8 +1392,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1410,7 +1405,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1440,8 +1435,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1453,7 +1448,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1500,8 +1495,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1513,7 +1508,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1542,8 +1537,8 @@ public abstract class JPRAJavaGeneratorContract
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
-    JPRAJavaGeneratorContract.compilePackeds(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compilePackeds(
+      createTemporaryDir(), g, List.of(r));
   }
 
   @Test
@@ -1555,7 +1550,7 @@ public abstract class JPRAJavaGeneratorContract
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -1616,7 +1611,7 @@ public abstract class JPRAJavaGeneratorContract
       new TVector(no_lex, Size.valueOf(4L), t_double));
 
     final TRecord r = rb.build();
-    JPRAJavaGeneratorContract.compileRecords(
-      JPRAJavaGeneratorContract.createTemporaryDir(), g, Lists.immutable.of(r));
+    compileRecords(
+      createTemporaryDir(), g, List.of(r));
   }
 }

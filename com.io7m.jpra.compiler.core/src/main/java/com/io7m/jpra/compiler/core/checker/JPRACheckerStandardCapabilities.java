@@ -16,16 +16,15 @@
 
 package com.io7m.jpra.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.set.ImmutableSet;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Sets;
 import com.io7m.jranges.RangeInclusiveB;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
+import io.vavr.collection.HashSet;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 /**
  * The default implementation of the {@link JPRACheckerCapabilitiesType}
@@ -36,16 +35,16 @@ import java.math.BigInteger;
 public final class JPRACheckerStandardCapabilities
   implements JPRACheckerCapabilitiesType
 {
-  private final ImmutableList<RangeInclusiveB> packed_integer_sizes;
-  private final ImmutableList<RangeInclusiveB> record_integer_sizes;
-  private final ImmutableList<RangeInclusiveB> record_float_sizes;
-  private final ImmutableSet<String> encodings;
-  private final ImmutableList<RangeInclusiveB> vector_sizes;
-  private final ImmutableList<RangeInclusiveB> vector_float_sizes;
-  private final ImmutableList<RangeInclusiveB> vector_integer_sizes;
-  private final ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> matrix_sizes;
-  private final ImmutableList<RangeInclusiveB> matrix_float_sizes;
-  private final ImmutableList<RangeInclusiveB> packed_sizes;
+  private final List<RangeInclusiveB> packed_integer_sizes;
+  private final List<RangeInclusiveB> record_integer_sizes;
+  private final List<RangeInclusiveB> record_float_sizes;
+  private final Set<String> encodings;
+  private final List<RangeInclusiveB> vector_sizes;
+  private final List<RangeInclusiveB> vector_float_sizes;
+  private final List<RangeInclusiveB> vector_integer_sizes;
+  private final List<Tuple2<RangeInclusiveB, RangeInclusiveB>> matrix_sizes;
+  private final List<RangeInclusiveB> matrix_float_sizes;
+  private final List<RangeInclusiveB> packed_sizes;
 
   private JPRACheckerStandardCapabilities()
   {
@@ -53,63 +52,63 @@ public final class JPRACheckerStandardCapabilities
     final BigInteger b64 = BigInteger.valueOf(64L);
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b2, b64));
-      this.packed_integer_sizes = s.toImmutable();
+      this.packed_integer_sizes = List.ofAll(s);
     }
 
     final BigInteger b32 = BigInteger.valueOf(32L);
     final BigInteger b16 = BigInteger.valueOf(16L);
     final BigInteger b8 = BigInteger.valueOf(8L);
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b8, b8));
       s.add(new RangeInclusiveB(b16, b16));
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.record_integer_sizes = s.toImmutable();
+      this.record_integer_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b16, b16));
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.record_float_sizes = s.toImmutable();
+      this.record_float_sizes = List.ofAll(s);
     }
 
     {
-      this.encodings = Sets.immutable.of("UTF-8");
+      this.encodings = HashSet.of("UTF-8");
     }
 
     final BigInteger b4 = BigInteger.valueOf(4L);
     final BigInteger b3 = BigInteger.valueOf(3L);
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b2, b2));
       s.add(new RangeInclusiveB(b3, b3));
       s.add(new RangeInclusiveB(b4, b4));
-      this.vector_sizes = s.toImmutable();
+      this.vector_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b16, b16));
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.vector_float_sizes = s.toImmutable();
+      this.vector_float_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.vector_integer_sizes = s.toImmutable();
+      this.vector_integer_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>> s =
-        Lists.mutable.empty();
+      final ArrayList<Tuple2<RangeInclusiveB, RangeInclusiveB>> s =
+        new ArrayList<>();
 
       final RangeInclusiveB r2 = new RangeInclusiveB(b2, b2);
       s.add(Tuple.of(r2, r2));
@@ -117,23 +116,23 @@ public final class JPRACheckerStandardCapabilities
       s.add(Tuple.of(r3, r3));
       final RangeInclusiveB r4 = new RangeInclusiveB(b4, b4);
       s.add(Tuple.of(r4, r4));
-      this.matrix_sizes = s.toImmutable();
+      this.matrix_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.matrix_float_sizes = s.toImmutable();
+      this.matrix_float_sizes = List.ofAll(s);
     }
 
     {
-      final MutableList<RangeInclusiveB> s = Lists.mutable.empty();
+      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
       s.add(new RangeInclusiveB(b8, b8));
       s.add(new RangeInclusiveB(b16, b16));
       s.add(new RangeInclusiveB(b32, b32));
       s.add(new RangeInclusiveB(b64, b64));
-      this.packed_sizes = s.toImmutable();
+      this.packed_sizes = List.ofAll(s);
     }
   }
 
@@ -147,7 +146,7 @@ public final class JPRACheckerStandardCapabilities
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getRecordIntegerSizeBitsSupported()
+  public List<RangeInclusiveB> getRecordIntegerSizeBitsSupported()
   {
     return this.record_integer_sizes;
   }
@@ -155,19 +154,19 @@ public final class JPRACheckerStandardCapabilities
   @Override
   public boolean isRecordIntegerSizeBitsSupported(final BigInteger size)
   {
-    return this.record_integer_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.record_integer_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
   public boolean isRecordFloatSizeBitsSupported(final BigInteger size)
   {
-    return this.record_float_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.record_float_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
   public boolean isVectorSizeElementsSupported(final BigInteger size)
   {
-    return this.vector_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.vector_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
@@ -175,16 +174,16 @@ public final class JPRACheckerStandardCapabilities
     final BigInteger width,
     final BigInteger height)
   {
-    return this.matrix_sizes.anySatisfy(
+    return this.matrix_sizes.find(
       p -> {
         final RangeInclusiveB l = p._1;
         final RangeInclusiveB r = p._2;
         return l.includesValue(width) && r.includesValue(height);
-      });
+      }).isDefined();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getRecordFloatSizeBitsSupported()
+  public List<RangeInclusiveB> getRecordFloatSizeBitsSupported()
   {
     return this.record_float_sizes;
   }
@@ -196,13 +195,13 @@ public final class JPRACheckerStandardCapabilities
   }
 
   @Override
-  public ImmutableSet<String> getStringEncodingsSupported()
+  public Set<String> getStringEncodingsSupported()
   {
     return this.encodings;
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorSizeSupported()
+  public List<RangeInclusiveB> getVectorSizeSupported()
   {
     return this.vector_sizes;
   }
@@ -210,11 +209,11 @@ public final class JPRACheckerStandardCapabilities
   @Override
   public boolean isVectorIntegerSizeSupported(final BigInteger size)
   {
-    return this.vector_integer_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.vector_integer_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorIntegerSizeSupported()
+  public List<RangeInclusiveB> getVectorIntegerSizeSupported()
   {
     return this.vector_integer_sizes;
   }
@@ -222,17 +221,17 @@ public final class JPRACheckerStandardCapabilities
   @Override
   public boolean isVectorFloatSizeSupported(final BigInteger size)
   {
-    return this.vector_float_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.vector_float_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
+  public List<RangeInclusiveB> getVectorFloatSizeSupported()
   {
     return this.vector_float_sizes;
   }
 
   @Override
-  public ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
+  public List<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported()
   {
     return this.matrix_sizes;
@@ -245,25 +244,25 @@ public final class JPRACheckerStandardCapabilities
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getMatrixIntegerSizeSupported()
+  public List<RangeInclusiveB> getMatrixIntegerSizeSupported()
   {
-    return Lists.immutable.empty();
+    return List.empty();
   }
 
   @Override
   public boolean isMatrixFloatSizeSupported(final BigInteger size)
   {
-    return this.matrix_float_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.matrix_float_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
+  public List<RangeInclusiveB> getMatrixFloatSizeSupported()
   {
     return this.matrix_float_sizes;
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
+  public List<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
   {
     return this.packed_integer_sizes;
   }
@@ -271,11 +270,11 @@ public final class JPRACheckerStandardCapabilities
   @Override
   public boolean isPackedIntegerSizeBitsSupported(final BigInteger size)
   {
-    return this.packed_integer_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.packed_integer_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
+  public List<RangeInclusiveB> getPackedSizeBitsSupported()
   {
     return this.packed_sizes;
   }
@@ -283,6 +282,6 @@ public final class JPRACheckerStandardCapabilities
   @Override
   public boolean isPackedSizeBitsSupported(final BigInteger size)
   {
-    return this.packed_sizes.anySatisfy(r -> r.includesValue(size));
+    return this.packed_sizes.find(r -> r.includesValue(size)).isDefined();
   }
 }

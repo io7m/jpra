@@ -16,12 +16,6 @@
 
 package com.io7m.jpra.model.types;
 
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
-import com.gs.collections.impl.factory.Sets;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.contexts.PackageContextType;
@@ -30,11 +24,15 @@ import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jranges.RangeInclusiveB;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,13 +45,13 @@ final class TPackedBuilder implements TPackedBuilderType
     LOG = LoggerFactory.getLogger(TPackedBuilder.class);
   }
 
-  private final MutableList<TPacked.FieldType> type_fields_ordered;
-  private final MutableMap<FieldName, TPacked.FieldValue> type_fields_named;
+  private final ArrayList<TPacked.FieldType> type_fields_ordered;
+  private final HashMap<FieldName, TPacked.FieldValue> type_fields_named;
   private final PackageContextType package_context;
   private final IdentifierType identifier;
   private final TypeName name;
   private final boolean finished;
-  private final MutableSet<IdentifierType> identifiers;
+  private final HashSet<IdentifierType> identifiers;
 
   TPackedBuilder(
     final PackageContextType in_package,
@@ -64,9 +62,9 @@ final class TPackedBuilder implements TPackedBuilderType
     this.identifier = Objects.requireNonNull(in_identifier, "Identifier");
     this.name = Objects.requireNonNull(in_ident, "Type name");
 
-    this.type_fields_ordered = Lists.mutable.empty();
-    this.type_fields_named = Maps.mutable.empty();
-    this.identifiers = Sets.mutable.empty();
+    this.type_fields_ordered = new ArrayList<>();
+    this.type_fields_named = new HashMap<>();
+    this.identifiers = new HashSet<>();
 
     this.identifiers.add(this.identifier);
     this.finished = false;
@@ -103,8 +101,9 @@ final class TPackedBuilder implements TPackedBuilderType
   @Override
   public Size<SizeUnitBitsType> getCurrentSize()
   {
-    return this.type_fields_ordered.injectInto(
-      Size.zero(), (s, f) -> s.add(f.getSize()));
+    return this.type_fields_ordered.stream()
+      .map(TPacked.FieldType::getSize)
+      .reduce(Size.zero(), Size::add);
   }
 
   @Override
@@ -117,8 +116,8 @@ final class TPackedBuilder implements TPackedBuilderType
       this.package_context,
       this.identifier,
       this.name,
-      this.type_fields_named.toImmutable(),
-      this.type_fields_ordered.toImmutable());
+      io.vavr.collection.HashMap.ofAll(this.type_fields_named),
+      List.ofAll(this.type_fields_ordered));
 
     final BigInteger size = tr.getSizeInBits().getValue();
     final AtomicReference<BigInteger> msb =

@@ -16,12 +16,6 @@
 
 package com.io7m.jpra.compiler.core.parser;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.Maps;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
@@ -69,6 +63,7 @@ import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.SExpressionType;
 import com.io7m.jsx.api.serializer.JSXSerializerType;
 import com.io7m.junreachable.UnreachableCodeException;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +72,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -300,16 +297,16 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  private static ImmutableList<FieldName> parseFieldSet(
+  private static List<FieldName> parseFieldSet(
     final SExpressionType f_expr)
     throws JPRACompilerParseException
   {
     return f_expr.matchExpression(
-      new SExpressionMatcherType<ImmutableList<FieldName>,
+      new SExpressionMatcherType<List<FieldName>,
         JPRACompilerParseException>()
       {
         @Override
-        public ImmutableList<FieldName> list(final SExpressionListType e)
+        public List<FieldName> list(final SExpressionListType e)
           throws JPRACompilerParseException
         {
           final Map<FieldName, Unresolved> names =
@@ -343,13 +340,11 @@ public final class JPRAParser implements JPRAParserType
             }
           }
 
-          final FastList<FieldName> rx = new FastList<>(names.size());
-          rx.addAll(names.keySet());
-          return rx.toImmutable();
+          return List.ofAll(names.keySet());
         }
 
         @Override
-        public ImmutableList<FieldName> quotedString(
+        public List<FieldName> quotedString(
           final SExpressionQuotedStringType e)
           throws JPRACompilerParseException
         {
@@ -357,7 +352,7 @@ public final class JPRAParser implements JPRAParserType
         }
 
         @Override
-        public ImmutableList<FieldName> symbol(final SExpressionSymbolType e)
+        public List<FieldName> symbol(final SExpressionSymbolType e)
           throws JPRACompilerParseException
         {
           throw JPRACompilerParseException.expectedListGotSymbol(e);
@@ -376,7 +371,7 @@ public final class JPRAParser implements JPRAParserType
     final Optional<LexicalPosition<Path>> ilex =
       getExpressionLexical(name);
 
-    final MutableList<PackageNameUnqualified> names_base = new FastList<>();
+    final ArrayList<PackageNameUnqualified> names_base = new ArrayList<>();
     for (int index = 0; index < segments.length; ++index) {
       final String raw = segments[index];
       try {
@@ -386,9 +381,7 @@ public final class JPRAParser implements JPRAParserType
       }
     }
 
-    final ImmutableList<PackageNameUnqualified> names =
-      names_base.toImmutable();
-    return new PackageNameQualified(names);
+    return new PackageNameQualified(List.ofAll(names_base));
   }
 
   private static PackageNameUnqualified parsePackageNameUnqualified(
@@ -652,19 +645,19 @@ public final class JPRAParser implements JPRAParserType
           parseTypeName((SExpressionSymbolType) n_expr);
         final SExpressionListType fl_expr = (SExpressionListType) f_expr;
 
-        final MutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
-          fields_by_name = Maps.mutable.empty();
-        final MutableList<PackedFieldDeclType<Unresolved, Untyped>>
-          fields_ordered = Lists.mutable.empty();
+        final HashMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+          fields_by_name = new HashMap<>();
+        final ArrayList<PackedFieldDeclType<Unresolved, Untyped>>
+          fields_ordered = new ArrayList<>();
 
         this.parsePackedFields(fl_expr, fields_by_name, fields_ordered);
 
         return new TypeDeclPacked<>(
           Unresolved.get(),
           Untyped.get(),
-          fields_by_name.toImmutable(),
+          io.vavr.collection.HashMap.ofAll(fields_by_name),
           t_name,
-          fields_ordered.toImmutable());
+          List.ofAll(fields_ordered));
       }
     }
 
@@ -685,9 +678,9 @@ public final class JPRAParser implements JPRAParserType
 
   private void parsePackedFields(
     final SExpressionListType fields,
-    final MutableMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
+    final HashMap<FieldName, PackedFieldDeclValue<Unresolved, Untyped>>
       fields_named,
-    final MutableList<PackedFieldDeclType<Unresolved, Untyped>> fields_order)
+    final ArrayList<PackedFieldDeclType<Unresolved, Untyped>> fields_order)
     throws JPRACompilerParseException
   {
     for (int index = 0; index < fields.size(); ++index) {
@@ -813,19 +806,19 @@ public final class JPRAParser implements JPRAParserType
           parseTypeName((SExpressionSymbolType) n_expr);
         final SExpressionListType fl_expr = (SExpressionListType) f_expr;
 
-        final MutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
-          fields_by_name = Maps.mutable.empty();
-        final MutableList<RecordFieldDeclType<Unresolved, Untyped>>
-          fields_ordered = Lists.mutable.empty();
+        final HashMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+          fields_by_name = new HashMap<>();
+        final ArrayList<RecordFieldDeclType<Unresolved, Untyped>>
+          fields_ordered = new ArrayList<>();
 
         this.parseRecordFields(fl_expr, fields_by_name, fields_ordered);
 
         return new TypeDeclRecord<>(
           Unresolved.get(),
           Untyped.get(),
-          fields_by_name.toImmutable(),
+          io.vavr.collection.HashMap.ofAll(fields_by_name),
           t_name,
-          fields_ordered.toImmutable());
+          List.ofAll(fields_ordered));
       }
     }
 
@@ -846,9 +839,9 @@ public final class JPRAParser implements JPRAParserType
 
   private void parseRecordFields(
     final SExpressionListType fields,
-    final MutableMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
+    final HashMap<FieldName, RecordFieldDeclValue<Unresolved, Untyped>>
       fields_named,
-    final MutableList<RecordFieldDeclType<Unresolved, Untyped>> fields_order)
+    final ArrayList<RecordFieldDeclType<Unresolved, Untyped>> fields_order)
     throws JPRACompilerParseException
   {
     for (int index = 0; index < fields.size(); ++index) {
@@ -1111,7 +1104,7 @@ public final class JPRAParser implements JPRAParserType
       final SizeExprType<Unresolved, Untyped> size =
         this.parseSizeExpression(s_expr);
 
-      final ImmutableList<FieldName> fields = parseFieldSet(f_expr);
+      final List<FieldName> fields = parseFieldSet(f_expr);
       final Optional<LexicalPosition<Path>> lex =
         getExpressionLexical(s_expr);
       return new TypeExprBooleanSet<>(Untyped.get(), lex, fields, size);

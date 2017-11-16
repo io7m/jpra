@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.compiler.java;
 
-import com.gs.collections.api.list.ImmutableList;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
@@ -37,6 +36,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import io.vavr.collection.List;
 
 import javax.lang.model.element.Modifier;
 import java.math.BigInteger;
@@ -153,7 +153,7 @@ final class RecordFieldInterfaceProcessor
   @Override
   public Void matchBooleanSet(final TBooleanSet t)
   {
-    final ImmutableList<FieldName> ordered = t.getFieldsInDeclarationOrder();
+    final List<FieldName> ordered = t.getFieldsInDeclarationOrder();
     for (final FieldName f : ordered) {
       if (this.methods.wantGetters()) {
         final String getter_name =

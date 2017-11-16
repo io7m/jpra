@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerErrorCode;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -65,6 +63,8 @@ import com.io7m.jpra.model.types.TType;
 import com.io7m.jpra.model.types.TVector;
 import com.io7m.jpra.tests.compiler.core.resolver.AlwaysEmptyLoader;
 import com.io7m.jsx.SExpressionType;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -80,14 +80,14 @@ public abstract class JPRACheckerContract
   protected abstract JPRAParserType newParser();
 
   protected abstract JPRAResolverType newResolver(
-    final GlobalContextType c);
+    GlobalContextType c);
 
   protected abstract JPRACheckerType newChecker(
-    final GlobalContextType c,
-    final JPRACheckerCapabilitiesType caps);
+    GlobalContextType c,
+    JPRACheckerCapabilitiesType caps);
 
   protected abstract SExpressionType newStringSExpr(
-    final String expr);
+    String expr);
 
   @Test
   public final void testTypeExprIntegerSignedSizeCorrect()
@@ -707,13 +707,13 @@ public abstract class JPRACheckerContract
     Assert.assertEquals(tr.getName(), tt.getName());
     Assert.assertEquals(tr.getIdentifier(), tt.getIdentifier());
 
-    final ImmutableMap<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
+    final Map<FieldName, RecordFieldDeclValue<IdentifierType, TType>>
       tr_named = tr.getFieldsByName();
-    final ImmutableMap<FieldName, TRecord.FieldValue> tt_named =
+    final Map<FieldName, TRecord.FieldValue> tt_named =
       tt.getFieldsByName();
-    final ImmutableList<RecordFieldDeclType<IdentifierType, TType>> tr_order =
+    final List<RecordFieldDeclType<IdentifierType, TType>> tr_order =
       tr.getFieldsInDeclarationOrder();
-    final ImmutableList<TRecord.FieldType> tt_order =
+    final List<TRecord.FieldType> tt_order =
       tt.getFieldsInDeclarationOrder();
 
     Assert.assertEquals((long) tt_named.size(), (long) tr_named.size());
@@ -724,8 +724,9 @@ public abstract class JPRACheckerContract
       Assert.assertEquals(f.getOwner(), tt);
     }
 
-    tt_named.forEachKey(
-      k -> Assert.assertTrue("Map contains " + k, tr_named.containsKey(k)));
+    tt_named.forEach((k, value) -> {
+      Assert.assertTrue("Map contains " + k, tr_named.containsKey(k));
+    });
   }
 
   @Test
@@ -765,13 +766,13 @@ public abstract class JPRACheckerContract
     Assert.assertEquals(tr.getName(), tt.getName());
     Assert.assertEquals(tr.getIdentifier(), tt.getIdentifier());
 
-    final ImmutableMap<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
+    final Map<FieldName, PackedFieldDeclValue<IdentifierType, TType>>
       tr_named = tr.getFieldsByName();
-    final ImmutableMap<FieldName, TPacked.FieldValue> tt_named =
+    final Map<FieldName, TPacked.FieldValue> tt_named =
       tt.getFieldsByName();
-    final ImmutableList<PackedFieldDeclType<IdentifierType, TType>> tr_order =
+    final List<PackedFieldDeclType<IdentifierType, TType>> tr_order =
       tr.getFieldsInDeclarationOrder();
-    final ImmutableList<TPacked.FieldType> tt_order =
+    final List<TPacked.FieldType> tt_order =
       tt.getFieldsInDeclarationOrder();
 
     Assert.assertEquals((long) tt_named.size(), (long) tr_named.size());
@@ -782,8 +783,9 @@ public abstract class JPRACheckerContract
       Assert.assertEquals(f.getOwner(), tt);
     }
 
-    tt_named.forEachKey(
-      k -> Assert.assertTrue("Map contains " + k, tr_named.containsKey(k)));
+    tt_named.forEach((k, value) -> {
+      Assert.assertTrue("Map contains " + k, tr_named.containsKey(k));
+    });
   }
 
   @Test

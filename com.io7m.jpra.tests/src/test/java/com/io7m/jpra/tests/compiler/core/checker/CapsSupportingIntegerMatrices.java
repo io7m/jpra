@@ -16,15 +16,14 @@
 
 package com.io7m.jpra.tests.compiler.core.checker;
 
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.set.ImmutableSet;
-import com.gs.collections.impl.factory.Lists;
-import java.util.Objects;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerCapabilitiesType;
 import com.io7m.jranges.RangeInclusiveB;
 import io.vavr.Tuple2;
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
 {
@@ -37,13 +36,13 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getMatrixFloatSizeSupported()
+  public List<RangeInclusiveB> getMatrixFloatSizeSupported()
   {
     return this.delegate.getMatrixFloatSizeSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
+  public List<RangeInclusiveB> getPackedIntegerSizeBitsSupported()
   {
     return this.delegate.getPackedIntegerSizeBitsSupported();
   }
@@ -55,9 +54,9 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getMatrixIntegerSizeSupported()
+  public List<RangeInclusiveB> getMatrixIntegerSizeSupported()
   {
-    return Lists.immutable.of(
+    return List.of(
       new RangeInclusiveB(
         BigInteger.valueOf(32L), BigInteger.valueOf(32L)));
   }
@@ -69,50 +68,50 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getPackedSizeBitsSupported()
+  public List<RangeInclusiveB> getPackedSizeBitsSupported()
   {
     return this.delegate.getPackedSizeBitsSupported();
   }
 
   @Override
-  public ImmutableList<Tuple2<RangeInclusiveB, RangeInclusiveB>>
+  public List<Tuple2<RangeInclusiveB, RangeInclusiveB>>
   getMatrixSizeElementsSupported()
   {
     return this.delegate.getMatrixSizeElementsSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getRecordFloatSizeBitsSupported()
+  public List<RangeInclusiveB> getRecordFloatSizeBitsSupported()
   {
     return this.delegate.getRecordFloatSizeBitsSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getRecordIntegerSizeBitsSupported()
+  public List<RangeInclusiveB> getRecordIntegerSizeBitsSupported()
   {
     return this.delegate.getRecordIntegerSizeBitsSupported();
   }
 
   @Override
-  public ImmutableSet<String> getStringEncodingsSupported()
+  public Set<String> getStringEncodingsSupported()
   {
     return this.delegate.getStringEncodingsSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorFloatSizeSupported()
+  public List<RangeInclusiveB> getVectorFloatSizeSupported()
   {
     return this.delegate.getVectorFloatSizeSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorIntegerSizeSupported()
+  public List<RangeInclusiveB> getVectorIntegerSizeSupported()
   {
     return this.delegate.getVectorIntegerSizeSupported();
   }
 
   @Override
-  public ImmutableList<RangeInclusiveB> getVectorSizeSupported()
+  public List<RangeInclusiveB> getVectorSizeSupported()
   {
     return this.delegate.getVectorSizeSupported();
   }

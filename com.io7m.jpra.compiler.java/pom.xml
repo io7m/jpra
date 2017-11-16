@@ -63,8 +63,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.goldmansachs</groupId>
-      <artifactId>gs-collections-api</artifactId>
+      <groupId>io.vavr</groupId>
+      <artifactId>vavr</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

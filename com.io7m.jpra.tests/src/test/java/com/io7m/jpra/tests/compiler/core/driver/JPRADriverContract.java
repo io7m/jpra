@@ -87,8 +87,8 @@ public abstract class JPRADriverContract
   }
 
   protected abstract JPRADriverType getDriver(
-    final Path base,
-    final JPRACheckerCapabilitiesType caps);
+    Path base,
+    JPRACheckerCapabilitiesType caps);
 
   protected abstract FileSystem getFilesystem()
     throws IOException;

@@ -16,7 +16,6 @@
 
 package com.io7m.jpra.tests.compiler.core.resolver;
 
-import com.gs.collections.impl.factory.Lists;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
@@ -49,6 +48,7 @@ import com.io7m.jpra.model.type_expressions.TypeExprMatrix;
 import com.io7m.jpra.model.type_expressions.TypeExprString;
 import com.io7m.jpra.model.type_expressions.TypeExprVector;
 import com.io7m.jsx.SExpressionType;
+import io.vavr.collection.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -73,14 +73,14 @@ public abstract class JPRAResolverContract
 
   protected abstract JPRAParserType newParser();
 
-  protected abstract JPRAResolverType newResolver(final GlobalContextType c);
+  protected abstract JPRAResolverType newResolver(GlobalContextType c);
 
   protected abstract JPRAResolverType newResolverForPackage(
     GlobalContextType c,
     PackageNameQualified p);
 
   protected abstract SExpressionType newStringSExpr(
-    final String expr);
+    String expr);
 
   @Test
   public final void testPackageNested()
@@ -174,7 +174,7 @@ public abstract class JPRAResolverContract
 
     c.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"),
           PackageNameUnqualified.of("y"),
           PackageNameUnqualified.of("z"))));
@@ -232,11 +232,11 @@ public abstract class JPRAResolverContract
 
     c.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"), PackageNameUnqualified.of("a"))));
     c.loadPackage(
       new PackageNameQualified(
-        Lists.immutable.of(
+        List.of(
           PackageNameUnqualified.of("x"), PackageNameUnqualified.of("b"))));
 
     r.resolvePackageBegin(
@@ -443,7 +443,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprIntegerSigned<IdentifierType, Untyped> ee =
       TypeExprIntegerSigned.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -464,7 +464,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprIntegerUnsigned<IdentifierType, Untyped> ee =
       TypeExprIntegerUnsigned.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -486,7 +486,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprIntegerUnsignedNormalized<IdentifierType, Untyped> ee =
       TypeExprIntegerUnsignedNormalized.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -508,7 +508,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprIntegerSignedNormalized<IdentifierType, Untyped> ee =
       TypeExprIntegerSignedNormalized.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -530,7 +530,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprFloat<IdentifierType, Untyped> ee =
       TypeExprFloat.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -552,7 +552,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprString<IdentifierType, Untyped> ee =
       TypeExprString.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSize(), BigInteger.valueOf(32L));
   }
 
@@ -574,7 +574,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprVector<IdentifierType, Untyped> ee =
       TypeExprVector.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getElementCount(), BigInteger.valueOf(32L));
   }
 
@@ -596,9 +596,9 @@ public abstract class JPRAResolverContract
 
     final TypeExprMatrix<IdentifierType, Untyped> ee =
       TypeExprMatrix.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getWidth(), BigInteger.valueOf(2L));
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getHeight(), BigInteger.valueOf(4L));
   }
 
@@ -620,7 +620,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprBooleanSet<IdentifierType, Untyped> ee =
       TypeExprBooleanSet.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getSizeExpression(), BigInteger.valueOf(1L));
   }
 
@@ -642,7 +642,7 @@ public abstract class JPRAResolverContract
 
     final TypeExprArray<IdentifierType, Untyped> ee =
       TypeExprArray.class.cast(ex.getExpression());
-    JPRAResolverContract.checkSizeExpressionConstant(
+    checkSizeExpressionConstant(
       ee.getElementCount(), BigInteger.valueOf(64L));
   }
 
