@@ -18,6 +18,10 @@ package com.io7m.jpra.compiler.frontend;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Parameters;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatter;
 import com.io7m.jpra.compiler.core.JPRAProblemFormatterType;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerStandardCapabilities;
@@ -35,22 +39,16 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
 import com.io7m.junreachable.UnreachableCodeException;
-import io.airlift.airline.Arguments;
-import io.airlift.airline.Cli;
-import io.airlift.airline.Command;
-import io.airlift.airline.Help;
-import io.airlift.airline.Option;
-import io.airlift.airline.ParseArgumentsMissingException;
-import io.airlift.airline.ParseArgumentsUnexpectedException;
-import io.airlift.airline.ParseOptionMissingException;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
@@ -66,9 +64,28 @@ public final class Main
     LOG = (Logger) LoggerFactory.getLogger(Main.class);
   }
 
-  private Main()
+  private final String[] args;
+  private final HashMap<String, CommandType> commands;
+  private final JCommander commander;
+  private int exit_code;
+
+  private Main(
+    final String[] in_args)
   {
-    throw new UnreachableCodeException();
+    this.args =
+      Objects.requireNonNull(in_args, "Command line arguments");
+
+    final CommandCheck check = new CommandCheck();
+    final CommandGenerateJava generate = new CommandGenerateJava();
+
+    this.commands = new HashMap<>(8);
+    this.commands.put("check", check);
+    this.commands.put("generate", generate);
+
+    this.commander = new JCommander();
+    this.commander.setProgramName("jpra-c");
+    this.commander.addCommand("check", check);
+    this.commander.addCommand("generate", generate);
   }
 
   /**
@@ -77,35 +94,60 @@ public final class Main
    * @param args Command line arguments
    */
 
-  public static void main(final String[] args)
+  public static void main(
+    final String[] args)
   {
-    final Cli.CliBuilder<Runnable> builder = Cli.builder("jpra");
-    builder.withDescription("Packed record access compiler");
-    builder.withDefaultCommand(Help.class);
-    builder.withCommand(Help.class);
-    builder.withCommand(CommandCheck.class);
-    builder.withCommand(CommandGenerateJava.class);
-    final Cli<Runnable> parser = builder.build();
+    final Main cm = new Main(args);
+    cm.run();
+    System.exit(cm.exitCode());
+  }
 
+  private int exitCode()
+  {
+    return this.exit_code;
+  }
+
+  private void run()
+  {
     try {
-      parser.parse(args).run();
-    } catch (final ParseArgumentsMissingException
-      | ParseOptionMissingException
-      | ParseArgumentsUnexpectedException e) {
-      LOG.error("parse error: {}", e.getMessage());
-      Help.help(parser.getMetadata(), Collections.emptyList());
+      this.commander.parse(this.args);
+
+      final String cmd = this.commander.getParsedCommand();
+      if (cmd == null) {
+        final StringBuilder sb = new StringBuilder(128);
+        this.commander.usage(sb);
+        LOG.info("Arguments required.\n{}", sb.toString());
+        this.exit_code = 1;
+        return;
+      }
+
+      final CommandType command = this.commands.get(cmd);
+      final CommandType.Status status = command.run();
+      this.exit_code = status.exitCode();
+    } catch (final ParameterException e) {
+      final StringBuilder sb = new StringBuilder(128);
+      this.commander.usage(sb);
+      LOG.error("{}\n{}", e.getMessage(), sb.toString());
+      this.exit_code = 1;
+    } catch (final Exception e) {
+      LOG.error("{}", e.getMessage(), e);
+      this.exit_code = 1;
     }
   }
 
-  abstract static class CommandType implements Runnable
+  abstract static class CommandType
   {
-    @Option(name = "--debug", description = "Enable debug logging")
+    @Parameter(
+      names = "--debug",
+      description = "Enable debug logging")
     private boolean debug;
 
     CommandType()
     {
 
     }
+
+    protected abstract Status run();
 
     protected final void setup()
     {
@@ -115,23 +157,42 @@ public final class Main
         root.setLevel(Level.TRACE);
       }
     }
+
+    enum Status
+    {
+      SUCCESS,
+      FAILURE;
+
+      int exitCode()
+      {
+        switch (this) {
+          case SUCCESS:
+            return 0;
+          case FAILURE:
+            return 1;
+        }
+        throw new UnreachableCodeException();
+      }
+    }
   }
 
   /**
    * A check command.
    */
 
-  @Command(name = "check", description = "Check a list of packages")
+  @Parameters(commandDescription = "Check a list of packages")
   public static final class CommandCheck extends CommandType
   {
-    @Option(
-      arity = 1,
+    @Parameter(
       description = "Source directory",
-      name = "--source-directory",
-      required = true) private String source_directory;
-    @Arguments(
-      description = "Packages to be checked",
-      required = true) private List<String> packages;
+      names = "--source-directory",
+      required = true)
+    private String source_directory;
+
+    @Parameter(
+      description = "Packages to be checked (may be specified multiple times)",
+      names = "--package")
+    private List<String> packages = new ArrayList<>();
 
     /**
      * Construct a command.
@@ -143,7 +204,7 @@ public final class Main
     }
 
     @Override
-    public void run()
+    public Status run()
     {
       this.setup();
 
@@ -179,9 +240,9 @@ public final class Main
       }
 
       if (error) {
-        System.exit(1);
+        return Status.FAILURE;
       }
-      System.exit(0);
+      return Status.SUCCESS;
     }
   }
 
@@ -189,22 +250,27 @@ public final class Main
    * A {@code generate-java} command.
    */
 
-  @Command(name = "generate-java", description = "Generate Java code")
+  @Parameters(commandDescription = "Generate Java code")
   public static final class CommandGenerateJava extends CommandType
   {
-    @Option(
+    @Parameter(
       arity = 1,
       description = "Source directory",
-      name = "--source-directory",
-      required = true) private String source_directory;
-    @Option(
+      names = "--source-directory",
+      required = true)
+    private String source_directory;
+
+    @Parameter(
       arity = 1,
       description = "Target directory",
-      name = "--target-directory",
-      required = true) private String target_directory;
-    @Arguments(
-      description = "Packages to be exported",
-      required = true) private List<String> packages;
+      names = "--target-directory",
+      required = true)
+    private String target_directory;
+
+    @Parameter(
+      description = "Packages to be exported (may be specified multiple times)",
+      names = "--package")
+    private List<String> packages = new ArrayList<>();
 
     /**
      * Construct a command.
@@ -216,7 +282,7 @@ public final class Main
     }
 
     @Override
-    public void run()
+    public Status run()
     {
       this.setup();
 
@@ -276,9 +342,9 @@ public final class Main
 
       System.err.flush();
       if (error) {
-        System.exit(1);
+        return Status.FAILURE;
       }
-      System.exit(0);
+      return Status.SUCCESS;
     }
   }
 }

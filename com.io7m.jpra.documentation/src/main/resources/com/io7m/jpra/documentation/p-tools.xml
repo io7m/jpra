@@ -10,14 +10,34 @@
       <s:formal-item s:kind="specification">
         <s:formal-item-title>Options</s:formal-item-title>
         <s:verbatim><![CDATA[
-usage: jpra <command> [<args>]
+Usage: jpra [command] [command options]
+  Commands:
+    check      Check a list of packages
+      Usage: check [options]
+        Options:
+          --debug
+            Enable debug logging
+            Default: false
+          --package
+            Packages to be checked (may be specified multiple times)
+            Default: []
+        * --source-directory
+            Source directory
 
-The most commonly used jpra commands are:
-    check           Check a list of packages
-    generate-java   Generate Java code
-    help            Display help information
+    generate      Generate Java code
+      Usage: generate [options]
+        Options:
+          --debug
+            Enable debug logging
+            Default: false
+          --package
+            Packages to be exported (may be specified multiple times)
+            Default: []
+        * --source-directory
+            Source directory
+        * --target-directory
+            Target directory
 
-See 'jpra help <command>' for more information on a specific command.
 ]]></s:verbatim>
       </s:formal-item>
       <s:paragraph>
@@ -35,7 +55,7 @@ See 'jpra help <command>' for more information on a specific command.
       <s:formal-item s:kind="example">
         <s:formal-item-title>Checking sources</s:formal-item-title>
         <s:verbatim><![CDATA[
-$ java -jar jpra.jar check --source-directory p com.io7m.example
+$ java -jar jpra.jar check --source-directory p --package com.io7m.example
 ]]></s:verbatim>
       </s:formal-item>
       <s:paragraph>
@@ -59,7 +79,7 @@ $ java -jar jpra.jar check --source-directory p com.io7m.example
       <s:formal-item s:kind="example">
         <s:formal-item-title>Checking sources</s:formal-item-title>
         <s:verbatim><![CDATA[
-$ java -jar jpra.jar generate-java --source-directory p --target-directory t com.io7m.example
+$ java -jar jpra.jar generate-java --source-directory p --target-directory t --package com.io7m.example
 ]]></s:verbatim>
       </s:formal-item>
       <s:paragraph>

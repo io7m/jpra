@@ -179,7 +179,7 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.8.0-beta0</version>
+        <version>1.7.25</version>
       </dependency>
       <dependency>
         <groupId>ch.qos.logback</groupId>
@@ -197,9 +197,9 @@
         <version>3.7</version>
       </dependency>
       <dependency>
-        <groupId>io.airlift</groupId>
-        <artifactId>airline</artifactId>
-        <version>0.8</version>
+        <groupId>com.beust</groupId>
+        <artifactId>jcommander</artifactId>
+        <version>1.72</version>
       </dependency>
       <dependency>
         <groupId>org.immutables</groupId>
