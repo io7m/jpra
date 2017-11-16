@@ -7,11 +7,8 @@ install: true
 
 script:
   - mvn --errors clean verify site
-  - bash <(curl -s https://codecov.io/bash) -f com.io7m.jpra.tests/target/site/jacoco/jacoco.xml
+  - bash <(curl -s https://codecov.io/bash) -f ./com.io7m.jpra.tests/target/site/jacoco-aggregate/jacoco.xml
 
 notifications:
   irc: "chat.freenode.net#io7m"
-
-after_failure:
-  - cat io7m-jpra-compiler-java/target/surefire-reports/*
 
