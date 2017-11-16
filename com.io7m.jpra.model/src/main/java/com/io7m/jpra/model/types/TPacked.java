@@ -384,8 +384,10 @@ public final class TPacked implements TType, TypeUserDefinedType
       final Size<SizeUnitBitsType> in_size_bits,
       final Optional<LexicalPosition<Path>> in_lex)
     {
-      this.size_bits = Objects.requireNonNull(in_size_bits, "Size bits");
-      this.lex = Objects.requireNonNull(in_lex, "Lexical information");
+      this.size_bits =
+        Objects.requireNonNull(in_size_bits, "Size bits");
+      this.lex =
+        Objects.requireNonNull(in_lex, "Lexical information");
     }
 
     @Override
