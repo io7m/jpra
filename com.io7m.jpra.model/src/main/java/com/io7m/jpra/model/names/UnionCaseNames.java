@@ -16,45 +16,43 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jpra.core.JPRAImmutableStyleType;
-import com.io7m.jpra.model.ModelElementType;
-import org.immutables.value.Value;
-
-import java.nio.file.Path;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
- * The type of type names.
+ * Functions over union case names.
  */
 
-@JPRAImmutableStyleType
-@Value.Immutable
-public interface TypeNameType extends ModelElementType
+public final class UnionCaseNames
 {
-  @Override
-  @Value.Auxiliary
-  @Value.Parameter
-  Optional<LexicalPosition<Path>> lexical();
-
   /**
-   * @return The raw string value
+   * The pattern that defines a valid union case name.
    */
 
-  @Value.Parameter
-  String value();
+  public static final Pattern PATTERN;
 
-  /**
-   * Check preconditions for the type.
-   */
+  private static final String PATTERN_TEXT;
 
-  @Value.Check
-  default void checkPreconditions()
+  static {
+    PATTERN_TEXT = "[\\p{IsUppercase}][\\p{IsAlphabetic}\\p{IsDigit}_]*";
+    PATTERN = Objects.requireNonNull(Pattern.compile(
+      PATTERN_TEXT, Pattern.UNICODE_CHARACTER_CLASS), "Pattern");
+  }
+
+  private UnionCaseNames()
   {
-    Preconditions.checkPrecondition(
-      this.value(),
-      TypeNames.isValid(this.value()),
-      s -> "Type name must match the pattern " + TypeNames.PATTERN.pattern());
+
+  }
+
+  /**
+   * @param name The raw name
+   *
+   * @return {@code true} iff the given name is a valid union case name
+   */
+
+  public static boolean isValid(
+    final String name)
+  {
+    return PATTERN.matcher(Objects.requireNonNull(name, "Name")).matches();
   }
 }

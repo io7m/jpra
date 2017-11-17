@@ -28,59 +28,59 @@ public final class UnionCaseNameTest
   @Test
   public void testValid0()
   {
-    final UnionCaseName p = new UnionCaseName(Optional.empty(), "A");
-    Assert.assertEquals("A", p.getValue());
+    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A");
+    Assert.assertEquals("A", p.value());
   }
 
   @Test
   public void testValid1()
   {
-    final UnionCaseName p = new UnionCaseName(Optional.empty(), "A_");
-    Assert.assertEquals("A_", p.getValue());
+    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A_");
+    Assert.assertEquals("A_", p.value());
   }
 
   @Test
   public void testValid2()
   {
-    final UnionCaseName p = new UnionCaseName(Optional.empty(), "A1");
-    Assert.assertEquals("A1", p.getValue());
+    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A1");
+    Assert.assertEquals("A1", p.value());
   }
 
   @Test
   public void testValid3()
   {
-    final UnionCaseName p = new UnionCaseName(Optional.empty(), "AA");
-    Assert.assertEquals("AA", p.getValue());
+    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "AA");
+    Assert.assertEquals("AA", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    new UnionCaseName(Optional.empty(), "1");
+    UnionCaseName.of(Optional.empty(), "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    new UnionCaseName(Optional.empty(), "a");
+    UnionCaseName.of(Optional.empty(), "a");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    new UnionCaseName(Optional.empty(), "_");
+    UnionCaseName.of(Optional.empty(), "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    new UnionCaseName(Optional.empty(), "aA");
+    UnionCaseName.of(Optional.empty(), "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    new UnionCaseName(Optional.empty(), "");
+    UnionCaseName.of(Optional.empty(), "");
   }
 
 }

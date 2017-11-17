@@ -26,12 +26,12 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 /**
- * The type of unqualified package names.
+ * The type of union case names.
  */
 
 @JPRAImmutableStyleType
 @Value.Immutable
-public interface PackageNameUnqualifiedType extends ModelElementType
+public interface UnionCaseNameType extends ModelElementType
 {
   @Override
   @Value.Auxiliary
@@ -54,7 +54,7 @@ public interface PackageNameUnqualifiedType extends ModelElementType
   {
     Preconditions.checkPrecondition(
       this.value(),
-      PackageNamesUnqualified.isValid(this.value()),
-      s -> "Package name must match the pattern " + PackageNamesUnqualified.PATTERN.pattern());
+      UnionCaseNames.isValid(this.value()),
+      s -> "Union case name must match the pattern " + UnionCaseNames.PATTERN.pattern());
   }
 }
