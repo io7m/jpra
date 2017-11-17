@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <div xmlns="http://www.w3.org/1999/xhtml">
-  <h3>User documentation</h3>
+  <h3>User Documentation</h3>
   <ul>
     <li><a href="/documentation/index-m.xhtml">XHTML - one page per section</a></li>
     <li><a href="/documentation/index.xhtml">XHTML - single page</a></li>
+  </ul>
+  <h3>Language Specification</h3>
+  <ul>
+    <li><a href="/specification/index-m.xhtml">XHTML - one page per section</a></li>
+    <li><a href="/specification/index.xhtml">XHTML - single page</a></li>
   </ul>
 </div>
