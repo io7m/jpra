@@ -756,7 +756,7 @@ public abstract class JPRACheckerContract
           p.parseTypeExpression(this.newStringSExpr("T")))));
 
     Assert.assertEquals(td.getIdentifier(), te.getIdentifier());
-    Assert.assertEquals(td.getName(), te.getReference().getType());
+    Assert.assertEquals(td.getName(), te.getReference().type());
   }
 
   private void checkPackedInvariants(

@@ -80,7 +80,7 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
   {
     Path p = base;
     for (final PackageNameUnqualified e : p_name.getValue()) {
-      p = p.resolve(e.getValue());
+      p = p.resolve(e.value());
     }
     return p;
   }

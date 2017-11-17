@@ -375,7 +375,7 @@ public final class JPRAParser implements JPRAParserType
     for (int index = 0; index < segments.length; ++index) {
       final String raw = segments[index];
       try {
-        names_base.add(new PackageNameUnqualified(ilex, raw));
+        names_base.add(PackageNameUnqualified.of(ilex, raw));
       } catch (final PreconditionViolationException e) {
         throw JPRACompilerParseException.badPackageName(name, e.getMessage());
       }
@@ -389,8 +389,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return new PackageNameUnqualified(
-        getExpressionLexical(s), s.text());
+      return PackageNameUnqualified.of(getExpressionLexical(s), s.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badPackageName(s, e.getMessage());
     }
@@ -431,8 +430,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return new TypeName(
-        getExpressionLexical(name), name.text());
+      return TypeName.of(getExpressionLexical(name), name.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badTypeName(name, e.getMessage());
     }

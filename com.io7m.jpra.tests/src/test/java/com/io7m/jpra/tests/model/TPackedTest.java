@@ -51,12 +51,12 @@ public final class TPackedTest
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"),
-          PackageNameUnqualified.of("y"),
-          PackageNameUnqualified.of("z"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"y"),
+          PackageNameUnqualified.of(Optional.empty(),"z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), new TypeName(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
     final TPacked tp = tpb.build();
     Assert.assertEquals(Size.zero(), tp.getSizeInBits());
   }
@@ -73,12 +73,12 @@ public final class TPackedTest
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"),
-          PackageNameUnqualified.of("y"),
-          PackageNameUnqualified.of("z"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"y"),
+          PackageNameUnqualified.of(Optional.empty(),"z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), new TypeName(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
 
     tpb.addField(
       FieldName.of(no_lex, "f0"),
@@ -145,12 +145,12 @@ public final class TPackedTest
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"),
-          PackageNameUnqualified.of("y"),
-          PackageNameUnqualified.of("z"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"y"),
+          PackageNameUnqualified.of(Optional.empty(),"z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), new TypeName(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
 
     tpb.addField(
       FieldName.of(no_lex, "f0"),

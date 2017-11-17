@@ -23,7 +23,9 @@ import com.io7m.jpra.model.names.FieldNames;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
+import com.io7m.jpra.model.names.PackageNamesUnqualified;
 import com.io7m.jpra.model.names.TypeName;
+import com.io7m.jpra.model.names.TypeNames;
 import com.io7m.jpra.model.names.TypeReference;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.api.serializer.JSXSerializerType;
@@ -54,11 +56,11 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final StringBuilder sb = new StringBuilder(128);
       sb.append("(");
-      sb.append(PackageNameUnqualified.PATTERN.toString());
+      sb.append(PackageNamesUnqualified.PATTERN.toString());
       sb.append(")");
       sb.append(":");
       sb.append("(");
-      sb.append(TypeName.PATTERN);
+      sb.append(TypeNames.PATTERN);
       sb.append(")");
       PATTERN_PT =
         Pattern.compile(sb.toString(), Pattern.UNICODE_CHARACTER_CLASS);
@@ -67,11 +69,11 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final StringBuilder sb = new StringBuilder(128);
       sb.append("(");
-      sb.append(PackageNameUnqualified.PATTERN.toString());
+      sb.append(PackageNamesUnqualified.PATTERN.toString());
       sb.append(")");
       sb.append(":");
       sb.append("(");
-      sb.append(TypeName.PATTERN);
+      sb.append(TypeNames.PATTERN);
       sb.append(")");
       sb.append("((\\.");
       sb.append(FieldNames.PATTERN);
@@ -83,7 +85,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final StringBuilder sb = new StringBuilder(128);
       sb.append("(");
-      sb.append(TypeName.PATTERN);
+      sb.append(TypeNames.PATTERN);
       sb.append(")");
       sb.append("((\\.");
       sb.append(FieldNames.PATTERN);
@@ -197,16 +199,16 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       final Matcher m = PATTERN_PT.matcher(text);
       if (m.matches()) {
         final PackageNameUnqualified p_name =
-          new PackageNameUnqualified(lex, m.group(1));
-        final TypeName t_name = new TypeName(lex, m.group(2));
-        return new TypeReference(Optional.of(p_name), t_name);
+          PackageNameUnqualified.of(lex, m.group(1));
+        final TypeName t_name = TypeName.of(lex, m.group(2));
+        return TypeReference.of(Optional.of(p_name), t_name);
       }
     }
 
     {
-      final Matcher m = TypeName.PATTERN.matcher(text);
+      final Matcher m = TypeNames.PATTERN.matcher(text);
       if (m.matches()) {
-        return new TypeReference(Optional.empty(), new TypeName(lex, text));
+        return TypeReference.of(Optional.empty(), TypeName.of(lex, text));
       }
     }
 
@@ -228,8 +230,8 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       final Matcher m = PATTERN_PTF.matcher(text);
       if (m.matches()) {
         final PackageNameUnqualified p_name =
-          new PackageNameUnqualified(lex, m.group(1));
-        final TypeName t_name = new TypeName(lex, m.group(2));
+          PackageNameUnqualified.of(lex, m.group(1));
+        final TypeName t_name = TypeName.of(lex, m.group(2));
         final List<FieldName> fields =
           getFieldPath(lex, se, m.group(3));
         return new FieldReference(
@@ -240,7 +242,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final Matcher m = PATTERN_TF.matcher(text);
       if (m.matches()) {
-        final TypeName t_name = new TypeName(lex, m.group(1));
+        final TypeName t_name = TypeName.of(lex, m.group(1));
         final List<FieldName> fields =
           getFieldPath(lex, se, m.group(2));
         return new FieldReference(

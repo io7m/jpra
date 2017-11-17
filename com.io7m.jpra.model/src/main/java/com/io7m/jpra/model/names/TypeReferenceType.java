@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,48 +16,30 @@
 
 package com.io7m.jpra.model.names;
 
-import java.util.Objects;
+import com.io7m.jpra.core.JPRAImmutableStyleType;
+import org.immutables.value.Value;
+
 import java.util.Optional;
 
 /**
  * A reference to a type by name.
  */
 
-public final class TypeReference
+@JPRAImmutableStyleType
+@Value.Immutable
+public interface TypeReferenceType
 {
-  private final Optional<PackageNameUnqualified> pack;
-  private final TypeName type;
-
-  /**
-   * Construct a reference.
-   *
-   * @param in_pack The package name, if any
-   * @param in_type The type name
-   */
-
-  public TypeReference(
-    final Optional<PackageNameUnqualified> in_pack,
-    final TypeName in_type)
-  {
-    this.type = Objects.requireNonNull(in_type, "Type");
-    this.pack = Objects.requireNonNull(in_pack, "Pack");
-  }
-
   /**
    * @return The package name, if any
    */
 
-  public Optional<PackageNameUnqualified> getPackage()
-  {
-    return this.pack;
-  }
+  @Value.Parameter
+  Optional<PackageNameUnqualified> packageName();
 
   /**
    * @return The type name
    */
 
-  public TypeName getType()
-  {
-    return this.type;
-  }
+  @Value.Parameter
+  TypeName type();
 }

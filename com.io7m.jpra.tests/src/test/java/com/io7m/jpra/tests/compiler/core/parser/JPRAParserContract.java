@@ -455,7 +455,7 @@ public abstract class JPRAParserContract
     final TypeExprName<Unresolved, Untyped> tn =
       TypeExprName.class.cast(sb.getTypeExpression());
     final TypeReference tr = TypeReference.class.cast(tn.getReference());
-    Assert.assertEquals("T", tr.getType().getValue());
+    Assert.assertEquals("T", tr.type().value());
   }
 
   @Test
@@ -484,7 +484,7 @@ public abstract class JPRAParserContract
     final TypeExprName<Unresolved, Untyped> tn =
       TypeExprName.class.cast(sb.getTypeExpression());
     final TypeReference tr = TypeReference.class.cast(tn.getReference());
-    Assert.assertEquals("T", tr.getType().getValue());
+    Assert.assertEquals("T", tr.type().value());
   }
 
   @Test
@@ -912,7 +912,7 @@ public abstract class JPRAParserContract
     final StatementPackageImport<Unresolved, Untyped> pi =
       StatementPackageImport.class.cast(st);
     Assert.assertEquals("x.y.z", pi.getPackageName().toString());
-    Assert.assertEquals("q", pi.getUsing().toString());
+    Assert.assertEquals("q", pi.getUsing().value());
   }
 
   @Test
@@ -1348,8 +1348,8 @@ public abstract class JPRAParserContract
     final TypeExprName<Unresolved, Untyped> tn =
       TypeExprName.class.cast(s.getExpression());
     final TypeReference ref = tn.getReference();
-    Assert.assertEquals(new TypeName(Optional.empty(), "T"), ref.getType());
-    Assert.assertEquals(Optional.empty(), ref.getPackage());
+    Assert.assertEquals(TypeName.of(Optional.empty(), "T"), ref.type());
+    Assert.assertEquals(Optional.empty(), ref.packageName());
   }
 
 

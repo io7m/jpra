@@ -157,7 +157,7 @@ public final class JPRADriver implements JPRADriverType
     {
       Path file = this.source_directory;
       for (final PackageNameUnqualified e : p.getValue()) {
-        file = file.resolve(e.getValue());
+        file = file.resolve(e.value());
       }
       return file.resolveSibling(file.getFileName() + ".jpr");
     }

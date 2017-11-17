@@ -28,59 +28,59 @@ public final class TypeNameTest
   @Test
   public void testValid0()
   {
-    final TypeName p = new TypeName(Optional.empty(), "A");
-    Assert.assertEquals("A", p.getValue());
+    final TypeName p = TypeName.of(Optional.empty(), "A");
+    Assert.assertEquals("A", p.value());
   }
 
   @Test
   public void testValid1()
   {
-    final TypeName p = new TypeName(Optional.empty(), "A_");
-    Assert.assertEquals("A_", p.getValue());
+    final TypeName p = TypeName.of(Optional.empty(), "A_");
+    Assert.assertEquals("A_", p.value());
   }
 
   @Test
   public void testValid2()
   {
-    final TypeName p = new TypeName(Optional.empty(), "A1");
-    Assert.assertEquals("A1", p.getValue());
+    final TypeName p = TypeName.of(Optional.empty(), "A1");
+    Assert.assertEquals("A1", p.value());
   }
 
   @Test
   public void testValid3()
   {
-    final TypeName p = new TypeName(Optional.empty(), "AA");
-    Assert.assertEquals("AA", p.getValue());
+    final TypeName p = TypeName.of(Optional.empty(), "AA");
+    Assert.assertEquals("AA", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    new TypeName(Optional.empty(), "1");
+    TypeName.of(Optional.empty(), "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    new TypeName(Optional.empty(), "a");
+    TypeName.of(Optional.empty(), "a");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    new TypeName(Optional.empty(), "_");
+    TypeName.of(Optional.empty(), "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    new TypeName(Optional.empty(), "aA");
+    TypeName.of(Optional.empty(), "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    new TypeName(Optional.empty(), "");
+    TypeName.of(Optional.empty(), "");
   }
 
 }

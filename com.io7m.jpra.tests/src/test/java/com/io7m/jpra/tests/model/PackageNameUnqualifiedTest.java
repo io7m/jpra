@@ -29,53 +29,53 @@ public final class PackageNameUnqualifiedTest
   public void testValid0()
   {
     final PackageNameUnqualified p =
-      new PackageNameUnqualified(Optional.empty(), "a");
-    Assert.assertEquals("a", p.getValue());
+      PackageNameUnqualified.of(Optional.empty(), "a");
+    Assert.assertEquals("a", p.value());
   }
 
   @Test
   public void testValid1()
   {
     final PackageNameUnqualified p =
-      new PackageNameUnqualified(Optional.empty(), "a_");
-    Assert.assertEquals("a_", p.getValue());
+      PackageNameUnqualified.of(Optional.empty(), "a_");
+    Assert.assertEquals("a_", p.value());
   }
 
   @Test
   public void testValid2()
   {
     final PackageNameUnqualified p =
-      new PackageNameUnqualified(Optional.empty(), "a1");
-    Assert.assertEquals("a1", p.getValue());
+      PackageNameUnqualified.of(Optional.empty(), "a1");
+    Assert.assertEquals("a1", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    new PackageNameUnqualified(Optional.empty(), "1");
+    PackageNameUnqualified.of(Optional.empty(), "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    new PackageNameUnqualified(Optional.empty(), "A");
+    PackageNameUnqualified.of(Optional.empty(), "A");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    new PackageNameUnqualified(Optional.empty(), "_");
+    PackageNameUnqualified.of(Optional.empty(), "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    new PackageNameUnqualified(Optional.empty(), "aA");
+    PackageNameUnqualified.of(Optional.empty(), "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    new PackageNameUnqualified(Optional.empty(), "");
+    PackageNameUnqualified.of(Optional.empty(), "");
   }
 }

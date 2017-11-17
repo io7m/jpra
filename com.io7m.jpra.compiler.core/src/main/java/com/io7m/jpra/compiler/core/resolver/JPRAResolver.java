@@ -710,8 +710,8 @@ public final class JPRAResolver implements JPRAResolverType
     final TypeReference ref)
     throws JPRACompilerResolverException
   {
-    final TypeName t_name = ref.getType();
-    final Optional<PackageNameUnqualified> pack_opt = ref.getPackage();
+    final TypeName t_name = ref.type();
+    final Optional<PackageNameUnqualified> pack_opt = ref.packageName();
     if (pack_opt.isPresent()) {
       final PackageNameUnqualified p_name = pack_opt.get();
       if (!this.import_names.containsKey(p_name)) {

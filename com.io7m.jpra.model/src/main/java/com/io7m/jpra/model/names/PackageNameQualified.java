@@ -55,7 +55,7 @@ public final class PackageNameQualified implements ModelElementType
 
     final StringBuilder sb = new StringBuilder(this.value.size() * 8);
     for (int index = 0; index < this.value.size(); ++index) {
-      sb.append(this.value.get(index));
+      sb.append(this.value.get(index).value());
       if (index + 1 < this.value.size()) {
         sb.append(".");
       }
@@ -89,7 +89,7 @@ public final class PackageNameQualified implements ModelElementType
     final String[] segments = text.split("\\.");
     return new PackageNameQualified(
       List.of(segments)
-        .map(raw -> new PackageNameUnqualified(Optional.empty(), raw)));
+        .map(raw -> PackageNameUnqualified.of(Optional.empty(), raw)));
   }
 
   @Override

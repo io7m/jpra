@@ -128,9 +128,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "z")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "z")));
     }
   }
 
@@ -189,9 +189,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "a")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "a")));
     }
   }
 
@@ -232,9 +232,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "z")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "z")));
     }
   }
 
@@ -280,9 +280,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "z")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "z")));
     }
   }
 
@@ -306,15 +306,15 @@ public abstract class JPRADriverContract
 
       final PackageContextType pc0 = d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "z")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "z")));
 
       final PackageContextType pc1 = d.compilePackage(
         PackageNameQualified.of(
-          new PackageNameUnqualified(no_lex, "x"),
-          new PackageNameUnqualified(no_lex, "y"),
-          new PackageNameUnqualified(no_lex, "z")));
+          PackageNameUnqualified.of(no_lex, "x"),
+          PackageNameUnqualified.of(no_lex, "y"),
+          PackageNameUnqualified.of(no_lex, "z")));
 
       Assert.assertSame(pc0, pc1);
     }

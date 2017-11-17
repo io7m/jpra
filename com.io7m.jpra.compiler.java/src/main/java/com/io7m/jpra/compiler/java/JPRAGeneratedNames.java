@@ -123,22 +123,22 @@ final class JPRAGeneratedNames
   static String getRecordImplementationByteBufferedName(
     final TypeName t)
   {
-    return t.getValue() + "ByteBuffered";
+    return t.value() + "ByteBuffered";
   }
 
   static String getRecordInterfaceReadableName(final TypeName t)
   {
-    return t.getValue() + "ReadableType";
+    return t.value() + "ReadableType";
   }
 
   static String getRecordInterfaceWritableName(final TypeName t)
   {
-    return t.getValue() + "WritableType";
+    return t.value() + "WritableType";
   }
 
   static String getRecordInterfaceName(final TypeName t)
   {
-    return t.getValue() + "Type";
+    return t.value() + "Type";
   }
 
   static String getFieldName(final FieldName f_name)
@@ -148,22 +148,22 @@ final class JPRAGeneratedNames
 
   static String getPackedInterfaceWritableName(final TypeName t)
   {
-    return t.getValue() + "WritableType";
+    return t.value() + "WritableType";
   }
 
   static String getPackedInterfaceReadableName(final TypeName t)
   {
-    return t.getValue() + "ReadableType";
+    return t.value() + "ReadableType";
   }
 
   static String getPackedInterfaceName(final TypeName t)
   {
-    return t.getValue() + "Type";
+    return t.value() + "Type";
   }
 
   static String getPackedImplementationByteBufferedName(final TypeName t)
   {
-    return t.getValue() + "ByteBuffered";
+    return t.value() + "ByteBuffered";
   }
 
   static String getNormalizedRawGetterName(final FieldName name)

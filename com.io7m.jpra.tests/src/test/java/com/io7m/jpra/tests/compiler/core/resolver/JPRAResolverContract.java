@@ -112,9 +112,9 @@ public abstract class JPRAResolverContract
 
     final JPRAResolverType r = this.newResolverForPackage(
       c, PackageNameQualified.of(
-        PackageNameUnqualified.of("x"),
-        PackageNameUnqualified.of("y"),
-        PackageNameUnqualified.of("z")));
+        PackageNameUnqualified.of(Optional.empty(),"x"),
+        PackageNameUnqualified.of(Optional.empty(),"y"),
+        PackageNameUnqualified.of(Optional.empty(),"z")));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
@@ -134,9 +134,9 @@ public abstract class JPRAResolverContract
 
     final JPRAResolverType r = this.newResolverForPackage(
       c, PackageNameQualified.of(
-        PackageNameUnqualified.of("x"),
-        PackageNameUnqualified.of("y"),
-        PackageNameUnqualified.of("z")));
+        PackageNameUnqualified.of(Optional.empty(),"x"),
+        PackageNameUnqualified.of(Optional.empty(),"y"),
+        PackageNameUnqualified.of(Optional.empty(),"z")));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
@@ -175,9 +175,9 @@ public abstract class JPRAResolverContract
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"),
-          PackageNameUnqualified.of("y"),
-          PackageNameUnqualified.of("z"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"y"),
+          PackageNameUnqualified.of(Optional.empty(),"z"))));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
@@ -233,11 +233,13 @@ public abstract class JPRAResolverContract
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"), PackageNameUnqualified.of("a"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"a"))));
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of("x"), PackageNameUnqualified.of("b"))));
+          PackageNameUnqualified.of(Optional.empty(),"x"),
+          PackageNameUnqualified.of(Optional.empty(),"b"))));
 
     r.resolvePackageBegin(
       StatementPackageBegin.class.cast(
