@@ -72,7 +72,7 @@ public final class RecordFieldDeclPaddingOctets<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

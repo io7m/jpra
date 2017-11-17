@@ -28,51 +28,51 @@ public final class FieldNameTest
   @Test
   public void testValid0()
   {
-    final FieldName p = new FieldName(Optional.empty(), "a");
-    Assert.assertEquals("a", p.getValue());
+    final FieldName p = FieldName.of(Optional.empty(), "a");
+    Assert.assertEquals("a", p.value());
   }
 
   @Test
   public void testValid1()
   {
-    final FieldName p = new FieldName(Optional.empty(), "a_");
-    Assert.assertEquals("a_", p.getValue());
+    final FieldName p = FieldName.of(Optional.empty(), "a_");
+    Assert.assertEquals("a_", p.value());
   }
 
   @Test
   public void testValid2()
   {
-    final FieldName p = new FieldName(Optional.empty(), "a1");
-    Assert.assertEquals("a1", p.getValue());
+    final FieldName p = FieldName.of(Optional.empty(), "a1");
+    Assert.assertEquals("a1", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    new FieldName(Optional.empty(), "1");
+    FieldName.of(Optional.empty(), "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    new FieldName(Optional.empty(), "A");
+    FieldName.of(Optional.empty(), "A");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    new FieldName(Optional.empty(), "_");
+    FieldName.of(Optional.empty(), "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    new FieldName(Optional.empty(), "aA");
+    FieldName.of(Optional.empty(), "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    new FieldName(Optional.empty(), "");
+    FieldName.of(Optional.empty(), "");
   }
 }

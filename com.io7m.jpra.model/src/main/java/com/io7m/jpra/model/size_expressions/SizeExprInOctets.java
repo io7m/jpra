@@ -67,8 +67,8 @@ public final class SizeExprInOctets<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.expression.getLexicalInformation();
+    return this.expression.lexical();
   }
 }

@@ -172,7 +172,7 @@ public final class PackedFieldInterfaceProcessor
                   return double.class;
                 }
               });
-            setb.addParameter(f_type, f_name.getValue(), Modifier.FINAL);
+            setb.addParameter(f_type, f_name.value(), Modifier.FINAL);
             return null;
           }
 

@@ -36,5 +36,5 @@ public interface ModelElementType
    * @return The original lexical information, if any
    */
 
-  Optional<LexicalPosition<Path>> getLexicalInformation();
+  Optional<LexicalPosition<Path>> lexical();
 }

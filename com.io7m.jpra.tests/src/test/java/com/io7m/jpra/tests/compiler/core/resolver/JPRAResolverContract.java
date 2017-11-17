@@ -160,7 +160,7 @@ public abstract class JPRAResolverContract
       r.resolvePackageBegin(pb);
 
     Assert.assertEquals(pb.getPackageName(), rp.getPackageName());
-    Assert.assertEquals(pb.getLexicalInformation(), rp.getLexicalInformation());
+    Assert.assertEquals(pb.lexical(), rp.lexical());
   }
 
   @Test
@@ -789,7 +789,7 @@ public abstract class JPRAResolverContract
       throws JPRAModelLoadingException
     {
       final JPRACompilerResolverException e = new JPRACompilerResolverException(
-        p.getLexicalInformation(),
+        p.lexical(),
         JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
         "No such package");
 

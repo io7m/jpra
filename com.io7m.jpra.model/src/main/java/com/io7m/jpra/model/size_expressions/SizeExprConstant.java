@@ -77,7 +77,7 @@ public final class SizeExprConstant<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

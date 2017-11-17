@@ -1233,7 +1233,7 @@ public abstract class JPRAParserContract
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(1L, (long) field_names.size());
 
-    final FieldName f_name = new FieldName(Optional.empty(), "f0");
+    final FieldName f_name = FieldName.of(Optional.empty(), "f0");
     final RecordFieldDeclValue<Unresolved, Untyped> f0 =
       field_names.get(f_name).get();
     final RecordFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
@@ -1476,7 +1476,7 @@ public abstract class JPRAParserContract
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(1L, (long) field_names.size());
 
-    final FieldName f_name = new FieldName(Optional.empty(), "f0");
+    final FieldName f_name = FieldName.of(Optional.empty(), "f0");
     final PackedFieldDeclValue<Unresolved, Untyped> f0 =
       field_names.get(f_name).get();
     final PackedFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);

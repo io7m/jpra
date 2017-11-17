@@ -88,9 +88,9 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(name);
 
     final Optional<LexicalPosition<Path>> curr_lex_opt =
-      name.getLexicalInformation();
+      name.lexical();
     final Optional<LexicalPosition<Path>> orig_lex_opt =
-      name.getLexicalInformation();
+      name.lexical();
 
     if (curr_lex_opt.isPresent() && orig_lex_opt.isPresent()) {
       sb.append(System.lineSeparator());
@@ -136,7 +136,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
-      name.getLexicalInformation().map(LexicalPosition::copyOf),
+      name.lexical().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.PACKAGE_NESTED,
       "Nested packages are not allowed.");
   }
@@ -161,14 +161,14 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(existing_name);
 
     final Optional<LexicalPosition<Path>> lex_orig_opt =
-      existing_name.getLexicalInformation();
+      existing_name.lexical();
     if (lex_orig_opt.isPresent()) {
       sb.append(" at ");
       sb.append(lex_orig_opt.get());
     }
 
     return new JPRACompilerResolverException(
-      new_name.getLexicalInformation().map(LexicalPosition::copyOf),
+      new_name.lexical().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.PACKAGE_IMPORT_CONFLICT,
       sb.toString());
   }
@@ -193,14 +193,14 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(original);
 
     final Optional<LexicalPosition<Path>> lex_orig_opt =
-      original.getLexicalInformation();
+      original.lexical();
     if (lex_orig_opt.isPresent()) {
       sb.append(" at ");
       sb.append(lex_orig_opt.get());
     }
 
     return new JPRACompilerResolverException(
-      current.getLexicalInformation().map(LexicalPosition::copyOf),
+      current.lexical().map(LexicalPosition::copyOf),
       JPRAResolverErrorCode.TYPE_DUPLICATE,
       sb.toString());
   }
@@ -217,7 +217,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
-      name.getLexicalInformation(),
+      name.lexical(),
       JPRAResolverErrorCode.PACKAGE_NONEXISTENT,
       String.format("Nonexistent package '%s'", name));
   }
@@ -240,7 +240,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(name);
 
     final Optional<LexicalPosition<Path>> lex_opt =
-      name.getLexicalInformation();
+      name.lexical();
     lex_opt.ifPresent(
       lex -> {
         sb.append(" at ");
@@ -281,7 +281,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(t_name);
 
     final Optional<LexicalPosition<Path>> lex_opt =
-      t_name.getLexicalInformation();
+      t_name.lexical();
     lex_opt.ifPresent(
       lex -> {
         sb.append(" at ");
@@ -334,7 +334,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(got);
 
     return new JPRACompilerResolverException(
-      got.getLexicalInformation(),
+      got.lexical(),
       JPRAResolverErrorCode.UNEXPECTED_PACKAGE,
       sb.toString());
   }
@@ -357,7 +357,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(p);
 
     return new JPRACompilerResolverException(
-      p.getLexicalInformation(),
+      p.lexical(),
       JPRAResolverErrorCode.EXPECTED_PACKAGE,
       sb.toString());
   }

@@ -87,8 +87,8 @@ public final class TypeExprName<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.ref.getType().getLexicalInformation();
+    return this.ref.getType().lexical();
   }
 }

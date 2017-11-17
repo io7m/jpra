@@ -111,7 +111,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
     final List<PackageImport> imports = e.getImports();
 
     printLex(
-      w, imports.get(0).getTo().getLexicalInformation());
+      w, imports.get(0).getTo().lexical());
 
     w.println("error: circular import:");
 
@@ -122,7 +122,7 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
       w.print(" at ");
 
       final Optional<LexicalPosition<Path>> lex =
-        i.getTo().getLexicalInformation();
+        i.getTo().lexical();
       lex.ifPresent(
         p -> {
           p.file().ifPresent(

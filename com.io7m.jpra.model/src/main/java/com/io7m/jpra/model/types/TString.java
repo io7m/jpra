@@ -90,7 +90,7 @@ public final class TString implements TType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

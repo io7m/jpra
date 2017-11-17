@@ -90,9 +90,9 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     final FieldPath path = this.field_reference.getFieldPath();
-    return path.getElements().get(0).getLexicalInformation();
+    return path.getElements().get(0).lexical();
   }
 }

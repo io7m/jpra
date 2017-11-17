@@ -19,6 +19,7 @@ package com.io7m.jpra.compiler.core.parser;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
+import com.io7m.jpra.model.names.FieldNames;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
@@ -73,7 +74,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       sb.append(TypeName.PATTERN);
       sb.append(")");
       sb.append("((\\.");
-      sb.append(FieldName.PATTERN);
+      sb.append(FieldNames.PATTERN);
       sb.append(")+)");
       PATTERN_PTF =
         Pattern.compile(sb.toString(), Pattern.UNICODE_CHARACTER_CLASS);
@@ -85,7 +86,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       sb.append(TypeName.PATTERN);
       sb.append(")");
       sb.append("((\\.");
-      sb.append(FieldName.PATTERN);
+      sb.append(FieldNames.PATTERN);
       sb.append(")+)");
       PATTERN_TF =
         Pattern.compile(sb.toString(), Pattern.UNICODE_CHARACTER_CLASS);
@@ -93,9 +94,9 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
 
     {
       final StringBuilder sb = new StringBuilder(128);
-      sb.append(FieldName.PATTERN);
+      sb.append(FieldNames.PATTERN);
       sb.append("((\\.");
-      sb.append(FieldName.PATTERN);
+      sb.append(FieldNames.PATTERN);
       sb.append(")*)");
       PATTERN_F =
         Pattern.compile(sb.toString(), Pattern.UNICODE_CHARACTER_CLASS);
@@ -166,7 +167,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     final String[] segments = text.split("\\.");
     return List.of(segments)
       .filter(s -> !s.isEmpty())
-      .map(s -> new FieldName(lex, s));
+      .map(s -> FieldName.of(lex, s));
   }
 
   /**

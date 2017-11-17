@@ -22,6 +22,7 @@ import com.io7m.jpra.model.PackageImport;
 import com.io7m.jpra.model.loading.JPRAModelCircularImportException;
 import com.io7m.jpra.model.loading.JPRAModelLoadingException;
 import com.io7m.jpra.model.loading.JPRAPackageLoaderType;
+import com.io7m.jpra.model.names.Identifier;
 import com.io7m.jpra.model.names.IdentifierType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
@@ -98,7 +99,7 @@ public final class GlobalContexts implements GlobalContextType
   {
     this.id_pool = this.id_pool.add(BigInteger.ONE);
     LOG.trace("fresh identifier: {}", this.id_pool);
-    return new Identifier(this.id_pool);
+    return Identifier.of(this.id_pool);
   }
 
   @Override

@@ -58,9 +58,9 @@ public final class StatementCommandSize<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.expr.getLexicalInformation();
+    return this.expr.lexical();
   }
 
   @Override

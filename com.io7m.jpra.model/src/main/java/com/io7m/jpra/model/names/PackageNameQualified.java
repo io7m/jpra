@@ -128,8 +128,8 @@ public final class PackageNameQualified implements ModelElementType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.value.get(0).getLexicalInformation();
+    return this.value.get(0).lexical();
   }
 }

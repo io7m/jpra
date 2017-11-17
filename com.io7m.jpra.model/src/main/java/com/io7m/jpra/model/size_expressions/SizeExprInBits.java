@@ -66,8 +66,8 @@ public final class SizeExprInBits<I, T> implements SizeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.expression.getLexicalInformation();
+    return this.expression.lexical();
   }
 }

@@ -184,9 +184,9 @@ public final class TRecord implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.name.getLexicalInformation();
+    return this.name.lexical();
   }
 
   @Override
@@ -353,9 +353,9 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> lexical()
     {
-      return this.name.getLexicalInformation();
+      return this.name.lexical();
     }
 
     @Override
@@ -440,7 +440,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> getLexicalInformation()
+    public Optional<LexicalPosition<Path>> lexical()
     {
       return this.lex;
     }

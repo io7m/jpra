@@ -167,7 +167,7 @@ public final class PackedFieldImplementationProcessor
             }
           });
 
-        final String f_name_text = f_name.getValue();
+        final String f_name_text = f_name.value();
         setb.addParameter(f_class, f_name_text, Modifier.FINAL);
         final BigInteger field_size = f_type.getSizeInBits().getValue();
         final String mask = JPRAMasks.createOneMask(
@@ -557,14 +557,11 @@ public final class PackedFieldImplementationProcessor
       setter_norm_raw_name);
 
     final Class<?> nfp_class =
-      getNFPClassFromFieldSizeAndSign(
-        field_size, signed);
+      getNFPClassFromFieldSizeAndSign(field_size, signed);
     final String m_to =
-      getNormalizedToMethod(
-        field_size, signed);
+      getNormalizedToMethod(field_size, signed);
     final String m_of =
-      getNormalizedFromMethod(
-        field_size, signed);
+      getNormalizedFromMethod(field_size, signed);
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
     getb.addModifiers(Modifier.PUBLIC);

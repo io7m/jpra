@@ -78,7 +78,7 @@ public final class TypeExprIntegerUnsigned<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

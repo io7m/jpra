@@ -132,7 +132,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.RECORD_INTEGER_SIZE_UNSUPPORTED,
       sb.toString());
   }
@@ -181,7 +181,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.RECORD_FLOAT_SIZE_UNSUPPORTED,
       sb.toString());
   }
@@ -215,7 +215,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.STRING_ENCODING_UNSUPPORTED,
       sb.toString());
   }
@@ -248,7 +248,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append("]");
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.BOOLEAN_SET_SIZE_INVALID,
       sb.toString());
   }
@@ -278,7 +278,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append(value);
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.BOOLEAN_SET_SIZE_TOO_SMALL,
       sb.toString());
   }
@@ -327,7 +327,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.VECTOR_SIZE_UNSUPPORTED,
       sb.toString());
   }
@@ -347,7 +347,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append("Vectors must only have elements of scalar types.");
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.VECTOR_NON_SCALAR_TYPE,
       sb.toString());
   }
@@ -396,7 +396,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.VECTOR_SIZE_INTEGER_UNSUPPORTED,
       sb.toString());
   }
@@ -445,7 +445,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.VECTOR_SIZE_FLOAT_UNSUPPORTED,
       sb.toString());
   }
@@ -519,7 +519,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.MATRIX_SIZE_UNSUPPORTED,
       sb.toString());
   }
@@ -539,7 +539,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append("Matrices must only have elements of scalar types.");
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.MATRIX_NON_SCALAR_TYPE,
       sb.toString());
   }
@@ -588,7 +588,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.MATRIX_SIZE_FLOAT_UNSUPPORTED,
       sb.toString());
   }
@@ -637,7 +637,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      e.getLexicalInformation(),
+      e.lexical(),
       JPRACheckerErrorCode.MATRIX_SIZE_INTEGER_UNSUPPORTED,
       sb.toString());
   }
@@ -690,7 +690,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append(rvt.getType());
 
     return new JPRACompilerCheckerException(
-      rvt.getLexicalInformation(),
+      rvt.lexical(),
       JPRACheckerErrorCode.PACKED_NON_INTEGER,
       sb.toString());
   }
@@ -739,7 +739,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     }
 
     return new JPRACompilerCheckerException(
-      name.getLexicalInformation(),
+      name.lexical(),
       JPRACheckerErrorCode.PACKED_SIZE_NOT_SUPPORTED,
       sb.toString());
   }

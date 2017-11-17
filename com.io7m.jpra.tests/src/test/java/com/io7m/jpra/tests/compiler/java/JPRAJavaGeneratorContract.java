@@ -258,36 +258,36 @@ public abstract class JPRAJavaGeneratorContract
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "i8"),
+      FieldName.of(no_lex, "i8"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "i16"),
+      FieldName.of(no_lex, "i16"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "i32"),
+      FieldName.of(no_lex, "i32"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(32L)));
     rb.addField(
-      new FieldName(no_lex, "i64"),
+      FieldName.of(no_lex, "i64"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(64L)));
 
     rb.addField(
-      new FieldName(no_lex, "u8"),
+      FieldName.of(no_lex, "u8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "u16"),
+      FieldName.of(no_lex, "u16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "u32"),
+      FieldName.of(no_lex, "u32"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(32L)));
     rb.addField(
-      new FieldName(no_lex, "u64"),
+      FieldName.of(no_lex, "u64"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(64L)));
 
@@ -317,15 +317,15 @@ public abstract class JPRAJavaGeneratorContract
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "f16"),
+      FieldName.of(no_lex, "f16"),
       gc.getFreshIdentifier(),
       new TFloat(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "f32"),
+      FieldName.of(no_lex, "f32"),
       gc.getFreshIdentifier(),
       new TFloat(no_lex, Size.valueOf(32L)));
     rb.addField(
-      new FieldName(no_lex, "f64"),
+      FieldName.of(no_lex, "f64"),
       gc.getFreshIdentifier(),
       new TFloat(no_lex, Size.valueOf(64L)));
 
@@ -355,36 +355,36 @@ public abstract class JPRAJavaGeneratorContract
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "isn8"),
+      FieldName.of(no_lex, "isn8"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "isn16"),
+      FieldName.of(no_lex, "isn16"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "isn32"),
+      FieldName.of(no_lex, "isn32"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(32L)));
     rb.addField(
-      new FieldName(no_lex, "isn64"),
+      FieldName.of(no_lex, "isn64"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(64L)));
 
     rb.addField(
-      new FieldName(no_lex, "usn8"),
+      FieldName.of(no_lex, "usn8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "usn16"),
+      FieldName.of(no_lex, "usn16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "usn32"),
+      FieldName.of(no_lex, "usn32"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(32L)));
     rb.addField(
-      new FieldName(no_lex, "usn64"),
+      FieldName.of(no_lex, "usn64"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(64L)));
 
@@ -441,19 +441,19 @@ public abstract class JPRAJavaGeneratorContract
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "bool"), gc.getFreshIdentifier(), new TBooleanSet(
+      FieldName.of(no_lex, "bool"), gc.getFreshIdentifier(), new TBooleanSet(
         no_lex, List.of(
-        new FieldName(no_lex, "flag_a"),
-        new FieldName(no_lex, "flag_b"),
-        new FieldName(no_lex, "flag_c"),
-        new FieldName(no_lex, "flag_d"),
-        new FieldName(no_lex, "flag_e"),
-        new FieldName(no_lex, "flag_f"),
-        new FieldName(no_lex, "flag_g"),
-        new FieldName(no_lex, "flag_h"),
-        new FieldName(no_lex, "flag_i"),
-        new FieldName(no_lex, "flag_j"),
-        new FieldName(no_lex, "flag_k")), Size.valueOf(2L)));
+        FieldName.of(no_lex, "flag_a"),
+        FieldName.of(no_lex, "flag_b"),
+        FieldName.of(no_lex, "flag_c"),
+        FieldName.of(no_lex, "flag_d"),
+        FieldName.of(no_lex, "flag_e"),
+        FieldName.of(no_lex, "flag_f"),
+        FieldName.of(no_lex, "flag_g"),
+        FieldName.of(no_lex, "flag_h"),
+        FieldName.of(no_lex, "flag_i"),
+        FieldName.of(no_lex, "flag_j"),
+        FieldName.of(no_lex, "flag_k")), Size.valueOf(2L)));
 
     final TRecord r = rb.build();
     compileRecords(createTemporaryDir(), g, List.of(r));
@@ -485,7 +485,7 @@ public abstract class JPRAJavaGeneratorContract
 
     final TypeName tr_name = new TypeName(no_lex, "RecordRecord");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
-    rb.addField(new FieldName(no_lex, "r"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(no_lex, "r"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
     compileRecords(path, g, List.of(te, r));
@@ -517,8 +517,8 @@ public abstract class JPRAJavaGeneratorContract
 
     final TypeName tr_name = new TypeName(no_lex, "RecordRecordTwice");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
-    rb.addField(new FieldName(no_lex, "r0"), gc.getFreshIdentifier(), te);
-    rb.addField(new FieldName(no_lex, "r1"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(no_lex, "r0"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(no_lex, "r1"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
     compileRecords(
@@ -598,19 +598,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r4"),
+      FieldName.of(no_lex, "r4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "g4"),
+      FieldName.of(no_lex, "g4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "b4"),
+      FieldName.of(no_lex, "b4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "a4"),
+      FieldName.of(no_lex, "a4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
 
@@ -640,19 +640,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r8"),
+      FieldName.of(no_lex, "r8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "g8"),
+      FieldName.of(no_lex, "g8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "b8"),
+      FieldName.of(no_lex, "b8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "a8"),
+      FieldName.of(no_lex, "a8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
 
@@ -683,19 +683,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r16"),
+      FieldName.of(no_lex, "r16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "g16"),
+      FieldName.of(no_lex, "g16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "b16"),
+      FieldName.of(no_lex, "b16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "a16"),
+      FieldName.of(no_lex, "a16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
 
@@ -725,19 +725,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
 
@@ -768,36 +768,36 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
 
     rb.addField(
-      new FieldName(no_lex, "x2"),
+      FieldName.of(no_lex, "x2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "y2"),
+      FieldName.of(no_lex, "y2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "z2"),
+      FieldName.of(no_lex, "z2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "w2"),
+      FieldName.of(no_lex, "w2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
 
@@ -827,19 +827,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r4"),
+      FieldName.of(no_lex, "r4"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "g4"),
+      FieldName.of(no_lex, "g4"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "b4"),
+      FieldName.of(no_lex, "b4"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "a4"),
+      FieldName.of(no_lex, "a4"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
 
@@ -869,19 +869,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r8"),
+      FieldName.of(no_lex, "r8"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "g8"),
+      FieldName.of(no_lex, "g8"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "b8"),
+      FieldName.of(no_lex, "b8"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "a8"),
+      FieldName.of(no_lex, "a8"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(8L)));
 
@@ -912,19 +912,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r16"),
+      FieldName.of(no_lex, "r16"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "g16"),
+      FieldName.of(no_lex, "g16"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "b16"),
+      FieldName.of(no_lex, "b16"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "a16"),
+      FieldName.of(no_lex, "a16"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(16L)));
 
@@ -954,19 +954,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
 
@@ -997,36 +997,36 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
 
     rb.addField(
-      new FieldName(no_lex, "x2"),
+      FieldName.of(no_lex, "x2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "y2"),
+      FieldName.of(no_lex, "y2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "z2"),
+      FieldName.of(no_lex, "z2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "w2"),
+      FieldName.of(no_lex, "w2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(2L)));
 
@@ -1057,19 +1057,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r4"),
+      FieldName.of(no_lex, "r4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "g4"),
+      FieldName.of(no_lex, "g4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "b4"),
+      FieldName.of(no_lex, "b4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "a4"),
+      FieldName.of(no_lex, "a4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
 
@@ -1100,19 +1100,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r8"),
+      FieldName.of(no_lex, "r8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "g8"),
+      FieldName.of(no_lex, "g8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "b8"),
+      FieldName.of(no_lex, "b8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "a8"),
+      FieldName.of(no_lex, "a8"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
 
@@ -1143,19 +1143,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r16"),
+      FieldName.of(no_lex, "r16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "g16"),
+      FieldName.of(no_lex, "g16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "b16"),
+      FieldName.of(no_lex, "b16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "a16"),
+      FieldName.of(no_lex, "a16"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
 
@@ -1186,19 +1186,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
 
@@ -1229,36 +1229,36 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
 
     rb.addField(
-      new FieldName(no_lex, "x2"),
+      FieldName.of(no_lex, "x2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "y2"),
+      FieldName.of(no_lex, "y2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "z2"),
+      FieldName.of(no_lex, "z2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "w2"),
+      FieldName.of(no_lex, "w2"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
 
@@ -1289,19 +1289,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r4"),
+      FieldName.of(no_lex, "r4"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "g4"),
+      FieldName.of(no_lex, "g4"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "b4"),
+      FieldName.of(no_lex, "b4"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "a4"),
+      FieldName.of(no_lex, "a4"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
 
@@ -1332,19 +1332,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r8"),
+      FieldName.of(no_lex, "r8"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "g8"),
+      FieldName.of(no_lex, "g8"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "b8"),
+      FieldName.of(no_lex, "b8"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
     rb.addField(
-      new FieldName(no_lex, "a8"),
+      FieldName.of(no_lex, "a8"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
 
@@ -1375,19 +1375,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r16"),
+      FieldName.of(no_lex, "r16"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "g16"),
+      FieldName.of(no_lex, "g16"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "b16"),
+      FieldName.of(no_lex, "b16"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
     rb.addField(
-      new FieldName(no_lex, "a16"),
+      FieldName.of(no_lex, "a16"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
 
@@ -1418,19 +1418,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
 
@@ -1461,36 +1461,36 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "r2"),
+      FieldName.of(no_lex, "r2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "g2"),
+      FieldName.of(no_lex, "g2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "b2"),
+      FieldName.of(no_lex, "b2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "a2"),
+      FieldName.of(no_lex, "a2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
 
     rb.addField(
-      new FieldName(no_lex, "x2"),
+      FieldName.of(no_lex, "x2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "y2"),
+      FieldName.of(no_lex, "y2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "z2"),
+      FieldName.of(no_lex, "z2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
     rb.addField(
-      new FieldName(no_lex, "w2"),
+      FieldName.of(no_lex, "w2"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
 
@@ -1520,19 +1520,19 @@ public abstract class JPRAJavaGeneratorContract
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      new FieldName(no_lex, "u4"),
+      FieldName.of(no_lex, "u4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "s4"),
+      FieldName.of(no_lex, "s4"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "un4"),
+      FieldName.of(no_lex, "un4"),
       gc.getFreshIdentifier(),
       new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
     rb.addField(
-      new FieldName(no_lex, "sn4"),
+      FieldName.of(no_lex, "sn4"),
       gc.getFreshIdentifier(),
       new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
 
@@ -1571,43 +1571,43 @@ public abstract class JPRAJavaGeneratorContract
       new TFloat(no_lex, Size.valueOf(64L));
 
     rb.addField(
-      new FieldName(no_lex, "v2i"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v2i"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(2L), t_int));
     rb.addField(
-      new FieldName(no_lex, "v3i"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v3i"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(3L), t_int));
     rb.addField(
-      new FieldName(no_lex, "v4i"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v4i"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(4L), t_int));
 
     rb.addField(
-      new FieldName(no_lex, "v2l"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v2l"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(2L), t_long));
     rb.addField(
-      new FieldName(no_lex, "v3l"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v3l"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(3L), t_long));
     rb.addField(
-      new FieldName(no_lex, "v4l"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v4l"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(4L), t_long));
 
     rb.addField(
-      new FieldName(no_lex, "v2f"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v2f"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(2L), t_float));
     rb.addField(
-      new FieldName(no_lex, "v3f"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v3f"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(3L), t_float));
     rb.addField(
-      new FieldName(no_lex, "v4f"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v4f"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(4L), t_float));
 
     rb.addField(
-      new FieldName(no_lex, "v2d"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v2d"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(2L), t_double));
     rb.addField(
-      new FieldName(no_lex, "v3d"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v3d"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(3L), t_double));
     rb.addField(
-      new FieldName(no_lex, "v4d"), gc.getFreshIdentifier(),
+      FieldName.of(no_lex, "v4d"), gc.getFreshIdentifier(),
       new TVector(no_lex, Size.valueOf(4L), t_double));
 
     final TRecord r = rb.build();

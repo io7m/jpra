@@ -72,9 +72,9 @@ public final class StatementPackageImport<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.pack.getLexicalInformation();
+    return this.pack.lexical();
   }
 
   @Override

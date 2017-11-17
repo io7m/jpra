@@ -59,9 +59,9 @@ public final class AlwaysEmptyLoader implements JPRAPackageLoaderType
 
       @Override
       public Optional<LexicalPosition<Path>>
-      getLexicalInformation()
+      lexical()
       {
-        return p.getLexicalInformation();
+        return p.lexical();
       }
     };
   }

@@ -141,7 +141,7 @@ public final class JPRAResolver implements JPRAResolverType
   private static SizeExprType<IdentifierType, Untyped> resolveSizeExprConstant(
     final SizeExprConstant<Unresolved, Untyped> s)
   {
-    return new SizeExprConstant<>(s.getLexicalInformation(), s.getValue());
+    return new SizeExprConstant<>(s.lexical(), s.getValue());
   }
 
   @Override
@@ -213,7 +213,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        s.getLexicalInformation());
+        s.lexical());
     }
 
     final PackageNameUnqualified s_new = s.getUsing();
@@ -242,7 +242,7 @@ public final class JPRAResolver implements JPRAResolverType
       return new StatementPackageImport<>(s.getPackageName(), s.getUsing());
     } catch (final JPRAModelLoadingException e) {
       throw new JPRACompilerResolverException(
-        s_new.getLexicalInformation(),
+        s_new.lexical(),
         JPRAResolverErrorCode.PACKAGE_LOADING_ERROR,
         "Error loading package");
     }
@@ -255,7 +255,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        s.getLexicalInformation());
+        s.lexical());
     }
 
     LOG.debug("end package {}", this.current_package.get());
@@ -265,7 +265,7 @@ public final class JPRAResolver implements JPRAResolverType
     this.current_types.clear();
     this.current_package = Optional.empty();
 
-    return new StatementPackageEnd<>(s.getLexicalInformation());
+    return new StatementPackageEnd<>(s.lexical());
   }
 
   @Override
@@ -275,7 +275,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     if (!this.current_package.isPresent()) {
       throw JPRACompilerResolverException.noCurrentPackage(
-        expr.getLexicalInformation());
+        expr.lexical());
     }
 
     Preconditions.checkPreconditionV(
@@ -383,7 +383,7 @@ public final class JPRAResolver implements JPRAResolverType
     throws JPRACompilerResolverException
   {
     return new PackedFieldDeclPaddingBits<>(
-      r.getLexicalInformation(),
+      r.lexical(),
       this.resolveSizeExpression(r.getSizeExpression()));
   }
 
@@ -460,7 +460,7 @@ public final class JPRAResolver implements JPRAResolverType
     throws JPRACompilerResolverException
   {
     return new RecordFieldDeclPaddingOctets<>(
-      r.getLexicalInformation(),
+      r.lexical(),
       this.resolveSizeExpression(r.getSizeExpression()));
   }
 
@@ -604,7 +604,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprIntegerSigned<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()));
   }
 
@@ -615,7 +615,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprIntegerSignedNormalized<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()));
   }
 
@@ -625,7 +625,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprIntegerUnsigned<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()));
   }
 
@@ -636,7 +636,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprIntegerUnsignedNormalized<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()));
   }
 
@@ -646,7 +646,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprBooleanSet<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       e.getFieldsInDeclarationOrder(),
       this.resolveSizeExpression(e.getSizeExpression()));
   }
@@ -657,7 +657,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprFloat<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()));
   }
 
@@ -667,7 +667,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprVector<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getElementCount()),
       this.resolveTypeExpression(e.getElementType()));
   }
@@ -678,7 +678,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprString<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getSize()),
       e.getEncoding());
   }
@@ -689,7 +689,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprMatrix<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getWidth()),
       this.resolveSizeExpression(e.getHeight()),
       this.resolveTypeExpression(e.getElementType()));
@@ -701,7 +701,7 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new TypeExprArray<>(
       Untyped.get(),
-      e.getLexicalInformation(),
+      e.lexical(),
       this.resolveSizeExpression(e.getElementCount()),
       this.resolveTypeExpression(e.getElementType()));
   }

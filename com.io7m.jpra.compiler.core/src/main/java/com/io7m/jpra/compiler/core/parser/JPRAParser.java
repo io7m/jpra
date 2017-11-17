@@ -318,7 +318,7 @@ public final class JPRAParser implements JPRAParserType
 
             final FieldName name;
             try {
-              name = new FieldName(
+              name = FieldName.of(
                 getExpressionLexical(si), si.text());
             } catch (final PreconditionViolationException x) {
               throw JPRACompilerParseException.badFieldName(si, x.getMessage());
@@ -476,8 +476,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return new FieldName(
-        getExpressionLexical(name), name.text());
+      return FieldName.of(getExpressionLexical(name), name.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badFieldName(name, e.getMessage());
     }
@@ -705,7 +704,7 @@ public final class JPRAParser implements JPRAParserType
             sb.append("Duplicate field name.");
             sb.append(System.lineSeparator());
             sb.append("  Name: ");
-            sb.append(f_name.getValue());
+            sb.append(f_name.value());
             throw JPRACompilerParseException.duplicateFieldName(
               k, sb.toString());
           }
@@ -866,7 +865,7 @@ public final class JPRAParser implements JPRAParserType
             sb.append("Duplicate field name.");
             sb.append(System.lineSeparator());
             sb.append("  Name: ");
-            sb.append(f_name.getValue());
+            sb.append(f_name.value());
             throw JPRACompilerParseException.duplicateFieldName(
               k, sb.toString());
           }

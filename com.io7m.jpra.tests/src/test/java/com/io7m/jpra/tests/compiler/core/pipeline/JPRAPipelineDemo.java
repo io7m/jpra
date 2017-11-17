@@ -99,7 +99,7 @@ public final class JPRAPipelineDemo
 
       @Override
       public Optional<LexicalPosition<Path>>
-      getLexicalInformation()
+      lexical()
       {
         return Optional.empty();
       }

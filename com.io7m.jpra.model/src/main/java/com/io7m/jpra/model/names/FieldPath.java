@@ -40,8 +40,7 @@ public final class FieldPath
       !in_path.isEmpty(), "Field path cannot be empty");
 
     this.image =
-      in_path.map(FieldName::getValue)
-        .collect(Collectors.joining("."));
+      in_path.map(FieldName::value).collect(Collectors.joining("."));
   }
 
   /**

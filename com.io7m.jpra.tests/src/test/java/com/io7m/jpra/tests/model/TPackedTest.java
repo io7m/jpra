@@ -81,19 +81,19 @@ public final class TPackedTest
       pc, gc.getFreshIdentifier(), new TypeName(no_lex, "T"));
 
     tpb.addField(
-      new FieldName(no_lex, "f0"),
+      FieldName.of(no_lex, "f0"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     tpb.addField(
-      new FieldName(no_lex, "f1"),
+      FieldName.of(no_lex, "f1"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     tpb.addField(
-      new FieldName(no_lex, "f2"),
+      FieldName.of(no_lex, "f2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     tpb.addField(
-      new FieldName(no_lex, "f3"),
+      FieldName.of(no_lex, "f3"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
 
@@ -153,12 +153,12 @@ public final class TPackedTest
       pc, gc.getFreshIdentifier(), new TypeName(no_lex, "T"));
 
     tpb.addField(
-      new FieldName(no_lex, "f0"),
+      FieldName.of(no_lex, "f0"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     tpb.addPaddingBits(no_lex, Size.valueOf(4L));
     tpb.addField(
-      new FieldName(no_lex, "f2"),
+      FieldName.of(no_lex, "f2"),
       gc.getFreshIdentifier(),
       new TIntegerSigned(no_lex, Size.valueOf(4L)));
     tpb.addPaddingBits(no_lex, Size.valueOf(4L));

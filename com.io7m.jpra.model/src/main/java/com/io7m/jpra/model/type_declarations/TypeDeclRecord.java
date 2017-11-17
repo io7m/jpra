@@ -121,9 +121,9 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.name.getLexicalInformation();
+    return this.name.lexical();
   }
 
   @Override

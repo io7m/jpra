@@ -99,7 +99,7 @@ final class RecordFieldImplementationProcessor
         final StringBuilder sb = new StringBuilder(128);
         sb.append("@return The offset in octets of field ");
         sb.append("{@code ");
-        sb.append(this.field.getName().getValue());
+        sb.append(this.field.getName().value());
         sb.append("} from the start of the type\n");
         getb.addJavadoc(sb.toString());
       }

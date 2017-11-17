@@ -79,7 +79,7 @@ public final class TIntegerSigned implements TIntegerType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

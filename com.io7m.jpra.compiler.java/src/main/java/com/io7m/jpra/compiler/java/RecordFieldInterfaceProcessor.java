@@ -161,7 +161,7 @@ final class RecordFieldInterfaceProcessor
         final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
         getb.addJavadoc(
           "@return The value of field {@code $L} of the boolean set $L",
-          f.getValue(),
+          f.value(),
           this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(boolean.class);
@@ -174,7 +174,7 @@ final class RecordFieldInterfaceProcessor
         final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
         setb.addJavadoc(
           "Set the value of field {@code $L} of the boolean set $L\n",
-          f.getValue(),
+          f.value(),
           this.field.getName());
         setb.addJavadoc("@param x The new value");
         setb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);

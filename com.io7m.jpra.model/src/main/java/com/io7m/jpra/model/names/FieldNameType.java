@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,23 +16,45 @@
 
 package com.io7m.jpra.model.names;
 
+import com.io7m.jaffirm.core.Preconditions;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.core.JPRAImmutableStyleType;
+import com.io7m.jpra.model.ModelElementType;
 import org.immutables.value.Value;
 
-import java.math.BigInteger;
+import java.nio.file.Path;
+import java.util.Optional;
 
 /**
- * The type of identifiers that are unique with a respect to a global context.
+ * The type of field names.
  */
 
 @JPRAImmutableStyleType
 @Value.Immutable
-public interface IdentifierType
+public interface FieldNameType extends ModelElementType
 {
+  @Override
+  @Value.Auxiliary
+  @Value.Parameter
+  Optional<LexicalPosition<Path>> lexical();
+
   /**
-   * @return The raw identifier value
+   * @return The raw string value
    */
 
   @Value.Parameter
-  BigInteger value();
+  String value();
+
+  /**
+   * Check preconditions for the type.
+   */
+
+  @Value.Check
+  default void checkPreconditions()
+  {
+    Preconditions.checkPrecondition(
+      this.value(),
+      FieldNames.isValid(this.value()),
+      s -> "Field name must match the pattern " + FieldNames.PATTERN.pattern());
+  }
 }

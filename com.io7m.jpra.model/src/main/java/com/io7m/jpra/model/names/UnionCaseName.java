@@ -97,7 +97,7 @@ public final class UnionCaseName implements ModelElementType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
     return this.lex;
   }

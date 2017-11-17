@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,25 +14,32 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.model.names;
+package com.io7m.jpra.core;
 
-import com.io7m.jpra.core.JPRAImmutableStyleType;
 import org.immutables.value.Value;
 
-import java.math.BigInteger;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * The type of identifiers that are unique with a respect to a global context.
+ * Style settings for generated immutable types.
  */
 
-@JPRAImmutableStyleType
-@Value.Immutable
-public interface IdentifierType
+@Target({ElementType.PACKAGE, ElementType.TYPE})
+@Retention(RetentionPolicy.CLASS)
+@Value.Style(
+  get = {"is*", "get*"},
+  init = "set*",
+  typeAbstract = {"Abstract*", "*Type"},
+  typeImmutable = "*",
+  typeModifiable = "*Mutable",
+  builder = "builder",
+  build = "build",
+  visibility = Value.Style.ImplementationVisibility.PUBLIC,
+  defaults = @Value.Immutable(copy = false))
+public @interface JPRAImmutableStyleType
 {
-  /**
-   * @return The raw identifier value
-   */
 
-  @Value.Parameter
-  BigInteger value();
 }

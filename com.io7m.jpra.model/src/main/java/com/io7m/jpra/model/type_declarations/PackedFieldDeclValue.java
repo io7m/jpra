@@ -94,8 +94,8 @@ public final class PackedFieldDeclValue<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> getLexicalInformation()
+  public Optional<LexicalPosition<Path>> lexical()
   {
-    return this.name.getLexicalInformation();
+    return this.name.lexical();
   }
 }
