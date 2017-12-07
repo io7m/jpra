@@ -57,7 +57,7 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   public List<RangeInclusiveB> getMatrixIntegerSizeSupported()
   {
     return List.of(
-      new RangeInclusiveB(
+      RangeInclusiveB.of(
         BigInteger.valueOf(32L), BigInteger.valueOf(32L)));
   }
 
@@ -125,7 +125,7 @@ final class CapsSupportingIntegerMatrices implements JPRACheckerCapabilitiesType
   @Override
   public boolean isMatrixIntegerSizeSupported(final BigInteger size)
   {
-    return size.equals(BigInteger.valueOf(32L));
+    return Objects.equals(size, BigInteger.valueOf(32L));
   }
 
   @Override

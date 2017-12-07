@@ -16,61 +16,37 @@
 
 package com.io7m.jpra.model.names;
 
-import java.util.Objects;
+import com.io7m.jpra.core.JPRAImmutableStyleType;
+import org.immutables.value.Value;
+
 import java.util.Optional;
 
 /**
  * A reference to a field.
  */
 
-public final class FieldReference
+@JPRAImmutableStyleType
+@Value.Immutable
+public interface FieldReferenceType
 {
-  private final Optional<PackageNameUnqualified> pack;
-  private final Optional<TypeName> type;
-  private final FieldPath field_path;
-
-  /**
-   * Construct a reference.
-   *
-   * @param in_pack       The package name, if any
-   * @param in_type       The type name, if any
-   * @param in_field_path The field path
-   */
-
-  public FieldReference(
-    final Optional<PackageNameUnqualified> in_pack,
-    final Optional<TypeName> in_type,
-    final FieldPath in_field_path)
-  {
-    this.pack = Objects.requireNonNull(in_pack, "Package");
-    this.type = Objects.requireNonNull(in_type, "Type");
-    this.field_path = Objects.requireNonNull(in_field_path, "Field path");
-  }
-
   /**
    * @return The field path
    */
 
-  public FieldPath getFieldPath()
-  {
-    return this.field_path;
-  }
+  @Value.Parameter
+  FieldPath fieldPath();
 
   /**
    * @return The package name, if any
    */
 
-  public Optional<PackageNameUnqualified> getPackage()
-  {
-    return this.pack;
-  }
+  @Value.Parameter
+  Optional<PackageNameUnqualified> packageName();
 
   /**
    * @return The type name, if any
    */
 
-  public Optional<TypeName> getType()
-  {
-    return this.type;
-  }
+  @Value.Parameter
+  Optional<TypeName> typeName();
 }

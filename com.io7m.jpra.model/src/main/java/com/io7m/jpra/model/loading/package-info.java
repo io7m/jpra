@@ -18,6 +18,5 @@
  * Model loading.
  */
 
-
 package com.io7m.jpra.model.loading;
 

@@ -40,9 +40,8 @@ import io.vavr.collection.List;
 import io.vavr.collection.Set;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The type of exceptions raised during checking.
@@ -61,7 +60,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public JPRACompilerCheckerException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final JPRACheckerErrorCode in_code,
     final String message)
   {
@@ -78,7 +77,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public JPRACompilerCheckerException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final JPRACheckerErrorCode in_code,
     final Exception e)
   {
@@ -114,8 +113,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = sizes.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = sizes.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -163,8 +162,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = sizes.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = sizes.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -242,9 +241,9 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     sb.append(value);
     sb.append(System.lineSeparator());
     sb.append("  Valid sizes: [");
-    sb.append(range.getLower());
+    sb.append(range.lower());
     sb.append(", ");
-    sb.append(range.getUpper());
+    sb.append(range.upper());
     sb.append("]");
 
     return new JPRACompilerCheckerException(
@@ -309,8 +308,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -378,8 +377,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -427,8 +426,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -484,8 +483,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       final RangeInclusiveB r = rp._2();
 
       {
-        final BigInteger lo = l.getLower();
-        final BigInteger hi = l.getUpper();
+        final BigInteger lo = l.lower();
+        final BigInteger hi = l.upper();
         if (Objects.equals(lo, hi)) {
           sb.append(lo);
         } else {
@@ -500,8 +499,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
       sb.append(" x ");
 
       {
-        final BigInteger lo = r.getLower();
-        final BigInteger hi = r.getUpper();
+        final BigInteger lo = r.lower();
+        final BigInteger hi = r.upper();
         if (Objects.equals(lo, hi)) {
           sb.append(lo);
         } else {
@@ -570,8 +569,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -619,8 +618,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {
@@ -654,7 +653,7 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
    */
 
   public static JPRACompilerCheckerException paddingSizeInvalid(
-    final Optional<LexicalPosition<Path>> lex,
+    final LexicalPosition<URI> lex,
     final BigInteger value)
   {
     final StringBuilder sb = new StringBuilder(128);
@@ -721,8 +720,8 @@ public final class JPRACompilerCheckerException extends JPRACompilerException
     final int max = supported.size();
     for (int index = 0; index < max; ++index) {
       final RangeInclusiveB r = supported.get(index);
-      final BigInteger lo = r.getLower();
-      final BigInteger hi = r.getUpper();
+      final BigInteger lo = r.lower();
+      final BigInteger hi = r.upper();
       if (Objects.equals(lo, hi)) {
         sb.append(lo);
       } else {

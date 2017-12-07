@@ -19,8 +19,6 @@ package com.io7m.jpra.compiler.core;
 
 import com.io7m.jsx.api.parser.JSXParserException;
 
-import java.util.Optional;
-
 /**
  * The type of lexer exceptions.
  */
@@ -36,6 +34,6 @@ public class JPRACompilerLexerException extends JPRACompilerException
   public JPRACompilerLexerException(
     final JSXParserException e)
   {
-    super(Optional.of(e.getLexicalInformation()), e);
+    super(e.lexical(), e);
   }
 }

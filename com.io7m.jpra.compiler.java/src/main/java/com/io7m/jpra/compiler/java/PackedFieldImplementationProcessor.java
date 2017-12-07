@@ -172,7 +172,7 @@ public final class PackedFieldImplementationProcessor
         final BigInteger field_size = f_type.getSizeInBits().getValue();
         final String mask = JPRAMasks.createOneMask(
           container_size.intValue(), 0, field_size.intValue() - 1);
-        final BigInteger shift = fv.getBitRange().getLower();
+        final BigInteger shift = fv.getBitRange().lower();
 
         f_type.matchTypeInteger(
           new TypeIntegerMatcherType<Void, UnreachableCodeException>()
@@ -474,8 +474,8 @@ public final class PackedFieldImplementationProcessor
     final RangeInclusiveB field_bit_range = this.field.getBitRange();
     final String container_mask = JPRAMasks.createZeroMask(
       container_size.intValue(),
-      field_bit_range.getLower().intValue(),
-      field_bit_range.getUpper().intValue());
+      field_bit_range.lower().intValue(),
+      field_bit_range.upper().intValue());
     final String field_mask = JPRAMasks.createOneMask(
       container_size.intValue(), 0, field_size.intValue() - 1);
 

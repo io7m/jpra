@@ -30,7 +30,7 @@ import com.io7m.jpra.model.statements.StatementPackageImport;
 import com.io7m.jpra.model.type_declarations.TypeDeclType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -154,12 +154,12 @@ public interface JPRAResolverType
   /**
    * EOF has been encountered.
    *
-   * @param lex Lexical information, if any
+   * @param lex Lexical information
    *
    * @throws JPRACompilerResolverException On resolution errors
    */
 
   void resolveEOF(
-    Optional<LexicalPosition<Path>> lex)
+    LexicalPosition<URI> lex)
     throws JPRACompilerResolverException;
 }

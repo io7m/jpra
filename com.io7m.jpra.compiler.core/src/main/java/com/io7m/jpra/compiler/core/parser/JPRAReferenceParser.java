@@ -34,8 +34,8 @@ import io.vavr.collection.List;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -160,7 +160,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
   }
 
   private static List<FieldName> getFieldPath(
-    final Optional<LexicalPosition<Path>> lex,
+    final LexicalPosition<URI> lex,
     final SExpressionSymbolType se,
     final String text)
     throws JPRACompilerParseException
@@ -192,15 +192,13 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     Objects.requireNonNull(se, "Symbol");
 
     final String text = se.text();
-    final Optional<LexicalPosition<Path>> lex =
-      se.lexical().map(LexicalPosition::copyOf);
 
     {
       final Matcher m = PATTERN_PT.matcher(text);
       if (m.matches()) {
         final PackageNameUnqualified p_name =
-          PackageNameUnqualified.of(lex, m.group(1));
-        final TypeName t_name = TypeName.of(lex, m.group(2));
+          PackageNameUnqualified.of(se.lexical(), m.group(1));
+        final TypeName t_name = TypeName.of(se.lexical(), m.group(2));
         return TypeReference.of(Optional.of(p_name), t_name);
       }
     }
@@ -208,7 +206,8 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     {
       final Matcher m = TypeNames.PATTERN.matcher(text);
       if (m.matches()) {
-        return TypeReference.of(Optional.empty(), TypeName.of(lex, text));
+        return TypeReference.of(
+          Optional.empty(), TypeName.of(se.lexical(), text));
       }
     }
 
@@ -223,8 +222,7 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
     Objects.requireNonNull(se, "Symbol");
 
     final String text = se.text();
-    final Optional<LexicalPosition<Path>> lex =
-      se.lexical().map(LexicalPosition::copyOf);
+    final LexicalPosition<URI> lex = se.lexical();
 
     {
       final Matcher m = PATTERN_PTF.matcher(text);
@@ -234,8 +232,10 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
         final TypeName t_name = TypeName.of(lex, m.group(2));
         final List<FieldName> fields =
           getFieldPath(lex, se, m.group(3));
-        return new FieldReference(
-          Optional.of(p_name), Optional.of(t_name), FieldPath.ofList(fields));
+        return FieldReference.of(
+          FieldPath.ofList(fields),
+          Optional.of(p_name),
+          Optional.of(t_name));
       }
     }
 
@@ -245,8 +245,10 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
         final TypeName t_name = TypeName.of(lex, m.group(1));
         final List<FieldName> fields =
           getFieldPath(lex, se, m.group(2));
-        return new FieldReference(
-          Optional.empty(), Optional.of(t_name), FieldPath.ofList(fields));
+        return FieldReference.of(
+          FieldPath.ofList(fields),
+          Optional.empty(),
+          Optional.of(t_name));
       }
     }
 
@@ -255,8 +257,10 @@ public final class JPRAReferenceParser implements JPRAReferenceParserType
       if (m.matches()) {
         final List<FieldName> fields =
           getFieldPath(lex, se, text);
-        return new FieldReference(
-          Optional.empty(), Optional.empty(), FieldPath.ofList(fields));
+        return FieldReference.of(
+          FieldPath.ofList(fields),
+          Optional.empty(),
+          Optional.empty());
       }
     }
 

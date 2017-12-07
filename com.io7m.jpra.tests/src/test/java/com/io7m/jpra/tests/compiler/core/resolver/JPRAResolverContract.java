@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core.resolver;
 
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.compiler.core.resolver.JPRACompilerResolverException;
 import com.io7m.jpra.compiler.core.resolver.JPRAResolverErrorCode;
@@ -55,11 +56,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 public abstract class JPRAResolverContract
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   @Rule public final ExpectedException expected = ExpectedException.none();
 
   private static <I, T> void checkSizeExpressionConstant(
@@ -112,9 +117,9 @@ public abstract class JPRAResolverContract
 
     final JPRAResolverType r = this.newResolverForPackage(
       c, PackageNameQualified.of(
-        PackageNameUnqualified.of(Optional.empty(),"x"),
-        PackageNameUnqualified.of(Optional.empty(),"y"),
-        PackageNameUnqualified.of(Optional.empty(),"z")));
+        PackageNameUnqualified.of(LEX_ZERO, "x"),
+        PackageNameUnqualified.of(LEX_ZERO, "y"),
+        PackageNameUnqualified.of(LEX_ZERO, "z")));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
@@ -134,14 +139,14 @@ public abstract class JPRAResolverContract
 
     final JPRAResolverType r = this.newResolverForPackage(
       c, PackageNameQualified.of(
-        PackageNameUnqualified.of(Optional.empty(),"x"),
-        PackageNameUnqualified.of(Optional.empty(),"y"),
-        PackageNameUnqualified.of(Optional.empty(),"z")));
+        PackageNameUnqualified.of(LEX_ZERO, "x"),
+        PackageNameUnqualified.of(LEX_ZERO, "y"),
+        PackageNameUnqualified.of(LEX_ZERO, "z")));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
         JPRAResolverErrorCode.EXPECTED_PACKAGE));
-    r.resolveEOF(Optional.empty());
+    r.resolveEOF(LEX_ZERO);
   }
 
   @Test
@@ -175,9 +180,9 @@ public abstract class JPRAResolverContract
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"y"),
-          PackageNameUnqualified.of(Optional.empty(),"z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     this.expected.expect(
       new JPRACompilerResolverExceptionMatcher(
@@ -233,13 +238,13 @@ public abstract class JPRAResolverContract
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"a"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "a"))));
     c.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"b"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "b"))));
 
     r.resolvePackageBegin(
       StatementPackageBegin.class.cast(

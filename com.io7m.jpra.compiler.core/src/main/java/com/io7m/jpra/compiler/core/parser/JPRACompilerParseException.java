@@ -24,9 +24,8 @@ import com.io7m.jsx.SExpressionQuotedStringType;
 import com.io7m.jsx.SExpressionSymbolType;
 import com.io7m.jsx.SExpressionType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The type of exceptions raised by the parser.
@@ -37,7 +36,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
   private final JPRAParseErrorCode code;
 
   private JPRACompilerParseException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final JPRAParseErrorCode in_code,
     final String message)
   {
@@ -64,7 +63,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("'");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_LIST_GOT_QUOTED_STRING,
       m);
   }
@@ -88,7 +87,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("'");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_LIST_GOT_SYMBOL,
       m);
   }
@@ -110,7 +109,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: A list");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_LIST,
       m);
   }
@@ -134,7 +133,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("'");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_SYMBOL_GOT_QUOTED_STRING,
       m);
   }
@@ -153,7 +152,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_KEYWORD,
       s);
   }
@@ -177,7 +176,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("  Got: An empty list");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_NON_EMPTY_LIST,
       m);
   }
@@ -196,7 +195,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.BAD_PACKAGE_NAME,
       message);
   }
@@ -215,7 +214,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.SYNTAX_ERROR,
       s);
   }
@@ -234,7 +233,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_TYPE_KEYWORD,
       s);
   }
@@ -253,7 +252,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_INTEGER_TYPE_KEYWORD,
       s);
   }
@@ -277,7 +276,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("'");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.EXPECTED_SYMBOL_OR_LIST_GOT_QUOTED_STRING,
       m);
   }
@@ -301,7 +300,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     mb.append("'");
     final String m = Objects.requireNonNull(mb.toString(), "Message");
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.INVALID_INTEGER_CONSTANT,
       m);
   }
@@ -320,7 +319,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_SIZE_FUNCTION,
       s);
   }
@@ -339,7 +338,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.BAD_FIELD_NAME,
       message);
   }
@@ -358,7 +357,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.DUPLICATE_FIELD_NAME,
       message);
   }
@@ -377,7 +376,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.BAD_TYPE_NAME,
       message);
   }
@@ -396,7 +395,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_RECORD_FIELD_KEYWORD,
       message);
   }
@@ -415,7 +414,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String s)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.BAD_TYPE_REFERENCE,
       s);
   }
@@ -434,7 +433,7 @@ public final class JPRACompilerParseException extends JPRACompilerException
     final String message)
   {
     return new JPRACompilerParseException(
-      e.lexical().map(LexicalPosition::copyOf),
+      e.lexical(),
       JPRAParseErrorCode.UNRECOGNIZED_PACKED_FIELD_KEYWORD,
       message);
   }

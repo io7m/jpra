@@ -20,9 +20,8 @@ import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldPath;
 import com.io7m.jpra.model.names.FieldReference;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code type-of} type expression.
@@ -90,9 +89,9 @@ public final class TypeExprTypeOfField<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
-    final FieldPath path = this.field_reference.getFieldPath();
-    return path.getElements().get(0).lexical();
+    final FieldPath path = this.field_reference.fieldPath();
+    return path.elements().get(0).lexical();
   }
 }

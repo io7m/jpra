@@ -19,9 +19,8 @@ package com.io7m.jpra.model.statements;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.ModelElementType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The {@code package-end} statement.
@@ -33,7 +32,7 @@ import java.util.Optional;
 public final class StatementPackageEnd<I, T>
   implements ModelElementType, StatementType<I, T>
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
 
   /**
    * Construct a statement.
@@ -42,13 +41,13 @@ public final class StatementPackageEnd<I, T>
    */
 
   public StatementPackageEnd(
-    final Optional<LexicalPosition<Path>> in_lex)
+    final LexicalPosition<URI> in_lex)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

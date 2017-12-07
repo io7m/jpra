@@ -26,12 +26,11 @@ import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
 import io.vavr.collection.List;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 
 final class TRecordBuilder implements TRecordBuilderType
 {
@@ -62,7 +61,7 @@ final class TRecordBuilder implements TRecordBuilderType
 
   @Override
   public void addPaddingOctets(
-    final Optional<LexicalPosition<Path>> lex,
+    final LexicalPosition<URI> lex,
     final Size<SizeUnitOctetsType> size)
   {
     Preconditions.checkPrecondition(

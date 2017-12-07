@@ -16,6 +16,7 @@
 
 package com.io7m.jpra.tests.compiler.core.parser;
 
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.compiler.core.parser.JPRAParseErrorCode;
 import com.io7m.jpra.compiler.core.parser.JPRAParserType;
 import com.io7m.jpra.model.Unresolved;
@@ -62,11 +63,15 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 public abstract class JPRAParserContract
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   @Rule public final ExpectedException expected = ExpectedException.none();
 
   protected abstract JPRAParserType newParser();
@@ -76,6 +81,7 @@ public abstract class JPRAParserContract
 
   protected abstract SExpressionType newStringSExpr(
     String expr);
+
 
   @Test
   public final void testTypeExprIntegerUnsigned32_Error0()
@@ -1233,7 +1239,7 @@ public abstract class JPRAParserContract
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(1L, (long) field_names.size());
 
-    final FieldName f_name = FieldName.of(Optional.empty(), "f0");
+    final FieldName f_name = FieldName.of(LEX_ZERO, "f0");
     final RecordFieldDeclValue<Unresolved, Untyped> f0 =
       field_names.get(f_name).get();
     final RecordFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);
@@ -1348,7 +1354,7 @@ public abstract class JPRAParserContract
     final TypeExprName<Unresolved, Untyped> tn =
       TypeExprName.class.cast(s.getExpression());
     final TypeReference ref = tn.getReference();
-    Assert.assertEquals(TypeName.of(Optional.empty(), "T"), ref.type());
+    Assert.assertEquals(TypeName.of(LEX_ZERO, "T"), ref.type());
     Assert.assertEquals(Optional.empty(), ref.packageName());
   }
 
@@ -1476,7 +1482,7 @@ public abstract class JPRAParserContract
     Assert.assertEquals(1L, (long) field_order.size());
     Assert.assertEquals(1L, (long) field_names.size());
 
-    final FieldName f_name = FieldName.of(Optional.empty(), "f0");
+    final FieldName f_name = FieldName.of(LEX_ZERO, "f0");
     final PackedFieldDeclValue<Unresolved, Untyped> f0 =
       field_names.get(f_name).get();
     final PackedFieldDeclType<Unresolved, Untyped> f1 = field_order.get(0);

@@ -21,9 +21,8 @@ import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The {@code import} statement.
@@ -72,7 +71,7 @@ public final class StatementPackageImport<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.pack.lexical();
   }

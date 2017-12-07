@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 <code@io7m.com> http://io7m.com
+ * Copyright © 2015 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,8 +14,41 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jpra.model;
+
+import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jpra.core.JPRAImmutableStyleType;
+import com.io7m.jpra.model.names.PackageNameQualified;
+import org.immutables.value.Value;
+
+import java.net.URI;
+
 /**
- * Internal implementation types.
+ * A package import declaration.
  */
 
-package com.io7m.jpra.compiler.core.internal;
+@JPRAImmutableStyleType
+@Value.Immutable
+public interface PackageImportType extends ModelElementType
+{
+  @Override
+  @Value.Auxiliary
+  default LexicalPosition<URI> lexical()
+  {
+    return this.from().lexical();
+  }
+
+  /**
+   * @return The importing package
+   */
+
+  @Value.Parameter
+  PackageNameQualified from();
+
+  /**
+   * @return The imported package
+   */
+
+  @Value.Parameter
+  PackageNameQualified to();
+}

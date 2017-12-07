@@ -16,25 +16,16 @@
 
 package com.io7m.jpra.model;
 
-import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jlexing.core.LexicalType;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.net.URI;
 
 /**
  * A marker interface indicating that something is an element of the
  * type_model.
  */
 
-public interface ModelElementType
+public interface ModelElementType extends LexicalType<URI>
 {
-  /**
-   * Fetch the lexical information for the element. This is used to localize
-   * error messages to a position in a file when referring to specific
-   * elements.
-   *
-   * @return The original lexical information, if any
-   */
 
-  Optional<LexicalPosition<Path>> lexical();
 }

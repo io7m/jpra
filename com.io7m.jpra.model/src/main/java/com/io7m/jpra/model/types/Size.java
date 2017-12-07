@@ -16,8 +16,6 @@
 
 package com.io7m.jpra.model.types;
 
-import net.jcip.annotations.Immutable;
-
 import java.math.BigInteger;
 import java.util.Objects;
 
@@ -27,7 +25,6 @@ import java.util.Objects;
  * @param <U> The unit of measurement
  */
 
-@Immutable
 public final class Size<U extends SizeUnitType>
 {
   private final BigInteger value;

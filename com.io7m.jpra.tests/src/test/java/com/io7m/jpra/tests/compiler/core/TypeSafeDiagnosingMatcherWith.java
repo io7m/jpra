@@ -16,9 +16,10 @@
 
 package com.io7m.jpra.tests.compiler.core;
 
-import java.util.Objects;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+
+import java.util.Objects;
 
 public final class TypeSafeDiagnosingMatcherWith<T extends Throwable>
   extends TypeSafeDiagnosingMatcher<T>

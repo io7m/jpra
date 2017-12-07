@@ -17,12 +17,10 @@
 package com.io7m.jpra.model.size_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A constant size.
@@ -31,12 +29,11 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class SizeExprConstant<I, T>
   implements SizeExprType<I, T>
 {
   private final BigInteger value;
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
 
   /**
    * Construct a size expression.
@@ -46,7 +43,7 @@ public final class SizeExprConstant<I, T>
    */
 
   public SizeExprConstant(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final BigInteger in_size)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
@@ -77,7 +74,7 @@ public final class SizeExprConstant<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

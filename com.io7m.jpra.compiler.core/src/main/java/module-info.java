@@ -15,7 +15,29 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Compiler core)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.compiler.core
+{
+  requires com.io7m.jaffirm.core;
+  requires com.io7m.jeucreader.core;
+  requires com.io7m.jlexing.core;
+  requires com.io7m.jpra.core;
+  requires com.io7m.jpra.model;
+  requires com.io7m.jranges.core;
+  requires com.io7m.jsx.core;
+  requires com.io7m.jsx.parser.api;
+  requires com.io7m.jsx.parser;
+  requires com.io7m.junreachable.core;
+  requires io.vavr;
+  requires org.slf4j;
+
+  exports com.io7m.jpra.compiler.core;
+  exports com.io7m.jpra.compiler.core.bimap;
+  exports com.io7m.jpra.compiler.core.checker;
+  exports com.io7m.jpra.compiler.core.driver;
+  exports com.io7m.jpra.compiler.core.parser;
+  exports com.io7m.jpra.compiler.core.pipeline;
+  exports com.io7m.jpra.compiler.core.resolver;
+}

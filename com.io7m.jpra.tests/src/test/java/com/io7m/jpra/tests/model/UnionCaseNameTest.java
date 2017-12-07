@@ -17,70 +17,75 @@
 package com.io7m.jpra.tests.model;
 
 import com.io7m.jaffirm.core.PreconditionViolationException;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.UnionCaseName;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.Optional;
 
 public final class UnionCaseNameTest
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   @Test
   public void testValid0()
   {
-    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A");
+    final UnionCaseName p = UnionCaseName.of(LEX_ZERO, "A");
     Assert.assertEquals("A", p.value());
   }
 
   @Test
   public void testValid1()
   {
-    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A_");
+    final UnionCaseName p = UnionCaseName.of(LEX_ZERO, "A_");
     Assert.assertEquals("A_", p.value());
   }
 
   @Test
   public void testValid2()
   {
-    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "A1");
+    final UnionCaseName p = UnionCaseName.of(LEX_ZERO, "A1");
     Assert.assertEquals("A1", p.value());
   }
 
   @Test
   public void testValid3()
   {
-    final UnionCaseName p = UnionCaseName.of(Optional.empty(), "AA");
+    final UnionCaseName p = UnionCaseName.of(LEX_ZERO, "AA");
     Assert.assertEquals("AA", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    UnionCaseName.of(Optional.empty(), "1");
+    UnionCaseName.of(LEX_ZERO, "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    UnionCaseName.of(Optional.empty(), "a");
+    UnionCaseName.of(LEX_ZERO, "a");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    UnionCaseName.of(Optional.empty(), "_");
+    UnionCaseName.of(LEX_ZERO, "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    UnionCaseName.of(Optional.empty(), "aA");
+    UnionCaseName.of(LEX_ZERO, "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    UnionCaseName.of(Optional.empty(), "");
+    UnionCaseName.of(LEX_ZERO, "");
   }
 
 }

@@ -17,70 +17,75 @@
 package com.io7m.jpra.tests.model;
 
 import com.io7m.jaffirm.core.PreconditionViolationException;
+import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.TypeName;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.Optional;
 
 public final class TypeNameTest
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   @Test
   public void testValid0()
   {
-    final TypeName p = TypeName.of(Optional.empty(), "A");
+    final TypeName p = TypeName.of(LEX_ZERO, "A");
     Assert.assertEquals("A", p.value());
   }
 
   @Test
   public void testValid1()
   {
-    final TypeName p = TypeName.of(Optional.empty(), "A_");
+    final TypeName p = TypeName.of(LEX_ZERO, "A_");
     Assert.assertEquals("A_", p.value());
   }
 
   @Test
   public void testValid2()
   {
-    final TypeName p = TypeName.of(Optional.empty(), "A1");
+    final TypeName p = TypeName.of(LEX_ZERO, "A1");
     Assert.assertEquals("A1", p.value());
   }
 
   @Test
   public void testValid3()
   {
-    final TypeName p = TypeName.of(Optional.empty(), "AA");
+    final TypeName p = TypeName.of(LEX_ZERO, "AA");
     Assert.assertEquals("AA", p.value());
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid0()
   {
-    TypeName.of(Optional.empty(), "1");
+    TypeName.of(LEX_ZERO, "1");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid1()
   {
-    TypeName.of(Optional.empty(), "a");
+    TypeName.of(LEX_ZERO, "a");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid2()
   {
-    TypeName.of(Optional.empty(), "_");
+    TypeName.of(LEX_ZERO, "_");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid3()
   {
-    TypeName.of(Optional.empty(), "aA");
+    TypeName.of(LEX_ZERO, "aA");
   }
 
   @Test(expected = PreconditionViolationException.class)
   public void testInvalid4()
   {
-    TypeName.of(Optional.empty(), "");
+    TypeName.of(LEX_ZERO, "");
   }
 
 }

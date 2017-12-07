@@ -15,7 +15,25 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Java backend)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.compiler.java
+{
+  requires com.io7m.ieee754b16.core;
+  requires com.io7m.jaffirm.core;
+  requires com.io7m.jnfp.core;
+  requires com.io7m.jpra.model;
+  requires com.io7m.jpra.runtime.java;
+  requires com.io7m.jranges.core;
+  requires com.io7m.jtensors.core;
+  requires com.io7m.jtensors.storage.api;
+  requires com.io7m.jtensors.storage.bytebuffered;
+  requires com.io7m.junreachable.core;
+  requires io.vavr;
+  requires java.compiler;
+  requires javapoet;
+  requires org.slf4j;
+
+  exports com.io7m.jpra.compiler.java;
+}

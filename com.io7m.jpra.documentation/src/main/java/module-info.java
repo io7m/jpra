@@ -15,7 +15,16 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Documentation)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.documentation
+{
+  requires com.io7m.jpra.compiler.core;
+  requires com.io7m.jpra.compiler.java;
+  requires com.io7m.jpra.core;
+  requires com.io7m.jpra.model;
+  requires com.io7m.jpra.runtime.java;
+
+  exports com.io7m.jpra.documentation;
+}

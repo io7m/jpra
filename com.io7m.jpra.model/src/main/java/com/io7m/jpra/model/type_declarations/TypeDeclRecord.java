@@ -23,9 +23,8 @@ import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.statements.StatementMatcherType;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,7 +35,6 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
 {
   private final TypeName name;
@@ -121,7 +119,7 @@ public final class TypeDeclRecord<I, T> implements TypeDeclType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.name.lexical();
   }

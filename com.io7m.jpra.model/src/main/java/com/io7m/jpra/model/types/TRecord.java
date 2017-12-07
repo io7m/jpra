@@ -18,7 +18,6 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
@@ -28,9 +27,8 @@ import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code record} type.
@@ -184,7 +182,7 @@ public final class TRecord implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.name.lexical();
   }
@@ -288,7 +286,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     private final FieldName name;
     private final TType type;
     private final Size<SizeUnitOctetsType> size_octets;
-    private @Nullable TRecord owner;
+    private TRecord owner;
 
     FieldValue(
       final FieldName in_name,
@@ -353,7 +351,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> lexical()
+    public LexicalPosition<URI> lexical()
     {
       return this.name.lexical();
     }
@@ -383,9 +381,9 @@ public final class TRecord implements TType, TypeUserDefinedType
   public static final class FieldPaddingOctets implements FieldType
   {
     private final Size<SizeUnitBitsType> size_bits;
-    private final Optional<LexicalPosition<Path>> lex;
+    private final LexicalPosition<URI> lex;
     private final Size<SizeUnitOctetsType> size_octets;
-    private @Nullable TRecord owner;
+    private TRecord owner;
 
     /**
      * Construct a field.
@@ -396,7 +394,7 @@ public final class TRecord implements TType, TypeUserDefinedType
 
     FieldPaddingOctets(
       final Size<SizeUnitOctetsType> in_size_octets,
-      final Optional<LexicalPosition<Path>> in_lex)
+      final LexicalPosition<URI> in_lex)
     {
       this.size_octets = Objects.requireNonNull(in_size_octets, "Size");
       this.size_bits = Size.toBits(this.size_octets);
@@ -440,7 +438,7 @@ public final class TRecord implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> lexical()
+    public LexicalPosition<URI> lexical()
     {
       return this.lex;
     }

@@ -17,24 +17,21 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code matrix} type expression.
  */
 
-@Immutable
 public final class TMatrix implements TType
 {
   private final TypeScalarType type;
   private final Size<?> size_width;
   private final Size<?> size_height;
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final Size<SizeUnitBitsType> size_bits;
 
   /**
@@ -49,7 +46,7 @@ public final class TMatrix implements TType
    */
 
   public TMatrix(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final Size<?> in_size_width,
     final Size<?> in_size_height,
     final TypeScalarType in_type)
@@ -107,7 +104,7 @@ public final class TMatrix implements TType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

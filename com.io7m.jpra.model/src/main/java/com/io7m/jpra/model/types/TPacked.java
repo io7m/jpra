@@ -18,7 +18,6 @@ package com.io7m.jpra.model.types;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jnull.Nullable;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jpra.model.names.FieldName;
@@ -29,9 +28,8 @@ import io.vavr.collection.List;
 import io.vavr.collection.Map;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code packed} type.
@@ -149,7 +147,7 @@ public final class TPacked implements TType, TypeUserDefinedType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.name.lexical();
   }
@@ -287,8 +285,8 @@ public final class TPacked implements TType, TypeUserDefinedType
   {
     private final FieldName name;
     private final TIntegerType type;
-    private @Nullable TPacked owner;
-    private @Nullable RangeInclusiveB range;
+    private TPacked owner;
+    private RangeInclusiveB range;
 
     FieldValue(
       final FieldName in_identifier,
@@ -352,7 +350,7 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> lexical()
+    public LexicalPosition<URI> lexical()
     {
       return this.name.lexical();
     }
@@ -376,13 +374,13 @@ public final class TPacked implements TType, TypeUserDefinedType
   public static final class FieldPaddingBits implements FieldType
   {
     private final Size<SizeUnitBitsType> size_bits;
-    private final Optional<LexicalPosition<Path>> lex;
-    private @Nullable TPacked owner;
-    private @Nullable RangeInclusiveB range;
+    private final LexicalPosition<URI> lex;
+    private TPacked owner;
+    private RangeInclusiveB range;
 
     FieldPaddingBits(
       final Size<SizeUnitBitsType> in_size_bits,
-      final Optional<LexicalPosition<Path>> in_lex)
+      final LexicalPosition<URI> in_lex)
     {
       this.size_bits =
         Objects.requireNonNull(in_size_bits, "Size bits");
@@ -426,7 +424,7 @@ public final class TPacked implements TType, TypeUserDefinedType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> lexical()
+    public LexicalPosition<URI> lexical()
     {
       return this.lex;
     }

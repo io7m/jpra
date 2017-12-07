@@ -17,19 +17,20 @@
 package com.io7m.jpra.compiler.core;
 
 import com.io7m.jlexing.core.LexicalPosition;
+import com.io7m.jlexing.core.LexicalType;
 import com.io7m.jpra.core.JPRAException;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The root type of compiler exceptions.
  */
 
-public abstract class JPRACompilerException extends JPRAException
+public abstract class JPRACompilerException
+  extends JPRAException implements LexicalType<URI>
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
 
   /**
    * Construct an exception.
@@ -39,7 +40,7 @@ public abstract class JPRACompilerException extends JPRAException
    */
 
   public JPRACompilerException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final String message)
   {
     super(Objects.requireNonNull(message, "Message"));
@@ -54,19 +55,15 @@ public abstract class JPRACompilerException extends JPRAException
    */
 
   public JPRACompilerException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final Exception cause)
   {
     super(Objects.requireNonNull(cause, "Cause"));
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
   }
 
-  /**
-   * @return The lexical information for the error, if any
-   */
-
-  public final Optional<LexicalPosition<Path>>
-  getLexicalInformation()
+  @Override
+  public final LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

@@ -29,12 +29,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 final class TPackedBuilder implements TPackedBuilderType
@@ -72,7 +71,7 @@ final class TPackedBuilder implements TPackedBuilderType
 
   @Override
   public void addPaddingBits(
-    final Optional<LexicalPosition<Path>> lex,
+    final LexicalPosition<URI> lex,
     final Size<SizeUnitBitsType> size)
   {
     Preconditions.checkPrecondition(
@@ -138,7 +137,7 @@ final class TPackedBuilder implements TPackedBuilderType
               current_msb.subtract(size).add(BigInteger.ONE);
 
             LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
-            f.setRange(new RangeInclusiveB(lsb, current_msb));
+            f.setRange(RangeInclusiveB.of(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
             return null;
           }
@@ -154,7 +153,7 @@ final class TPackedBuilder implements TPackedBuilderType
               current_msb.subtract(size).add(BigInteger.ONE);
 
             LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
-            f.setRange(new RangeInclusiveB(lsb, current_msb));
+            f.setRange(RangeInclusiveB.of(lsb, current_msb));
             msb.set(lsb.subtract(BigInteger.ONE));
             return null;
           }

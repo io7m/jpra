@@ -15,7 +15,12 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Core)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.core
+{
+  requires static org.immutables.value;
+
+  exports com.io7m.jpra.core;
+}

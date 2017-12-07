@@ -17,21 +17,18 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import net.jcip.annotations.Immutable;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code vector} type expression.
  */
 
-@Immutable
 public final class TVector implements TType
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final TypeScalarType type;
   private final Size<?> size;
   private final Size<SizeUnitBitsType> size_bits;
@@ -45,7 +42,7 @@ public final class TVector implements TType
    */
 
   public TVector(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final Size<?> in_size,
     final TypeScalarType in_type)
   {
@@ -91,7 +88,7 @@ public final class TVector implements TType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

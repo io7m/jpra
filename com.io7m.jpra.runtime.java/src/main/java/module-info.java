@@ -15,7 +15,14 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Java runtime)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.runtime.java
+{
+  requires static org.immutables.value;
+
+  requires com.io7m.mutable.numbers.core;
+
+  exports com.io7m.jpra.runtime.java;
+}

@@ -87,7 +87,7 @@ public final class FieldPath
    * @return The path elements
    */
 
-  public List<FieldName> getElements()
+  public List<FieldName> elements()
   {
     return this.path;
   }

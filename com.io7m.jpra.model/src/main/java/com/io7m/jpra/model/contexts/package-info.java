@@ -18,6 +18,5 @@
  * Context types.
  */
 
-
 package com.io7m.jpra.model.contexts;
 

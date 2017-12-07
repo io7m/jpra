@@ -20,8 +20,7 @@ import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.IdentifierType;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.net.URI;
 
 /**
  * The type of mutable records for {@link TRecord} values.
@@ -37,7 +36,7 @@ public interface TRecordBuilderType
    */
 
   void addPaddingOctets(
-    Optional<LexicalPosition<Path>> lex,
+    LexicalPosition<URI> lex,
     Size<SizeUnitOctetsType> size);
 
   /**

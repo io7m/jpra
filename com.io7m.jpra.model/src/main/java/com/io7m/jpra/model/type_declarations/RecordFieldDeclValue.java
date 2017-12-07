@@ -19,11 +19,9 @@ package com.io7m.jpra.model.type_declarations;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code record} {@code field} declaration.
@@ -32,7 +30,6 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class RecordFieldDeclValue<I, T>
   implements RecordFieldDeclType<I, T>
 {
@@ -94,7 +91,7 @@ public final class RecordFieldDeclValue<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.name.lexical();
   }

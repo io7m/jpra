@@ -20,9 +20,8 @@ import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.ModelElementType;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code :size} command.
@@ -58,7 +57,7 @@ public final class StatementCommandSize<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.expr.lexical();
   }

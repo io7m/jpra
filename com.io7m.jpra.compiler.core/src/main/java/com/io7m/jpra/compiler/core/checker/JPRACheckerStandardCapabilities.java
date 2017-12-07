@@ -54,7 +54,7 @@ public final class JPRACheckerStandardCapabilities
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b1, b64));
+      s.add(RangeInclusiveB.of(b1, b64));
       this.packed_integer_sizes = List.ofAll(s);
     }
 
@@ -63,18 +63,18 @@ public final class JPRACheckerStandardCapabilities
     final BigInteger b8 = BigInteger.valueOf(8L);
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b8, b8));
-      s.add(new RangeInclusiveB(b16, b16));
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b8, b8));
+      s.add(RangeInclusiveB.of(b16, b16));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.record_integer_sizes = List.ofAll(s);
     }
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b16, b16));
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b16, b16));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.record_float_sizes = List.ofAll(s);
     }
 
@@ -86,24 +86,24 @@ public final class JPRACheckerStandardCapabilities
     final BigInteger b3 = BigInteger.valueOf(3L);
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b2, b2));
-      s.add(new RangeInclusiveB(b3, b3));
-      s.add(new RangeInclusiveB(b4, b4));
+      s.add(RangeInclusiveB.of(b2, b2));
+      s.add(RangeInclusiveB.of(b3, b3));
+      s.add(RangeInclusiveB.of(b4, b4));
       this.vector_sizes = List.ofAll(s);
     }
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b16, b16));
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b16, b16));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.vector_float_sizes = List.ofAll(s);
     }
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.vector_integer_sizes = List.ofAll(s);
     }
 
@@ -111,28 +111,28 @@ public final class JPRACheckerStandardCapabilities
       final ArrayList<Tuple2<RangeInclusiveB, RangeInclusiveB>> s =
         new ArrayList<>();
 
-      final RangeInclusiveB r2 = new RangeInclusiveB(b2, b2);
+      final RangeInclusiveB r2 = RangeInclusiveB.of(b2, b2);
       s.add(Tuple.of(r2, r2));
-      final RangeInclusiveB r3 = new RangeInclusiveB(b3, b3);
+      final RangeInclusiveB r3 = RangeInclusiveB.of(b3, b3);
       s.add(Tuple.of(r3, r3));
-      final RangeInclusiveB r4 = new RangeInclusiveB(b4, b4);
+      final RangeInclusiveB r4 = RangeInclusiveB.of(b4, b4);
       s.add(Tuple.of(r4, r4));
       this.matrix_sizes = List.ofAll(s);
     }
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.matrix_float_sizes = List.ofAll(s);
     }
 
     {
       final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(new RangeInclusiveB(b8, b8));
-      s.add(new RangeInclusiveB(b16, b16));
-      s.add(new RangeInclusiveB(b32, b32));
-      s.add(new RangeInclusiveB(b64, b64));
+      s.add(RangeInclusiveB.of(b8, b8));
+      s.add(RangeInclusiveB.of(b16, b16));
+      s.add(RangeInclusiveB.of(b32, b32));
+      s.add(RangeInclusiveB.of(b64, b64));
       this.packed_sizes = List.ofAll(s);
     }
   }

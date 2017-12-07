@@ -18,11 +18,9 @@ package com.io7m.jpra.model.size_expressions;
 
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A size function denoting the size in bits of a given type expression.
@@ -31,7 +29,6 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class SizeExprInBits<I, T> implements SizeExprType<I, T>
 {
   private final TypeExprType<I, T> expression;
@@ -66,7 +63,7 @@ public final class SizeExprInBits<I, T> implements SizeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.expression.lexical();
   }

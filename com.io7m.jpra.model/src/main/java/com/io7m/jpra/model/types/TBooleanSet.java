@@ -19,22 +19,19 @@ package com.io7m.jpra.model.types;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.names.FieldName;
 import io.vavr.collection.List;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code boolean-set} type.
  */
 
-@Immutable
 public final class TBooleanSet implements TType
 {
   private final Size<SizeUnitOctetsType> size;
   private final List<FieldName> fields;
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final Size<SizeUnitBitsType> size_bits;
 
   /**
@@ -46,7 +43,7 @@ public final class TBooleanSet implements TType
    */
 
   public TBooleanSet(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final List<FieldName> in_fields,
     final Size<SizeUnitOctetsType> in_size)
   {
@@ -89,7 +86,7 @@ public final class TBooleanSet implements TType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

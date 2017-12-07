@@ -30,8 +30,7 @@ import io.vavr.collection.List;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.util.Optional;
+import java.net.URI;
 
 /**
  * Default implementation of the {@link JPRAProblemFormatterType} interface.
@@ -55,27 +54,24 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
 
   private static void printLex(
     final PrintWriter w,
-    final Optional<LexicalPosition<Path>> lex)
+    final LexicalPosition<URI> lex)
   {
-    lex.ifPresent(
-      p -> {
-        p.file().ifPresent(
-          f -> {
-            w.print(f);
-            w.print(":");
-          });
-        w.print(p.line() + 1);
+    lex.file().ifPresent(
+      f -> {
+        w.print(f);
         w.print(":");
-        w.print(p.column());
-        w.print(": ");
       });
+    w.print(lex.line() + 1);
+    w.print(":");
+    w.print(lex.column());
+    w.print(": ");
   }
 
   private static void onCompilerException(
     final PrintWriter w,
     final JPRACompilerException e)
   {
-    printLex(w, e.getLexicalInformation());
+    printLex(w, e.lexical());
 
     if (e instanceof JPRACompilerLexerException) {
       w.print("lexical error: ");
@@ -111,30 +107,26 @@ public final class JPRAProblemFormatter implements JPRAProblemFormatterType
     final List<PackageImport> imports = e.getImports();
 
     printLex(
-      w, imports.get(0).getTo().lexical());
+      w, imports.get(0).to().lexical());
 
     w.println("error: circular import:");
 
     for (int index = 0; index < imports.size(); ++index) {
       final PackageImport i = imports.get(index);
       w.print("  → import ");
-      w.print(i.getTo());
+      w.print(i.to());
       w.print(" at ");
 
-      final Optional<LexicalPosition<Path>> lex =
-        i.getTo().lexical();
-      lex.ifPresent(
-        p -> {
-          p.file().ifPresent(
-            f -> {
-              w.print(f);
-              w.print(": ");
-            });
-          w.print(p.line() + 1);
-          w.print(":");
-          w.print(p.column());
-          w.print("");
+      final LexicalPosition<URI> lex = i.to().lexical();
+      lex.file().ifPresent(
+        f -> {
+          w.print(f);
+          w.print(": ");
         });
+      w.print(lex.line() + 1);
+      w.print(":");
+      w.print(lex.column());
+      w.print("");
       w.println();
     }
   }

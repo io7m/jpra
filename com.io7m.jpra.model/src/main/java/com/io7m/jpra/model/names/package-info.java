@@ -18,6 +18,5 @@
  * Unresolved name types.
  */
 
-
 package com.io7m.jpra.model.names;
 

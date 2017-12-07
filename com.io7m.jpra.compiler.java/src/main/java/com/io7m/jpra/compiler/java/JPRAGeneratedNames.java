@@ -19,7 +19,9 @@ package com.io7m.jpra.compiler.java;
 import com.io7m.jpra.model.names.FieldName;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.junreachable.UnreachableCodeException;
-import org.apache.commons.lang3.text.WordUtils;
+import io.vavr.collection.List;
+
+import java.util.stream.Collectors;
 
 final class JPRAGeneratedNames
 {
@@ -49,9 +51,16 @@ final class JPRAGeneratedNames
 
   static String getRecased(final String raw)
   {
-    final String spaced = raw.replaceAll("_", " ");
-    final String capped = WordUtils.capitalize(spaced);
-    return capped.replaceAll(" ", "");
+    return List.of(
+      raw.replaceAll("_", " ").split(" "))
+      .map(JPRAGeneratedNames::capitalizeWord)
+      .collect(Collectors.joining(""));
+  }
+
+  private static String capitalizeWord(
+    final String word)
+  {
+    return word.substring(0, 1).toUpperCase() + word.substring(1);
   }
 
   static String getSetterName(final FieldName name)

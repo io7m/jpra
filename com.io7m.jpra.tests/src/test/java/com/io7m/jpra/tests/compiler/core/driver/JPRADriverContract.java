@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,6 +52,9 @@ import java.util.Queue;
 
 public abstract class JPRADriverContract
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   private static final Logger LOG;
 
   static {
@@ -97,9 +101,6 @@ public abstract class JPRADriverContract
   public final void testPackageNonexistent()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     try (final FileSystem fs = this.getFilesystem()) {
       final Path base = getFirstRoot(fs);
       final JPRACheckerCapabilitiesType caps =
@@ -128,9 +129,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "z")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z")));
     }
   }
 
@@ -138,9 +139,6 @@ public abstract class JPRADriverContract
   public final void testPackageCircular()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     try (final FileSystem fs = this.getFilesystem()) {
       final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
@@ -189,9 +187,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "a")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "a")));
     }
   }
 
@@ -199,9 +197,6 @@ public abstract class JPRADriverContract
   public final void testPackageEmpty()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     try (final FileSystem fs = this.getFilesystem()) {
       final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
@@ -232,9 +227,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "z")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z")));
     }
   }
 
@@ -242,9 +237,6 @@ public abstract class JPRADriverContract
   public final void testPackageUnparseable()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     try (final FileSystem fs = this.getFilesystem()) {
       final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
@@ -280,9 +272,9 @@ public abstract class JPRADriverContract
 
       d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "z")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z")));
     }
   }
 
@@ -290,9 +282,6 @@ public abstract class JPRADriverContract
   public final void testPackageTwice()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     try (final FileSystem fs = this.getFilesystem()) {
       final Path base = getFirstRoot(fs);
       final Path dir = base.resolve("x").resolve("y");
@@ -306,15 +295,15 @@ public abstract class JPRADriverContract
 
       final PackageContextType pc0 = d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "z")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z")));
 
       final PackageContextType pc1 = d.compilePackage(
         PackageNameQualified.of(
-          PackageNameUnqualified.of(no_lex, "x"),
-          PackageNameUnqualified.of(no_lex, "y"),
-          PackageNameUnqualified.of(no_lex, "z")));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z")));
 
       Assert.assertSame(pc0, pc1);
     }

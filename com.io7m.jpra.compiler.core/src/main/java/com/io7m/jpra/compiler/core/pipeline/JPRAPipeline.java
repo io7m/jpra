@@ -36,7 +36,7 @@ import com.io7m.jpra.model.types.TType;
 import com.io7m.jsx.SExpressionType;
 import com.io7m.junreachable.UnimplementedCodeException;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -156,7 +156,7 @@ public final class JPRAPipeline implements JPRAPipelineType
 
   @Override
   public void onEOF(
-    final Optional<LexicalPosition<Path>> lex)
+    final LexicalPosition<URI> lex)
     throws JPRACompilerException
   {
     this.parser.parseEOF(lex);

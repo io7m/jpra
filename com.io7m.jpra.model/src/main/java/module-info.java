@@ -15,7 +15,29 @@
  */
 
 /**
- * Parser.
+ * Packed record access (Model)
  */
 
-package com.io7m.jpra.compiler.core.parser;
+module com.io7m.jpra.model
+{
+  requires static org.immutables.value;
+
+  requires com.io7m.jaffirm.core;
+  requires com.io7m.jlexing.core;
+  requires com.io7m.jpra.core;
+  requires com.io7m.jranges.core;
+  requires com.io7m.junreachable.core;
+  requires io.vavr;
+  requires jgrapht.core;
+  requires org.slf4j;
+
+  exports com.io7m.jpra.model;
+  exports com.io7m.jpra.model.contexts;
+  exports com.io7m.jpra.model.loading;
+  exports com.io7m.jpra.model.names;
+  exports com.io7m.jpra.model.size_expressions;
+  exports com.io7m.jpra.model.statements;
+  exports com.io7m.jpra.model.type_declarations;
+  exports com.io7m.jpra.model.type_expressions;
+  exports com.io7m.jpra.model.types;
+}

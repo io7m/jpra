@@ -52,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -67,6 +68,9 @@ import java.util.Optional;
 
 public abstract class JPRAJavaGeneratorContract
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   private static final Logger LOG;
 
   static {
@@ -222,14 +226,12 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "Empty");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "Empty");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
     final TRecord r = rb.build();
 
@@ -247,49 +249,47 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordInteger");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordInteger");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "i8"),
+      FieldName.of(LEX_ZERO, "i8"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "i16"),
+      FieldName.of(LEX_ZERO, "i16"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "i32"),
+      FieldName.of(LEX_ZERO, "i32"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(32L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(32L)));
     rb.addField(
-      FieldName.of(no_lex, "i64"),
+      FieldName.of(LEX_ZERO, "i64"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(64L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(64L)));
 
     rb.addField(
-      FieldName.of(no_lex, "u8"),
+      FieldName.of(LEX_ZERO, "u8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "u16"),
+      FieldName.of(LEX_ZERO, "u16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "u32"),
+      FieldName.of(LEX_ZERO, "u32"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(32L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(32L)));
     rb.addField(
-      FieldName.of(no_lex, "u64"),
+      FieldName.of(LEX_ZERO, "u64"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(64L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
     compileRecords(
@@ -306,28 +306,26 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordFloat");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordFloat");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "f16"),
+      FieldName.of(LEX_ZERO, "f16"),
       gc.getFreshIdentifier(),
-      new TFloat(no_lex, Size.valueOf(16L)));
+      new TFloat(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "f32"),
+      FieldName.of(LEX_ZERO, "f32"),
       gc.getFreshIdentifier(),
-      new TFloat(no_lex, Size.valueOf(32L)));
+      new TFloat(LEX_ZERO, Size.valueOf(32L)));
     rb.addField(
-      FieldName.of(no_lex, "f64"),
+      FieldName.of(LEX_ZERO, "f64"),
       gc.getFreshIdentifier(),
-      new TFloat(no_lex, Size.valueOf(64L)));
+      new TFloat(LEX_ZERO, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
     compileRecords(
@@ -344,49 +342,47 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordIntegerNormalized");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordIntegerNormalized");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "isn8"),
+      FieldName.of(LEX_ZERO, "isn8"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "isn16"),
+      FieldName.of(LEX_ZERO, "isn16"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "isn32"),
+      FieldName.of(LEX_ZERO, "isn32"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(32L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(32L)));
     rb.addField(
-      FieldName.of(no_lex, "isn64"),
+      FieldName.of(LEX_ZERO, "isn64"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(64L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(64L)));
 
     rb.addField(
-      FieldName.of(no_lex, "usn8"),
+      FieldName.of(LEX_ZERO, "usn8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "usn16"),
+      FieldName.of(LEX_ZERO, "usn16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "usn32"),
+      FieldName.of(LEX_ZERO, "usn32"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(32L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(32L)));
     rb.addField(
-      FieldName.of(no_lex, "usn64"),
+      FieldName.of(LEX_ZERO, "usn64"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(64L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(64L)));
 
     final TRecord r = rb.build();
     compileRecords(
@@ -403,17 +399,15 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordPadding");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordPadding");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
-    rb.addPaddingOctets(no_lex, Size.valueOf(100L));
+    rb.addPaddingOctets(LEX_ZERO, Size.valueOf(100L));
 
     final TRecord r = rb.build();
     compileRecords(
@@ -430,30 +424,28 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordBooleanSet");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordBooleanSet");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "bool"), gc.getFreshIdentifier(), new TBooleanSet(
-        no_lex, List.of(
-        FieldName.of(no_lex, "flag_a"),
-        FieldName.of(no_lex, "flag_b"),
-        FieldName.of(no_lex, "flag_c"),
-        FieldName.of(no_lex, "flag_d"),
-        FieldName.of(no_lex, "flag_e"),
-        FieldName.of(no_lex, "flag_f"),
-        FieldName.of(no_lex, "flag_g"),
-        FieldName.of(no_lex, "flag_h"),
-        FieldName.of(no_lex, "flag_i"),
-        FieldName.of(no_lex, "flag_j"),
-        FieldName.of(no_lex, "flag_k")), Size.valueOf(2L)));
+      FieldName.of(LEX_ZERO, "bool"), gc.getFreshIdentifier(), new TBooleanSet(
+        LEX_ZERO, List.of(
+        FieldName.of(LEX_ZERO, "flag_a"),
+        FieldName.of(LEX_ZERO, "flag_b"),
+        FieldName.of(LEX_ZERO, "flag_c"),
+        FieldName.of(LEX_ZERO, "flag_d"),
+        FieldName.of(LEX_ZERO, "flag_e"),
+        FieldName.of(LEX_ZERO, "flag_f"),
+        FieldName.of(LEX_ZERO, "flag_g"),
+        FieldName.of(LEX_ZERO, "flag_h"),
+        FieldName.of(LEX_ZERO, "flag_i"),
+        FieldName.of(LEX_ZERO, "flag_j"),
+        FieldName.of(LEX_ZERO, "flag_k")), Size.valueOf(2L)));
 
     final TRecord r = rb.build();
     compileRecords(createTemporaryDir(), g, List.of(r));
@@ -469,23 +461,20 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     final Path path = createTemporaryDir();
 
-    final TypeName t_name = TypeName.of(no_lex, "Empty");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
     final TRecord te = teb.build();
 
-    final TypeName tr_name = TypeName.of(no_lex, "RecordRecord");
+    final TypeName tr_name = TypeName.of(LEX_ZERO, "RecordRecord");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
-    rb.addField(FieldName.of(no_lex, "r"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(LEX_ZERO, "r"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
     compileRecords(path, g, List.of(te, r));
@@ -501,24 +490,21 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     final Path path = createTemporaryDir();
 
-    final TypeName t_name = TypeName.of(no_lex, "Empty");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "Empty");
     final TRecordBuilderType teb = TRecord.newBuilder(pc, id, t_name);
     final TRecord te = teb.build();
 
-    final TypeName tr_name = TypeName.of(no_lex, "RecordRecordTwice");
+    final TypeName tr_name = TypeName.of(LEX_ZERO, "RecordRecordTwice");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, tr_name);
-    rb.addField(FieldName.of(no_lex, "r0"), gc.getFreshIdentifier(), te);
-    rb.addField(FieldName.of(no_lex, "r1"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(LEX_ZERO, "r0"), gc.getFreshIdentifier(), te);
+    rb.addField(FieldName.of(LEX_ZERO, "r1"), gc.getFreshIdentifier(), te);
 
     final TRecord r = rb.build();
     compileRecords(
@@ -535,14 +521,12 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "Empty");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "Empty");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
     final TPacked r = rb.build();
 
@@ -560,17 +544,15 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedAllPadding");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedAllPadding");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
-    rb.addPaddingBits(no_lex, Size.valueOf(64L));
+    rb.addPaddingBits(LEX_ZERO, Size.valueOf(64L));
 
     final TPacked r = rb.build();
     compilePackeds(createTemporaryDir(), g, List.of(r));
@@ -586,32 +568,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerU4_U4_U4_U4");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerU4_U4_U4_U4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r4"),
+      FieldName.of(LEX_ZERO, "r4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "g4"),
+      FieldName.of(LEX_ZERO, "g4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "b4"),
+      FieldName.of(LEX_ZERO, "b4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "a4"),
+      FieldName.of(LEX_ZERO, "a4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -628,32 +608,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerU8_U8_U8_U8");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerU8_U8_U8_U8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r8"),
+      FieldName.of(LEX_ZERO, "r8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "g8"),
+      FieldName.of(LEX_ZERO, "g8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "b8"),
+      FieldName.of(LEX_ZERO, "b8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "a8"),
+      FieldName.of(LEX_ZERO, "a8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -670,33 +648,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerU16_U16_U16_U16");
+      TypeName.of(LEX_ZERO, "PackedIntegerU16_U16_U16_U16");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r16"),
+      FieldName.of(LEX_ZERO, "r16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "g16"),
+      FieldName.of(LEX_ZERO, "g16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "b16"),
+      FieldName.of(LEX_ZERO, "b16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "a16"),
+      FieldName.of(LEX_ZERO, "a16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -713,32 +689,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerU2_U2_U2_U2");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerU2_U2_U2_U2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -755,50 +729,48 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerU2_U2_U2_U2_U2_U2_U2_U2");
+      TypeName.of(LEX_ZERO, "PackedIntegerU2_U2_U2_U2_U2_U2_U2_U2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
 
     rb.addField(
-      FieldName.of(no_lex, "x2"),
+      FieldName.of(LEX_ZERO, "x2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "y2"),
+      FieldName.of(LEX_ZERO, "y2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "z2"),
+      FieldName.of(LEX_ZERO, "z2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "w2"),
+      FieldName.of(LEX_ZERO, "w2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -815,32 +787,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerS4_S4_S4_S4");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerS4_S4_S4_S4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r4"),
+      FieldName.of(LEX_ZERO, "r4"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "g4"),
+      FieldName.of(LEX_ZERO, "g4"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "b4"),
+      FieldName.of(LEX_ZERO, "b4"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "a4"),
+      FieldName.of(LEX_ZERO, "a4"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -857,32 +827,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerS8_S8_S8_S8");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerS8_S8_S8_S8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r8"),
+      FieldName.of(LEX_ZERO, "r8"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "g8"),
+      FieldName.of(LEX_ZERO, "g8"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "b8"),
+      FieldName.of(LEX_ZERO, "b8"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "a8"),
+      FieldName.of(LEX_ZERO, "a8"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(8L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -899,33 +867,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerS16_S16_S16_S16");
+      TypeName.of(LEX_ZERO, "PackedIntegerS16_S16_S16_S16");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r16"),
+      FieldName.of(LEX_ZERO, "r16"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "g16"),
+      FieldName.of(LEX_ZERO, "g16"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "b16"),
+      FieldName.of(LEX_ZERO, "b16"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "a16"),
+      FieldName.of(LEX_ZERO, "a16"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(16L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -942,32 +908,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerS2_S2_S2_S2");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerS2_S2_S2_S2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -984,50 +948,48 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerS2_S2_S2_S2_S2_S2_S2_S2");
+      TypeName.of(LEX_ZERO, "PackedIntegerS2_S2_S2_S2_S2_S2_S2_S2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
 
     rb.addField(
-      FieldName.of(no_lex, "x2"),
+      FieldName.of(LEX_ZERO, "x2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "y2"),
+      FieldName.of(LEX_ZERO, "y2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "z2"),
+      FieldName.of(LEX_ZERO, "z2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "w2"),
+      FieldName.of(LEX_ZERO, "w2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(2L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1044,33 +1006,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerUN4_UN4_UN4_UN4");
+      TypeName.of(LEX_ZERO, "PackedIntegerUN4_UN4_UN4_UN4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r4"),
+      FieldName.of(LEX_ZERO, "r4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "g4"),
+      FieldName.of(LEX_ZERO, "g4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "b4"),
+      FieldName.of(LEX_ZERO, "b4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "a4"),
+      FieldName.of(LEX_ZERO, "a4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1087,33 +1047,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerUN8_UN8_UN8_UN8");
+      TypeName.of(LEX_ZERO, "PackedIntegerUN8_UN8_UN8_UN8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r8"),
+      FieldName.of(LEX_ZERO, "r8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "g8"),
+      FieldName.of(LEX_ZERO, "g8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "b8"),
+      FieldName.of(LEX_ZERO, "b8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "a8"),
+      FieldName.of(LEX_ZERO, "a8"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1130,33 +1088,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerUN16_UN16_UN16_UN16");
+      TypeName.of(LEX_ZERO, "PackedIntegerUN16_UN16_UN16_UN16");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r16"),
+      FieldName.of(LEX_ZERO, "r16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "g16"),
+      FieldName.of(LEX_ZERO, "g16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "b16"),
+      FieldName.of(LEX_ZERO, "b16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "a16"),
+      FieldName.of(LEX_ZERO, "a16"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1173,33 +1129,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerUN2_UN2_UN2_UN2");
+      TypeName.of(LEX_ZERO, "PackedIntegerUN2_UN2_UN2_UN2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1216,50 +1170,48 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerUN2_UN2_UN2_UN2_UN2_UN2_UN2_UN2");
+      TypeName.of(LEX_ZERO, "PackedIntegerUN2_UN2_UN2_UN2_UN2_UN2_UN2_UN2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     rb.addField(
-      FieldName.of(no_lex, "x2"),
+      FieldName.of(LEX_ZERO, "x2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "y2"),
+      FieldName.of(LEX_ZERO, "y2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "z2"),
+      FieldName.of(LEX_ZERO, "z2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "w2"),
+      FieldName.of(LEX_ZERO, "w2"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1276,33 +1228,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerSN4_SN4_SN4_SN4");
+      TypeName.of(LEX_ZERO, "PackedIntegerSN4_SN4_SN4_SN4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r4"),
+      FieldName.of(LEX_ZERO, "r4"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "g4"),
+      FieldName.of(LEX_ZERO, "g4"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "b4"),
+      FieldName.of(LEX_ZERO, "b4"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "a4"),
+      FieldName.of(LEX_ZERO, "a4"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1319,33 +1269,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerSN8_SN8_SN8_SN8");
+      TypeName.of(LEX_ZERO, "PackedIntegerSN8_SN8_SN8_SN8");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r8"),
+      FieldName.of(LEX_ZERO, "r8"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "g8"),
+      FieldName.of(LEX_ZERO, "g8"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "b8"),
+      FieldName.of(LEX_ZERO, "b8"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(8L)));
     rb.addField(
-      FieldName.of(no_lex, "a8"),
+      FieldName.of(LEX_ZERO, "a8"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(8L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(8L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1362,33 +1310,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerSN16_SN16_SN16_SN16");
+      TypeName.of(LEX_ZERO, "PackedIntegerSN16_SN16_SN16_SN16");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r16"),
+      FieldName.of(LEX_ZERO, "r16"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "g16"),
+      FieldName.of(LEX_ZERO, "g16"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "b16"),
+      FieldName.of(LEX_ZERO, "b16"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(16L)));
     rb.addField(
-      FieldName.of(no_lex, "a16"),
+      FieldName.of(LEX_ZERO, "a16"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(16L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(16L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1405,33 +1351,31 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerSN2_SN2_SN2_SN2");
+      TypeName.of(LEX_ZERO, "PackedIntegerSN2_SN2_SN2_SN2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1448,50 +1392,48 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
     final TypeName t_name =
-      TypeName.of(no_lex, "PackedIntegerSN2_SN2_SN2_SN2_SN2_SN2_SN2_SN2");
+      TypeName.of(LEX_ZERO, "PackedIntegerSN2_SN2_SN2_SN2_SN2_SN2_SN2_SN2");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "r2"),
+      FieldName.of(LEX_ZERO, "r2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "g2"),
+      FieldName.of(LEX_ZERO, "g2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "b2"),
+      FieldName.of(LEX_ZERO, "b2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "a2"),
+      FieldName.of(LEX_ZERO, "a2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     rb.addField(
-      FieldName.of(no_lex, "x2"),
+      FieldName.of(LEX_ZERO, "x2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "y2"),
+      FieldName.of(LEX_ZERO, "y2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "z2"),
+      FieldName.of(LEX_ZERO, "z2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
     rb.addField(
-      FieldName.of(no_lex, "w2"),
+      FieldName.of(LEX_ZERO, "w2"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(2L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(2L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1508,32 +1450,30 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "PackedIntegerU4_S4_UN4_SN4");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "PackedIntegerU4_S4_UN4_SN4");
     final TPackedBuilderType rb = TPacked.newBuilder(pc, id, t_name);
 
     rb.addField(
-      FieldName.of(no_lex, "u4"),
+      FieldName.of(LEX_ZERO, "u4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsigned(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "s4"),
+      FieldName.of(LEX_ZERO, "s4"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "un4"),
+      FieldName.of(LEX_ZERO, "un4"),
       gc.getFreshIdentifier(),
-      new TIntegerUnsignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerUnsignedNormalized(LEX_ZERO, Size.valueOf(4L)));
     rb.addField(
-      FieldName.of(no_lex, "sn4"),
+      FieldName.of(LEX_ZERO, "sn4"),
       gc.getFreshIdentifier(),
-      new TIntegerSignedNormalized(no_lex, Size.valueOf(4L)));
+      new TIntegerSignedNormalized(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked r = rb.build();
     compilePackeds(
@@ -1550,64 +1490,62 @@ public abstract class JPRAJavaGeneratorContract
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(), "x"),
-          PackageNameUnqualified.of(Optional.empty(), "y"),
-          PackageNameUnqualified.of(Optional.empty(), "z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final IdentifierType id = gc.getFreshIdentifier();
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-    final TypeName t_name = TypeName.of(no_lex, "RecordVector");
+    final TypeName t_name = TypeName.of(LEX_ZERO, "RecordVector");
     final TRecordBuilderType rb = TRecord.newBuilder(pc, id, t_name);
 
     final TIntegerSigned t_int =
-      new TIntegerSigned(no_lex, Size.valueOf(32L));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(32L));
     final TIntegerSigned t_long =
-      new TIntegerSigned(no_lex, Size.valueOf(64L));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(64L));
     final TFloat t_float =
-      new TFloat(no_lex, Size.valueOf(32L));
+      new TFloat(LEX_ZERO, Size.valueOf(32L));
     final TFloat t_double =
-      new TFloat(no_lex, Size.valueOf(64L));
+      new TFloat(LEX_ZERO, Size.valueOf(64L));
 
     rb.addField(
-      FieldName.of(no_lex, "v2i"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(2L), t_int));
+      FieldName.of(LEX_ZERO, "v2i"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(2L), t_int));
     rb.addField(
-      FieldName.of(no_lex, "v3i"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(3L), t_int));
+      FieldName.of(LEX_ZERO, "v3i"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(3L), t_int));
     rb.addField(
-      FieldName.of(no_lex, "v4i"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(4L), t_int));
+      FieldName.of(LEX_ZERO, "v4i"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(4L), t_int));
 
     rb.addField(
-      FieldName.of(no_lex, "v2l"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(2L), t_long));
+      FieldName.of(LEX_ZERO, "v2l"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(2L), t_long));
     rb.addField(
-      FieldName.of(no_lex, "v3l"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(3L), t_long));
+      FieldName.of(LEX_ZERO, "v3l"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(3L), t_long));
     rb.addField(
-      FieldName.of(no_lex, "v4l"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(4L), t_long));
+      FieldName.of(LEX_ZERO, "v4l"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(4L), t_long));
 
     rb.addField(
-      FieldName.of(no_lex, "v2f"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(2L), t_float));
+      FieldName.of(LEX_ZERO, "v2f"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(2L), t_float));
     rb.addField(
-      FieldName.of(no_lex, "v3f"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(3L), t_float));
+      FieldName.of(LEX_ZERO, "v3f"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(3L), t_float));
     rb.addField(
-      FieldName.of(no_lex, "v4f"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(4L), t_float));
+      FieldName.of(LEX_ZERO, "v4f"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(4L), t_float));
 
     rb.addField(
-      FieldName.of(no_lex, "v2d"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(2L), t_double));
+      FieldName.of(LEX_ZERO, "v2d"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(2L), t_double));
     rb.addField(
-      FieldName.of(no_lex, "v3d"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(3L), t_double));
+      FieldName.of(LEX_ZERO, "v3d"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(3L), t_double));
     rb.addField(
-      FieldName.of(no_lex, "v4d"), gc.getFreshIdentifier(),
-      new TVector(no_lex, Size.valueOf(4L), t_double));
+      FieldName.of(LEX_ZERO, "v4d"), gc.getFreshIdentifier(),
+      new TVector(LEX_ZERO, Size.valueOf(4L), t_double));
 
     final TRecord r = rb.build();
     compileRecords(

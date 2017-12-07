@@ -20,9 +20,8 @@ import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.ModelElementType;
 import io.vavr.collection.List;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,7 +29,6 @@ import java.util.Optional;
  * A fully qualified package name.
  */
 
-@Immutable
 public final class PackageNameQualified implements ModelElementType
 {
   private final List<PackageNameUnqualified> value;
@@ -88,8 +86,10 @@ public final class PackageNameQualified implements ModelElementType
   {
     final String[] segments = text.split("\\.");
     return new PackageNameQualified(
-      List.of(segments)
-        .map(raw -> PackageNameUnqualified.of(Optional.empty(), raw)));
+      List.of(segments).map(raw -> PackageNameUnqualified.of(LexicalPosition.of(
+        0,
+        0,
+        Optional.empty()), raw)));
   }
 
   @Override
@@ -128,7 +128,7 @@ public final class PackageNameQualified implements ModelElementType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.value.get(0).lexical();
   }

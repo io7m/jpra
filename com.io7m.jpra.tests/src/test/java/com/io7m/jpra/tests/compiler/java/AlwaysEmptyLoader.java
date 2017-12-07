@@ -24,11 +24,10 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.TypeName;
 import com.io7m.jpra.model.types.TypeUserDefinedType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public final class AlwaysEmptyLoader implements JPRAPackageLoaderType
 {
@@ -58,7 +57,7 @@ public final class AlwaysEmptyLoader implements JPRAPackageLoaderType
       }
 
       @Override
-      public Optional<LexicalPosition<Path>>
+      public LexicalPosition<URI>
       lexical()
       {
         return p.lexical();

@@ -18,6 +18,4 @@
  * Size expressions.
  */
 
-
 package com.io7m.jpra.model.size_expressions;
-

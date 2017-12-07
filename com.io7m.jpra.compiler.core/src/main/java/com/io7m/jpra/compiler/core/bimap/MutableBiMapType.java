@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jpra.compiler.core.internal;
+package com.io7m.jpra.compiler.core.bimap;
 
 /**
  * A mutable bi-map.

@@ -16,13 +16,14 @@
 
 package com.io7m.jpra.tests.compiler.core.checker;
 
-import java.util.Objects;
 import com.io7m.jpra.compiler.core.checker.JPRACheckerErrorCode;
 import com.io7m.jpra.compiler.core.checker.JPRACompilerCheckerException;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 final class JPRACompilerCheckerExceptionMatcher
   extends TypeSafeDiagnosingMatcher<JPRACompilerCheckerException>

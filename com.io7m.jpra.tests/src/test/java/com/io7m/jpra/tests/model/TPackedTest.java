@@ -34,29 +34,29 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Optional;
 
 public final class TPackedTest
 {
+  static final LexicalPosition<URI> LEX_ZERO =
+    LexicalPosition.of(0, 0, Optional.empty());
+
   @Test
   public void testLSBMSBRanges_0()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"y"),
-          PackageNameUnqualified.of(Optional.empty(),"z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(LEX_ZERO, "T"));
     final TPacked tp = tpb.build();
     Assert.assertEquals(Size.zero(), tp.getSizeInBits());
   }
@@ -65,37 +65,34 @@ public final class TPackedTest
   public void testLSBMSBRanges_1()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"y"),
-          PackageNameUnqualified.of(Optional.empty(),"z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(LEX_ZERO, "T"));
 
     tpb.addField(
-      FieldName.of(no_lex, "f0"),
+      FieldName.of(LEX_ZERO, "f0"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     tpb.addField(
-      FieldName.of(no_lex, "f1"),
+      FieldName.of(LEX_ZERO, "f1"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     tpb.addField(
-      FieldName.of(no_lex, "f2"),
+      FieldName.of(LEX_ZERO, "f2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
     tpb.addField(
-      FieldName.of(no_lex, "f3"),
+      FieldName.of(LEX_ZERO, "f3"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
 
     final TPacked tp = tpb.build();
     Assert.assertEquals(Size.valueOf(16L), tp.getSizeInBits());
@@ -104,32 +101,32 @@ public final class TPackedTest
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(3);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(0L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(3L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(0L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(3L), range.upper());
     }
 
     {
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(2);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(4L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(7L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(4L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(7L), range.upper());
     }
 
     {
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(1);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(8L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(11L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(8L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(11L), range.upper());
     }
 
     {
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(0);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(12L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(15L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(12L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(15L), range.upper());
     }
   }
 
@@ -137,31 +134,28 @@ public final class TPackedTest
   public void testLSBMSBRanges_2()
     throws Exception
   {
-    final Optional<LexicalPosition<Path>> no_lex =
-      Optional.empty();
-
     final GlobalContextType gc =
       GlobalContexts.newContext(new AlwaysEmptyLoader());
     final PackageContextType pc = gc.loadPackage(
       new PackageNameQualified(
         List.of(
-          PackageNameUnqualified.of(Optional.empty(),"x"),
-          PackageNameUnqualified.of(Optional.empty(),"y"),
-          PackageNameUnqualified.of(Optional.empty(),"z"))));
+          PackageNameUnqualified.of(LEX_ZERO, "x"),
+          PackageNameUnqualified.of(LEX_ZERO, "y"),
+          PackageNameUnqualified.of(LEX_ZERO, "z"))));
 
     final TPackedBuilderType tpb = TPacked.newBuilder(
-      pc, gc.getFreshIdentifier(), TypeName.of(no_lex, "T"));
+      pc, gc.getFreshIdentifier(), TypeName.of(LEX_ZERO, "T"));
 
     tpb.addField(
-      FieldName.of(no_lex, "f0"),
+      FieldName.of(LEX_ZERO, "f0"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
-    tpb.addPaddingBits(no_lex, Size.valueOf(4L));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
+    tpb.addPaddingBits(LEX_ZERO, Size.valueOf(4L));
     tpb.addField(
-      FieldName.of(no_lex, "f2"),
+      FieldName.of(LEX_ZERO, "f2"),
       gc.getFreshIdentifier(),
-      new TIntegerSigned(no_lex, Size.valueOf(4L)));
-    tpb.addPaddingBits(no_lex, Size.valueOf(4L));
+      new TIntegerSigned(LEX_ZERO, Size.valueOf(4L)));
+    tpb.addPaddingBits(LEX_ZERO, Size.valueOf(4L));
 
     final TPacked tp = tpb.build();
     Assert.assertEquals(Size.valueOf(16L), tp.getSizeInBits());
@@ -170,32 +164,32 @@ public final class TPackedTest
       final TPacked.FieldPaddingBits f =
         (TPacked.FieldPaddingBits) tp.getFieldsInDeclarationOrder().get(3);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(0L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(3L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(0L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(3L), range.upper());
     }
 
     {
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(2);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(4L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(7L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(4L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(7L), range.upper());
     }
 
     {
       final TPacked.FieldPaddingBits f =
         (TPacked.FieldPaddingBits) tp.getFieldsInDeclarationOrder().get(1);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(8L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(11L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(8L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(11L), range.upper());
     }
 
     {
       final TPacked.FieldValue f =
         (TPacked.FieldValue) tp.getFieldsInDeclarationOrder().get(0);
       final RangeInclusiveB range = f.getBitRange();
-      Assert.assertEquals(BigInteger.valueOf(12L), range.getLower());
-      Assert.assertEquals(BigInteger.valueOf(15L), range.getUpper());
+      Assert.assertEquals(BigInteger.valueOf(12L), range.lower());
+      Assert.assertEquals(BigInteger.valueOf(15L), range.upper());
     }
   }
 }

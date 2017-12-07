@@ -19,9 +19,8 @@ package com.io7m.jpra.model.type_expressions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * An {@code integer unsigned-normalized} type expression.
@@ -33,7 +32,7 @@ import java.util.Optional;
 public final class TypeExprIntegerUnsignedNormalized<I, T>
   implements TypeExprType<I, T>
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final SizeExprType<I, T> size;
   private final T type;
 
@@ -47,7 +46,7 @@ public final class TypeExprIntegerUnsignedNormalized<I, T>
 
   public TypeExprIntegerUnsignedNormalized(
     final T in_type,
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final SizeExprType<I, T> in_size)
   {
     this.type = Objects.requireNonNull(in_type, "Type");
@@ -70,7 +69,7 @@ public final class TypeExprIntegerUnsignedNormalized<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

@@ -19,9 +19,8 @@ package com.io7m.jpra.model.type_expressions;
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code matrix} type expression.
@@ -32,7 +31,7 @@ import java.util.Optional;
 
 public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final SizeExprType<I, T> width;
   private final SizeExprType<I, T> height;
   private final TypeExprType<I, T> element_type;
@@ -50,7 +49,7 @@ public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
 
   public TypeExprMatrix(
     final T in_type,
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final SizeExprType<I, T> in_width,
     final SizeExprType<I, T> in_height,
     final TypeExprType<I, T> in_element_type)
@@ -104,7 +103,7 @@ public final class TypeExprMatrix<I, T> implements TypeExprType<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

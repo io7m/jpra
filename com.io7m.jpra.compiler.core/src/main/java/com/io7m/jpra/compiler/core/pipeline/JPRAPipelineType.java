@@ -21,7 +21,7 @@ import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.model.contexts.PackageContextType;
 import com.io7m.jsx.SExpressionType;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Optional;
 
 /**
@@ -53,6 +53,6 @@ public interface JPRAPipelineType
    * @throws JPRACompilerException If any of the stages raise an exception
    */
 
-  void onEOF(Optional<LexicalPosition<Path>> lex)
+  void onEOF(LexicalPosition<URI> lex)
     throws JPRACompilerException;
 }

@@ -18,8 +18,8 @@ package com.io7m.jpra.compiler.core.resolver;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jpra.compiler.core.internal.MutableBiMap;
-import com.io7m.jpra.compiler.core.internal.MutableBiMapType;
+import com.io7m.jpra.compiler.core.bimap.MutableBiMap;
+import com.io7m.jpra.compiler.core.bimap.MutableBiMapType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.contexts.GlobalContextType;
@@ -72,7 +72,7 @@ import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -212,8 +212,7 @@ public final class JPRAResolver implements JPRAResolverType
     throws JPRACompilerResolverException
   {
     if (!this.current_package.isPresent()) {
-      throw JPRACompilerResolverException.noCurrentPackage(
-        s.lexical());
+      throw JPRACompilerResolverException.noCurrentPackage(s.lexical());
     }
 
     final PackageNameUnqualified s_new = s.getUsing();
@@ -792,7 +791,7 @@ public final class JPRAResolver implements JPRAResolverType
 
   @Override
   public void resolveEOF(
-    final Optional<LexicalPosition<Path>> lex)
+    final LexicalPosition<URI> lex)
     throws JPRACompilerResolverException
   {
     if (this.current_package.isPresent()) {

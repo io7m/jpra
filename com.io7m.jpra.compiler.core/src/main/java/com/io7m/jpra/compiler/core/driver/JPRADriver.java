@@ -20,7 +20,6 @@ import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jeucreader.UnicodeCharacterReader;
 import com.io7m.jeucreader.UnicodeCharacterReaderPushBackType;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jlexing.core.LexicalPositionType;
 import com.io7m.jpra.compiler.core.JPRACompilerException;
 import com.io7m.jpra.compiler.core.JPRACompilerLexerException;
 import com.io7m.jpra.compiler.core.checker.JPRAChecker;
@@ -60,6 +59,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -100,7 +100,7 @@ public final class JPRADriver implements JPRADriverType
       JSXLexerConfiguration.builder();
     lc.setNewlinesInQuotedStrings(false);
     lc.setSquareBrackets(true);
-    lc.setFile(Optional.of(file));
+    lc.setFile(Optional.of(file.toUri()));
 
     final JSXLexerType lex = JSXLexer.newLexer(lc.build(), r);
 
@@ -188,15 +188,16 @@ public final class JPRADriver implements JPRADriverType
       try (InputStream is = Files.newInputStream(file)) {
         final JSXParserType sxp = newJSXParser(is, file);
 
-        Optional<LexicalPosition<Path>> lex = Optional.empty();
+        int line_max = 0;
+
         boolean done = false;
         while (!done) {
           try {
             final Optional<SExpressionType> e_opt = sxp.parseExpressionOrEOF();
             if (e_opt.isPresent()) {
               final SExpressionType s = e_opt.get();
-              final Optional<LexicalPositionType<Path>> lex_opt = s.lexical();
-              lex = lex_opt.map(LexicalPosition::copyOf);
+              final LexicalPosition<URI> lex = s.lexical();
+              line_max = Math.max(line_max, lex.line());
 
               /*
                 The resolver is configured to only accept packages named
@@ -211,7 +212,7 @@ public final class JPRADriver implements JPRADriverType
               }
             } else {
               done = true;
-              pipe.onEOF(lex);
+              pipe.onEOF(LexicalPosition.of(line_max, 0, Optional.empty()));
             }
           } catch (final JPRACompilerException e) {
             error_queue.add(e);

@@ -17,20 +17,17 @@
 package com.io7m.jpra.model.types;
 
 import com.io7m.jlexing.core.LexicalPosition;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code signed} integer type expression.
  */
 
-@Immutable
 public final class TIntegerSigned implements TIntegerType
 {
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
   private final Size<SizeUnitBitsType> size;
 
   /**
@@ -41,7 +38,7 @@ public final class TIntegerSigned implements TIntegerType
    */
 
   public TIntegerSigned(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final Size<SizeUnitBitsType> in_size)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
@@ -79,7 +76,7 @@ public final class TIntegerSigned implements TIntegerType
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

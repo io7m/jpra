@@ -22,7 +22,7 @@ import com.io7m.jpra.model.names.PackageNameQualified;
 import com.io7m.jpra.model.names.PackageNameUnqualified;
 import com.io7m.jpra.model.names.TypeName;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -43,7 +43,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public JPRACompilerResolverException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final JPRAResolverErrorCode in_code,
     final String message)
   {
@@ -60,7 +60,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public JPRACompilerResolverException(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final JPRAResolverErrorCode in_code,
     final Exception e)
   {
@@ -87,20 +87,16 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append("  Name: ");
     sb.append(name);
 
-    final Optional<LexicalPosition<Path>> curr_lex_opt =
-      name.lexical();
-    final Optional<LexicalPosition<Path>> orig_lex_opt =
+    final LexicalPosition<URI> curr_lex_opt =
       name.lexical();
 
-    if (curr_lex_opt.isPresent() && orig_lex_opt.isPresent()) {
-      sb.append(System.lineSeparator());
-      sb.append("  Current: At ");
-      sb.append(curr_lex_opt.get());
-      sb.append(System.lineSeparator());
-      sb.append("  Original: At ");
-      sb.append(orig_lex_opt.get());
-      sb.append(System.lineSeparator());
-    }
+    sb.append(System.lineSeparator());
+    sb.append("  Current: At ");
+    sb.append(name.lexical());
+    sb.append(System.lineSeparator());
+    sb.append("  Original: At ");
+    sb.append(original.lexical());
+    sb.append(System.lineSeparator());
 
     return new JPRACompilerResolverException(
       curr_lex_opt, JPRAResolverErrorCode.PACKAGE_DUPLICATE, sb.toString());
@@ -115,7 +111,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public static JPRACompilerResolverException noCurrentPackage(
-    final Optional<LexicalPosition<Path>> lex)
+    final LexicalPosition<URI> lex)
   {
     return new JPRACompilerResolverException(
       lex,
@@ -136,7 +132,7 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     final PackageNameQualified name)
   {
     return new JPRACompilerResolverException(
-      name.lexical().map(LexicalPosition::copyOf),
+      name.lexical(),
       JPRAResolverErrorCode.PACKAGE_NESTED,
       "Nested packages are not allowed.");
   }
@@ -159,16 +155,11 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(System.lineSeparator());
     sb.append("  Original: Name ");
     sb.append(existing_name);
-
-    final Optional<LexicalPosition<Path>> lex_orig_opt =
-      existing_name.lexical();
-    if (lex_orig_opt.isPresent()) {
-      sb.append(" at ");
-      sb.append(lex_orig_opt.get());
-    }
+    sb.append(" at ");
+    sb.append(existing_name.lexical());
 
     return new JPRACompilerResolverException(
-      new_name.lexical().map(LexicalPosition::copyOf),
+      new_name.lexical(),
       JPRAResolverErrorCode.PACKAGE_IMPORT_CONFLICT,
       sb.toString());
   }
@@ -191,16 +182,11 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(System.lineSeparator());
     sb.append("  Original: Name ");
     sb.append(original);
-
-    final Optional<LexicalPosition<Path>> lex_orig_opt =
-      original.lexical();
-    if (lex_orig_opt.isPresent()) {
-      sb.append(" at ");
-      sb.append(lex_orig_opt.get());
-    }
+    sb.append(" at ");
+    sb.append(original.lexical());
 
     return new JPRACompilerResolverException(
-      current.lexical().map(LexicalPosition::copyOf),
+      current.lexical(),
       JPRAResolverErrorCode.TYPE_DUPLICATE,
       sb.toString());
   }
@@ -238,17 +224,11 @@ public final class JPRACompilerResolverException extends JPRACompilerException
     sb.append(System.lineSeparator());
     sb.append("  Error: ");
     sb.append(name);
-
-    final Optional<LexicalPosition<Path>> lex_opt =
-      name.lexical();
-    lex_opt.ifPresent(
-      lex -> {
-        sb.append(" at ");
-        sb.append(lex);
-      });
+    sb.append(" at ");
+    sb.append(name.lexical());
 
     return new JPRACompilerResolverException(
-      lex_opt.map(LexicalPosition::copyOf),
+      name.lexical(),
       JPRAResolverErrorCode.PACKAGE_REFERENCE_NONEXISTENT,
       sb.toString());
   }
@@ -279,23 +259,17 @@ public final class JPRACompilerResolverException extends JPRACompilerException
 
     sb.append("  Type: ");
     sb.append(t_name);
-
-    final Optional<LexicalPosition<Path>> lex_opt =
-      t_name.lexical();
-    lex_opt.ifPresent(
-      lex -> {
-        sb.append(" at ");
-        sb.append(lex);
-      });
+    sb.append(" at ");
+    sb.append(t_name.lexical());
 
     return new JPRACompilerResolverException(
-      lex_opt.map(LexicalPosition::copyOf),
+      t_name.lexical(),
       JPRAResolverErrorCode.TYPE_NONEXISTENT,
       sb.toString());
   }
 
   /**
-   * @param lex_opt Lexical information, if any
+   * @param lex Lexical information, if any
    *
    * @return An exception
    *
@@ -303,10 +277,10 @@ public final class JPRACompilerResolverException extends JPRACompilerException
    */
 
   public static JPRACompilerResolverException unexpectedEOF(
-    final Optional<LexicalPosition<Path>> lex_opt)
+    final LexicalPosition<URI> lex)
   {
     return new JPRACompilerResolverException(
-      lex_opt.map(LexicalPosition::copyOf),
+      lex,
       JPRAResolverErrorCode.UNEXPECTED_EOF,
       "Unexpected EOF.");
   }

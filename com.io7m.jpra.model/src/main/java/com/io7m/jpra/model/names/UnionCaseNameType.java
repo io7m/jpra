@@ -22,8 +22,7 @@ import com.io7m.jpra.core.JPRAImmutableStyleType;
 import com.io7m.jpra.model.ModelElementType;
 import org.immutables.value.Value;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.net.URI;
 
 /**
  * The type of union case names.
@@ -36,7 +35,7 @@ public interface UnionCaseNameType extends ModelElementType
   @Override
   @Value.Auxiliary
   @Value.Parameter
-  Optional<LexicalPosition<Path>> lexical();
+  LexicalPosition<URI> lexical();
 
   /**
    * @return The raw string value

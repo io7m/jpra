@@ -18,11 +18,9 @@ package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code record} field declaration that specifies a number of padding
@@ -32,12 +30,11 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class RecordFieldDeclPaddingOctets<I, T>
   implements RecordFieldDeclType<I, T>
 {
   private final SizeExprType<I, T> size;
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
 
   /**
    * Construct a field declaration.
@@ -47,7 +44,7 @@ public final class RecordFieldDeclPaddingOctets<I, T>
    */
 
   public RecordFieldDeclPaddingOctets(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final SizeExprType<I, T> in_size)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
@@ -72,7 +69,7 @@ public final class RecordFieldDeclPaddingOctets<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

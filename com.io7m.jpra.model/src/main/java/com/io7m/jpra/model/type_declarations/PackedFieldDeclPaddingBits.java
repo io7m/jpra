@@ -18,11 +18,9 @@ package com.io7m.jpra.model.type_declarations;
 
 import com.io7m.jlexing.core.LexicalPosition;
 import com.io7m.jpra.model.size_expressions.SizeExprType;
-import net.jcip.annotations.Immutable;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * A {@code packed} type field that specifies a number of padding bits.
@@ -31,12 +29,11 @@ import java.util.Optional;
  * @param <T> The type of type information
  */
 
-@Immutable
 public final class PackedFieldDeclPaddingBits<I, T>
   implements PackedFieldDeclType<I, T>
 {
   private final SizeExprType<I, T> size;
-  private final Optional<LexicalPosition<Path>> lex;
+  private final LexicalPosition<URI> lex;
 
   /**
    * Construct a packed field declaration.
@@ -46,7 +43,7 @@ public final class PackedFieldDeclPaddingBits<I, T>
    */
 
   public PackedFieldDeclPaddingBits(
-    final Optional<LexicalPosition<Path>> in_lex,
+    final LexicalPosition<URI> in_lex,
     final SizeExprType<I, T> in_size)
   {
     this.lex = Objects.requireNonNull(in_lex, "Lexical information");
@@ -71,7 +68,7 @@ public final class PackedFieldDeclPaddingBits<I, T>
   }
 
   @Override
-  public Optional<LexicalPosition<Path>> lexical()
+  public LexicalPosition<URI> lexical()
   {
     return this.lex;
   }

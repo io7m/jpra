@@ -51,7 +51,7 @@ public final class TRecords
     Objects.requireNonNull(t, "Record");
     Objects.requireNonNull(p, "Field path");
 
-    final List<FieldName> es = p.getElements();
+    final List<FieldName> es = p.elements();
     final FieldName first = es.get(0);
     final List<FieldName> rest = es.drop(1);
 

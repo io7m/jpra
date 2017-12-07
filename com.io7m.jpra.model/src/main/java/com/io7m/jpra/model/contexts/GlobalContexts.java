@@ -72,7 +72,7 @@ public final class GlobalContexts implements GlobalContextType
     this.loading = Optional.empty();
     this.error_queue = new ArrayDeque<>(128);
 
-    this.graph = new DirectedAcyclicGraph<>(PackageImport::new);
+    this.graph = new DirectedAcyclicGraph<>(PackageImport::of);
     LOG.trace("created");
   }
 
@@ -160,7 +160,7 @@ public final class GlobalContexts implements GlobalContextType
           new DijkstraShortestPath<>(this.graph);
         final List<PackageImport> path =
           new ArrayList<>(djp.getPath(current, previous).getEdgeList());
-        path.add(new PackageImport(previous, current));
+        path.add(PackageImport.of(previous, current));
 
         final JPRAModelCircularImportException ex =
           new JPRAModelCircularImportException(

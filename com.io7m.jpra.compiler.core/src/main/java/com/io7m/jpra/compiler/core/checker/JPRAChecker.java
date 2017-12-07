@@ -89,7 +89,7 @@ import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 
 import java.math.BigInteger;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -105,8 +105,8 @@ public final class JPRAChecker implements JPRACheckerType
   private static final RangeInclusiveB BOOLEAN_SET_SIZES;
 
   static {
-    BOOLEAN_SET_SIZES = new RangeInclusiveB(
-      BigInteger.ONE, BigInteger.valueOf(128L));
+    BOOLEAN_SET_SIZES =
+      RangeInclusiveB.of(BigInteger.ONE, BigInteger.valueOf(128L));
   }
 
   private final GlobalContextType context;
@@ -1074,7 +1074,7 @@ public final class JPRAChecker implements JPRACheckerType
     }
 
     @Override
-    public Optional<LexicalPosition<Path>> lexical()
+    public LexicalPosition<URI> lexical()
     {
       return this.name.lexical();
     }

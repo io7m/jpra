@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -98,10 +98,9 @@ public final class JPRAPipelineDemo
       }
 
       @Override
-      public Optional<LexicalPosition<Path>>
-      lexical()
+      public LexicalPosition<URI> lexical()
       {
-        return Optional.empty();
+        return p.lexical();
       }
     };
 
@@ -118,7 +117,6 @@ public final class JPRAPipelineDemo
     final JPRAPipelineType pipe =
       JPRAPipeline.newPipeline(parser, resolver, checker);
 
-    Optional<LexicalPosition<Path>> lex = Optional.empty();
     boolean done = false;
     while (!done) {
       try {
@@ -126,27 +124,17 @@ public final class JPRAPipelineDemo
         final Optional<SExpressionType> opt = sexpr.parseExpressionOrEOF();
         if (opt.isPresent()) {
           final SExpressionType s = opt.get();
-          lex = s.lexical().map(LexicalPosition::copyOf);
           pipe.onExpression(s);
         } else {
           done = true;
-          pipe.onEOF(lex);
+          pipe.onEOF(LexicalPosition.of(0, 0, Optional.empty()));
         }
       } catch (final JSXParserException e) {
-        LOG.error(
-          "{}: {}", e.getLexicalInformation(), e.getMessage());
+        LOG.error("{}: {}", e.lexical(), e.getMessage());
         System.out.println();
       } catch (final JPRACompilerException e) {
-        final Optional<LexicalPosition<Path>> lex_opt =
-          e.getLexicalInformation();
         final String error_name = e.getClass().getSimpleName();
-        if (lex_opt.isPresent()) {
-          final LexicalPosition<Path> elex = lex_opt.get();
-          LOG.error(
-            "{}: {}: {}", error_name, elex, e.getMessage());
-        } else {
-          LOG.error("{}: {}", error_name, e.getMessage());
-        }
+        LOG.error("{}: {}: {}", error_name, e.lexical(), e.getMessage());
         System.out.println();
       }
     }

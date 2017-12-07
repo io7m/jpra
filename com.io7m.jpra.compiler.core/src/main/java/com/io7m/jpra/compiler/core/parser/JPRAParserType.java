@@ -24,8 +24,7 @@ import com.io7m.jpra.model.statements.StatementType;
 import com.io7m.jpra.model.type_expressions.TypeExprType;
 import com.io7m.jsx.SExpressionType;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.net.URI;
 
 /**
  * The type of parsers.
@@ -84,6 +83,6 @@ public interface JPRAParserType
    */
 
   void parseEOF(
-    Optional<LexicalPosition<Path>> lex)
+    LexicalPosition<URI> lex)
     throws JPRACompilerParseException;
 }

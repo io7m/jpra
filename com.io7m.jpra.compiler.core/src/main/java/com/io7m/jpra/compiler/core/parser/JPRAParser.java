@@ -19,7 +19,6 @@ package com.io7m.jpra.compiler.core.parser;
 import com.io7m.jaffirm.core.PreconditionViolationException;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jlexing.core.LexicalPositionType;
 import com.io7m.jpra.model.Unresolved;
 import com.io7m.jpra.model.Untyped;
 import com.io7m.jpra.model.names.FieldName;
@@ -70,15 +69,14 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -108,8 +106,7 @@ public final class JPRAParser implements JPRAParserType
   private static final String INTEGER_SIGNED = "signed";
   private static final String INTEGER_UNSIGNED = "unsigned";
   private static final String INTEGER_SIGNED_NORMALIZED = "signed-normalized";
-  private static final String INTEGER_UNSIGNED_NORMALIZED =
-    "unsigned-normalized";
+  private static final String INTEGER_UNSIGNED_NORMALIZED = "unsigned-normalized";
 
   private static final String SIZE_IN_OCTETS = "size-in-octets";
   private static final String SIZE_IN_BITS = "size-in-bits";
@@ -257,12 +254,6 @@ public final class JPRAParser implements JPRAParserType
     }
   }
 
-  private static Optional<LexicalPosition<Path>>
-  getExpressionLexical(final SExpressionType q)
-  {
-    return q.lexical().map(LexicalPosition::copyOf);
-  }
-
   private static void checkIntegerTypeKeyword(final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
@@ -318,8 +309,7 @@ public final class JPRAParser implements JPRAParserType
 
             final FieldName name;
             try {
-              name = FieldName.of(
-                getExpressionLexical(si), si.text());
+              name = FieldName.of(si.lexical(), si.text());
             } catch (final PreconditionViolationException x) {
               throw JPRACompilerParseException.badFieldName(si, x.getMessage());
             }
@@ -368,8 +358,7 @@ public final class JPRAParser implements JPRAParserType
     Preconditions.checkPrecondition(!text.isEmpty(), "Text must not be empty");
     final String[] segments = text.split("\\.");
 
-    final Optional<LexicalPosition<Path>> ilex =
-      getExpressionLexical(name);
+    final LexicalPosition<URI> ilex = name.lexical();
 
     final ArrayList<PackageNameUnqualified> names_base = new ArrayList<>();
     for (int index = 0; index < segments.length; ++index) {
@@ -389,7 +378,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return PackageNameUnqualified.of(getExpressionLexical(s), s.text());
+      return PackageNameUnqualified.of(s.lexical(), s.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badPackageName(s, e.getMessage());
     }
@@ -430,7 +419,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return TypeName.of(getExpressionLexical(name), name.text());
+      return TypeName.of(name.lexical(), name.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badTypeName(name, e.getMessage());
     }
@@ -474,7 +463,7 @@ public final class JPRAParser implements JPRAParserType
     throws JPRACompilerParseException
   {
     try {
-      return FieldName.of(getExpressionLexical(name), name.text());
+      return FieldName.of(name.lexical(), name.text());
     } catch (final PreconditionViolationException e) {
       throw JPRACompilerParseException.badFieldName(name, e.getMessage());
     }
@@ -735,7 +724,7 @@ public final class JPRAParser implements JPRAParserType
       final SizeExprType<Unresolved, Untyped> s =
         this.parseSizeExpression(l_expr.get(1));
       return new PackedFieldDeclPaddingBits<>(
-        getExpressionLexical(l_expr), s);
+        l_expr.lexical(), s);
     }
 
     try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -895,7 +884,7 @@ public final class JPRAParser implements JPRAParserType
       final SizeExprType<Unresolved, Untyped> s =
         this.parseSizeExpression(l_expr.get(1));
       return new RecordFieldDeclPaddingOctets<>(
-        getExpressionLexical(l_expr), s);
+        l_expr.lexical(), s);
     }
 
     try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -953,7 +942,7 @@ public final class JPRAParser implements JPRAParserType
       PACKAGE_END);
 
     if (le.size() == 1) {
-      return new StatementPackageEnd<>(getExpressionLexical(se));
+      return new StatementPackageEnd<>(se.lexical());
     }
 
     try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -1079,8 +1068,8 @@ public final class JPRAParser implements JPRAParserType
     final SExpressionSymbolType se)
     throws JPRACompilerParseException
   {
-    final Optional<LexicalPosition<Path>> lex =
-      getExpressionLexical(se);
+    final LexicalPosition<URI> lex =
+      se.lexical();
     return new TypeExprName<>(
       Unresolved.get(), Untyped.get(), this.ref_parser.parseTypeReference(se));
   }
@@ -1102,8 +1091,8 @@ public final class JPRAParser implements JPRAParserType
         this.parseSizeExpression(s_expr);
 
       final List<FieldName> fields = parseFieldSet(f_expr);
-      final Optional<LexicalPosition<Path>> lex =
-        getExpressionLexical(s_expr);
+      final LexicalPosition<URI> lex =
+        s_expr.lexical();
       return new TypeExprBooleanSet<>(Untyped.get(), lex, fields, size);
     }
 
@@ -1145,7 +1134,7 @@ public final class JPRAParser implements JPRAParserType
           this.parseSizeExpression(s_expr);
         return new TypeExprString<>(
           Untyped.get(),
-          getExpressionLexical(le),
+          le.lexical(),
           size,
           qe.text());
       }
@@ -1186,7 +1175,7 @@ public final class JPRAParser implements JPRAParserType
       final TypeExprType<Unresolved, Untyped> type =
         this.parseTypeExpression(t_expr);
       return new TypeExprArray<>(
-        Untyped.get(), getExpressionLexical(le), size, type);
+        Untyped.get(), le.lexical(), size, type);
     }
 
     try (ByteArrayOutputStream bao = new ByteArrayOutputStream(256)) {
@@ -1229,7 +1218,7 @@ public final class JPRAParser implements JPRAParserType
 
       return new TypeExprMatrix<>(
         Untyped.get(),
-        getExpressionLexical(le),
+        le.lexical(),
         width,
         height,
         type);
@@ -1263,12 +1252,12 @@ public final class JPRAParser implements JPRAParserType
       VECTOR);
 
     if (le.size() == 3) {
-      final Optional<LexicalPositionType<Path>> lex = le.lexical();
+      final LexicalPosition<URI> lex = le.lexical();
       final SExpressionType t_expr = le.get(1);
       final SExpressionType s_expr = le.get(2);
       return new TypeExprVector<>(
         Untyped.get(),
-        lex.map(LexicalPosition::copyOf),
+        lex,
         this.parseSizeExpression(s_expr),
         this.parseTypeExpression(t_expr));
     }
@@ -1302,7 +1291,7 @@ public final class JPRAParser implements JPRAParserType
       final SExpressionType s_expr = le.get(1);
       return new TypeExprFloat<>(
         Untyped.get(),
-        getExpressionLexical(s_expr),
+        s_expr.lexical(),
         this.parseSizeExpression(s_expr));
     }
 
@@ -1345,19 +1334,19 @@ public final class JPRAParser implements JPRAParserType
         switch (t_name.text()) {
           case INTEGER_SIGNED: {
             return new TypeExprIntegerSigned<>(
-              Untyped.get(), getExpressionLexical(s_expr), size);
+              Untyped.get(), s_expr.lexical(), size);
           }
           case INTEGER_UNSIGNED: {
             return new TypeExprIntegerUnsigned<>(
-              Untyped.get(), getExpressionLexical(s_expr), size);
+              Untyped.get(), s_expr.lexical(), size);
           }
           case INTEGER_SIGNED_NORMALIZED: {
             return new TypeExprIntegerSignedNormalized<>(
-              Untyped.get(), getExpressionLexical(s_expr), size);
+              Untyped.get(), s_expr.lexical(), size);
           }
           case INTEGER_UNSIGNED_NORMALIZED: {
             return new TypeExprIntegerUnsignedNormalized<>(
-              Untyped.get(), getExpressionLexical(s_expr), size);
+              Untyped.get(), s_expr.lexical(), size);
           }
           default:
             throw new UnreachableCodeException();
@@ -1429,7 +1418,7 @@ public final class JPRAParser implements JPRAParserType
         {
           try {
             return new SizeExprConstant<>(
-              getExpressionLexical(se),
+              se.lexical(),
               new BigInteger(se.text()));
           } catch (final NumberFormatException x) {
             throw JPRACompilerParseException.invalidIntegerConstant(se);
@@ -1440,7 +1429,7 @@ public final class JPRAParser implements JPRAParserType
 
   @Override
   public void parseEOF(
-    final Optional<LexicalPosition<Path>> lex)
+    final LexicalPosition<URI> lex)
     throws JPRACompilerParseException
   {
     Objects.requireNonNull(lex, "Lexical information");
