@@ -32,7 +32,7 @@ module com.io7m.jpra.compiler.java
   requires com.io7m.junreachable.core;
   requires io.vavr;
   requires java.compiler;
-  requires javapoet;
+  requires com.squareup.javapoet;
   requires org.slf4j;
 
   exports com.io7m.jpra.compiler.java;
