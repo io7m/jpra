@@ -16,17 +16,19 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jpra.core.JPRAImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.util.Optional;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * A reference to a type by name.
  */
 
-@JPRAImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface TypeReferenceType
 {
   /**

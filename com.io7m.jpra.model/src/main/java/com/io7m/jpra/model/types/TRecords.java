@@ -63,83 +63,7 @@ public final class TRecords
     final FieldName name,
     final List<FieldName> rest)
   {
-    return rt.matchType(
-      new TypeMatcherType<TypeLookupType, UnreachableCodeException>()
-      {
-        @Override
-        public TypeLookupType matchArray(final TArray t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchString(final TString t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchBooleanSet(final TBooleanSet t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchInteger(final TIntegerType t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchFloat(final TFloat t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchVector(final TVector t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchMatrix(final TMatrix t)
-        {
-          return new TypeLookupFailed(t, name, rest);
-        }
-
-        @Override
-        public TypeLookupType matchRecord(final TRecord t)
-        {
-          final Map<FieldName, TRecord.FieldValue> by_name =
-            t.getFieldsByName();
-
-          if (!by_name.containsKey(name)) {
-            return new TypeLookupFailed(t, name, rest);
-          }
-
-          final TRecord.FieldValue f = by_name.get(name).get();
-          final FieldName next = rest.get(0);
-          return typeForFieldPathActual(
-            f.getType(), next, rest.drop(1));
-        }
-
-        @Override
-        public TypeLookupType matchPacked(final TPacked t)
-        {
-          final Map<FieldName, TPacked.FieldValue> by_name =
-            t.getFieldsByName();
-
-          if (!by_name.containsKey(name)) {
-            return new TypeLookupFailed(t, name, rest);
-          }
-
-          final TPacked.FieldValue f = by_name.get(name).get();
-          final FieldName next = rest.get(0);
-          return typeForFieldPathActual(
-            f.getType(), next, rest.drop(1));
-        }
-      });
+    return rt.matchType(new TypeForFieldPathMapper(name, rest));
   }
 
   /**
@@ -260,4 +184,92 @@ public final class TRecords
     }
   }
 
+  private static final class TypeForFieldPathMapper
+    implements TypeMatcherType<TypeLookupType, UnreachableCodeException>
+  {
+    private final FieldName name;
+    private final List<FieldName> rest;
+
+    TypeForFieldPathMapper(
+      final FieldName in_name,
+      final List<FieldName> in_rest)
+    {
+      this.name = in_name;
+      this.rest = in_rest;
+    }
+
+    @Override
+    public TypeLookupType matchArray(final TArray t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchString(final TString t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchBooleanSet(final TBooleanSet t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchInteger(final TIntegerType t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchFloat(final TFloat t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchVector(final TVector t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchMatrix(final TMatrix t)
+    {
+      return new TypeLookupFailed(t, this.name, this.rest);
+    }
+
+    @Override
+    public TypeLookupType matchRecord(final TRecord t)
+    {
+      final Map<FieldName, TRecord.FieldValue> by_name =
+        t.getFieldsByName();
+
+      if (!by_name.containsKey(this.name)) {
+        return new TypeLookupFailed(t, this.name, this.rest);
+      }
+
+      final TRecord.FieldValue f = by_name.get(this.name).get();
+      final FieldName next = this.rest.get(0);
+      return typeForFieldPathActual(
+        f.getType(), next, this.rest.drop(1));
+    }
+
+    @Override
+    public TypeLookupType matchPacked(final TPacked t)
+    {
+      final Map<FieldName, TPacked.FieldValue> by_name =
+        t.getFieldsByName();
+
+      if (!by_name.containsKey(this.name)) {
+        return new TypeLookupFailed(t, this.name, this.rest);
+      }
+
+      final TPacked.FieldValue f = by_name.get(this.name).get();
+      final FieldName next = this.rest.get(0);
+      return typeForFieldPathActual(
+        f.getType(), next, this.rest.drop(1));
+    }
+  }
 }

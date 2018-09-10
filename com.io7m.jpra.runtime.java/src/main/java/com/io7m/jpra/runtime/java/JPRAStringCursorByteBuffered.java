@@ -165,7 +165,9 @@ public final class JPRAStringCursorByteBuffered implements JPRAStringCursorType
     final byte[] buf = new byte[used];
     this.buffer.get(buf, 0, used);
     this.buffer.position(old_pos);
+    // CHECKSTYLE:OFF
     return new String(buf, this.encoding);
+    // CHECKSTYLE:ON
   }
 
   @Override

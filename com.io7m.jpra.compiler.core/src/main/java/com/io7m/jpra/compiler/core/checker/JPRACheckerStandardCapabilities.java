@@ -25,6 +25,7 @@ import io.vavr.collection.Set;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The default implementation of the {@link JPRACheckerCapabilitiesType}
@@ -35,6 +36,15 @@ import java.util.ArrayList;
 public final class JPRACheckerStandardCapabilities
   implements JPRACheckerCapabilitiesType
 {
+  private static final BigInteger BIG_1 = BigInteger.valueOf(1L);
+  private static final BigInteger BIG_2 = BigInteger.valueOf(2L);
+  private static final BigInteger BIG_64 = BigInteger.valueOf(64L);
+  private static final BigInteger BIG_32 = BigInteger.valueOf(32L);
+  private static final BigInteger BIG_16 = BigInteger.valueOf(16L);
+  private static final BigInteger BIG_8 = BigInteger.valueOf(8L);
+  private static final BigInteger BIG_4 = BigInteger.valueOf(4L);
+  private static final BigInteger BIG_3 = BigInteger.valueOf(3L);
+
   private final List<RangeInclusiveB> packed_integer_sizes;
   private final List<RangeInclusiveB> record_integer_sizes;
   private final List<RangeInclusiveB> record_float_sizes;
@@ -48,93 +58,98 @@ public final class JPRACheckerStandardCapabilities
 
   private JPRACheckerStandardCapabilities()
   {
-    final BigInteger b1 = BigInteger.valueOf(1L);
-    final BigInteger b2 = BigInteger.valueOf(2L);
-    final BigInteger b64 = BigInteger.valueOf(64L);
+    this.packed_integer_sizes = makePackedIntegerSizes();
+    this.record_integer_sizes = makeRecordIntegerSizes();
+    this.record_float_sizes = makeRecordFloatSizes();
+    this.encodings = HashSet.of("UTF-8");
+    this.vector_sizes = makeVectorSizes();
+    this.vector_float_sizes = makeVectorFloatSizes();
+    this.vector_integer_sizes = makeVectorIntegerSizes();
+    this.matrix_sizes = makeMatrixSizes();
+    this.matrix_float_sizes = makeMatrixFloatSizes();
+    this.packed_sizes = makePackedSizes();
+  }
 
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b1, b64));
-      this.packed_integer_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makePackedSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(4);
+    s.add(RangeInclusiveB.of(BIG_8, BIG_8));
+    s.add(RangeInclusiveB.of(BIG_16, BIG_16));
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-    final BigInteger b32 = BigInteger.valueOf(32L);
-    final BigInteger b16 = BigInteger.valueOf(16L);
-    final BigInteger b8 = BigInteger.valueOf(8L);
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b8, b8));
-      s.add(RangeInclusiveB.of(b16, b16));
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.record_integer_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makeMatrixFloatSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(2);
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b16, b16));
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.record_float_sizes = List.ofAll(s);
-    }
+  private static List<Tuple2<RangeInclusiveB, RangeInclusiveB>> makeMatrixSizes()
+  {
+    final Collection<Tuple2<RangeInclusiveB, RangeInclusiveB>> s = new ArrayList<>(3);
+    final RangeInclusiveB r2 = RangeInclusiveB.of(BIG_2, BIG_2);
+    s.add(Tuple.of(r2, r2));
+    final RangeInclusiveB r3 = RangeInclusiveB.of(BIG_3, BIG_3);
+    s.add(Tuple.of(r3, r3));
+    final RangeInclusiveB r4 = RangeInclusiveB.of(BIG_4, BIG_4);
+    s.add(Tuple.of(r4, r4));
+    return List.ofAll(s);
+  }
 
-    {
-      this.encodings = HashSet.of("UTF-8");
-    }
+  private static List<RangeInclusiveB> makeVectorIntegerSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(2);
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-    final BigInteger b4 = BigInteger.valueOf(4L);
-    final BigInteger b3 = BigInteger.valueOf(3L);
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b2, b2));
-      s.add(RangeInclusiveB.of(b3, b3));
-      s.add(RangeInclusiveB.of(b4, b4));
-      this.vector_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makeVectorFloatSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(3);
+    s.add(RangeInclusiveB.of(BIG_16, BIG_16));
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b16, b16));
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.vector_float_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makeVectorSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(3);
+    s.add(RangeInclusiveB.of(BIG_2, BIG_2));
+    s.add(RangeInclusiveB.of(BIG_3, BIG_3));
+    s.add(RangeInclusiveB.of(BIG_4, BIG_4));
+    return List.ofAll(s);
+  }
 
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.vector_integer_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makeRecordFloatSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(3);
+    s.add(RangeInclusiveB.of(BIG_16, BIG_16));
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-    {
-      final ArrayList<Tuple2<RangeInclusiveB, RangeInclusiveB>> s =
-        new ArrayList<>();
+  private static List<RangeInclusiveB> makeRecordIntegerSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(4);
+    s.add(RangeInclusiveB.of(BIG_8, BIG_8));
+    s.add(RangeInclusiveB.of(BIG_16, BIG_16));
+    s.add(RangeInclusiveB.of(BIG_32, BIG_32));
+    s.add(RangeInclusiveB.of(BIG_64, BIG_64));
+    return List.ofAll(s);
+  }
 
-      final RangeInclusiveB r2 = RangeInclusiveB.of(b2, b2);
-      s.add(Tuple.of(r2, r2));
-      final RangeInclusiveB r3 = RangeInclusiveB.of(b3, b3);
-      s.add(Tuple.of(r3, r3));
-      final RangeInclusiveB r4 = RangeInclusiveB.of(b4, b4);
-      s.add(Tuple.of(r4, r4));
-      this.matrix_sizes = List.ofAll(s);
-    }
-
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.matrix_float_sizes = List.ofAll(s);
-    }
-
-    {
-      final ArrayList<RangeInclusiveB> s = new ArrayList<>();
-      s.add(RangeInclusiveB.of(b8, b8));
-      s.add(RangeInclusiveB.of(b16, b16));
-      s.add(RangeInclusiveB.of(b32, b32));
-      s.add(RangeInclusiveB.of(b64, b64));
-      this.packed_sizes = List.ofAll(s);
-    }
+  private static List<RangeInclusiveB> makePackedIntegerSizes()
+  {
+    final Collection<RangeInclusiveB> s = new ArrayList<>(1);
+    s.add(RangeInclusiveB.of(BIG_1, BIG_64));
+    return List.ofAll(s);
   }
 
   /**

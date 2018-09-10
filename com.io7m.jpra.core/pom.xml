@@ -17,14 +17,6 @@
   <description>Packed record access (Core)</description>
   <url>http://github.com/io7m/jpra</url>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.immutables</groupId>
-      <artifactId>value</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
-
   <build>
     <plugins>
       <!-- Check style -->

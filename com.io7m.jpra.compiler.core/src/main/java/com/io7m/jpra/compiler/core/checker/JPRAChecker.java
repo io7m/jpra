@@ -100,8 +100,11 @@ import java.util.Optional;
  * The default implementation of the {@link JPRACheckerType} interface.
  */
 
+// Class Data Abstraction Coupling: Unavoidable?
+// CHECKSTYLE:OFF
 public final class JPRAChecker implements JPRACheckerType
 {
+  // CHECKSTYLE:ON
   private static final RangeInclusiveB BOOLEAN_SET_SIZES;
 
   static {
@@ -141,33 +144,7 @@ public final class JPRAChecker implements JPRACheckerType
   private static <T extends SizeUnitType> Size<T> evaluateSize(
     final SizeExprType<IdentifierType, TType> se)
   {
-    return se.matchSizeExpression(
-      new SizeExprMatcherType<IdentifierType, TType, Size<T>,
-        UnreachableCodeException>()
-      {
-        @Override
-        public Size<T> matchConstant(
-          final SizeExprConstant<IdentifierType, TType> s)
-        {
-          return new Size<>(s.getValue());
-        }
-
-        @Override
-        public Size<T> matchInOctets(
-          final SizeExprInOctets<IdentifierType, TType> s)
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-
-        @Override
-        public Size<T> matchInBits(
-          final SizeExprInBits<IdentifierType, TType> s)
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-      });
+    return se.matchSizeExpression(new CheckEvaluateSizeExpression<>());
   }
 
   private static SizeExprType<IdentifierType, TType> checkSizeExprConstant(
@@ -179,7 +156,6 @@ public final class JPRAChecker implements JPRACheckerType
   @Override
   public void checkPackageBegin(
     final StatementPackageBegin<IdentifierType, Untyped> s)
-    throws JPRACompilerCheckerException
   {
     Objects.requireNonNull(s, "Statement");
     final PackageNameQualified name = s.getPackageName();
@@ -190,7 +166,6 @@ public final class JPRAChecker implements JPRACheckerType
   @Override
   public PackageContextType checkPackageEnd(
     final StatementPackageEnd<IdentifierType, Untyped> s)
-    throws JPRACompilerCheckerException
   {
     Objects.requireNonNull(s, "Statement");
     this.current_package = Optional.empty();
@@ -549,109 +524,7 @@ public final class JPRAChecker implements JPRACheckerType
     throws JPRACompilerCheckerException
   {
     Objects.requireNonNull(expr, "Expression");
-    return expr.matchType(
-      new TypeExprMatcherType<IdentifierType, Untyped,
-        TypeExprType<IdentifierType, TType>, JPRACompilerCheckerException>()
-      {
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprIntegerSigned(
-          final TypeExprIntegerSigned<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprIntegerSigned(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType>
-        matchExprIntegerSignedNormalized(
-          final TypeExprIntegerSignedNormalized<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprIntegerSignedNormalized(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprIntegerUnsigned(
-          final TypeExprIntegerUnsigned<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprIntegerUnsigned(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType>
-        matchExprIntegerUnsignedNormalized(
-          final TypeExprIntegerUnsignedNormalized<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprIntegerUnsignedNormalized(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprArray(
-          final TypeExprArray<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprArray(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprFloat(
-          final TypeExprFloat<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprFloat(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprVector(
-          final TypeExprVector<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprVector(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprMatrix(
-          final TypeExprMatrix<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprMatrix(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchExprString(
-          final TypeExprString<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprString(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchName(
-          final TypeExprName<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprName(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchTypeOfField(
-          final TypeExprTypeOfField<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, TType> matchBooleanSet(
-          final TypeExprBooleanSet<IdentifierType, Untyped> e)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkTypeExprBooleanSet(e);
-        }
-      });
+    return expr.matchType(new CheckTypeExpression());
   }
 
   @Override
@@ -697,35 +570,7 @@ public final class JPRAChecker implements JPRACheckerType
     }
 
     final TypeScalarType te_type = TypeScalarType.class.cast(tt);
-    te_type.matchTypeScalar(
-      new TypeScalarMatcherType<Void, JPRACompilerCheckerException>()
-      {
-        @Override
-        public Void matchScalarInteger(
-          final TIntegerType t)
-          throws JPRACompilerCheckerException
-        {
-          final BigInteger size = t.getSizeInBits().getValue();
-          if (!JPRAChecker.this.caps.isMatrixIntegerSizeSupported(size)) {
-            throw JPRACompilerCheckerException.matrixIntegerSizeNotSupported(
-              t, size, JPRAChecker.this.caps.getMatrixIntegerSizeSupported());
-          }
-          return null;
-        }
-
-        @Override
-        public Void matchScalarFloat(
-          final TFloat t)
-          throws JPRACompilerCheckerException
-        {
-          final BigInteger size = t.getSizeInBits().getValue();
-          if (!JPRAChecker.this.caps.isMatrixFloatSizeSupported(size)) {
-            throw JPRACompilerCheckerException.matrixFloatSizeNotSupported(
-              t, size, JPRAChecker.this.caps.getMatrixFloatSizeSupported());
-          }
-          return null;
-        }
-      });
+    te_type.matchTypeScalar(new CheckMatrixScalarType());
 
     final TType t_type =
       new TMatrix(e.lexical(), t_width, t_height, te_type);
@@ -753,35 +598,7 @@ public final class JPRAChecker implements JPRACheckerType
         e, t_size.getValue(), this.caps.getVectorSizeSupported());
     }
 
-    t_type.matchTypeScalar(
-      new TypeScalarMatcherType<Void, JPRACompilerCheckerException>()
-      {
-        @Override
-        public Void matchScalarInteger(
-          final TIntegerType t)
-          throws JPRACompilerCheckerException
-        {
-          final BigInteger size = t.getSizeInBits().getValue();
-          if (!JPRAChecker.this.caps.isVectorIntegerSizeSupported(size)) {
-            throw JPRACompilerCheckerException.vectorIntegerSizeNotSupported(
-              t, size, JPRAChecker.this.caps.getVectorIntegerSizeSupported());
-          }
-          return null;
-        }
-
-        @Override
-        public Void matchScalarFloat(
-          final TFloat t)
-          throws JPRACompilerCheckerException
-        {
-          final BigInteger size = t.getSizeInBits().getValue();
-          if (!JPRAChecker.this.caps.isVectorFloatSizeSupported(size)) {
-            throw JPRACompilerCheckerException.vectorFloatSizeNotSupported(
-              t, size, JPRAChecker.this.caps.getVectorFloatSizeSupported());
-          }
-          return null;
-        }
-      });
+    t_type.matchTypeScalar(new CheckVectorScalarType());
 
     final TType type = new TVector(e.lexical(), t_size, t_type);
     return new TypeExprVector<>(
@@ -975,50 +792,21 @@ public final class JPRAChecker implements JPRACheckerType
     final SizeExprType<IdentifierType, Untyped> e)
     throws JPRACompilerCheckerException
   {
-    return e.matchSizeExpression(
-      new SizeExprMatcherType<IdentifierType, Untyped,
-        SizeExprType<IdentifierType, TType>, JPRACompilerCheckerException>()
-      {
-        @Override
-        public SizeExprType<IdentifierType, TType> matchConstant(
-          final SizeExprConstant<IdentifierType, Untyped> s)
-          throws JPRACompilerCheckerException
-        {
-          return checkSizeExprConstant(s);
-        }
-
-        @Override
-        public SizeExprType<IdentifierType, TType> matchInOctets(
-          final SizeExprInOctets<IdentifierType, Untyped> s)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkSizeExprInOctets(s);
-        }
-
-        @Override
-        public SizeExprType<IdentifierType, TType> matchInBits(
-          final SizeExprInBits<IdentifierType, Untyped> s)
-          throws JPRACompilerCheckerException
-        {
-          return JPRAChecker.this.checkSizeExprInBits(s);
-        }
-      });
+    return e.matchSizeExpression(new CheckSizeExpression());
   }
 
   private SizeExprType<IdentifierType, TType> checkSizeExprInBits(
     final SizeExprInBits<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException
   {
-    return new SizeExprInBits<>(
-      this.checkTypeExpression(s.getTypeExpression()));
+    return new SizeExprInBits<>(this.checkTypeExpression(s.getTypeExpression()));
   }
 
   private SizeExprType<IdentifierType, TType> checkSizeExprInOctets(
     final SizeExprInOctets<IdentifierType, Untyped> s)
     throws JPRACompilerCheckerException
   {
-    return new SizeExprInOctets<>(
-      this.checkTypeExpression(s.getTypeExpression()));
+    return new SizeExprInOctets<>(this.checkTypeExpression(s.getTypeExpression()));
   }
 
   private enum TypeExpressionContext
@@ -1077,6 +865,248 @@ public final class JPRAChecker implements JPRACheckerType
     public LexicalPosition<URI> lexical()
     {
       return this.name.lexical();
+    }
+  }
+
+  private static final class CheckEvaluateSizeExpression<T extends SizeUnitType>
+    implements SizeExprMatcherType<IdentifierType, TType, Size<T>, UnreachableCodeException>
+  {
+    CheckEvaluateSizeExpression()
+    {
+
+    }
+
+    @Override
+    public Size<T> matchConstant(
+      final SizeExprConstant<IdentifierType, TType> s)
+    {
+      return new Size<>(s.getValue());
+    }
+
+    @Override
+    public Size<T> matchInOctets(
+      final SizeExprInOctets<IdentifierType, TType> s)
+    {
+      // TODO: Generated method stub!
+      throw new UnimplementedCodeException();
+    }
+
+    @Override
+    public Size<T> matchInBits(
+      final SizeExprInBits<IdentifierType, TType> s)
+    {
+      // TODO: Generated method stub!
+      throw new UnimplementedCodeException();
+    }
+  }
+
+  private final class CheckTypeExpression
+    implements TypeExprMatcherType<
+    IdentifierType, Untyped, TypeExprType<IdentifierType, TType>, JPRACompilerCheckerException>
+  {
+    CheckTypeExpression()
+    {
+
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprIntegerSigned(
+      final TypeExprIntegerSigned<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprIntegerSigned(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType>
+    matchExprIntegerSignedNormalized(
+      final TypeExprIntegerSignedNormalized<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprIntegerSignedNormalized(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprIntegerUnsigned(
+      final TypeExprIntegerUnsigned<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprIntegerUnsigned(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType>
+    matchExprIntegerUnsignedNormalized(
+      final TypeExprIntegerUnsignedNormalized<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprIntegerUnsignedNormalized(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprArray(
+      final TypeExprArray<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprArray(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprFloat(
+      final TypeExprFloat<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprFloat(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprVector(
+      final TypeExprVector<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprVector(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprMatrix(
+      final TypeExprMatrix<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprMatrix(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchExprString(
+      final TypeExprString<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprString(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchName(
+      final TypeExprName<IdentifierType, Untyped> e)
+    {
+      return JPRAChecker.this.checkTypeExprName(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchTypeOfField(
+      final TypeExprTypeOfField<IdentifierType, Untyped> e)
+    {
+      // TODO: Generated method stub!
+      throw new UnimplementedCodeException();
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, TType> matchBooleanSet(
+      final TypeExprBooleanSet<IdentifierType, Untyped> e)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkTypeExprBooleanSet(e);
+    }
+  }
+
+  private final class CheckMatrixScalarType
+    implements TypeScalarMatcherType<Void, JPRACompilerCheckerException>
+  {
+    CheckMatrixScalarType()
+    {
+
+    }
+
+    @Override
+    public Void matchScalarInteger(
+      final TIntegerType t)
+      throws JPRACompilerCheckerException
+    {
+      final BigInteger size = t.getSizeInBits().getValue();
+      if (!JPRAChecker.this.caps.isMatrixIntegerSizeSupported(size)) {
+        throw JPRACompilerCheckerException.matrixIntegerSizeNotSupported(
+          t, size, JPRAChecker.this.caps.getMatrixIntegerSizeSupported());
+      }
+      return null;
+    }
+
+    @Override
+    public Void matchScalarFloat(
+      final TFloat t)
+      throws JPRACompilerCheckerException
+    {
+      final BigInteger size = t.getSizeInBits().getValue();
+      if (!JPRAChecker.this.caps.isMatrixFloatSizeSupported(size)) {
+        throw JPRACompilerCheckerException.matrixFloatSizeNotSupported(
+          t, size, JPRAChecker.this.caps.getMatrixFloatSizeSupported());
+      }
+      return null;
+    }
+  }
+
+  private final class CheckVectorScalarType
+    implements TypeScalarMatcherType<Void, JPRACompilerCheckerException>
+  {
+    CheckVectorScalarType()
+    {
+
+    }
+
+    @Override
+    public Void matchScalarInteger(
+      final TIntegerType t)
+      throws JPRACompilerCheckerException
+    {
+      final BigInteger size = t.getSizeInBits().getValue();
+      if (!JPRAChecker.this.caps.isVectorIntegerSizeSupported(size)) {
+        throw JPRACompilerCheckerException.vectorIntegerSizeNotSupported(
+          t, size, JPRAChecker.this.caps.getVectorIntegerSizeSupported());
+      }
+      return null;
+    }
+
+    @Override
+    public Void matchScalarFloat(
+      final TFloat t)
+      throws JPRACompilerCheckerException
+    {
+      final BigInteger size = t.getSizeInBits().getValue();
+      if (!JPRAChecker.this.caps.isVectorFloatSizeSupported(size)) {
+        throw JPRACompilerCheckerException.vectorFloatSizeNotSupported(
+          t, size, JPRAChecker.this.caps.getVectorFloatSizeSupported());
+      }
+      return null;
+    }
+  }
+
+  private final class CheckSizeExpression
+    implements SizeExprMatcherType<IdentifierType, Untyped,
+    SizeExprType<IdentifierType, TType>, JPRACompilerCheckerException>
+  {
+    CheckSizeExpression()
+    {
+
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, TType> matchConstant(
+      final SizeExprConstant<IdentifierType, Untyped> s)
+    {
+      return checkSizeExprConstant(s);
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, TType> matchInOctets(
+      final SizeExprInOctets<IdentifierType, Untyped> s)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkSizeExprInOctets(s);
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, TType> matchInBits(
+      final SizeExprInBits<IdentifierType, Untyped> s)
+      throws JPRACompilerCheckerException
+    {
+      return JPRAChecker.this.checkSizeExprInBits(s);
     }
   }
 }

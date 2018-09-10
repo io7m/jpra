@@ -45,8 +45,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * A type matcher that produces implementation methods for a given record
- * field.
+ * A type matcher that produces implementation methods for a given record field.
  */
 
 final class RecordFieldImplementationProcessor
@@ -113,8 +112,7 @@ final class RecordFieldImplementationProcessor
 
     {
       final String getter_name =
-        JPRAGeneratedNames.getMetaOffsetCursorReadableName(
-          this.field.getName());
+        JPRAGeneratedNames.getMetaOffsetCursorReadableName(this.field.getName());
       final String offset_constant =
         JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
 
@@ -197,49 +195,67 @@ final class RecordFieldImplementationProcessor
 
       final int octet = index / 8;
       final int bit = 7 - (index % 8);
+      final String bin =
+        String.format("0b%8s", Integer.toBinaryString(1 << bit))
+          .replace(" ", "0");
 
-      final String getter_name =
-        JPRAGeneratedNames.getGetterBooleanSetName(this.field.getName(), f);
-      final String offset_name = JPRAGeneratedNames.getOffsetConstantName(
-        this.field.getName());
-
-      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-      getb.addAnnotation(Override.class);
-      getb.addModifiers(Modifier.PUBLIC);
-      getb.returns(boolean.class);
-      getb.addStatement(
-        "final int i = ((int) this.getByteOffsetFor($N)) + $L",
-        offset_name,
-        Integer.valueOf(octet));
-      getb.addStatement("final int k = this.buffer.get(i)");
-      final String bin = String.format(
-        "0b%8s",
-        Integer.toBinaryString(1 << bit))
-        .replace(" ", "0");
-      getb.addStatement("return (k & $L) == $L", bin, bin);
-      this.class_builder.addMethod(getb.build());
-
-      final String setter_name =
-        JPRAGeneratedNames.getSetterBooleanSetName(this.field.getName(), f);
-      final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
-      setb.addAnnotation(Override.class);
-      setb.addModifiers(Modifier.PUBLIC);
-      setb.addParameter(boolean.class, "x", Modifier.FINAL);
-      setb.addStatement(
-        "final int i = ((int) this.getByteOffsetFor($N)) + $L",
-        offset_name,
-        Integer.valueOf(octet));
-      setb.addStatement("final int k = this.buffer.get(i)");
-      setb.addStatement("final int q");
-      setb.beginControlFlow("if (x)");
-      setb.addStatement("q = k | $L", bin);
-      setb.nextControlFlow("else");
-      setb.addStatement("q = k & ~$L", bin);
-      setb.endControlFlow();
-      setb.addStatement("this.buffer.put(i, (byte) (q & 0xff))");
-      this.class_builder.addMethod(setb.build());
+      final String offset_name = JPRAGeneratedNames.getOffsetConstantName(this.field.getName());
+      this.class_builder.addMethod(booleanGetter(f, octet, bin, offset_name, this.field));
+      this.class_builder.addMethod(booleanSetter(f, octet, bin, offset_name, this.field));
     }
     return null;
+  }
+
+  private static MethodSpec booleanSetter(
+    final FieldName f,
+    final int octet,
+    final String bin,
+    final String offset_name,
+    final TRecord.FieldValue field)
+  {
+    final String setter_name =
+      JPRAGeneratedNames.getSetterBooleanSetName(field.getName(), f);
+
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+    setb.addAnnotation(Override.class);
+    setb.addModifiers(Modifier.PUBLIC);
+    setb.addParameter(boolean.class, "x", Modifier.FINAL);
+    setb.addStatement(
+      "final int i = ((int) this.getByteOffsetFor($N)) + $L",
+      offset_name,
+      Integer.valueOf(octet));
+    setb.addStatement("final int k = this.buffer.get(i)");
+    setb.addStatement("final int q");
+    setb.beginControlFlow("if (x)");
+    setb.addStatement("q = k | $L", bin);
+    setb.nextControlFlow("else");
+    setb.addStatement("q = k & ~$L", bin);
+    setb.endControlFlow();
+    setb.addStatement("this.buffer.put(i, (byte) (q & 0xff))");
+    return setb.build();
+  }
+
+  private static MethodSpec booleanGetter(
+    final FieldName f,
+    final int octet,
+    final String bin,
+    final String offset_name,
+    final TRecord.FieldValue field)
+  {
+    final String getter_name =
+      JPRAGeneratedNames.getGetterBooleanSetName(field.getName(), f);
+
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+    getb.addAnnotation(Override.class);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.returns(boolean.class);
+    getb.addStatement(
+      "final int i = ((int) this.getByteOffsetFor($N)) + $L",
+      offset_name,
+      Integer.valueOf(octet));
+    getb.addStatement("final int k = this.buffer.get(i)");
+    getb.addStatement("return (k & $L) == $L", bin, bin);
+    return getb.build();
   }
 
   @Override
@@ -307,78 +323,106 @@ final class RecordFieldImplementationProcessor
      */
 
     if (pack) {
-
-      /*
-        Generate a method to unpack values from the byte buffer.
-       */
-
-      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-      getb.addModifiers(Modifier.PUBLIC);
-      getb.addAnnotation(Override.class);
-      getb.returns(double.class);
-      getb.addStatement(
-        "return $T.unpackDouble($N.$N(this.getByteOffsetFor($N)))",
-        Binary16.class,
-        "buffer",
-        iget,
-        offset_constant);
-      this.class_builder.addMethod(getb.build());
-
-      /*
-        Generate a method to pack values into the byte buffer.
-       */
-
-      final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
-      setb.addModifiers(Modifier.PUBLIC);
-      setb.addAnnotation(Override.class);
-      setb.addParameter(double.class, "x", Modifier.FINAL);
-      setb.returns(void.class);
-      setb.addStatement(
-        "this.$N.$N(this.getByteOffsetFor($N), $T.packDouble($N))",
-        "buffer",
-        iput,
-        offset_constant,
-        Binary16.class,
-        "x");
-      this.class_builder.addMethod(setb.build());
+      this.class_builder.addMethod(packedFloatGetter(offset_constant, getter_name, iget));
+      this.class_builder.addMethod(packedFloatSetter(offset_constant, setter_name, iput));
     } else {
-
-      /*
-        Generate a method to retrieve floating point values from the byte
-        buffer.
-       */
-
-      final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-      getb.addModifiers(Modifier.PUBLIC);
-      getb.addAnnotation(Override.class);
-      getb.returns(itype);
-      getb.addStatement(
-        "return this.$N.$N(this.getByteOffsetFor($N))",
-        "buffer",
-        iget,
-        offset_constant);
-      this.class_builder.addMethod(getb.build());
-
-      /*
-        Generate a method to insert floating point values into the byte
-        buffer.
-       */
-
-      final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
-      setb.addModifiers(Modifier.PUBLIC);
-      setb.addAnnotation(Override.class);
-      setb.addParameter(itype, "x", Modifier.FINAL);
-      setb.returns(void.class);
-      setb.addStatement(
-        "this.$N.$N(this.getByteOffsetFor($N), $N)",
-        "buffer",
-        iput,
-        offset_constant,
-        "x");
-      this.class_builder.addMethod(setb.build());
+      this.class_builder.addMethod(unpackedFloatGetter(offset_constant, getter_name, itype, iget));
+      this.class_builder.addMethod(unpackedFloatSetter(offset_constant, setter_name, itype, iput));
     }
 
     return null;
+  }
+
+  /**
+   * Generate a method to insert floating point values into the byte buffer.
+   */
+
+  private static MethodSpec unpackedFloatSetter(
+    final String offset_constant,
+    final String setter_name,
+    final Class<?> itype,
+    final String iput)
+  {
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+    setb.addModifiers(Modifier.PUBLIC);
+    setb.addAnnotation(Override.class);
+    setb.addParameter(itype, "x", Modifier.FINAL);
+    setb.returns(void.class);
+    setb.addStatement(
+      "this.$N.$N(this.getByteOffsetFor($N), $N)",
+      "buffer",
+      iput,
+      offset_constant,
+      "x");
+    return setb.build();
+  }
+
+  /**
+   * Generate a method to retrieve floating point values from the byte buffer.
+   */
+
+  private static MethodSpec unpackedFloatGetter(
+    final String offset_constant,
+    final String getter_name,
+    final Class<?> itype,
+    final String iget)
+  {
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.addAnnotation(Override.class);
+    getb.returns(itype);
+    getb.addStatement(
+      "return this.$N.$N(this.getByteOffsetFor($N))",
+      "buffer",
+      iget,
+      offset_constant);
+    return getb.build();
+  }
+
+  /**
+   * Generate a method to pack values into the byte buffer.
+   */
+
+  private static MethodSpec packedFloatSetter(
+    final String offset_constant,
+    final String setter_name,
+    final String iput)
+  {
+    final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
+    setb.addModifiers(Modifier.PUBLIC);
+    setb.addAnnotation(Override.class);
+    setb.addParameter(double.class, "x", Modifier.FINAL);
+    setb.returns(void.class);
+    setb.addStatement(
+      "this.$N.$N(this.getByteOffsetFor($N), $T.packDouble($N))",
+      "buffer",
+      iput,
+      offset_constant,
+      Binary16.class,
+      "x");
+    return setb.build();
+  }
+
+  /**
+   * Generate a method to unpack values from the byte buffer.
+   */
+
+  private static MethodSpec packedFloatGetter(
+    final String offset_constant,
+    final String getter_name,
+    final String iget)
+  {
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.addAnnotation(Override.class);
+    getb.returns(double.class);
+    getb.addStatement(
+      "return $T.unpackDouble($N.$N(this.getByteOffsetFor($N)))",
+      Binary16.class,
+      "buffer",
+      iget,
+      offset_constant);
+    return getb.build();
   }
 
   @Override
@@ -425,8 +469,8 @@ final class RecordFieldImplementationProcessor
       JPRAGeneratedNames.getGetterMatrixReadableName(this.field.getName());
     final String writer_name =
       JPRAGeneratedNames.getGetterMatrixWritableName(this.field.getName());
-
-    final String f_name = JPRAGeneratedNames.getFieldName(this.field.getName());
+    final String f_name =
+      JPRAGeneratedNames.getFieldName(this.field.getName());
 
     final MethodSpec.Builder read_b = MethodSpec.methodBuilder(reader_name);
     read_b.addModifiers(Modifier.PUBLIC);
@@ -455,8 +499,8 @@ final class RecordFieldImplementationProcessor
   }
 
   /**
-   * Generate methods that return a readable or writable reference to a given
-   * field of type {@code packed} or {@code record}.
+   * Generate methods that return a readable or writable reference to a given field of type {@code
+   * packed} or {@code record}.
    *
    * @param t_name The name of the field type
    * @param tp_ctx The target package context
@@ -508,8 +552,8 @@ final class RecordFieldImplementationProcessor
   }
 
   /**
-   * Generate a static constant indicating the offset in octets of the field
-   * from the start of the type.
+   * Generate a static constant indicating the offset in octets of the field from the start of the
+   * type.
    */
 
   private void generateFieldOffsetConstant()

@@ -123,42 +123,55 @@ final class TPackedBuilder implements TPackedBuilderType
       new AtomicReference<>(size.subtract(BigInteger.ONE));
 
     for (final TPacked.FieldType f : this.type_fields_ordered) {
-      f.matchField(
-        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
-        {
-          @Override
-          public Void matchFieldValue(
-            final TPacked.FieldValue f)
-          {
-            f.setOwner(tr);
-            final BigInteger size = f.getSize().getValue();
-            final BigInteger current_msb = msb.get();
-            final BigInteger lsb =
-              current_msb.subtract(size).add(BigInteger.ONE);
-
-            LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
-            f.setRange(RangeInclusiveB.of(lsb, current_msb));
-            msb.set(lsb.subtract(BigInteger.ONE));
-            return null;
-          }
-
-          @Override
-          public Void matchFieldPaddingBits(
-            final TPacked.FieldPaddingBits f)
-          {
-            f.setOwner(tr);
-            final BigInteger size = f.getSize().getValue();
-            final BigInteger current_msb = msb.get();
-            final BigInteger lsb =
-              current_msb.subtract(size).add(BigInteger.ONE);
-
-            LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
-            f.setRange(RangeInclusiveB.of(lsb, current_msb));
-            msb.set(lsb.subtract(BigInteger.ONE));
-            return null;
-          }
-        });
+      f.matchField(new FieldAdder(tr, msb));
     }
     return tr;
+  }
+
+  private static final class FieldAdder
+    implements TPacked.FieldMatcherType<Void, UnreachableCodeException>
+  {
+    private final TPacked tr;
+    private final AtomicReference<BigInteger> msb;
+
+    FieldAdder(
+      final TPacked in_tr,
+      final AtomicReference<BigInteger> in_msb)
+    {
+      this.tr = in_tr;
+      this.msb = in_msb;
+    }
+
+    @Override
+    public Void matchFieldValue(
+      final TPacked.FieldValue f)
+    {
+      f.setOwner(this.tr);
+      final BigInteger size = f.getSize().getValue();
+      final BigInteger current_msb = this.msb.get();
+      final BigInteger lsb =
+        current_msb.subtract(size).add(BigInteger.ONE);
+
+      LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+      f.setRange(RangeInclusiveB.of(lsb, current_msb));
+      this.msb.set(lsb.subtract(BigInteger.ONE));
+      return null;
+    }
+
+    @Override
+    public Void matchFieldPaddingBits(
+      final TPacked.FieldPaddingBits f)
+    {
+      f.setOwner(this.tr);
+      final BigInteger size = f.getSize().getValue();
+      final BigInteger current_msb = this.msb.get();
+      final BigInteger lsb =
+        current_msb.subtract(size).add(BigInteger.ONE);
+
+      LOG.trace("field lsb/msb: {}/{}", lsb, current_msb);
+      f.setRange(RangeInclusiveB.of(lsb, current_msb));
+      this.msb.set(lsb.subtract(BigInteger.ONE));
+      return null;
+    }
   }
 }

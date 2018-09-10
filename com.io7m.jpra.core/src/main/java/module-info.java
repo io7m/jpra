@@ -20,7 +20,5 @@
 
 module com.io7m.jpra.core
 {
-  requires static org.immutables.value;
-
   exports com.io7m.jpra.core;
 }

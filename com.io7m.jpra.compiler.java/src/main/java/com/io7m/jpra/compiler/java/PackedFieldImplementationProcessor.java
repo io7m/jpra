@@ -52,8 +52,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * A type matcher that produces implementation methods for a given packed
- * field.
+ * A type matcher that produces implementation methods for a given packed field.
  */
 
 public final class PackedFieldImplementationProcessor
@@ -89,7 +88,7 @@ public final class PackedFieldImplementationProcessor
    * @param t             The packed type
    */
 
-  public static void generatedPackedAllMethodImplementation(
+  static void generatedPackedAllMethodImplementation(
     final TypeSpec.Builder class_builder,
     final TPacked t)
   {
@@ -132,40 +131,7 @@ public final class PackedFieldImplementationProcessor
         final BigInteger f_size = fv.getSize().getValue();
         final FieldName f_name = fv.getName();
         final TIntegerType f_type = fv.getType();
-
-        final Class<?> f_class = f_type.matchTypeInteger(
-          new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
-          {
-            @Override
-            public Class<?> matchIntegerUnsigned(
-              final TIntegerUnsigned t)
-            {
-              return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
-                f_size);
-            }
-
-            @Override
-            public Class<?> matchIntegerSigned(
-              final TIntegerSigned t)
-            {
-              return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(
-                f_size);
-            }
-
-            @Override
-            public Class<?> matchIntegerSignedNormalized(
-              final TIntegerSignedNormalized t)
-            {
-              return double.class;
-            }
-
-            @Override
-            public Class<?> matchIntegerUnsignedNormalized(
-              final TIntegerUnsignedNormalized t)
-            {
-              return double.class;
-            }
-          });
+        final Class<?> f_class = f_type.matchTypeInteger(new GetIntegerTypeClass(f_size));
 
         final String f_name_text = f_name.value();
         setb.addParameter(f_class, f_name_text, Modifier.FINAL);
@@ -175,48 +141,10 @@ public final class PackedFieldImplementationProcessor
         final BigInteger shift = fv.getBitRange().lower();
 
         f_type.matchTypeInteger(
-          new TypeIntegerMatcherType<Void, UnreachableCodeException>()
-          {
-            @Override
-            public Void matchIntegerUnsigned(
-              final TIntegerUnsigned t)
-            {
-              onInteger(
-                setb, arith_type, f_name_text, mask, shift);
-              return null;
-            }
-
-            @Override
-            public Void matchIntegerSigned(
-              final TIntegerSigned t)
-            {
-              onInteger(
-                setb, arith_type, f_name_text, mask, shift);
-              return null;
-            }
-
-            @Override
-            public Void matchIntegerSignedNormalized(
-              final TIntegerSignedNormalized t)
-            {
-              onNormalized(
-                true, field_size, setb, arith_type, f_name_text, mask, shift);
-              return null;
-            }
-
-            @Override
-            public Void matchIntegerUnsignedNormalized(
-              final TIntegerUnsignedNormalized t)
-            {
-              onNormalized(
-                false, field_size, setb, arith_type, f_name_text, mask, shift);
-              return null;
-            }
-          });
+          new GenerateIntegerCode(setb, arith_type, f_name_text, mask, shift, field_size));
       });
 
-    bufferWriteStatement(
-      t, setb, container_type, iput, "result");
+    bufferWriteStatement(t, setb, container_type, iput, "result");
     setb.returns(void.class);
     class_builder.addMethod(setb.build());
   }
@@ -250,12 +178,7 @@ public final class PackedFieldImplementationProcessor
   {
     setb.beginControlFlow("");
     setb.addStatement("final int off = this.getByteOffset()");
-    setb.addStatement(
-      "this.$N.$N(0, ($T) $N)",
-      "pack_buffer",
-      iput,
-      container_type,
-      value);
+    setb.addStatement("this.$N.$N(0, ($T) $N)", "pack_buffer", iput, container_type, value);
 
     final int bytes = t.getSizeInOctets().getValue().intValue();
     for (int index = 0; index < bytes; ++index) {
@@ -277,8 +200,7 @@ public final class PackedFieldImplementationProcessor
     final String mask,
     final BigInteger shift)
   {
-    setb.addStatement(
-      "final $T $L_mask = $L", arith_type, f_name_text, mask);
+    setb.addStatement("final $T $L_mask = $L", arith_type, f_name_text, mask);
     setb.addStatement(
       "final $T $L_valu = ($L & $L_mask) << $L",
       arith_type,
@@ -298,12 +220,8 @@ public final class PackedFieldImplementationProcessor
     final String mask,
     final BigInteger shift)
   {
-    final Class<?> nfp_class =
-      getNFPClassFromFieldSizeAndSign(
-        field_size, signed);
-    final String m_to =
-      getNormalizedToMethod(
-        field_size, signed);
+    final Class<?> nfp_class = getNFPClassFromFieldSizeAndSign(field_size, signed);
+    final String m_to = getNormalizedToMethod(field_size, signed);
 
     setb.addStatement(
       "final $T $L_conv = $T.$N($N)",
@@ -431,43 +349,12 @@ public final class PackedFieldImplementationProcessor
       smaller than the field size.
      */
 
-    final Class<?> external_type;
+    final Class<?> external_type =
+      findExternalTypeForFieldSize(field_size);
 
-    if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
-      external_type = long.class;
-    } else if (field_size.compareTo(BigInteger.valueOf(16L)) > 0) {
-      external_type = int.class;
-    } else if (field_size.compareTo(BigInteger.valueOf(8L)) > 0) {
-      external_type = int.class;
-    } else {
-      external_type = int.class;
-    }
-
-    final String iget;
-    final String iput;
-    final Class<?> arith_type;
-    final Class<?> container_type;
-    if (Objects.equals(container_size, BigInteger.valueOf(64L))) {
-      container_type = long.class;
-      arith_type = long.class;
-      iget = "getLong";
-      iput = "putLong";
-    } else if (Objects.equals(container_size, BigInteger.valueOf(32L))) {
-      container_type = int.class;
-      arith_type = int.class;
-      iget = "getInt";
-      iput = "putInt";
-    } else if (Objects.equals(container_size, BigInteger.valueOf(16L))) {
-      container_type = short.class;
-      arith_type = int.class;
-      iget = "getShort";
-      iput = "putShort";
-    } else {
-      container_type = byte.class;
-      arith_type = int.class;
-      iget = "get";
-      iput = "put";
-    }
+    final IntegerGetterSetterNamesAndTypes types =
+      new IntegerGetterSetterNamesAndTypes(container_size)
+        .invoke();
 
     final BigInteger shift =
       container_size.subtract(this.offset_bits).subtract(field_size);
@@ -486,11 +373,10 @@ public final class PackedFieldImplementationProcessor
     bufferReadStatement(t, getb);
     getb.addStatement(
       "final $T read = this.$N.$N(0)",
-      container_type,
+      types.getContainerType(),
       "pack_buffer",
-      iget);
-    getb.addStatement(
-      "return ($T) ((read >>> $L) & $L)", external_type, shift, field_mask);
+      types.getIntegerGetName());
+    getb.addStatement("return ($T) ((read >>> $L) & $L)", external_type, shift, field_mask);
     this.class_builder.addMethod(getb.build());
 
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
@@ -499,24 +385,32 @@ public final class PackedFieldImplementationProcessor
     setb.addAnnotation(Override.class);
     setb.returns(void.class);
     bufferReadStatement(t, setb);
-    setb.addStatement(
-      "final $T result = this.$N.$N(0)",
-      container_type,
-      "pack_buffer",
-      iget);
-    setb.addStatement(
-      "final $T r_mask = $L", arith_type, container_mask);
-    setb.addStatement(
-      "final $T x_mask = $L", arith_type, field_mask);
-    setb.addStatement(
-      "final $T x_valu = (x & x_mask) << $L", arith_type, shift);
-    setb.addStatement(
-      "final $T w_valu = (result & r_mask) | x_valu", arith_type);
-    bufferWriteStatement(
-      this.field.getOwner(), setb, container_type, iput, "w_valu");
+    setb.addStatement("final $T result = this.$N.$N(0)", types.getContainerType(), "pack_buffer",
+                      types.getIntegerGetName());
+    setb.addStatement("final $T r_mask = $L", types.getArithmeticType(), container_mask);
+    setb.addStatement("final $T x_mask = $L", types.getArithmeticType(), field_mask);
+    setb.addStatement("final $T x_valu = (x & x_mask) << $L", types.getArithmeticType(), shift);
+    setb.addStatement("final $T w_valu = (result & r_mask) | x_valu", types.getArithmeticType());
 
+    bufferWriteStatement(this.field.getOwner(), setb, types.getContainerType(),
+                         types.getIntegerPutName(), "w_valu");
     this.class_builder.addMethod(setb.build());
     return null;
+  }
+
+  private static Class<?> findExternalTypeForFieldSize(
+    final BigInteger field_size)
+  {
+    if (field_size.compareTo(BigInteger.valueOf(32L)) > 0) {
+      return long.class;
+    }
+    if (field_size.compareTo(BigInteger.valueOf(16L)) > 0) {
+      return int.class;
+    }
+    if (field_size.compareTo(BigInteger.valueOf(8L)) > 0) {
+      return int.class;
+    }
+    return int.class;
   }
 
   @Override
@@ -556,27 +450,22 @@ public final class PackedFieldImplementationProcessor
       getter_norm_raw_name,
       setter_norm_raw_name);
 
-    final Class<?> nfp_class =
-      getNFPClassFromFieldSizeAndSign(field_size, signed);
-    final String m_to =
-      getNormalizedToMethod(field_size, signed);
-    final String m_of =
-      getNormalizedFromMethod(field_size, signed);
+    final Class<?> nfp_class = getNFPClassFromFieldSizeAndSign(field_size, signed);
+    final String m_to = getNormalizedToMethod(field_size, signed);
+    final String m_of = getNormalizedFromMethod(field_size, signed);
 
     final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
     getb.addModifiers(Modifier.PUBLIC);
     getb.addAnnotation(Override.class);
     getb.returns(double.class);
-    getb.addStatement(
-      "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
+    getb.addStatement("return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
     this.class_builder.addMethod(getb.build());
 
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);
     setb.addModifiers(Modifier.PUBLIC);
     setb.addAnnotation(Override.class);
     setb.addParameter(double.class, "x", Modifier.FINAL);
-    setb.addStatement(
-      "this.$N($T.$N($N))", setter_norm_raw_name, nfp_class, m_to, "x");
+    setb.addStatement("this.$N($T.$N($N))", setter_norm_raw_name, nfp_class, m_to, "x");
     this.class_builder.addMethod(setb.build());
     return null;
   }
@@ -640,5 +529,178 @@ public final class PackedFieldImplementationProcessor
   public Void matchPacked(final TPacked t)
   {
     throw new UnreachableCodeException();
+  }
+
+  private static final class GetIntegerTypeClass
+    implements TypeIntegerMatcherType<Class<?>, UnreachableCodeException>
+  {
+    private final BigInteger size;
+
+    GetIntegerTypeClass(final BigInteger in_size)
+    {
+      this.size = in_size;
+    }
+
+    @Override
+    public Class<?> matchIntegerUnsigned(
+      final TIntegerUnsigned t)
+    {
+      return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(this.size);
+    }
+
+    @Override
+    public Class<?> matchIntegerSigned(
+      final TIntegerSigned t)
+    {
+      return PackedFieldInterfaceProcessor.getPackedIntegerTypeForSize(this.size);
+    }
+
+    @Override
+    public Class<?> matchIntegerSignedNormalized(
+      final TIntegerSignedNormalized t)
+    {
+      return double.class;
+    }
+
+    @Override
+    public Class<?> matchIntegerUnsignedNormalized(
+      final TIntegerUnsignedNormalized t)
+    {
+      return double.class;
+    }
+  }
+
+  private static final class GenerateIntegerCode
+    implements TypeIntegerMatcherType<Void, UnreachableCodeException>
+  {
+    private final MethodSpec.Builder builder;
+    private final Class<?> arith_type;
+    private final String f_name_text;
+    private final String mask;
+    private final BigInteger shift;
+    private final BigInteger field_size;
+
+    GenerateIntegerCode(
+      final MethodSpec.Builder in_builder,
+      final Class<?> in_arithmetic_type,
+      final String in_name_text,
+      final String in_mask,
+      final BigInteger in_shift,
+      final BigInteger in_field_size)
+    {
+      this.builder = in_builder;
+      this.arith_type = in_arithmetic_type;
+      this.f_name_text = in_name_text;
+      this.mask = in_mask;
+      this.shift = in_shift;
+      this.field_size = in_field_size;
+    }
+
+    @Override
+    public Void matchIntegerUnsigned(
+      final TIntegerUnsigned t)
+    {
+      onInteger(this.builder, this.arith_type, this.f_name_text, this.mask, this.shift);
+      return null;
+    }
+
+    @Override
+    public Void matchIntegerSigned(
+      final TIntegerSigned t)
+    {
+      onInteger(this.builder, this.arith_type, this.f_name_text, this.mask, this.shift);
+      return null;
+    }
+
+    @Override
+    public Void matchIntegerSignedNormalized(
+      final TIntegerSignedNormalized t)
+    {
+      onNormalized(
+        true,
+        this.field_size,
+        this.builder,
+        this.arith_type,
+        this.f_name_text,
+        this.mask,
+        this.shift);
+      return null;
+    }
+
+    @Override
+    public Void matchIntegerUnsignedNormalized(
+      final TIntegerUnsignedNormalized t)
+    {
+      onNormalized(
+        false,
+        this.field_size,
+        this.builder,
+        this.arith_type,
+        this.f_name_text,
+        this.mask,
+        this.shift);
+      return null;
+    }
+  }
+
+  private static final class IntegerGetterSetterNamesAndTypes
+  {
+    private final BigInteger container_size;
+    private String integer_get_name;
+    private String integer_put_name;
+    private Class<?> arithmetic_type;
+    private Class<?> container_type;
+
+    IntegerGetterSetterNamesAndTypes(
+      final BigInteger in_container_size)
+    {
+      this.container_size = in_container_size;
+    }
+
+    String getIntegerGetName()
+    {
+      return this.integer_get_name;
+    }
+
+    String getIntegerPutName()
+    {
+      return this.integer_put_name;
+    }
+
+    Class<?> getArithmeticType()
+    {
+      return this.arithmetic_type;
+    }
+
+    Class<?> getContainerType()
+    {
+      return this.container_type;
+    }
+
+    IntegerGetterSetterNamesAndTypes invoke()
+    {
+      if (Objects.equals(this.container_size, BigInteger.valueOf(64L))) {
+        this.container_type = long.class;
+        this.arithmetic_type = long.class;
+        this.integer_get_name = "getLong";
+        this.integer_put_name = "putLong";
+      } else if (Objects.equals(this.container_size, BigInteger.valueOf(32L))) {
+        this.container_type = int.class;
+        this.arithmetic_type = int.class;
+        this.integer_get_name = "getInt";
+        this.integer_put_name = "putInt";
+      } else if (Objects.equals(this.container_size, BigInteger.valueOf(16L))) {
+        this.container_type = short.class;
+        this.arithmetic_type = int.class;
+        this.integer_get_name = "getShort";
+        this.integer_put_name = "putShort";
+      } else {
+        this.container_type = byte.class;
+        this.arithmetic_type = int.class;
+        this.integer_get_name = "get";
+        this.integer_put_name = "put";
+      }
+      return this;
+    }
   }
 }

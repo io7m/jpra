@@ -82,76 +82,7 @@ public final class JPRAPipeline implements JPRAPipelineType
   public Optional<PackageContextType> onExpression(final SExpressionType e)
     throws JPRACompilerException
   {
-    return this.parser.parseStatement(e).matchStatement(
-      new StatementMatcherType<Unresolved, Untyped,
-        Optional<PackageContextType>, JPRACompilerException>()
-      {
-        @Override
-        public Optional<PackageContextType> matchPackageBegin(
-          final StatementPackageBegin<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          final StatementPackageBegin<IdentifierType, Untyped> r =
-            JPRAPipeline.this.resolver.resolvePackageBegin(s);
-          JPRAPipeline.this.checker.checkPackageBegin(r);
-          return Optional.empty();
-        }
-
-        @Override
-        public Optional<PackageContextType> matchPackageEnd(
-          final StatementPackageEnd<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          final StatementPackageEnd<IdentifierType, Untyped> r =
-            JPRAPipeline.this.resolver.resolvePackageEnd(s);
-          final PackageContextType c =
-            JPRAPipeline.this.checker.checkPackageEnd(r);
-          return Optional.of(c);
-        }
-
-        @Override
-        public Optional<PackageContextType> matchPackageImport(
-          final StatementPackageImport<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          final StatementPackageImport<IdentifierType, Untyped> r =
-            JPRAPipeline.this.resolver.resolvePackageImport(s);
-          return Optional.empty();
-        }
-
-        @Override
-        public Optional<PackageContextType> matchTypeDecl(
-          final TypeDeclType<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          final TypeDeclType<IdentifierType, Untyped> r =
-            JPRAPipeline.this.resolver.resolveTypeDeclaration(s);
-          JPRAPipeline.this.checker.checkTypeDeclaration(r);
-          return Optional.empty();
-        }
-
-        @Override
-        public Optional<PackageContextType> matchShowType(
-          final StatementCommandType<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          final StatementCommandType<IdentifierType, Untyped> r =
-            JPRAPipeline.this.resolver.resolveCommandType(s);
-          final StatementCommandType<IdentifierType, TType> c =
-            JPRAPipeline.this.checker.checkCommandType(r);
-
-          System.out.println(c.getExpression().getType());
-          return Optional.empty();
-        }
-
-        @Override
-        public Optional<PackageContextType> matchShowSize(
-          final StatementCommandSize<Unresolved, Untyped> s)
-          throws JPRACompilerException
-        {
-          throw new UnimplementedCodeException();
-        }
-      });
+    return this.parser.parseStatement(e).matchStatement(new PipelineApplicator());
   }
 
   @Override
@@ -161,5 +92,79 @@ public final class JPRAPipeline implements JPRAPipelineType
   {
     this.parser.parseEOF(lex);
     this.resolver.resolveEOF(lex);
+  }
+
+  private final class PipelineApplicator implements StatementMatcherType<Unresolved, Untyped,
+    Optional<PackageContextType>, JPRACompilerException>
+  {
+    PipelineApplicator()
+    {
+
+    }
+
+    @Override
+    public Optional<PackageContextType> matchPackageBegin(
+      final StatementPackageBegin<Unresolved, Untyped> s)
+      throws JPRACompilerException
+    {
+      final StatementPackageBegin<IdentifierType, Untyped> r =
+        JPRAPipeline.this.resolver.resolvePackageBegin(s);
+      JPRAPipeline.this.checker.checkPackageBegin(r);
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<PackageContextType> matchPackageEnd(
+      final StatementPackageEnd<Unresolved, Untyped> s)
+      throws JPRACompilerException
+    {
+      final StatementPackageEnd<IdentifierType, Untyped> r =
+        JPRAPipeline.this.resolver.resolvePackageEnd(s);
+      final PackageContextType c =
+        JPRAPipeline.this.checker.checkPackageEnd(r);
+      return Optional.of(c);
+    }
+
+    @Override
+    public Optional<PackageContextType> matchPackageImport(
+      final StatementPackageImport<Unresolved, Untyped> s)
+      throws JPRACompilerException
+    {
+      final StatementPackageImport<IdentifierType, Untyped> r =
+        JPRAPipeline.this.resolver.resolvePackageImport(s);
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<PackageContextType> matchTypeDecl(
+      final TypeDeclType<Unresolved, Untyped> s)
+      throws JPRACompilerException
+    {
+      final TypeDeclType<IdentifierType, Untyped> r =
+        JPRAPipeline.this.resolver.resolveTypeDeclaration(s);
+      JPRAPipeline.this.checker.checkTypeDeclaration(r);
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<PackageContextType> matchShowType(
+      final StatementCommandType<Unresolved, Untyped> s)
+      throws JPRACompilerException
+    {
+      final StatementCommandType<IdentifierType, Untyped> r =
+        JPRAPipeline.this.resolver.resolveCommandType(s);
+      final StatementCommandType<IdentifierType, TType> c =
+        JPRAPipeline.this.checker.checkCommandType(r);
+
+      System.out.println(c.getExpression().getType());
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<PackageContextType> matchShowSize(
+      final StatementCommandSize<Unresolved, Untyped> s)
+    {
+      throw new UnimplementedCodeException();
+    }
   }
 }

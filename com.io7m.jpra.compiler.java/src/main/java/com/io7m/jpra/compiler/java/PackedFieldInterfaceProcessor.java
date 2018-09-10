@@ -67,10 +67,9 @@ public final class PackedFieldInterfaceProcessor
   }
 
   /**
-   * Retrieve the type that should be used for the interfaces of non-normalized
-   * integers fields in packed types. Generally, this is the smallest integer
-   * size larger than or equal to {@code int} that can hold values of the given
-   * size.
+   * Retrieve the type that should be used for the interfaces of non-normalized integers fields in
+   * packed types. Generally, this is the smallest integer size larger than or equal to {@code int}
+   * that can hold values of the given size.
    *
    * @param size The size in bits of the integer type
    *
@@ -108,80 +107,11 @@ public final class PackedFieldInterfaceProcessor
     setb.addJavadoc("Set the value of all fields.\n");
 
     for (final TPacked.FieldType f : ordered) {
-      f.matchField(
-        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
-        {
-          @Override
-          public Void matchFieldValue(final TPacked.FieldValue f)
-          {
-            final FieldName f_name = f.getName();
-            setb.addJavadoc(
-              "@param $L The value for field {@code $L}\n", f_name, f_name);
-            return null;
-          }
-
-          @Override
-          public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
-          {
-            return null;
-          }
-        });
+      f.matchField(new FieldJavaDocAdder(setb));
     }
 
     for (final TPacked.FieldType f : ordered) {
-      f.matchField(
-        new TPacked.FieldMatcherType<Void, UnreachableCodeException>()
-        {
-          @Override
-          public Void matchFieldValue(final TPacked.FieldValue f)
-          {
-            final BigInteger f_size = f.getSize().getValue();
-            final FieldName f_name = f.getName();
-            final Class<?> f_type = f.getType().matchTypeInteger(
-              new TypeIntegerMatcherType<Class<?>, UnreachableCodeException>()
-              {
-                @Override
-                public Class<?> matchIntegerUnsigned(
-                  final TIntegerUnsigned t)
-                {
-                  return
-                    getPackedIntegerTypeForSize(
-                      f_size);
-                }
-
-                @Override
-                public Class<?> matchIntegerSigned(
-                  final TIntegerSigned t)
-                {
-                  return
-                    getPackedIntegerTypeForSize(
-                      f_size);
-                }
-
-                @Override
-                public Class<?> matchIntegerSignedNormalized(
-                  final TIntegerSignedNormalized t)
-                {
-                  return double.class;
-                }
-
-                @Override
-                public Class<?> matchIntegerUnsignedNormalized(
-                  final TIntegerUnsignedNormalized t)
-                {
-                  return double.class;
-                }
-              });
-            setb.addParameter(f_type, f_name.value(), Modifier.FINAL);
-            return null;
-          }
-
-          @Override
-          public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
-          {
-            return null;
-          }
-        });
+      f.matchField(new PackedFieldTypeFinder(setb));
     }
 
     setb.returns(void.class);
@@ -282,8 +212,7 @@ public final class PackedFieldInterfaceProcessor
 
     if (this.methods.wantGetters()) {
       final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_name);
-      getb.addJavadoc(
-        "@return The value of the {@code $L} field", this.field.getName());
+      getb.addJavadoc("@return The value of the {@code $L} field", this.field.getName());
       getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
       getb.returns(itype);
       this.class_builder.addMethod(getb.build());
@@ -291,8 +220,7 @@ public final class PackedFieldInterfaceProcessor
 
     if (this.methods.wantSetters()) {
       final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_name);
-      setb.addJavadoc(
-        "Set the value of the {@code $L} field.\n", this.field.getName());
+      setb.addJavadoc("Set the value of the {@code $L} field.\n", this.field.getName());
       setb.addJavadoc(
         "The $L least significant bits of {@code x} will be used.\n",
         this.field.getSize().getValue());
@@ -325,8 +253,7 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_name);
-        getb.addJavadoc(
-          "@return The value of the {@code $L} field", this.field.getName());
+        getb.addJavadoc("@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(double.class);
         this.class_builder.addMethod(getb.build());
@@ -335,8 +262,7 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder getb =
           MethodSpec.methodBuilder(getter_norm_raw_name);
-        getb.addJavadoc(
-          "@return The value of the {@code $L} field", this.field.getName());
+        getb.addJavadoc("@return The value of the {@code $L} field", this.field.getName());
         getb.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         getb.returns(itype);
         this.class_builder.addMethod(getb.build());
@@ -358,8 +284,7 @@ public final class PackedFieldInterfaceProcessor
       {
         final MethodSpec.Builder setb =
           MethodSpec.methodBuilder(setter_norm_raw_name);
-        setb.addJavadoc(
-          "Set the value of the {@code $L} field.\n", this.field.getName());
+        setb.addJavadoc("Set the value of the {@code $L} field.\n", this.field.getName());
         setb.addJavadoc(
           "The $L least significant bits of {@code x} will be used.\n",
           this.field.getSize().getValue());
@@ -372,5 +297,97 @@ public final class PackedFieldInterfaceProcessor
     }
 
     return null;
+  }
+
+  private static final class FieldJavaDocAdder
+    implements TPacked.FieldMatcherType<Void, UnreachableCodeException>
+  {
+    private final MethodSpec.Builder builder;
+
+    FieldJavaDocAdder(final MethodSpec.Builder setb)
+    {
+      this.builder = setb;
+    }
+
+    @Override
+    public Void matchFieldValue(final TPacked.FieldValue f)
+    {
+      final FieldName f_name = f.getName();
+      this.builder.addJavadoc("@param $L The value for field {@code $L}\n", f_name, f_name);
+      return null;
+    }
+
+    @Override
+    public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+    {
+      return null;
+    }
+  }
+
+  private static final class PackedFieldTypeFinder
+    implements TPacked.FieldMatcherType<Void, UnreachableCodeException>
+  {
+    private final MethodSpec.Builder builder;
+
+    PackedFieldTypeFinder(final MethodSpec.Builder setb)
+    {
+      this.builder = setb;
+    }
+
+    @Override
+    public Void matchFieldValue(final TPacked.FieldValue f)
+    {
+      final BigInteger f_size = f.getSize().getValue();
+      final FieldName f_name = f.getName();
+      final Class<?> f_type = f.getType().matchTypeInteger(new PackedIntegerTypeFinder(f_size));
+
+      this.builder.addParameter(f_type, f_name.value(), Modifier.FINAL);
+      return null;
+    }
+
+    @Override
+    public Void matchFieldPaddingBits(final TPacked.FieldPaddingBits f)
+    {
+      return null;
+    }
+
+    private static final class PackedIntegerTypeFinder
+      implements TypeIntegerMatcherType<Class<?>, UnreachableCodeException>
+    {
+      private final BigInteger f_size;
+
+      PackedIntegerTypeFinder(final BigInteger size)
+      {
+        this.f_size = size;
+      }
+
+      @Override
+      public Class<?> matchIntegerUnsigned(
+        final TIntegerUnsigned t)
+      {
+        return getPackedIntegerTypeForSize(this.f_size);
+      }
+
+      @Override
+      public Class<?> matchIntegerSigned(
+        final TIntegerSigned t)
+      {
+        return getPackedIntegerTypeForSize(this.f_size);
+      }
+
+      @Override
+      public Class<?> matchIntegerSignedNormalized(
+        final TIntegerSignedNormalized t)
+      {
+        return double.class;
+      }
+
+      @Override
+      public Class<?> matchIntegerUnsignedNormalized(
+        final TIntegerUnsignedNormalized t)
+      {
+        return double.class;
+      }
+    }
   }
 }

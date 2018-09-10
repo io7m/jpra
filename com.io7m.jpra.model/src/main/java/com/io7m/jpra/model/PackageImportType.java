@@ -16,8 +16,8 @@
 
 package com.io7m.jpra.model;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jpra.core.JPRAImmutableStyleType;
 import com.io7m.jpra.model.names.PackageNameQualified;
 import org.immutables.value.Value;
 
@@ -27,7 +27,7 @@ import java.net.URI;
  * A package import declaration.
  */
 
-@JPRAImmutableStyleType
+@ImmutablesStyleType
 @Value.Immutable
 public interface PackageImportType extends ModelElementType
 {

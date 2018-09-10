@@ -107,135 +107,14 @@ final class JPRAClasses
     return e_type.matchTypeScalar(new MatrixClassMatcher(e_width, e_width));
   }
 
-  public static ClassName
-  getModelScalarTypeForScalarType(
-    final TypeScalarType type)
+  public static ClassName getModelScalarTypeForScalarType(final TypeScalarType type)
   {
-    return type.matchTypeScalar(new TypeScalarMatcherType<ClassName,
-      RuntimeException>()
-    {
-      @Override
-      public ClassName matchScalarInteger(
-        final
-        TIntegerType t)
-      {
-        return t.matchTypeInteger(
-          new TypeIntegerMatcherType<ClassName,
-            RuntimeException>()
-          {
-            @Override
-            public ClassName
-            matchIntegerUnsigned(
-              final TIntegerUnsigned t)
-            {
-              return ClassName.get(JPRATypeModel.JPRAIntegerUnsigned.class);
-            }
-
-            @Override
-            public ClassName
-            matchIntegerSigned(
-              final TIntegerSigned t)
-            {
-              return ClassName.get(JPRATypeModel.JPRAIntegerSigned.class);
-            }
-
-            @Override
-            public ClassName
-            matchIntegerSignedNormalized(
-              final TIntegerSignedNormalized t)
-            {
-              return ClassName.get(
-                JPRATypeModel.JPRAIntegerSignedNormalized.class);
-            }
-
-            @Override
-            public ClassName
-            matchIntegerUnsignedNormalized(
-              final TIntegerUnsignedNormalized t)
-            {
-              return ClassName.get(
-                JPRATypeModel.JPRAIntegerUnsignedNormalized.class);
-            }
-          });
-      }
-
-      @Override
-      public ClassName matchScalarFloat(final TFloat t)
-      {
-        return ClassName.get(JPRATypeModel.JPRAFloat.class);
-      }
-    });
+    return type.matchTypeScalar(new ModelClassForScalarType());
   }
 
-  public static ClassName
-  getModelTypeForType(final TType type)
+  public static ClassName getModelTypeForType(final TType type)
   {
-    return type.matchType(
-      new TypeMatcherType<ClassName, RuntimeException>()
-      {
-        @Override
-        public ClassName matchArray(
-          final TArray t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAArray.class);
-        }
-
-        @Override
-        public ClassName matchString(
-          final TString t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAString.class);
-        }
-
-        @Override
-        public ClassName matchBooleanSet(
-          final TBooleanSet t)
-        {
-          return ClassName.get(JPRATypeModel.JPRABooleanSet.class);
-        }
-
-        @Override
-        public ClassName matchInteger(
-          final TIntegerType t)
-        {
-          return getModelScalarTypeForScalarType(t);
-        }
-
-        @Override
-        public ClassName matchFloat(
-          final TFloat t)
-        {
-          return getModelScalarTypeForScalarType(t);
-        }
-
-        @Override
-        public ClassName matchVector(
-          final TVector t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAVector.class);
-        }
-
-        @Override
-        public ClassName matchMatrix(
-          final TMatrix t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAMatrix.class);
-        }
-
-        @Override
-        public ClassName matchRecord(
-          final TRecord t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
-        }
-
-        @Override
-        public ClassName matchPacked(
-          final TPacked t)
-        {
-          return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
-        }
-      });
+    return type.matchType(new ModelClassForType());
   }
 
   static final class VectorsClasses
@@ -253,9 +132,7 @@ final class JPRAClasses
     {
       this.base_interface = Objects.requireNonNull(in_base, "Base");
       this.base_readable = Objects.requireNonNull(in_readable, "Readable");
-      this.buffered_constructors = Objects.requireNonNull(
-        in_buffered_cons,
-        "Buffered_cons");
+      this.buffered_constructors = Objects.requireNonNull(in_buffered_cons, "Buffered_cons");
       this.buffered_interface = Objects.requireNonNull(in_buffered, "Buffered");
     }
 
@@ -421,104 +298,7 @@ final class JPRAClasses
     public VectorsClasses matchScalarInteger(
       final TIntegerType t)
     {
-      return t.matchTypeInteger(new TypeIntegerMatcherType<VectorsClasses,
-        RuntimeException>()
-      {
-        @Override
-        public VectorsClasses matchIntegerUnsigned(
-          final TIntegerUnsigned t)
-        {
-          throw new UnsupportedOperationException(
-            "Unsigned integer vectors are not supported");
-        }
-
-        @Override
-        public VectorsClasses matchIntegerSigned(
-          final TIntegerSigned t)
-        {
-          final int e_size = t.getSizeInBits().getValue().intValue();
-          switch (e_size) {
-            case 32: {
-              switch (VectorClassMatcher.this.e_count) {
-                case 2: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral2Type.class,
-                    VectorReadable2LType.class,
-                    VectorByteBufferedIntegral2s32.class,
-                    VectorStorageIntegral2Type.class);
-                }
-                case 3: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral3Type.class,
-                    VectorReadable3LType.class,
-                    VectorByteBufferedIntegral3s32.class,
-                    VectorStorageIntegral3Type.class);
-                }
-                case 4: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral4Type.class,
-                    VectorReadable4LType.class,
-                    VectorByteBufferedIntegral4s32.class,
-                    VectorStorageIntegral4Type.class);
-                }
-                default:
-                  throw new UnsupportedOperationException(
-                    "Unsupported integer vector size");
-              }
-
-
-            }
-            case 64: {
-              switch (VectorClassMatcher.this.e_count) {
-                case 2: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral2Type.class,
-                    VectorReadable2LType.class,
-                    VectorByteBufferedIntegral2s64.class,
-                    VectorStorageIntegral2Type.class);
-                }
-                case 3: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral3Type.class,
-                    VectorReadable3LType.class,
-                    VectorByteBufferedIntegral3s64.class,
-                    VectorStorageIntegral3Type.class);
-                }
-                case 4: {
-                  return new VectorsClasses(
-                    VectorStorageIntegral4Type.class,
-                    VectorReadable4LType.class,
-                    VectorByteBufferedIntegral4s64.class,
-                    VectorStorageIntegral4Type.class);
-                }
-                default:
-                  throw new UnsupportedOperationException(
-                    "Unsupported integer vector size");
-              }
-            }
-
-            default:
-              throw new UnsupportedOperationException(
-                "Unsupported integer element size");
-          }
-        }
-
-        @Override
-        public VectorsClasses matchIntegerSignedNormalized(
-          final TIntegerSignedNormalized t)
-        {
-          throw new UnsupportedOperationException(
-            "Signed normalized integer vectors are not supported");
-        }
-
-        @Override
-        public VectorsClasses matchIntegerUnsignedNormalized(
-          final TIntegerUnsignedNormalized t)
-        {
-          throw new UnsupportedOperationException(
-            "Unsigned normalized integer vectors are not supported");
-        }
-      });
+      return t.matchTypeInteger(new VectorClassesLookup());
     }
 
     @Override
@@ -618,6 +398,229 @@ final class JPRAClasses
           throw new UnsupportedOperationException(
             "Unsupported float vector element size");
       }
+    }
+
+    private final class VectorClassesLookup
+      implements TypeIntegerMatcherType<VectorsClasses, RuntimeException>
+    {
+      VectorClassesLookup()
+      {
+
+      }
+
+      @Override
+      public VectorsClasses matchIntegerUnsigned(
+        final TIntegerUnsigned t)
+      {
+        throw new UnsupportedOperationException(
+          "Unsigned integer vectors are not supported");
+      }
+
+      @Override
+      public VectorsClasses matchIntegerSigned(
+        final TIntegerSigned t)
+      {
+        final int e_size = t.getSizeInBits().getValue().intValue();
+        switch (e_size) {
+          case 32: {
+            switch (VectorClassMatcher.this.e_count) {
+              case 2: {
+                return new VectorsClasses(
+                  VectorStorageIntegral2Type.class,
+                  VectorReadable2LType.class,
+                  VectorByteBufferedIntegral2s32.class,
+                  VectorStorageIntegral2Type.class);
+              }
+              case 3: {
+                return new VectorsClasses(
+                  VectorStorageIntegral3Type.class,
+                  VectorReadable3LType.class,
+                  VectorByteBufferedIntegral3s32.class,
+                  VectorStorageIntegral3Type.class);
+              }
+              case 4: {
+                return new VectorsClasses(
+                  VectorStorageIntegral4Type.class,
+                  VectorReadable4LType.class,
+                  VectorByteBufferedIntegral4s32.class,
+                  VectorStorageIntegral4Type.class);
+              }
+              default:
+                throw new UnsupportedOperationException(
+                  "Unsupported integer vector size");
+            }
+
+
+          }
+          case 64: {
+            switch (VectorClassMatcher.this.e_count) {
+              case 2: {
+                return new VectorsClasses(
+                  VectorStorageIntegral2Type.class,
+                  VectorReadable2LType.class,
+                  VectorByteBufferedIntegral2s64.class,
+                  VectorStorageIntegral2Type.class);
+              }
+              case 3: {
+                return new VectorsClasses(
+                  VectorStorageIntegral3Type.class,
+                  VectorReadable3LType.class,
+                  VectorByteBufferedIntegral3s64.class,
+                  VectorStorageIntegral3Type.class);
+              }
+              case 4: {
+                return new VectorsClasses(
+                  VectorStorageIntegral4Type.class,
+                  VectorReadable4LType.class,
+                  VectorByteBufferedIntegral4s64.class,
+                  VectorStorageIntegral4Type.class);
+              }
+              default:
+                throw new UnsupportedOperationException(
+                  "Unsupported integer vector size");
+            }
+          }
+
+          default:
+            throw new UnsupportedOperationException(
+              "Unsupported integer element size");
+        }
+      }
+
+      @Override
+      public VectorsClasses matchIntegerSignedNormalized(
+        final TIntegerSignedNormalized t)
+      {
+        throw new UnsupportedOperationException(
+          "Signed normalized integer vectors are not supported");
+      }
+
+      @Override
+      public VectorsClasses matchIntegerUnsignedNormalized(
+        final TIntegerUnsignedNormalized t)
+      {
+        throw new UnsupportedOperationException(
+          "Unsigned normalized integer vectors are not supported");
+      }
+    }
+  }
+
+  private static final class IntegerClassTypeLookup
+    implements TypeIntegerMatcherType<ClassName, RuntimeException>
+  {
+    IntegerClassTypeLookup()
+    {
+
+    }
+
+    @Override
+    public ClassName matchIntegerUnsigned(final TIntegerUnsigned t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAIntegerUnsigned.class);
+    }
+
+    @Override
+    public ClassName matchIntegerSigned(final TIntegerSigned t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAIntegerSigned.class);
+    }
+
+    @Override
+    public ClassName matchIntegerSignedNormalized(final TIntegerSignedNormalized t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAIntegerSignedNormalized.class);
+    }
+
+    @Override
+    public ClassName matchIntegerUnsignedNormalized(final TIntegerUnsignedNormalized t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAIntegerUnsignedNormalized.class);
+    }
+  }
+
+  private static final class ModelClassForType
+    implements TypeMatcherType<ClassName, RuntimeException>
+  {
+    ModelClassForType()
+    {
+
+    }
+
+    @Override
+    public ClassName matchArray(final TArray t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAArray.class);
+    }
+
+    @Override
+    public ClassName matchString(final TString t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAString.class);
+    }
+
+    @Override
+    public ClassName matchBooleanSet(final TBooleanSet t)
+    {
+      return ClassName.get(JPRATypeModel.JPRABooleanSet.class);
+    }
+
+    @Override
+    public ClassName matchInteger(final TIntegerType t)
+    {
+      return getModelScalarTypeForScalarType(t);
+    }
+
+    @Override
+    public ClassName matchFloat(final TFloat t)
+    {
+      return getModelScalarTypeForScalarType(t);
+    }
+
+    @Override
+    public ClassName matchVector(final TVector t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAVector.class);
+    }
+
+    @Override
+    public ClassName matchMatrix(final TMatrix t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAMatrix.class);
+    }
+
+    @Override
+    public ClassName matchRecord(
+      final TRecord t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
+    }
+
+    @Override
+    public ClassName matchPacked(
+      final TPacked t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAUserDefined.class);
+    }
+  }
+
+  private static final class ModelClassForScalarType
+    implements TypeScalarMatcherType<ClassName, RuntimeException>
+  {
+    ModelClassForScalarType()
+    {
+
+    }
+
+    @Override
+    public ClassName matchScalarInteger(final TIntegerType t)
+    {
+      return t.matchTypeInteger(new IntegerClassTypeLookup());
+    }
+
+    @Override
+    public ClassName matchScalarFloat(final TFloat t)
+    {
+      return ClassName.get(JPRATypeModel.JPRAFloat.class);
     }
   }
 }

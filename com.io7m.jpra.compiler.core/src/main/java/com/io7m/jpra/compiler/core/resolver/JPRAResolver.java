@@ -122,8 +122,8 @@ public final class JPRAResolver implements JPRAResolverType
   }
 
   /**
-   * Create a new resolver. The resolver may optionally raise errors if the
-   * package it resolves turns out not to be {@code in_expected_package}.
+   * Create a new resolver. The resolver may optionally raise errors if the package it resolves
+   * turns out not to be {@code in_expected_package}.
    *
    * @param c                   A global context
    * @param in_expected_package The expected package, if any
@@ -483,109 +483,7 @@ public final class JPRAResolver implements JPRAResolverType
     final TypeExprType<Unresolved, Untyped> expr)
     throws JPRACompilerResolverException
   {
-    return expr.matchType(
-      new TypeExprMatcherType<Unresolved, Untyped,
-        TypeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>()
-      {
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprIntegerSigned(
-          final TypeExprIntegerSigned<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprIntegerSigned(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped>
-        matchExprIntegerSignedNormalized(
-          final TypeExprIntegerSignedNormalized<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprIntegerSignedNormalized(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprIntegerUnsigned(
-          final TypeExprIntegerUnsigned<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprIntegerUnsigned(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped>
-        matchExprIntegerUnsignedNormalized(
-          final TypeExprIntegerUnsignedNormalized<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprIntegerUnsignedNormalized(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprArray(
-          final TypeExprArray<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprArray(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprFloat(
-          final TypeExprFloat<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprFloat(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprVector(
-          final TypeExprVector<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprVector(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprMatrix(
-          final TypeExprMatrix<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprMatrix(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchExprString(
-          final TypeExprString<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprString(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchName(
-          final TypeExprName<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprName(e);
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchTypeOfField(
-          final TypeExprTypeOfField<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          // TODO: Generated method stub!
-          throw new UnimplementedCodeException();
-        }
-
-        @Override
-        public TypeExprType<IdentifierType, Untyped> matchBooleanSet(
-          final TypeExprBooleanSet<Unresolved, Untyped> e)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveTypeExprBooleanSet(e);
-        }
-      });
+    return expr.matchType(new TypeExpressionResolver());
   }
 
   private TypeExprType<IdentifierType, Untyped> resolveTypeExprName(
@@ -750,34 +648,7 @@ public final class JPRAResolver implements JPRAResolverType
     final SizeExprType<Unresolved, Untyped> expr)
     throws JPRACompilerResolverException
   {
-    return expr.matchSizeExpression(
-      new SizeExprMatcherType<Unresolved, Untyped,
-        SizeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>()
-      {
-        @Override
-        public SizeExprType<IdentifierType, Untyped> matchConstant(
-          final SizeExprConstant<Unresolved, Untyped> s)
-          throws JPRACompilerResolverException
-        {
-          return resolveSizeExprConstant(s);
-        }
-
-        @Override
-        public SizeExprType<IdentifierType, Untyped> matchInOctets(
-          final SizeExprInOctets<Unresolved, Untyped> s)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveSizeExprInOctets(s);
-        }
-
-        @Override
-        public SizeExprType<IdentifierType, Untyped> matchInBits(
-          final SizeExprInBits<Unresolved, Untyped> s)
-          throws JPRACompilerResolverException
-        {
-          return JPRAResolver.this.resolveSizeExprInBits(s);
-        }
-      });
+    return expr.matchSizeExpression(new SizeExpressionResolver());
   }
 
   @Override
@@ -820,5 +691,146 @@ public final class JPRAResolver implements JPRAResolverType
   {
     return new SizeExprInOctets<>(
       this.resolveTypeExpression(s.getTypeExpression()));
+  }
+
+  private final class TypeExpressionResolver
+    implements TypeExprMatcherType<Unresolved, Untyped,
+    TypeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>
+  {
+    TypeExpressionResolver()
+    {
+
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprIntegerSigned(
+      final TypeExprIntegerSigned<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprIntegerSigned(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped>
+    matchExprIntegerSignedNormalized(
+      final TypeExprIntegerSignedNormalized<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprIntegerSignedNormalized(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprIntegerUnsigned(
+      final TypeExprIntegerUnsigned<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprIntegerUnsigned(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped>
+    matchExprIntegerUnsignedNormalized(
+      final TypeExprIntegerUnsignedNormalized<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprIntegerUnsignedNormalized(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprArray(
+      final TypeExprArray<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprArray(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprFloat(
+      final TypeExprFloat<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprFloat(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprVector(
+      final TypeExprVector<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprVector(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprMatrix(
+      final TypeExprMatrix<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprMatrix(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchExprString(
+      final TypeExprString<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprString(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchName(
+      final TypeExprName<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprName(e);
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchTypeOfField(
+      final TypeExprTypeOfField<Unresolved, Untyped> e)
+    {
+      // TODO: Generated method stub!
+      throw new UnimplementedCodeException();
+    }
+
+    @Override
+    public TypeExprType<IdentifierType, Untyped> matchBooleanSet(
+      final TypeExprBooleanSet<Unresolved, Untyped> e)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveTypeExprBooleanSet(e);
+    }
+  }
+
+  private final class SizeExpressionResolver
+    implements SizeExprMatcherType<Unresolved, Untyped,
+    SizeExprType<IdentifierType, Untyped>, JPRACompilerResolverException>
+  {
+    SizeExpressionResolver()
+    {
+
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, Untyped> matchConstant(
+      final SizeExprConstant<Unresolved, Untyped> s)
+    {
+      return resolveSizeExprConstant(s);
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, Untyped> matchInOctets(
+      final SizeExprInOctets<Unresolved, Untyped> s)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveSizeExprInOctets(s);
+    }
+
+    @Override
+    public SizeExprType<IdentifierType, Untyped> matchInBits(
+      final SizeExprInBits<Unresolved, Untyped> s)
+      throws JPRACompilerResolverException
+    {
+      return JPRAResolver.this.resolveSizeExprInBits(s);
+    }
   }
 }

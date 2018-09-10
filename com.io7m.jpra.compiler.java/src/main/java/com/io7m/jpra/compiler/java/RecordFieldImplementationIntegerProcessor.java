@@ -36,8 +36,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * A type matcher that produces implementation methods for a given integer type
- * record fields.
+ * A type matcher that produces implementation methods for a given integer type record fields.
  */
 
 final class RecordFieldImplementationIntegerProcessor
@@ -54,6 +53,46 @@ final class RecordFieldImplementationIntegerProcessor
     this.class_builder = Objects.requireNonNull(
       in_class_builder,
       "Class builder");
+  }
+
+  /**
+   * Generate a method to return a value in normalized floating point form.
+   */
+
+  private static MethodSpec generateNormalizedGetter(
+    final boolean signed,
+    final String getter_norm_name,
+    final String getter_norm_raw_name,
+    final String conv,
+    final Class<?> nfp_class,
+    final Class<?> r_class,
+    final Class<?> r_type,
+    final Class<?> i_type,
+    final String m_of)
+  {
+    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
+    getb.addModifiers(Modifier.PUBLIC);
+    getb.addAnnotation(Override.class);
+    getb.returns(double.class);
+
+    if (signed) {
+      getb.addStatement("return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
+    } else {
+
+      /*
+        Types of different sizes require explicit unsigned conversions.
+       */
+
+      getb.addStatement("final $T x = this.$N()", r_type, getter_norm_raw_name);
+      if (!Objects.equals(i_type, r_type)) {
+        getb.addStatement("final $T y = $T.$N(x)", i_type, r_class, conv);
+        getb.addStatement("return $T.$N(y)", nfp_class, m_of);
+      } else {
+        getb.addStatement("return $T.$N(x)", nfp_class, m_of);
+      }
+    }
+
+    return getb.build();
   }
 
   @Override
@@ -125,8 +164,7 @@ final class RecordFieldImplementationIntegerProcessor
    *
    * @param offset_constant The offset constant
    * @param setter_name     The name of the resulting method
-   * @param iput            The method that will be called on the underlying
-   *                        byte buffer
+   * @param iput            The method that will be called on the underlying byte buffer
    * @param itype           The input type
    */
 
@@ -155,8 +193,7 @@ final class RecordFieldImplementationIntegerProcessor
    *
    * @param offset_constant The offset constant
    * @param getter_name     The name of the resulting method
-   * @param iget            The method that will be called on the underlying
-   *                        byte buffer
+   * @param iget            The method that will be called on the underlying byte buffer
    * @param itype           The output type
    */
 
@@ -188,8 +225,7 @@ final class RecordFieldImplementationIntegerProcessor
   }
 
   /**
-   * Generate a set of methods for setting and retrieving normalized integer
-   * values.
+   * Generate a set of methods for setting and retrieving normalized integer values.
    *
    * @param size   The size of the integer
    * @param signed {@code true} iff the integer type is signed
@@ -214,70 +250,9 @@ final class RecordFieldImplementationIntegerProcessor
       throw new UnimplementedCodeException();
     }
 
-    /*
-      Determine the type and methods used to put/get values to/from the
-      underlying byte buffer. Additionally, a reference to the corresponding
-      boxed type is necessary to allow for access to functions to convert
-      values to/from unsigned types.
-     */
-
-    final String iput;
-    final String iget;
-    final String conv;
-
-    final Class<?> nfp_class;
-    final Class<?> r_class;
-    final Class<?> r_type;
-    final Class<?> i_type;
-    if (size.compareTo(BigInteger.valueOf(32L)) > 0) {
-      r_type = long.class;
-      i_type = long.class;
-      r_class = Long.class;
-      if (signed) {
-        nfp_class = NFPSignedDoubleLong.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleLong.class;
-      }
-      iput = "putLong";
-      iget = "getLong";
-      conv = "toUnsignedLong";
-    } else if (size.compareTo(BigInteger.valueOf(16L)) > 0) {
-      r_type = int.class;
-      i_type = int.class;
-      r_class = Integer.class;
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-      iput = "putInt";
-      iget = "getInt";
-      conv = "toUnsignedInt";
-    } else if (size.compareTo(BigInteger.valueOf(8L)) > 0) {
-      r_type = short.class;
-      i_type = int.class;
-      r_class = Short.class;
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-      iput = "putShort";
-      iget = "getShort";
-      conv = "toUnsignedInt";
-    } else {
-      r_type = byte.class;
-      i_type = int.class;
-      r_class = Byte.class;
-      if (signed) {
-        nfp_class = NFPSignedDoubleInt.class;
-      } else {
-        nfp_class = NFPUnsignedDoubleInt.class;
-      }
-      iput = "put";
-      iget = "get";
-      conv = "toUnsignedInt";
-    }
+    final IntegerNormalizedTypes types =
+      new IntegerNormalizedTypes(size, signed)
+        .invoke();
 
     /*
       Construct names of the methods used to convert values to/from
@@ -298,46 +273,46 @@ final class RecordFieldImplementationIntegerProcessor
       Generate raw getters and setters.
      */
 
-    this.integerGetter(offset_constant, getter_norm_raw_name, iget, r_type);
-    this.integerSetter(offset_constant, setter_norm_raw_name, iput, r_type);
+    this.integerGetter(
+      offset_constant,
+      getter_norm_raw_name,
+      types.getIntegerGetName(),
+      types.getReturnType());
 
-    /*
-      Generate a method to return a value in normalized floating point form.
-     */
+    this.integerSetter(
+      offset_constant,
+      setter_norm_raw_name,
+      types.getIntegerPutName(),
+      types.getReturnType());
 
-    final MethodSpec.Builder getb = MethodSpec.methodBuilder(getter_norm_name);
-    getb.addModifiers(Modifier.PUBLIC);
-    getb.addAnnotation(Override.class);
-    getb.returns(double.class);
+    this.class_builder.addMethod(generateNormalizedGetter(
+      signed,
+      getter_norm_name,
+      getter_norm_raw_name,
+      types.getIntegerConversionName(),
+      types.getNfpClass(),
+      types.getReturnClass(),
+      types.getReturnType(),
+      types.getInputType(),
+      m_of));
 
-    if (signed) {
-      getb.addStatement(
-        "return $T.$N(this.$N())", nfp_class, m_of, getter_norm_raw_name);
-    } else {
+    this.generatedNormalizedSetter(
+      setter_norm_name, setter_norm_raw_name,
+      types.getNfpClass(),
+      types.getReturnType(), m_to);
+  }
 
-      /*
-        Types of different sizes require explicit unsigned conversions.
-       */
+  /**
+   * Generate a method to set a value in normalized floating point form.
+   */
 
-      getb.addStatement(
-        "final $T x = this.$N()", r_type, getter_norm_raw_name);
-      if (!Objects.equals(i_type, r_type)) {
-        getb.addStatement(
-          "final $T y = $T.$N(x)", i_type, r_class, conv);
-        getb.addStatement(
-          "return $T.$N(y)", nfp_class, m_of);
-      } else {
-        getb.addStatement(
-          "return $T.$N(x)", nfp_class, m_of);
-      }
-    }
-
-    this.class_builder.addMethod(getb.build());
-
-    /*
-      Generate a method to set a value in normalized floating point form.
-     */
-
+  private void generatedNormalizedSetter(
+    final String setter_norm_name,
+    final String setter_norm_raw_name,
+    final Class<?> nfp_class,
+    final Class<?> r_type,
+    final String m_to)
+  {
     final MethodSpec.Builder setb = MethodSpec.methodBuilder(setter_norm_name);
     setb.addModifiers(Modifier.PUBLIC);
     setb.addAnnotation(Override.class);
@@ -359,5 +334,121 @@ final class RecordFieldImplementationIntegerProcessor
     final BigInteger size = t.getSizeInBits().getValue();
     this.onIntegerNormalized(size, false);
     return null;
+  }
+
+  private static final class IntegerNormalizedTypes
+  {
+    private BigInteger size;
+    private boolean signed;
+    private String integer_put_name;
+    private String integer_get_name;
+    private String integer_conversion_name;
+    private Class<?> nfp_class;
+    private Class<?> return_class;
+    private Class<?> return_type;
+    private Class<?> input_type;
+
+    IntegerNormalizedTypes(
+      final BigInteger in_size,
+      final boolean in_signed)
+    {
+      this.size = in_size;
+      this.signed = in_signed;
+    }
+
+    String getIntegerPutName()
+    {
+      return this.integer_put_name;
+    }
+
+    String getIntegerGetName()
+    {
+      return this.integer_get_name;
+    }
+
+    String getIntegerConversionName()
+    {
+      return this.integer_conversion_name;
+    }
+
+    Class<?> getNfpClass()
+    {
+      return this.nfp_class;
+    }
+
+    Class<?> getReturnClass()
+    {
+      return this.return_class;
+    }
+
+    Class<?> getReturnType()
+    {
+      return this.return_type;
+    }
+
+    Class<?> getInputType()
+    {
+      return this.input_type;
+    }
+
+    /**
+     * Determine the type and methods used to put/get values to/from the underlying byte buffer.
+     * Additionally, a reference to the corresponding boxed type is necessary to allow for access to
+     * functions to convert values to/from unsigned types.
+     */
+
+    IntegerNormalizedTypes invoke()
+    {
+      if (this.size.compareTo(BigInteger.valueOf(32L)) > 0) {
+        this.return_type = long.class;
+        this.input_type = long.class;
+        this.return_class = Long.class;
+        if (this.signed) {
+          this.nfp_class = NFPSignedDoubleLong.class;
+        } else {
+          this.nfp_class = NFPUnsignedDoubleLong.class;
+        }
+        this.integer_put_name = "putLong";
+        this.integer_get_name = "getLong";
+        this.integer_conversion_name = "toUnsignedLong";
+      } else if (this.size.compareTo(BigInteger.valueOf(16L)) > 0) {
+        this.return_type = int.class;
+        this.input_type = int.class;
+        this.return_class = Integer.class;
+        if (this.signed) {
+          this.nfp_class = NFPSignedDoubleInt.class;
+        } else {
+          this.nfp_class = NFPUnsignedDoubleInt.class;
+        }
+        this.integer_put_name = "putInt";
+        this.integer_get_name = "getInt";
+        this.integer_conversion_name = "toUnsignedInt";
+      } else if (this.size.compareTo(BigInteger.valueOf(8L)) > 0) {
+        this.return_type = short.class;
+        this.input_type = int.class;
+        this.return_class = Short.class;
+        if (this.signed) {
+          this.nfp_class = NFPSignedDoubleInt.class;
+        } else {
+          this.nfp_class = NFPUnsignedDoubleInt.class;
+        }
+        this.integer_put_name = "putShort";
+        this.integer_get_name = "getShort";
+        this.integer_conversion_name = "toUnsignedInt";
+      } else {
+        this.return_type = byte.class;
+        this.input_type = int.class;
+        this.return_class = Byte.class;
+        if (this.signed) {
+          this.nfp_class = NFPSignedDoubleInt.class;
+        } else {
+          this.nfp_class = NFPUnsignedDoubleInt.class;
+        }
+        this.integer_put_name = "put";
+        this.integer_get_name = "get";
+        this.integer_conversion_name = "toUnsignedInt";
+      }
+      return this;
+    }
   }
 }

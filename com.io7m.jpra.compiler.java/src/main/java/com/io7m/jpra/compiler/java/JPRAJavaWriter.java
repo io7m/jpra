@@ -101,75 +101,89 @@ public final class JPRAJavaWriter implements JPRAJavaWriterType
     final Path pkg_path = getPathForPackage(path, p_name);
     Files.createDirectories(pkg_path);
 
-    final JPRAJavaGeneratorType g = this.generator;
-    t.matchTypeUserDefined(
-      new TypeUserDefinedMatcherType<Void, IOException>()
-      {
-        @Override
-        public Void matchRecord(final TRecord r)
-          throws IOException
-        {
-          final Path c_file = pkg_path.resolve(
-            g.getRecordImplementationByteBufferedName(t_name) + ".java");
-          final Path r_file = pkg_path.resolve(
-            g.getRecordInterfaceReadableName(t_name) + ".java");
-          final Path w_file = pkg_path.resolve(
-            g.getRecordInterfaceWritableName(t_name) + ".java");
-          final Path i_file =
-            pkg_path.resolve(g.getRecordInterfaceName(t_name) + ".java");
+    t.matchTypeUserDefined(new TypeWriter(pkg_path, this.generator, t_name));
+  }
 
-          LOG.debug("writing {}", c_file);
-          try (OutputStream w = Files.newOutputStream(c_file)) {
-            g.generateRecordImplementation(r, w);
-          }
-          LOG.debug("writing {}", r_file);
-          try (OutputStream w = Files.newOutputStream(r_file)) {
-            g.generateRecordInterfaceReadable(r, w);
-          }
-          LOG.debug("writing {}", w_file);
-          try (OutputStream w = Files.newOutputStream(w_file)) {
-            g.generateRecordInterfaceWritable(r, w);
-          }
-          LOG.debug("writing {}", i_file);
-          try (OutputStream w = Files.newOutputStream(i_file)) {
-            g.generateRecordInterface(r, w);
-          }
+  private static final class TypeWriter implements TypeUserDefinedMatcherType<Void, IOException>
+  {
+    private final Path pkg_path;
+    private final JPRAJavaGeneratorType generator;
+    private final TypeName type_name;
 
-          return null;
-        }
+    TypeWriter(
+      final Path path,
+      final JPRAJavaGeneratorType gen,
+      final TypeName name)
+    {
+      this.pkg_path = path;
+      this.generator = gen;
+      this.type_name = name;
+    }
 
-        @Override
-        public Void matchPacked(final TPacked r)
-          throws IOException
-        {
-          final Path c_file = pkg_path.resolve(
-            g.getPackedImplementationByteBufferedName(t_name) + ".java");
-          final Path r_file = pkg_path.resolve(
-            g.getPackedInterfaceReadableName(t_name) + ".java");
-          final Path w_file = pkg_path.resolve(
-            g.getPackedInterfaceWritableName(t_name) + ".java");
-          final Path i_file =
-            pkg_path.resolve(g.getPackedInterfaceName(t_name) + ".java");
+    @Override
+    public Void matchRecord(final TRecord r)
+      throws IOException
+    {
+      final Path c_file = this.pkg_path.resolve(
+        this.generator.getRecordImplementationByteBufferedName(this.type_name) + ".java");
+      final Path r_file = this.pkg_path.resolve(
+        this.generator.getRecordInterfaceReadableName(this.type_name) + ".java");
+      final Path w_file = this.pkg_path.resolve(
+        this.generator.getRecordInterfaceWritableName(this.type_name) + ".java");
+      final Path i_file =
+        this.pkg_path.resolve(this.generator.getRecordInterfaceName(this.type_name) + ".java");
 
-          LOG.debug("writing {}", c_file);
-          try (OutputStream w = Files.newOutputStream(c_file)) {
-            g.generatePackedImplementation(r, w);
-          }
-          LOG.debug("writing {}", r_file);
-          try (OutputStream w = Files.newOutputStream(r_file)) {
-            g.generatePackedInterfaceReadable(r, w);
-          }
-          LOG.debug("writing {}", w_file);
-          try (OutputStream w = Files.newOutputStream(w_file)) {
-            g.generatePackedInterfaceWritable(r, w);
-          }
-          LOG.debug("writing {}", i_file);
-          try (OutputStream w = Files.newOutputStream(i_file)) {
-            g.generatePackedInterface(r, w);
-          }
+      LOG.debug("writing {}", c_file);
+      try (OutputStream w = Files.newOutputStream(c_file)) {
+        this.generator.generateRecordImplementation(r, w);
+      }
+      LOG.debug("writing {}", r_file);
+      try (OutputStream w = Files.newOutputStream(r_file)) {
+        this.generator.generateRecordInterfaceReadable(r, w);
+      }
+      LOG.debug("writing {}", w_file);
+      try (OutputStream w = Files.newOutputStream(w_file)) {
+        this.generator.generateRecordInterfaceWritable(r, w);
+      }
+      LOG.debug("writing {}", i_file);
+      try (OutputStream w = Files.newOutputStream(i_file)) {
+        this.generator.generateRecordInterface(r, w);
+      }
 
-          return null;
-        }
-      });
+      return null;
+    }
+
+    @Override
+    public Void matchPacked(final TPacked r)
+      throws IOException
+    {
+      final Path c_file = this.pkg_path.resolve(
+        this.generator.getPackedImplementationByteBufferedName(this.type_name) + ".java");
+      final Path r_file = this.pkg_path.resolve(
+        this.generator.getPackedInterfaceReadableName(this.type_name) + ".java");
+      final Path w_file = this.pkg_path.resolve(
+        this.generator.getPackedInterfaceWritableName(this.type_name) + ".java");
+      final Path i_file =
+        this.pkg_path.resolve(this.generator.getPackedInterfaceName(this.type_name) + ".java");
+
+      LOG.debug("writing {}", c_file);
+      try (OutputStream w = Files.newOutputStream(c_file)) {
+        this.generator.generatePackedImplementation(r, w);
+      }
+      LOG.debug("writing {}", r_file);
+      try (OutputStream w = Files.newOutputStream(r_file)) {
+        this.generator.generatePackedInterfaceReadable(r, w);
+      }
+      LOG.debug("writing {}", w_file);
+      try (OutputStream w = Files.newOutputStream(w_file)) {
+        this.generator.generatePackedInterfaceWritable(r, w);
+      }
+      LOG.debug("writing {}", i_file);
+      try (OutputStream w = Files.newOutputStream(i_file)) {
+        this.generator.generatePackedInterface(r, w);
+      }
+
+      return null;
+    }
   }
 }

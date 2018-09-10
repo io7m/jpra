@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0-beta0010</version>
   </parent>
 
   <groupId>com.io7m.jpra</groupId>
@@ -18,7 +22,6 @@
   <url>http://github.com/io7m/jpra</url>
 
   <modules>
-    <module>com.io7m.jpra.checkstyle</module>
     <module>com.io7m.jpra.compiler.core</module>
     <module>com.io7m.jpra.compiler.frontend</module>
     <module>com.io7m.jpra.compiler.java</module>
@@ -32,10 +35,8 @@
   </modules>
 
   <properties>
-    <io7m.checkstyle.artifact>com.io7m.jpra.checkstyle</io7m.checkstyle.artifact>
-    <io7m.checkstyle.path>/com/io7m/jpra/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>0.6.0</io7m.api.previousVersion>
-    <io7m.org.immutables.version>2.6.0-alpha1</io7m.org.immutables.version>
+    <io7m.org.immutables.version>2.7.1</io7m.org.immutables.version>
   </properties>
 
   <licenses>
@@ -92,6 +93,12 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.io7m.immutables.style</groupId>
+        <artifactId>com.io7m.immutables.style</artifactId>
+        <version>0.0.1</version>
+        <scope>provided</scope>
+      </dependency>
       <dependency>
         <groupId>com.io7m.jaffirm</groupId>
         <artifactId>com.io7m.jaffirm.core</artifactId>

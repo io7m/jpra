@@ -18,7 +18,6 @@ package com.io7m.jpra.model.names;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jpra.core.JPRAImmutableStyleType;
 import com.io7m.jpra.model.ModelElementType;
 import org.immutables.value.Value;
 
@@ -28,7 +27,7 @@ import java.net.URI;
  * The type of field names.
  */
 
-@JPRAImmutableStyleType
+@com.io7m.immutables.styles.ImmutablesStyleType
 @Value.Immutable
 public interface FieldNameType extends ModelElementType
 {

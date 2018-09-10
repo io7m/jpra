@@ -36,53 +36,7 @@ public final class MutableBiMap<A, B> implements MutableBiMapType<A, B>
   {
     this.map_ab = new HashMap<>();
     this.map_ba = new HashMap<>();
-
-    this.inverse =
-      new MutableBiMapType<>()
-      {
-        @Override
-        public boolean isEmpty()
-        {
-          return MutableBiMap.this.isEmpty();
-        }
-
-        @Override
-        public boolean containsKey(final B key)
-        {
-          return MutableBiMap.this.map_ba.containsKey(
-            Objects.requireNonNull(key, "Key"));
-        }
-
-        @Override
-        public A get(final B key)
-        {
-          return MutableBiMap.this.map_ba.get(
-            Objects.requireNonNull(key, "Key"));
-        }
-
-        @Override
-        public void put(
-          final B key,
-          final A value)
-        {
-          Objects.requireNonNull(key, "Key");
-          Objects.requireNonNull(value, "Value");
-          MutableBiMap.this.map_ba.put(key, value);
-          MutableBiMap.this.map_ab.put(value, key);
-        }
-
-        @Override
-        public void clear()
-        {
-          MutableBiMap.this.clear();
-        }
-
-        @Override
-        public MutableBiMapType<A, B> inverse()
-        {
-          return MutableBiMap.this;
-        }
-      };
+    this.inverse = new Inverse();
   }
 
   /**
@@ -171,5 +125,56 @@ public final class MutableBiMap<A, B> implements MutableBiMapType<A, B>
   public MutableBiMapType<B, A> inverse()
   {
     return this.inverse;
+  }
+
+  private final class Inverse implements MutableBiMapType<B, A>
+  {
+    Inverse()
+    {
+
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+      return MutableBiMap.this.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(final B key)
+    {
+      return MutableBiMap.this.map_ba.containsKey(
+        Objects.requireNonNull(key, "Key"));
+    }
+
+    @Override
+    public A get(final B key)
+    {
+      return MutableBiMap.this.map_ba.get(
+        Objects.requireNonNull(key, "Key"));
+    }
+
+    @Override
+    public void put(
+      final B key,
+      final A value)
+    {
+      Objects.requireNonNull(key, "Key");
+      Objects.requireNonNull(value, "Value");
+      MutableBiMap.this.map_ba.put(key, value);
+      MutableBiMap.this.map_ab.put(value, key);
+    }
+
+    @Override
+    public void clear()
+    {
+      MutableBiMap.this.clear();
+    }
+
+    @Override
+    public MutableBiMapType<A, B> inverse()
+    {
+      return MutableBiMap.this;
+    }
   }
 }

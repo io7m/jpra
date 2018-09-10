@@ -16,17 +16,19 @@
 
 package com.io7m.jpra.model.names;
 
-import com.io7m.jpra.core.JPRAImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 import java.math.BigInteger;
+
+import static org.immutables.value.Value.Immutable;
 
 /**
  * The type of identifiers that are unique with a respect to a global context.
  */
 
-@JPRAImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface IdentifierType
 {
   /**

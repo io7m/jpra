@@ -16,20 +16,22 @@
 
 package com.io7m.jpra.model.names;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jlexing.core.LexicalPosition;
-import com.io7m.jpra.core.JPRAImmutableStyleType;
 import com.io7m.jpra.model.ModelElementType;
 import org.immutables.value.Value;
 
 import java.net.URI;
 
+import static org.immutables.value.Value.Immutable;
+
 /**
  * The type of union case names.
  */
 
-@JPRAImmutableStyleType
-@Value.Immutable
+@ImmutablesStyleType
+@Immutable
 public interface UnionCaseNameType extends ModelElementType
 {
   @Override
