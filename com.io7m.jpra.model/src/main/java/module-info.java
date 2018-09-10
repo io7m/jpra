@@ -29,7 +29,7 @@ module com.io7m.jpra.model
   requires com.io7m.jranges.core;
   requires com.io7m.junreachable.core;
   requires io.vavr;
-  requires jgrapht.core;
+  requires org.jgrapht.core;
   requires org.slf4j;
 
   exports com.io7m.jpra.model;
