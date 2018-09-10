@@ -118,6 +118,9 @@
         <configuration>
           <failOnWarning>true</failOnWarning>
           <ignoredUnusedDeclaredDependencies>
+            <ignoredUnusedDeclaredDependency>org.codehaus.plexus:plexus-utils:*</ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>io.takari.maven.plugins:takari-plugin-testing:*</ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>junit:junit:*</ignoredUnusedDeclaredDependency>
             <ignoredUnusedDeclaredDependency>org.apache.maven.plugin-tools:maven-plugin-tools-api:*</ignoredUnusedDeclaredDependency>
             <ignoredUnusedDeclaredDependency>org.apache.maven:maven-compat:*</ignoredUnusedDeclaredDependency>
           </ignoredUnusedDeclaredDependencies>
