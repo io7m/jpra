@@ -15,7 +15,7 @@
  */
 
 /**
- * Types and functions implementing the <tt>jpra</tt> type_model.
+ * Types and functions implementing the {@code jpra} type_model.
  */
 
 

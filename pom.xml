@@ -36,7 +36,7 @@
 
   <properties>
     <io7m.api.previousVersion>0.6.0</io7m.api.previousVersion>
-    <io7m.org.immutables.version>2.7.1</io7m.org.immutables.version>
+    <io7m.org.immutables.version>2.7.5</io7m.org.immutables.version>
   </properties>
 
   <licenses>
@@ -264,14 +264,14 @@
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Require JDK >= 9 -->
+        <!-- Require JDK >= 11 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>9</source>
-            <target>9</target>
-            <release>9</release>
+            <source>11</source>
+            <target>11</target>
+            <release>11</release>
           </configuration>
         </plugin>
 
@@ -293,7 +293,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.5</version>
+          <version>3.6.0</version>
         </plugin>
 
         <plugin>
